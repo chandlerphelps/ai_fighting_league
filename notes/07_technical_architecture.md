@@ -194,7 +194,6 @@ Fighter {
 
   // Meta
   status: "active" | "injured" | "retired" | "deceased"
-  division: DivisionId
   ranking: Number | null  // null = unranked
   created_date: Date
   debut_date: Date
@@ -364,7 +363,7 @@ The AI-powered system that generates all non-fight story content.
 Handles the competitive structure.
 
 **Responsibilities:**
-- Maintain rankings per division
+- Maintain unified league rankings
 - Schedule events and fight cards
 - Manage title lineages
 - Track records and statistics

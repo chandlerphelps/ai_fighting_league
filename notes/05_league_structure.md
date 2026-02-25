@@ -1,44 +1,27 @@
-# League Structure - Rankings, Divisions & Events
+# League Structure - Rankings & Events
 
 ## Overview
 
 The AFL needs a structured competitive framework that serves two purposes:
-1. **Competitive legitimacy**: Rankings, divisions, and titles that feel meaningful
-2. **Story engine**: The structure itself generates narratives (title chases, division rivalries, tournament drama)
+1. **Competitive legitimacy**: Rankings and titles that feel meaningful
+2. **Story engine**: The structure itself generates narratives (title chases, rivalries, tournament drama)
 
 The structure borrows from UFC's competitive framework but adds WWE's theatrical event
 hierarchy and fighting game tournament formats.
 
----
-
-## Weight Divisions
-
-Weight classes keep fights competitive while allowing cross-division super fights as
-special events. The divisions are:
-
-| Division | Weight Range | Flavor |
-|---|---|---|
-| **Phantom Weight** | Under 125 lbs | Speed demons, technical wizards, underestimated killers |
-| **Featherweight** | 126-145 lbs | Precision strikers, dynamic movers, chi masters |
-| **Lightweight** | 146-165 lbs | The most balanced division — every style represented |
-| **Middleweight** | 166-185 lbs | Power meets technique, the "glamour" division |
-| **Heavyweight** | 186-225 lbs | Big hitters, grapplers, monsters, enhanced fighters |
-| **Colossus** | 226+ lbs | The giants, the abominations, the forces of nature |
-| **Open** | Any weight | Special events only — no standing rankings |
-
-### Division Notes
-- Fighters compete in one primary division but can move up/down with story justification
-- Moving up a division means fighting bigger opponents (stat penalties for size difference)
-- Moving down means a weight cut (potential cardio/durability penalties if rushed)
-- Some supernatural fighters may not fit neatly into a weight class (narrative opportunity)
+> **Design Note**: AFL has **no weight classes**. This is a fantasy league where a 112 lb chi
+> monk can face a 278 lb cartel enforcer. Size differences are reflected in stats (Strength,
+> Size, Reach, Durability, etc.) and factor into the match engine's probability calculations,
+> but they don't restrict matchmaking. This creates inherently dramatic matchups and lets
+> narrative drive who fights whom, not arbitrary weight limits.
 
 ---
 
 ## Ranking System
 
-### Per-Division Rankings
+### League Rankings
 
-Each division maintains:
+The league maintains a single unified ranking:
 - **Champion**: The belt holder
 - **Ranked #1-10**: Contenders with official rankings
 - **Unranked**: Active fighters not yet in the top 10
@@ -58,11 +41,6 @@ Rankings update after every fight card based on:
 | **Recency** | Medium | Recent results matter more than old ones |
 | **Activity** | Low | Inactive fighters slowly drift down |
 | **Streak** | Medium | Win/loss streaks amplify movement |
-
-### The Pound-for-Pound List
-
-A cross-division ranking of the top 15 fighters regardless of weight class. This is
-the **prestige ranking** — being #1 P4P is the ultimate recognition. Updated monthly.
 
 ### Title Fights
 
@@ -122,7 +100,7 @@ These are the tent-pole events that seasons build toward. Each has a unique iden
 | **Ascension** | Q4 (Oct) | Year-end event, crowning moments, legacy-defining fights |
 
 Each mega-event features:
-- 8-10 fights across all divisions
+- 8-10 fights across the roster
 - 2-3 title fights
 - At least one special match type (death match, Blood Pact, etc.)
 - The culmination of 2-3 major story arcs
@@ -144,7 +122,7 @@ Tournaments are special competitive structures used for specific events:
 - 4-6 fighters
 - Everyone fights everyone
 - Best record wins, tiebreakers by head-to-head then method of victory
-- Good for establishing division hierarchy
+- Good for establishing roster hierarchy
 
 ### King of the Hill
 - Champion defends against a queue of challengers
@@ -166,7 +144,7 @@ Tournaments are special competitive structures used for specific events:
 ### Fighter Records
 
 Every fighter's record tracks:
-- **Win/Loss/Draw/NC**: Overall and per-division
+- **Win/Loss/Draw/NC**: Overall record
 - **Method breakdown**: KOs, submissions, decisions
 - **Streak data**: Current streak, longest win/loss streak
 - **Title history**: Belts held and defended

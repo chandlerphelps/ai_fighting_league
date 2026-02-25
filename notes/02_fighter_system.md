@@ -25,7 +25,7 @@ training, aging, injuries, and enhancements.
 | **Endurance** | Cardio, ability to sustain output over rounds | Late-round performance, recovery between rounds |
 | **Durability** | Chin, body toughness, resistance to damage | KO resistance, ability to absorb punishment |
 | **Flexibility** | Range of motion, kick height, submission escape | Submission defense, kick variety, ground mobility |
-| **Size** | Height and frame within weight class | Reach advantage, clinch leverage |
+| **Size** | Height and frame relative to other fighters | Reach advantage, clinch leverage, power differential |
 | **Reach** | Arm and leg length relative to frame | Striking distance control, jab effectiveness |
 | **Recovery** | How fast they heal between fights, bounce back in fights | Time between fights, mid-fight second winds |
 
@@ -110,7 +110,6 @@ Every fighter should have these components:
 - **Age**: Current age (affects physical decline, experience)
 - **Origin**: Where they're from (city, country, dimension, whatever)
 - **Affiliation**: Faction, gym, syndicate, or independent
-- **Weight Class**: Where they compete (see League Structure doc)
 
 ### Physical Description
 - **Height & Weight**: Specific measurements
@@ -239,7 +238,7 @@ When AI generates new fighters, it should:
 3. **Build from archetype blends** (e.g., Veteran + Mystic = aging sorcerer-warrior)
 4. **Create at least one unique hook** that no other active fighter has
 5. **Plant story seeds** in the backstory that connect to existing characters or future events
-6. **Balance the roster** across weight classes, alignments, and fighting styles
+6. **Balance the roster** across size ranges, alignments, and fighting styles
 7. **Vary the power level** — not every new fighter is a contender; some are jobbers, some are prospects
 8. **Include flaws** — perfect characters are boring; every strength should imply a vulnerability
 
@@ -251,7 +250,6 @@ When AI generates new fighters, it should:
 > **Real Name**: Morrigan Vex
 > **Age**: 26
 > **Origin**: Dublin, Ireland (raised in a Traveller fighting family)
-> **Weight Class**: Featherweight
 > **Affiliation**: Independent (formerly The Ashen Circle)
 >
 > **Physical**: 5'6", 145 lbs, lean and angular. Covered in Celtic knotwork tattoos that

@@ -97,7 +97,7 @@ Think of it as our world but turned up to 11:
 - Fighters can use **martial arts, street fighting, wrestling, magic, psychic powers,
   seduction, divine intervention, cybernetic enhancements, demonic pacts** — anything goes
   as long as it's narratively earned
-- The league itself has **rules** (weight classes, match types, banned techniques) but those
+- The league itself has **rules** (match types, banned techniques, fighter codes) but those
   rules exist to be tested and sometimes broken
 - There are **factions, crime syndicates, ancient orders, government experiments, and cosmic
   forces** all feeding fighters into the league
@@ -237,7 +237,7 @@ The league operates on a **daily timeline** where each day advances the world st
 
 ### Phase 4: AI Video + Scale
 - AI-generated video clips for key fight moments → full fight animation
-- Multiple leagues/divisions
+- Multiple leagues and regional circuits
 - Cross-promotion events
 - Historical archive and lore wiki
 - Content creator tools
