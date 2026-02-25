@@ -114,15 +114,32 @@ The best new fighters serve an immediate narrative function AND have long-term s
 Write one sentence that captures what makes this fighter unique. If you can't say it in
 one sentence, the concept needs refinement.
 
+**The best hooks often start with a recognizable archetype from popular media** — action
+movies, anime, comics, video games, wrestling, mythology, pulp fiction — and translate it
+into the AFL world. Don't default to "martial artist with magic." Think bigger.
+
 Good examples from the existing roster:
 - "A 112-pound woman who dismantles giants through stillness and chi mastery" (Whisper)
 - "A French aristocrat who makes violence look like ballet and uses her beauty as a weapon" (Duchess)
 - "A 278-pound Colombian enforcer with no formal training who just shows up in the cage" (Butcher)
 - "The most aggressively normal person in a league of freaks" (Apex)
 
+Good examples of hooks that could create new characters:
+- "A cartel chemist who poisons opponents before the bell and fights in a cocktail dress"
+- "An ex-military sniper in a mech-augmented exosuit who treats the cage like a kill box"
+- "A disgraced priest who channels genuine divine wrath and hates what it's turning him into"
+- "A honeytrap assassin trained by intelligence services who weaponizes desire and fights dirty"
+- "A ninja-tradition kunoichi who uses smoke, misdirection, and concealed weapons"
+
 Bad examples:
 - "A strong fighter who uses magic" (generic, could be anyone)
 - "A mysterious warrior from a hidden temple" (cliche without specificity)
+- "A woman who is really strong and tough" (for female fighters, strength and toughness
+  aren't the hook — see Core Philosophy #2)
+
+> **For female characters specifically**: The hook should make clear why she's compelling
+> to a male audience. Beauty, danger, allure, mystique, cleverness, cruelty, seduction —
+> these are the ingredients. A woman who wins by out-muscling men is not an AFL concept.
 
 ### Step 4: Archetype Blend
 
@@ -138,11 +155,14 @@ The blend should create internal tension. A Technician-Wildcard has a precise ga
 but an unpredictable streak. A Monster-Survivor is physically dominant but got here through
 hardship, not privilege. The tension within the blend is where personality lives.
 
-**Underrepresented blends on the current roster:**
-- Legacy as primary (only Golden Boy has it, and as secondary)
-- Survivor as primary with non-Monster secondary
-- Veteran-Technician (the methodical old hand)
-- Mystic-Seductress/Seductor (supernatural allure as primary identity)
+> **Gender rule for archetypes**: The Monster archetype — defined by being bigger, stronger,
+> and more physically imposing than everyone else — is a **male archetype**. Female fighters
+> should not be designed around physical dominance over men. Women can be Monsters in the
+> sense of being terrifying or inhuman (think body horror, supernatural corruption), but not
+> in the sense of "she's bigger and stronger than the men." Women win through seduction,
+> technique, supernatural ability, psychological warfare, dirty tactics, speed, precision,
+> poison, technology, or sheer force of will — not by out-muscling men.
+
 
 ### Step 5: Identity & Origin
 
@@ -164,6 +184,19 @@ hardship, not privilege. The tension within the blend is where personality lives
 See the **Visual Design Principles** section below. This step produces the full physical
 description: build, skin, hair, eyes, distinguishing features, ring attire, entrance style.
 
+> **For female characters**: This is where sex appeal is designed in, not bolted on later.
+> The outfit should be the statement — high-cut leotards, crop tops, sling bikinis, thongs, mesh
+> panels, thigh-highs, micro shorts, plunging necklines. The outfit IS character design.
+> Duchess's white leotard with plunging neckline tells you who she is. Venom's painted-on
+> black ensemble tells you who she is. Don't design a female fighter in generic athletic
+> wear and then try to make her interesting with magic effects. Design for a male audience.
+> Make her visually arresting first.
+>
+> **For male characters**: Men should read as physically imposing, powerful, larger than the
+> women. Shirtless, muscular, scarred, weathered, massive — the visual vocabulary of
+> masculine threat. Male fighters carry danger in their physicality. Female fighters carry
+> it in everything else.
+
 ### Step 7: Personality & Alignment
 
 **Alignment guidelines:**
@@ -174,7 +207,29 @@ description: build, skin, hair, eyes, distinguishing features, ring attire, entr
 | **Heel** | Compelling quality the audience loves to hate | Fans boo, scheme against, secretly respect | Making them irredeemably evil — the best heels have a point |
 | **Tweener** | Ambiguous morality that keeps fans guessing | Fans debate, argue, can't look away | Staying neutral forever — tweeners need to make choices eventually |
 
-**Build personality from:**
+> **The morality spectrum (Core Philosophy #3)**: Almost every character should live in the
+> grey. Avoid purely good and purely evil characters. A roster of saints and monsters is
+> boring. A roster of complicated people who do violent things for understandable reasons is
+> interesting. Keep at most 1-2 characters at the extremes, and even those should be 95/5 —
+> the hero with one dark impulse, the villain with one flicker of humanity.
+
+**Build personality from violence first (Core Philosophy #3):**
+
+Before motivations, fears, and quirks, answer these two questions:
+
+1. **How do they hurt others, and how do they feel about it?** Old Testament delivers
+   Judgment Day with the calm of a man doing God's work. Duchess mouths "bonsoir" with
+   contemptuous pleasure. Banshee screams with feral joy. Kofi pauses before the final
+   elbow — hesitation or respect, and even he doesn't know which. This is the core of the
+   character. Everything else is texture.
+
+2. **How do they get hurt, and how do they react?** Golden Boy wears his pain on his face
+   and the crowd aches with him. Crown becomes confused and angry — she wasn't supposed to
+   get hit. Butcher doesn't react at all, which is worse. Carrion King grins and gets
+   stronger. A character's relationship to their own suffering defines them more than any
+   backstory.
+
+**Then build outward:**
 - **Motivations**: Why do they fight? Money, glory, revenge, survival, fun, obligation,
   addiction to violence, something to prove? The best fighters have layered motivations.
 - **Fears**: What genuinely scares them? This is where weakness lives.
@@ -188,6 +243,14 @@ description: build, skin, hair, eyes, distinguishing features, ring attire, entr
 
 See the **Fighting Style Construction** section below. Produces primary style, secondary
 style, win condition, and style description.
+
+> **Remember Core Philosophy #4**: Fighting style doesn't have to mean "martial art."
+> A character's combat approach can include technology (mech suit, cybernetic limbs,
+> directed energy weapons), weapons (concealed blades, chains, firearms in certain match
+> types), science (combat drugs, chemical agents, nerve toxins), faith (divine channeling,
+> exorcism techniques, holy relics), or subterfuge (poison, hypnotics, smoke bombs, ninja
+> tools). The roster should NOT be 20 flavors of "martial artist." Think about what makes
+> the character's archetype work in their source media and bring that in.
 
 ### Step 9: Signature & Finishing Moves
 
@@ -274,23 +337,39 @@ small, spiky profile is distinct from Sundance's compact, ponytailed shape.
 Test: describe the character's silhouette in one sentence. If it sounds like someone
 else on the roster, differentiate further.
 
-### Sex Appeal
+### Sex Appeal — Especially for Female Characters
 
-AFL leans into attractiveness — this is explicit in the design philosophy
-(see `01_vision_and_overview.md`). But sex appeal comes from human qualities:
+This is not optional. This is core to the product. AFL is designed for a predominantly
+male audience and female characters should be designed accordingly.
 
-- **Confidence**: Duchess's amused condescension. Icon's magazine-cover awareness.
-  Venom's predatory smile.
-- **Physique**: Golden Boy's sculpted build. Valkyrie's amazonian frame. Icon's
-  Greek-god proportions.
-- **Outfit**: Duchess's plunging leotard. Venom's painted-on black ensemble. Vesper's
-  clinical sling bikini top.
-- **Expression**: Venom's all-teeth smile. Duchess's heavy-lidded amusement. Icon's
-  intense-but-warm eye contact.
+**For every female fighter, the outfit and physical design should be overtly sexy.** This
+means:
 
-What NOT to do: Use "faint [color] energy emanates from their body" or "an aura of
-desire radiates outward" as a substitute for actual visual design. Supernatural allure
-is an amplifier for characters that already work. It is never the source.
+- **Revealing outfits are the default**: High-cut leotards, plunging necklines, sling
+  bikinis, crop tops showing underboob, micro shorts, mesh panels, thigh-highs, painted-on
+  bodysuits. The outfit should turn heads. Look at the existing roster: Duchess's white
+  leotard with deep V-neckline. Venom's painted-on black ensemble. Vesper's sling bikini
+  top. Banshee's neon sports bra and ripped denim shorts. This is the standard. Don't
+  retreat from it.
+- **Physique matters**: Athletic, toned, curves emphasized. Different body types are fine
+  (petite, hourglass, athletic, compact) but all should be attractive. No female fighter
+  should be designed to be visually unremarkable.
+- **Confidence amplifies everything**: Duchess's amused condescension. Venom's predatory
+  smile. Vesper's cold clinical beauty. The attitude in the eyes and the body language
+  multiply the visual impact of the outfit.
+- **The outfit IS the character**: Duchess in a standard sports bra and shorts is not
+  Duchess. Crown in anything less than immaculate white-and-gold is not Crown. The outfit
+  choice reveals personality as much as any dialogue.
+
+**For male fighters**, sex appeal comes through physicality — sculpted builds, shirtless by
+default, chiseled jaws, imposing frames. Golden Boy's magazine-cover body. Icon's Greek-god
+proportions. Butcher's terrifying mass.
+
+**What NOT to do**: Use "faint [color] energy emanates from their body" or "an aura of
+desire radiates outward" as a substitute for actual visual design. Don't sanitize female
+designs into modest athletic wear because it feels "safer" or "more realistic." This is a
+fantasy fighting league inspired by Mortal Kombat and Street Fighter, not a UFC simulation.
+Lean in.
 
 ### Distinguishing Features
 
@@ -335,6 +414,23 @@ that seem to move, veins that darken, eyes that catch light strangely).
 ---
 
 ## Stat Assignment Framework
+
+### Gender and Stats — Hard Rule
+
+**Men are physically bigger and stronger than women.** This is a design constraint, not a
+suggestion. When assigning stats:
+
+- Male fighters should have higher Strength, Size, and Durability than female fighters
+  as a baseline. A male Monster at 6'6"/278 lbs with Strength 90 is normal. A female
+  fighter should not have comparable raw physical stats.
+- Female fighters compensate with other categories: higher Seduction, higher supernatural
+  stats, higher Fight IQ, specialized combat skills, psychological tools, dirty tactics,
+  technology, or abilities that bypass raw physicality entirely.
+- The dramatic tension of a woman beating a man in AFL comes from HOW she does it — not
+  by matching his strength, but by making his strength irrelevant. Poison, chi mastery,
+  psychic disruption, seduction that breaks focus, submissions from positions he didn't
+  see coming, technology that equalizes, divine favor that overrides muscle.
+- A female fighter with Strength 85 and Size 90 is a design error. Revisit the concept.
 
 ### Stat Ranges by Archetype
 
@@ -399,21 +495,42 @@ exception, not the norm. When it exists, it should feel unsettling rather than m
 
 ### Base Style
 
-Every fighter's primary style must be a **real martial art or recognizable discipline**:
+A fighter's primary approach can be a martial art, but it doesn't have to be. Think
+broadly — **Core Philosophy #4 says to steal from everywhere:**
 
+**Martial Arts & Combat Disciplines:**
 - Boxing (various national styles: Mexican pressure, British technical, bare-knuckle)
 - Muay Thai / Muay Boran
 - Wrestling (freestyle, Greco-Roman, catch, folk, sumo, glima)
 - BJJ / submission grappling
-- Judo
-- Karate (various styles)
-- Taekwondo
-- Savate
-- Sambo / combat sambo
+- Judo / Sambo / combat sambo
+- Karate / Taekwondo / Savate / Kickboxing
 - Wing Chun / kung fu variants
-- Kickboxing
-- Street fighting (a valid "style" in this world)
-- Pankration (ancient Greek combat — Carrion King's base)
+- Street fighting, Pankration, Krav Maga, Silat, Capoeira
+
+**Technology & Science:**
+- Mech-augmented combat (powered exosuit, cybernetic limbs, enhanced reflexes)
+- Weapons integration (concealed blades, retractable weapons, chain weapons)
+- Chemical warfare (poison coatings, nerve agents, combat stimulants, aerosolized drugs)
+- Directed energy / sonic weapons (for characters with tech backgrounds)
+- Nanotech enhancement (real-time physical augmentation)
+
+**Faith & Tradition:**
+- Divine channeling (Christian, Norse, animist, etc. — power through belief/favor)
+- Exorcism techniques (fighting supernatural opponents with holy methods)
+- Ninja art / shinobi tradition (smoke, misdirection, hidden tools, assassination technique)
+- Voodoo / spiritual tradition (curses, possession, spirit communication)
+- Monastic disciplines (ascetic power, self-denial as weapon)
+
+**Subterfuge & Psychological:**
+- Honeytrap / intelligence training (seduction + close-quarters lethality)
+- Hypnotics and mental manipulation (eye contact techniques, voice modulation, NLP)
+- Poisoner's art (pre-fight drugging, coated weapons, ingested agents)
+- Performance / theatrics (using spectacle and misdirection as combat tools)
+
+The current roster leans heavily toward martial arts. New characters that bring technology,
+weapons, faith, or subterfuge as their PRIMARY approach will feel fresher and more
+distinctive than another variation on "skilled fighter with supernatural ability."
 
 ### Secondary Style
 
@@ -696,34 +813,66 @@ for roster balance and make the supernatural elements feel more special by contr
 
 ## Common Mistakes
 
-1. **Generic glow effects as primary visual identity.** If the character's most notable
+1. **Sanitizing female character designs.** This is the #1 most likely failure mode. The
+   AI generating characters will instinctively pull toward modest athletic wear, "practical"
+   outfits, and de-sexualized designs for women. Fight this. Female fighters in AFL wear
+   revealing, attention-grabbing outfits by design. If a female character's outfit could
+   pass in a real UFC broadcast, it's too conservative. Think Mortal Kombat, Dead or Alive,
+   Street Fighter — not ESPN.
+
+2. **Making a female fighter whose identity is "big and strong."** Women in AFL do not
+   compete with men on physicality. No female character should be designed around being
+   physically imposing relative to the male roster. If the concept is "she's really strong
+   and tough," it's a male character concept. Rethink the character around seduction,
+   mysticism, technology, poison, psychological warfare, technical mastery, or supernatural
+   ability.
+
+3. **Making every character clearly good or clearly evil.** The roster should be
+   overwhelmingly grey. Characters who hurt people and feel complicated about it. Characters
+   who do bad things for understandable reasons. Characters who do good things for selfish
+   reasons. At most 1-2 characters at the moral extremes, and even those get a 5% crack in
+   the armor.
+
+4. **Defaulting to "martial artist with supernatural power."** The roster already has
+   plenty of these. New characters should explore technology, weapons, science, faith,
+   poison, drugs, hypnotics, ninja tradition, mech suits, cybernetics, and other archetypes
+   borrowed from popular media. If the concept is "[martial art] + [magical ability],"
+   check whether the roster already has three of those and pivot to something with a
+   different vocabulary.
+
+5. **Generic glow effects as primary visual identity.** If the character's most notable
    visual feature is that they glow, redo the design. Pass the strip test.
 
-2. **"Supernatural seduction" substituting for actual personality.** Seduction should work
+6. **"Supernatural seduction" substituting for actual personality.** Seduction should work
    through specific human behaviors: how they dress, move, talk, look at you. "Mystical
    allure" without specific mechanism is lazy.
 
-3. **No genuine weaknesses.** If you can't name 2-3 existing roster members who would give
+7. **No genuine weaknesses.** If you can't name 2-3 existing roster members who would give
    this fighter serious trouble, the weaknesses aren't real.
 
-4. **Backstory disconnected from existing world.** A fighter whose history doesn't touch
+8. **Backstory disconnected from existing world.** A fighter whose history doesn't touch
    any existing character, faction, location, or lore element is floating in space. At least
    2 connections.
 
-5. **Duplicate archetype/style in an already crowded slot.** Check the roster audit. If we
+9. **Duplicate archetype/style in an already crowded slot.** Check the roster audit. If we
    already have three Prodigies, your Prodigy needs a strong reason to exist.
 
-6. **Power levels that break matchup dynamics.** A new fighter shouldn't be unbeatable by
-   anyone on the current roster. If you can't identify their bad matchups, they're
-   overpowered.
+10. **Power levels that break matchup dynamics.** A new fighter shouldn't be unbeatable by
+    anyone on the current roster. If you can't identify their bad matchups, they're
+    overpowered.
 
-7. **Overly complex supernatural systems for a new character.** A debut fighter should
-   have 0-2 supernatural stats, not a bespoke magic system. Complexity is earned through
-   narrative development, not character creation.
+11. **Overly complex supernatural systems for a new character.** A debut fighter should
+    have 0-2 supernatural stats, not a bespoke magic system. Complexity is earned through
+    narrative development, not character creation.
 
-8. **Forgetting the strip test.** Say it again: remove the supernatural effects. Is the
-   character still visually compelling, personality-rich, and distinct? If not, do more work
-   on the human foundation before adding anything else.
+12. **Forgetting the strip test.** Remove the supernatural effects. Is the character still
+    visually compelling, personality-rich, and distinct? If not, do more work on the human
+    foundation before adding anything else.
+
+13. **Cheap diversity.** Don't add geographic/cultural origins just to check boxes. A
+    fighter from Nigeria should exist because Lagos street fighting culture creates an
+    interesting character, not because "we don't have anyone from Africa." The origin must
+    serve the character concept. Tokenism is boring.
 
 ---
 
@@ -921,6 +1070,19 @@ patterns.
 
 ### The Heir — Final Check
 
+**Core Philosophy compliance:**
+- [x] **#1 (Female sex appeal)**: N/A — male character. (If female, would need: Is
+  the outfit overtly sexy? Would a male audience find her visually compelling? Is her
+  gear designed to turn heads, not blend in?)
+- [x] **#2 (Men bigger/stronger, women win differently)**: Male character with appropriate
+  physical stats. Not oversized, but clearly physically capable in the masculine register.
+- [x] **#3 (Violence defines character)**: The pause before "The Inheritance" defines him.
+  His relationship to hurting people (reluctance + competence) is the core tension. His
+  fear of his father's violent death shapes everything.
+- [x] **#4 (Steal from media archetypes)**: Classic "martial arts legacy" archetype pulled
+  from kung fu films, sports movies. The concept is recognizable and resonant.
+
+**Design checks:**
 - [x] Passes the strip test (no supernatural elements to remove)
 - [x] Silhouette distinct from roster (lean Thai fighter build, Sak Yant tattoo,
   gold armband)
@@ -934,3 +1096,6 @@ patterns.
   (becoming his own fighter)
 - [x] Human qualities carry the design (the armband, the scar, the old eyes, the
   respectful bow, the pre-fight jollof rice)
+
+> **Use this checklist for every new character.** The Core Philosophy items are non-negotiable.
+> If any of the four philosophy checks fail, the character needs rework before proceeding.
