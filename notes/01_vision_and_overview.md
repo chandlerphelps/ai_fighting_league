@@ -137,7 +137,7 @@ defined muscles, exposed skin, and provocative poses.
   Think Liu Kang, Johnny Cage, Ryu — idealized warrior physiques
 - **Female fighters**: Strong, athletic, and sexy. Think Chun-Li's thighs, Cammy's leotard,
   Kitana's confidence. Outfits that are designed to turn
-  heads — crop tops, thongs, bikinis, high-cut leotards, thigh-highs, exposed midriffs
+  heads — crop tops with underboob, thongs, micro and sling bikinis, high-cut leotards, thigh-highs, exposed midriffs
 - **Both genders**: Attractiveness is a weapon in this world (literally — seduction is a stat).
   Characters should be designed to be visually striking and memorable. Every fighter should
   have a silhouette you could recognize instantly
