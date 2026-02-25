@@ -168,13 +168,26 @@ NPC {
 
 #### "The Siren" — The Distracting Lover
 
-**Inspired by**: The Kim Kardashian / WAG archetype — gorgeous, famous, and a walking
-distraction factory.
+**Inspired by**: The Kim Kardashian / WAG archetype — but with agency, personality, and
+her own story beyond "hot woman who ruins fighters."
 
-**Concept**: A glamorous, Instagram-famous socialite who dates fighters. The problem?
-Every fighter she gets involved with starts losing. Whether it's the late nights, the
-drama, the paparazzi, or the jealousy from other fighters — her presence is a debuff.
-But fighters keep falling for her anyway because she's irresistible.
+**Concept**: A glamorous, Instagram-famous socialite who built her brand from nothing —
+grew up broke, figured out that attention is currency, and now runs a media empire from
+her phone. She dates fighters because she genuinely loves the world: the violence, the
+drama, the intensity of people who put everything on the line. The problem? Every fighter
+she gets involved with starts losing. Whether it's the late nights, the drama, the
+paparazzi, the jealousy from other fighters, or simply the fact that she's more interesting
+than any opponent — her presence disrupts focus.
+
+Her "seduction" works the same way as the fighters' — through specific human qualities: her
+social media savvy, her impeccable style, her ability to make anyone feel like the only
+person in the room, her genuine warmth that masks razor-sharp intelligence about what people
+want. She's not mystically irresistible — she's just very, very good at being interesting.
+
+**What She Wants**: That's the question. Maybe she wants genuine connection and keeps picking
+people whose jobs make that impossible. Maybe she wants power and influence and fighters are
+her access point. Maybe she's addicted to the intensity and moves on when it fades. Her
+motivations should be as layered as any fighter's.
 
 **Narrative Function**:
 - Creates a **focus/performance debuff** on fighters she's romantically linked to
@@ -183,12 +196,18 @@ But fighters keep falling for her anyway because she's irresistible.
 - Creates **love triangle storylines** that spill into the cage
 - Her social media posts become story beats (thirst traps during fight week,
   cryptic breakup posts, being seen at ringside with someone new)
+- **Has her own arcs**: business deals, rivalries with other media figures, moments of
+  genuine vulnerability, choices that reveal whether she's a user or just unlucky in love
 - Fan debate: Is she a curse? A gold digger? Genuinely looking for love? Or is she
-  secretly manipulating fighters for someone else?
+  secretly manipulating fighters for someone else? The answer should evolve.
+- Her own motivations and personality should be as developed as any fighter's — she
+  shouldn't just be a mechanic that happens to fighters, but a character who creates
+  interesting situations through her own choices and desires
 
 **Twist Potential**: Maybe she's not bad luck at all — maybe someone is sabotaging her
 boyfriends and framing her. Or maybe she's a secret agent for a faction. Or maybe the
-"curse" is real and supernatural.
+"curse" is real and supernatural. Or maybe she figures out what's happening and becomes
+an active player in the story rather than a passive element.
 
 #### "The Resurrectionist" — The Necromancer
 

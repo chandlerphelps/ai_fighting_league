@@ -74,7 +74,7 @@ ancient bloodline, experimental program, etc.). A fighter might have 1-2 of thes
 | **Elemental Affinity** | Control of fire, ice, lightning, etc. | Elemental strikes, environmental effects |
 | **Chi Mastery** | Internal energy manipulation, pressure points | Precision strikes, energy projection, healing |
 | **Blood Rage** | Power that grows with damage taken | Comeback mechanic, berserker state |
-| **Seduction** | Supernatural charm, distraction, desire manipulation | Focus debuffs, hesitation induction |
+| **Seduction** | Charm, physical allure, psychological distraction, desire manipulation — ranges from natural charisma and attractiveness to supernaturally enhanced magnetism | Opponent hesitation, focus disruption, poor decision-making, emotional engagement that compromises tactical thinking |
 
 > **Design Note**: Supernatural abilities should never be a guaranteed win button. A fighter
 > with 80 Arcane Power can still lose to a disciplined martial artist with 90 Focus and 85
@@ -185,9 +185,15 @@ Has no business being here on paper. Outstatted in every fight. But they just wo
 - Story arc: The ultimate underdog, Rocky Balboa energy, inspiring or tragic
 
 ### The Seductress/Seductor
-Uses beauty, charm, and desire as a weapon. Fights dirty in every sense.
+Uses beauty, charm, and desire as a weapon. Fights dirty in every sense — how they dress,
+how they move, how they talk to opponents, how they use proximity and body language in the
+clinch, how they get under your skin.
 - Moderate physicals, high seduction/intimidation, specialized skills
 - Story arc: Manipulation, the line between weapon and vulnerability
+- The best seductors don't need supernatural enhancement. Their weapon is human —
+  confidence, style, the way they look at you, the way they make you feel. Supernatural
+  charm is an amplifier, not a replacement. A fighter with Seduction 40 might have zero
+  supernatural abilities — they're just genuinely attractive and know how to use it.
 
 ### The Experiment
 Created, enhanced, or modified by some organization. Are they a person or a product?

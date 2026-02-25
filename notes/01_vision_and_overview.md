@@ -139,12 +139,21 @@ defined muscles, exposed skin, and provocative poses.
   Kitana's confidence. Outfits that are designed to turn
   heads — crop tops with underboob, thongs, micro and sling bikinis, high-cut leotards, thigh-highs, exposed midriffs
 - **Both genders**: Attractiveness is a weapon in this world (literally — seduction is a stat).
-  Characters should be designed to be visually striking and memorable. Every fighter should
-  have a silhouette you could recognize instantly
+  Seduction works through human qualities: confidence, style, body language, expression,
+  outfit choices, how they move, willingness to play dirty. The stat tracks how effective
+  someone is at it, but the mechanism is human, not magical. Characters should be designed
+  to be visually striking and memorable. Every fighter should have a silhouette you could
+  recognize instantly
 - **Variety within sexiness**: Not everyone is the same body type. A massive brawler and a
   lithe assassin should both look good but in completely different ways
-- **Supernatural flair**: Glowing tattoos, ethereal hair, demonic features, cybernetic
-  enhancements — these layer on top of the base attractiveness to create truly unique designs
+- **Human qualities first**: What makes a character visually unique and compelling is their
+  personality, attitude, style, body language, outfit choices, and expression. Supernatural
+  elements (glowing tattoos, ethereal hair, demonic features, cybernetic enhancements) are
+  one optional ingredient and should never be the main thing that makes a character visually
+  interesting. A character who's only interesting because they glow is not interesting.
+- **The strip test**: If you removed all supernatural visual effects from a fighter, they
+  should still be visually compelling and distinct through their human qualities alone. If
+  they're not, the design needs more work.
 
 ### Match Visualization Roadmap
 

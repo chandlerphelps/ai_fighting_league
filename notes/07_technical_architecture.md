@@ -134,7 +134,10 @@ Fighter {
     elemental_affinity: 0-100
     chi_mastery: 0-100
     blood_rage: 0-100
-    seduction: 0-100
+    seduction: 0-100  // Primarily human (charm, attractiveness, style, body language, confidence).
+                      // Only sometimes supernaturally amplified. In the supernatural block for
+                      // convenience, but a fighter with Seduction 40 might have zero supernatural
+                      // abilities — they're just genuinely charming/attractive and know how to use it.
   }
 
   // Character info

@@ -261,7 +261,7 @@ The narrative is structured as a timeline of events that can be programmatically
           "user": "fighter_b",
           "ability": "chi_sense",
           "description": "Vex's eyes narrow. For a moment she seems to see Cole's next combination before he throws it — slipping the jab, ducking the hook, and landing a devastating liver shot as he overextends. Cole grimaces and backs off for the first time tonight.",
-          "visual_effect": "Faint blue shimmer along Vex's forearms as she moves"
+          "visual_effect": "Vex's Celtic tattoos seem to darken and shift as she moves — or maybe it's the arena lights. Her eyes track Cole's shoulders before he commits."
         },
         {
           "time": "4:50",
