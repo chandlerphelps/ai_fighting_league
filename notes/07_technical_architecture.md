@@ -519,6 +519,84 @@ For the "live" fight experience on the frontend:
 
 ---
 
+## Visual Rendering Pipeline
+
+The fight narrative JSON is the **single source of truth** for all visual layers. Each
+rendering phase adds fidelity on top of the same underlying data.
+
+### Phase 1: Pixel Art Layer (MVP)
+
+**Assets Needed:**
+- Character portrait sprites (pixel art, MK2/SF2 aesthetic) — idle, attack, defend, hurt,
+  knockout, signature move, victory, defeat poses
+- Stage backgrounds (pixel art arenas) — 5-10 distinct venues
+- UI elements — health bars, round indicators, stat overlays, fight cards
+- Effect sprites — impact flashes, blood, elemental effects, supernatural auras
+
+**Rendering Approach:**
+```
+Fight Narrative JSON
+  → Event Parser (maps narrative events to sprite animations)
+  → Sprite Sequencer (assembles animation frames with timing from JSON)
+  → Canvas/WebGL Renderer (displays pixel art fight sequence)
+```
+
+- Key narrative events trigger specific sprite animations
+- Between events, fighters display idle/stance animations
+- Knockdowns, signature moves, and finishers get special multi-frame sequences
+- Pixel art style means the asset pipeline is manageable for a small team or AI generation
+
+**Character Sprite Generation:**
+- AI image generation (with pixel art fine-tuning/LoRA) can produce character sprites
+  from fighter descriptions
+- Each fighter needs: idle, jab, kick, block, hurt, knockdown, victory, defeat, entrance
+- Signature/finishing moves get unique sprite sequences
+- The pixel art style is forgiving — stylization hides imperfections in AI generation
+
+### Phase 2: Comic Book / Motion Comic
+
+**Assets Needed:**
+- AI-generated comic panels for key fight moments
+- Panel layout templates (action sequences, splash pages, dramatic reveals)
+- Speech bubble system for trash talk and commentary
+- Sound effect typography (WHAM, CRACK, etc.)
+
+**Rendering Approach:**
+```
+Fight Narrative JSON
+  → Panel Planner (selects key moments, assigns panel types/sizes)
+  → AI Image Generator (generates each panel from narrative description + character refs)
+  → Comic Layout Engine (assembles panels into pages with speech bubbles & SFX)
+  → Animated Reveal (panels appear sequentially with transitions)
+```
+
+- The fight narrative JSON contains enough detail to prompt AI image generation for each panel
+- Character reference sheets (generated from pixel art portraits + descriptions) ensure
+  visual consistency across panels
+- Key moments get splash pages; rapid exchanges get small sequential panels
+- The motion comic player reveals panels with timing, zoom, and transition effects
+
+### Phase 3: AI Video Generation
+
+**Rendering Approach:**
+```
+Fight Narrative JSON
+  → Scene Planner (breaks narrative into video shots/sequences)
+  → AI Video Generator (generates short clips per scene)
+  → Video Compositor (stitches clips, adds HUD, sound, commentary)
+  → Streaming Player (delivers fight as video stream)
+```
+
+- Start with **key moment clips only** (10-30 second clips for knockdowns, finishers, etc.)
+- Expand to **full fight generation** as model capabilities and cost allow
+- Maintain stylized aesthetic — cel-shaded / anime-inspired, NOT photorealistic
+- Character consistency across clips is the main technical challenge — solve with
+  character LoRAs or reference-based generation
+- The pixel art / comic book layers remain available as fallback and for lower-bandwidth
+  viewing
+
+---
+
 ## System Reliability
 
 ### Consistency Guarantees

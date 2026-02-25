@@ -118,6 +118,148 @@ EVENT: Fighter A and Fighter B's romantic tension boils over
 
 ---
 
+## Non-Fighting Characters (NPCs)
+
+Not everyone in the AFL universe throws punches. A small cast of **recurring non-fighter
+characters** orbits the league, creating drama, complications, and narrative texture.
+These characters don't have combat stats — they have **influence stats** that affect the
+fighters and storylines around them.
+
+### NPC Design Philosophy
+
+- **Keep the cast small**: A handful of memorable NPCs is better than a bloated roster.
+  Start with 3-5 and add more only when the story demands it.
+- **Each NPC has a clear narrative function**: They exist to create specific types of story
+  complications. If an NPC doesn't generate interesting choices and consequences, they
+  don't belong.
+- **NPCs are magnets for drama**: They pull fighters into situations that affect performance,
+  relationships, and arcs. A fighter's life outside the cage matters.
+- **NPCs can be loved or hated**: Just like fighters, NPCs should provoke strong fan reactions.
+  Fans should debate whether a certain NPC is good or bad for their favorite fighter.
+
+### NPC Stat Template
+
+```
+NPC {
+  id: NPCId
+  name: String
+  role: String  // "The Girlfriend", "The Necromancer", "The Promoter", etc.
+  archetype: String
+  description: String
+
+  influence_stats: {
+    charisma: 1-100       // How persuasive/magnetic they are
+    manipulation: 1-100   // How good at working people to their advantage
+    connections: 1-100    // How well-connected in the league/underworld
+    loyalty: 1-100        // How reliable they are to those they're attached to
+    volatility: 1-100     // How unpredictable/dramatic their behavior is
+    mystical_power: 0-100 // Supernatural abilities (0 = none)
+  }
+
+  current_relationships: [NPCRelationship]  // who they're connected to
+  active_effects: [Effect]  // ongoing stat/narrative effects on fighters
+  story_arcs: [ArcId]
+  personality: { ... }  // same structure as fighter personality
+  backstory: String
+}
+```
+
+### Starter NPC Roster
+
+#### "The Siren" — The Distracting Lover
+
+**Inspired by**: The Kim Kardashian / WAG archetype — gorgeous, famous, and a walking
+distraction factory.
+
+**Concept**: A glamorous, Instagram-famous socialite who dates fighters. The problem?
+Every fighter she gets involved with starts losing. Whether it's the late nights, the
+drama, the paparazzi, or the jealousy from other fighters — her presence is a debuff.
+But fighters keep falling for her anyway because she's irresistible.
+
+**Narrative Function**:
+- Creates a **focus/performance debuff** on fighters she's romantically linked to
+  (-5 to -15 Focus, -5 to -10 Composure depending on relationship intensity)
+- Generates **jealousy arcs** when she moves from one fighter to another
+- Creates **love triangle storylines** that spill into the cage
+- Her social media posts become story beats (thirst traps during fight week,
+  cryptic breakup posts, being seen at ringside with someone new)
+- Fan debate: Is she a curse? A gold digger? Genuinely looking for love? Or is she
+  secretly manipulating fighters for someone else?
+
+**Twist Potential**: Maybe she's not bad luck at all — maybe someone is sabotaging her
+boyfriends and framing her. Or maybe she's a secret agent for a faction. Or maybe the
+"curse" is real and supernatural.
+
+#### "The Resurrectionist" — The Necromancer
+
+**Concept**: A shadowy, morally ambiguous figure who claims to be able to bring dead
+fighters back to life — for a price. Operates in the gray area between the league's
+official rules and the supernatural underground. Nobody knows if they're a genuine
+mystic, a con artist, or something far more dangerous.
+
+**Narrative Function**:
+- Creates the **possibility** that death isn't always permanent — but at a terrible cost
+- Resurrected fighters come back *wrong*: altered stats, changed personality, missing
+  memories, supernatural side effects, maybe they're not fully "them" anymore
+- Can be **bribed or petitioned** by fans/sponsors who want a dead fighter back —
+  this becomes a major story event when it happens
+- Creates moral dilemmas: Should a fighter's loved ones let them rest? What if the
+  resurrected fighter doesn't want to be back?
+- The price is always narratively interesting — not just money. A soul fragment, a
+  future favor, someone else's lifespan, a dark secret revealed
+
+**Rules for Resurrection**:
+- Extremely rare (maybe 1-2 per year at most)
+- Never guaranteed to work — and never works cleanly
+- The resurrected fighter is a **new version** of the character, not a restoration
+- Always generates a massive story arc
+- Fan investment can influence whether a resurrection is attempted
+- The Resurrectionist's motives should always be somewhat unclear
+
+#### "The Mouth" — The Journalist / Commentator
+
+**Concept**: A fast-talking, opinion-having sports journalist who covers the league.
+Think a mashup of a TMZ reporter, a podcaster, and a pro wrestling color commentator.
+They break stories, start rumors, conduct interviews, and are not above stirring the pot
+for ratings.
+
+**Narrative Function**:
+- **Information delivery vehicle**: Breaks news, reports on injuries, reveals backstage
+  drama to the audience
+- **Pot-stirrer**: Their interviews and hot takes can ignite feuds ("I asked Fighter A
+  what they thought of Fighter B's title shot, and they said...")
+- **Fan surrogate**: Asks the questions fans are thinking
+- **Unreliable narrator**: Sometimes their reporting is wrong, biased, or planted by a
+  faction — fans learn to read between the lines
+- Their social media feed is a constant stream of league news, rankings debates, and
+  provocative takes
+
+#### "The Fixer" — The Backroom Dealer
+
+**Concept**: A well-connected operator who can arrange... things. Better training
+facilities, favorable matchmaking, medical treatments, introductions to supernatural
+mentors, or making certain problems disappear. Everything has a price, and debts to
+The Fixer always come due at the worst possible time.
+
+**Narrative Function**:
+- Creates **Faustian bargain** storylines — fighters get what they want now but owe later
+- Connects to the **fan sponsorship system**: some sponsor money flows through The Fixer
+- Can arrange **match fixes**, creating controversy and investigation arcs
+- Their loyalty is to nobody but themselves — they'll sell out anyone if the price is right
+- A living nexus of the league's seedy underbelly
+
+### NPC Interaction Rules
+
+1. **NPCs don't appear in every story beat** — they show up when dramatically appropriate
+2. **NPC effects on fighters must be earned narratively** — The Siren doesn't debuff a
+   fighter just because; there needs to be a story explaining the relationship
+3. **NPCs have their own arcs** — they grow, change, and can be removed from the story
+4. **NPCs interact with each other** — The Mouth reports on The Siren's latest relationship;
+   The Fixer arranges a meeting with The Resurrectionist
+5. **New NPCs are introduced the same way as new fighters** — teased, debuted, integrated
+
+---
+
 ## Daily World State
 
 The league advances **one day at a time**. Each day, the system processes:
