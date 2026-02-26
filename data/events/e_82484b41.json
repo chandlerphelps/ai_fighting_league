@@ -1,0 +1,29 @@
+{
+  "id": "e_82484b41",
+  "date": "2026-03-06",
+  "name": "AFL Fight Night 2",
+  "matches": [
+    {
+      "match_id": "",
+      "fighter1_id": "f_blaze05",
+      "fighter1_name": "Neon",
+      "fighter2_id": "f_ghost04",
+      "fighter2_name": "Whisper",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    },
+    {
+      "match_id": "",
+      "fighter1_id": "f_iron01",
+      "fighter1_name": "Iron Fist",
+      "fighter2_id": "f_titan03",
+      "fighter2_name": "The Butcher",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    }
+  ],
+  "completed": false,
+  "summary": ""
+}
