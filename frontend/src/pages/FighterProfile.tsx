@@ -9,6 +9,7 @@ import type { Fighter } from '../types/fighter'
 import StatBar from '../components/StatBar'
 import InjuryBadge from '../components/InjuryBadge'
 import FighterLink from '../components/FighterLink'
+import FighterPortrait from '../components/FighterPortrait'
 import NoData from '../components/NoData'
 
 export default function FighterProfile() {
@@ -47,23 +48,26 @@ export default function FighterProfile() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xl }}>
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md, marginBottom: spacing.xs }}>
-          <h1 style={{ fontSize: fontSizes.xxl, color: colors.accent }}>{fighter.ring_name}</h1>
-          <span style={{
-            fontSize: fontSizes.xs,
-            color: alignmentColor,
-            padding: `2px ${spacing.sm}`,
-            border: `1px solid ${withAlpha(alignmentColor, 0.5)}`,
-            borderRadius: '3px',
-            textTransform: 'uppercase',
-          }}>
-            {fighter.alignment}
-          </span>
+      <div style={{ display: 'flex', gap: spacing.lg, alignItems: 'flex-start' }}>
+        <FighterPortrait fighterId={fighter.id} name={fighter.ring_name} size={96} />
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md, marginBottom: spacing.xs }}>
+            <h1 style={{ fontSize: fontSizes.xxl, color: colors.accent }}>{fighter.ring_name}</h1>
+            <span style={{
+              fontSize: fontSizes.xs,
+              color: alignmentColor,
+              padding: `2px ${spacing.sm}`,
+              border: `1px solid ${withAlpha(alignmentColor, 0.5)}`,
+              borderRadius: '3px',
+              textTransform: 'uppercase',
+            }}>
+              {fighter.alignment}
+            </span>
+          </div>
+          <p style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
+            {fighter.real_name}{fighter.gender ? ` — ${fighter.gender.charAt(0).toUpperCase() + fighter.gender.slice(1)}` : ''}, Age {fighter.age} — {fighter.origin}
+          </p>
         </div>
-        <p style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
-          {fighter.real_name}{fighter.gender ? ` — ${fighter.gender.charAt(0).toUpperCase() + fighter.gender.slice(1)}` : ''}, Age {fighter.age} — {fighter.origin}
-        </p>
       </div>
 
       <section>
