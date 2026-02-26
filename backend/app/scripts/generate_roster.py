@@ -1,15 +1,25 @@
 import random
-import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 
 from app.config import load_config
-from app.engine.fighter_generator import generate_fighter, ARCHETYPES
+from app.engine.fighter_generator import generate_fighter, plan_roster, ARCHETYPES
 from app.models.world_state import WorldState
 from app.services import data_manager
 
 
 SUPERNATURAL_ARCHETYPES = {"The Mystic"}
 POSSIBLE_SUPERNATURAL = {"The Wildcard", "The Seductress/Seductor", "The Survivor"}
+
+MAX_WORKERS = 4
+
+
+def _generate_one(config, blueprint, index, total):
+    label = f"{blueprint.get('ring_name', '?')} ({blueprint.get('archetype', '?')})"
+    print(f"  [{index + 1}/{total}] Generating {label}...")
+    fighter = generate_fighter(config, blueprint=blueprint)
+    print(f"  [{index + 1}/{total}] Done: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin} | Stats: {fighter.total_core_stats()}")
+    return fighter
 
 
 def generate_roster():
@@ -25,53 +35,32 @@ def generate_roster():
     random.shuffle(slots)
 
     existing_on_disk = data_manager.load_all_fighters(config)
-    existing_fighters = [
-        {
-            "ring_name": f.get("ring_name"),
-            "gender": f.get("gender", ""),
-            "height": f.get("height", ""),
-            "origin": f.get("origin"),
-            "alignment": f.get("alignment"),
-            "build": f.get("build", ""),
-            "distinguishing_features": f.get("distinguishing_features", ""),
-            "ring_attire": f.get("ring_attire", ""),
-            "fighting_style": f.get("fighting_style", {}),
-        }
-        for f in existing_on_disk
-    ]
-
     fighter_ids = [f.get("id") for f in existing_on_disk]
-    for i, (archetype, has_supernatural) in enumerate(slots):
-        print(f"[{i + 1}/{len(slots)}] Generating {archetype} {'(supernatural)' if has_supernatural else ''}...")
-        try:
-            fighter = generate_fighter(
-                config, archetype=archetype, has_supernatural=has_supernatural,
-                existing_fighters=existing_fighters,
-            )
-            data_manager.save_fighter(fighter, config)
-            fighter_ids.append(fighter.id)
-            existing_fighters.append({
-                "ring_name": fighter.ring_name,
-                "gender": fighter.gender,
-                "height": fighter.height,
-                "origin": fighter.origin,
-                "alignment": fighter.alignment,
-                "build": fighter.build,
-                "distinguishing_features": fighter.distinguishing_features,
-                "ring_attire": fighter.ring_attire,
-                "fighting_style": {
-                    "primary_style": fighter.fighting_style.primary_style,
-                    "secondary_style": fighter.fighting_style.secondary_style,
-                },
-            })
-            print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin}")
-            print(f"  Stats total: {fighter.total_core_stats()}")
-        except Exception as e:
-            print(f"  ERROR generating fighter: {e}")
-            continue
+    remaining_slots = slots[len(existing_on_disk):]
 
-        if i < len(slots) - 1:
-            time.sleep(1)
+    if not remaining_slots:
+        print("Roster already complete on disk.")
+    else:
+        print(f"Planning {len(remaining_slots)} fighters...")
+        blueprints = plan_roster(config, remaining_slots)
+        print(f"Roster planned! Generating {len(blueprints)} fighters in parallel (workers={MAX_WORKERS})...\n")
+
+        fighters = []
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {
+                executor.submit(_generate_one, config, bp, i, len(blueprints)): i
+                for i, bp in enumerate(blueprints)
+            }
+            for future in as_completed(futures):
+                idx = futures[future]
+                try:
+                    fighter = future.result()
+                    data_manager.save_fighter(fighter, config)
+                    fighters.append(fighter)
+                except Exception as e:
+                    print(f"  ERROR on fighter {idx + 1}: {e}")
+
+        fighter_ids.extend(f.id for f in fighters)
 
     random.shuffle(fighter_ids)
 

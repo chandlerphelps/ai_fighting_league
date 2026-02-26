@@ -30,10 +30,72 @@ ARCHETYPE GUIDELINES:
 - The Seductress/Seductor: Uses charm, beauty, and psychological manipulation as weapons."""
 
 
+def plan_roster(config: Config, slots: list[tuple[str, bool]]) -> list[dict]:
+    slot_lines = []
+    for i, (archetype, has_super) in enumerate(slots):
+        super_tag = " [SUPERNATURAL]" if has_super else ""
+        slot_lines.append(f"{i + 1}. {archetype}{super_tag}")
+
+    prompt = f"""{CHARACTER_PHILOSOPHY}
+
+You are planning a 16-fighter roster for the AI Fighting League. Each fighter must be COMPLETELY UNIQUE — no two should share the same country of origin, primary fighting style, body type, or visual concept.
+
+Here are the {len(slots)} character slots to fill:
+{chr(10).join(slot_lines)}
+
+For each slot, create a fighter blueprint. Return a JSON array of {len(slots)} objects, one per slot, in order. Each object must have:
+{{
+  "ring_name": "<evocative 1-2 word ring name>",
+  "real_name": "<authentic name for their cultural background>",
+  "gender": "<male|female>",
+  "age": <18-45>,
+  "origin": "<specific city/region, country>",
+  "alignment": "<face|heel|tweener>",
+  "height": "<height in feet/inches>",
+  "weight": "<weight in lbs>",
+  "build": "<body type description>",
+  "distinguishing_features": "<scars, tattoos, unique physical traits>",
+  "ring_attire": "<detailed outfit description>",
+  "primary_style": "<main fighting discipline>",
+  "secondary_style": "<secondary discipline>",
+  "concept": "<1-sentence creative pitch for this character>"
+}}
+
+DIVERSITY RULES:
+- At least 6 female fighters and at least 6 male fighters
+- Every fighter must come from a DIFFERENT country
+- Every fighter must have a DIFFERENT primary fighting style
+- Mix alignments: roughly equal face/heel/tweener split
+- Vary body types, ages, and visual aesthetics widely
+- [SUPERNATURAL] fighters should have concepts that naturally incorporate mystical/otherworldly elements
+
+Return ONLY valid JSON — an array of {len(slots)} objects."""
+
+    system_prompt = "You are a character designer for a fighting league. Plan a diverse, compelling roster. Always respond with valid JSON only."
+
+    result = call_openrouter_json(prompt, config, system_prompt=system_prompt, temperature=0.9, max_tokens=8192)
+
+    if isinstance(result, dict) and "roster" in result:
+        result = result["roster"]
+    if not isinstance(result, list):
+        raise RuntimeError(f"Expected JSON array from roster planning, got {type(result)}")
+
+    for i, bp in enumerate(result):
+        if i < len(slots):
+            bp["archetype"] = slots[i][0]
+            bp["has_supernatural"] = slots[i][1]
+
+    return result
+
+
 def generate_fighter(
     config: Config, archetype: str = None, has_supernatural: bool = False,
-    existing_fighters: list[dict] = None,
+    existing_fighters: list[dict] = None, blueprint: dict = None,
 ) -> Fighter:
+    if blueprint:
+        archetype = blueprint.get("archetype", archetype)
+        has_supernatural = blueprint.get("has_supernatural", has_supernatural)
+
     supernatural_instruction = ""
     if has_supernatural:
         supernatural_instruction = """This fighter HAS supernatural abilities. Give 1-2 supernatural stats values between 20-50. The rest should be 0. Choose from: arcane_power, chi_mastery, elemental_affinity, dark_arts. The supernatural ability should tie into their backstory and fighting style naturally."""
@@ -42,8 +104,30 @@ def generate_fighter(
 
     archetype_text = f"Primary archetype: {archetype}" if archetype else "Choose a fitting archetype"
 
+    blueprint_text = ""
+    if blueprint:
+        blueprint_text = f"""
+
+LOCKED CHARACTER IDENTITY (you MUST use these exactly):
+- Ring Name: {blueprint.get('ring_name', '')}
+- Real Name: {blueprint.get('real_name', '')}
+- Gender: {blueprint.get('gender', '')}
+- Age: {blueprint.get('age', '')}
+- Origin: {blueprint.get('origin', '')}
+- Alignment: {blueprint.get('alignment', '')}
+- Height: {blueprint.get('height', '')}
+- Weight: {blueprint.get('weight', '')}
+- Build: {blueprint.get('build', '')}
+- Distinguishing Features: {blueprint.get('distinguishing_features', '')}
+- Ring Attire: {blueprint.get('ring_attire', '')}
+- Primary Style: {blueprint.get('primary_style', '')}
+- Secondary Style: {blueprint.get('secondary_style', '')}
+- Character Concept: {blueprint.get('concept', '')}
+
+You MUST use the identity fields above verbatim in your JSON output. Your job is to flesh out: backstory, personality_traits, fears_quirks, signature_move, finishing_move, known_weaknesses, and all stats — while staying true to the character concept."""
+
     existing_roster_text = ""
-    if existing_fighters:
+    if not blueprint and existing_fighters:
         roster_lines = []
         for ef in existing_fighters:
             style = ef.get("fighting_style", {})
@@ -70,7 +154,7 @@ def generate_fighter(
 
     prompt = f"""{CHARACTER_PHILOSOPHY}
 
-Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing_roster_text}
+Generate a unique fighter for the AI Fighting League. {archetype_text}.{blueprint_text}{existing_roster_text}
 
 {supernatural_instruction}
 
