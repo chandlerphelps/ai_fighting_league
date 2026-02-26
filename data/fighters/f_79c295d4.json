@@ -1,0 +1,83 @@
+{
+  "id": "f_79c295d4",
+  "ring_name": "YUREI",
+  "real_name": "Akemi Tatsuo",
+  "age": "24",
+  "origin": "Kyoto, Japan",
+  "alignment": "tweener",
+  "gender": "female",
+  "height": "5'6\"",
+  "weight": "128 lbs",
+  "build": "Slender and willowy with an almost ethereal quality - her frame is delicate yet moves with unsettling grace, as if her body exists slightly out of sync with the physical world. Pale skin that seems to glow faintly in low light, dark circles under her eyes from chronic insomnia caused by her gift.",
+  "distinguishing_features": "Long straight black hair that moves independently of wind, always slightly unkempt as if she just woke from a dream. Eyes are an unusual pale gray - almost white - and appear to look through people rather than at them. A small red dot (traditional bindi-style) on her forehead that pulses faintly when she uses her abilities. No scars or tattoos - her body bears no marks of violence.",
+  "ring_attire": "Traditional shiro (white) hakama pants paired with a cropped black haori jacket, the sleeves so long they completely cover her hands. Beneath, a high-necked black mesh bodysuit with subtle silver thread patterns that resemble kanji for 'spirit' and 'restless.' She fights barefoot, her feet silent on the mat. A single red cord bracelet on her left wrist - her mother's - which she never removes. When she enters, she carries a folded paper omamori (protective charm) that she places at her corner before fighting.",
+  "backstory": "Akemi was born into a family of onmy\u014dji - traditional spirit mediators - in the ancient capital of Kyoto. Her grandmother was the last true practitioner of their lineage, and Akemi was marked from birth as spiritually sensitive. At age seven, she nearly drowned in a temple pond and died for ninety seconds before being resuscitated - an event that 'opened her eyes' to the spirit world. She can see ghosts, feel their emotions, and occasionally channel them through her body. Her family saw this as a gift, training her in traditional exorcism arts, but the constant contact with death and dying spirits slowly eroded her sanity. She fled to Tokyo, then America, fighting in underground circuits to feel 'real' - to have opponents who could hit back, who were undeniably alive. She fights not for money or glory, but to prove to herself that the living world still has weight.",
+  "personality_traits": [
+    "Detached",
+    "Melancholic",
+    "Observant",
+    "Unexpectedly violent"
+  ],
+  "fears_quirks": [
+    "Afraid of becoming fully 'gone' - losing herself to the spirits permanently",
+    "Talks to people who aren't there, sometimes mid-fight"
+  ],
+  "fighting_style": {
+    "primary_style": "Aikido-derived flow - she redirects momentum rather than meeting force with force",
+    "secondary_style": "Kyudo (archery) principles translated to striking - focus on precise single strikes over combinations",
+    "signature_move": "Kokoro-uchi (Heart Strike): A precise palm strike to the sternum that, when she channels spiritual energy, feels like ice water flooding the opponent's chest - causing momentary paralysis and gasping",
+    "finishing_move": "Y\u016bgen (The Twilight): A standing guillotine choke where she whispers names of the dead into the opponent's ear while tightening - the psychological horror of hearing a dying woman speak in dead voices often breaks opponents psychologically before they go unconscious",
+    "known_weaknesses": [
+      "Physically underwhelming - lacks knockout power without channeling",
+      "Vulnerable to grounded, pressure-based fighters who don't give her space to move"
+    ]
+  },
+  "physical_stats": {
+    "strength": 35,
+    "speed": 75,
+    "endurance": 60,
+    "durability": 45,
+    "recovery": 55
+  },
+  "combat_stats": {
+    "striking": 70,
+    "grappling": 65,
+    "defense": 85,
+    "fight_iq": 80,
+    "finishing_instinct": 60
+  },
+  "psychological_stats": {
+    "aggression": 40,
+    "composure": 74,
+    "confidence": 63,
+    "resilience": 71,
+    "killer_instinct": 55
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 45,
+    "elemental_affinity": 0,
+    "dark_arts": 25
+  },
+  "record": {
+    "wins": 0,
+    "losses": 2,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [
+    "",
+    "The second knockout in"
+  ],
+  "rivalries": [],
+  "last_fight_date": "2026-03-06",
+  "ranking": null
+}

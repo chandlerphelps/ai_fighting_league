@@ -1,0 +1,83 @@
+{
+  "id": "f_29b70018",
+  "ring_name": "JADU",
+  "real_name": "Aarav Sharma",
+  "age": "24",
+  "origin": "Mumbai, Maharashtra, India",
+  "alignment": "tweener",
+  "gender": "male",
+  "height": "5'10\"",
+  "weight": "165",
+  "build": "Lean and wiry with a performer's build - not bulky but possessing surprising explosive power hidden in his lanky frame. Long limbs with visible tendon and muscle structure suggesting speed over strength. Looks like he could be a dancer or gymnast rather than a fighter.",
+  "distinguishing_features": "A small mirror embedded in his left earlobe - a traditional nazar charm to 'reflect bad energy.' Constant slight dilation of pupils giving him an unnervingly wide-eyed appearance. No visible scars or tattoos - he considers marks 'too permanent for someone who changes.' A faint shimmer sometimes visible around his hands when under stress, like heat distortion.",
+  "ring_attire": "Wears loose-fitting clothing that seems to shift and change between matches - sometimes traditional kurta pants in deep purple, other times worn jeans with a cropped black jacket. Always wears a multi-colored scarf around his neck that he uses as a distraction tool, whipping it toward opponents' faces. Fingerless gloves in mismatched colors - one purple, one blue. Fights in worn leather loafers he claims are 'lucky.' Before entering, he flips a coin repeatedly - the same worn rupee coin he found at his first street performance.",
+  "backstory": "Aarav Sharma grew up in the crowded streets of Dharavi, learning magic tricks from elderly tourists and pickpocketing techniques from older children. By twelve, he was performing on Marine Drive - card tricks, coin vanishes, and eventually 'fortune telling' that was really cold reading elevated by his uncanny ability to sense what people wanted to believe. His 'gift' manifested during a brutal beating by gang members when he was sixteen - he somehow slipped through their grasp three times, tripping them into each other, making their weapons fly from their hands. He didn't understand it then. He still doesn't fully understand it now. He calls it 'jadu' - magic - and has learned to lean into it. He entered fighting circuits because audiences paid better than magic shows, and because he discovered something: when he fights unpredictably, when he makes moves that make no sense, the universe seems to... cooperate. Bullets miss. Opponents slip. The impossible happens. He's not a hero or a villain - he's a showman who found a superpower and decided to use it in a fighting ring.",
+  "personality_traits": [
+    "Chaotic",
+    "Flamboyant",
+    "Superstitious",
+    "Unpredictable"
+  ],
+  "fears_quirks": [
+    "Fears the loss of his 'luck' - believes it will leave him if he becomes too serious or loses his sense of fun",
+    "Has an obsessive ritual of flipping his lucky coin exactly seven times before every match - if it doesn't land heads at least four times, he becomes visibly anxious"
+  ],
+  "fighting_style": {
+    "primary_style": "Improvised chaos - he has training in basic wushu and capoeira but deliberately fights 'wrong,' using moves that make no tactical sense, switching stances mid-combo, throwing techniques from completely different martial arts at random",
+    "secondary_style": "Street fighting basics learned from Dharavi alley fights - not technically proficient but effective enough when combined with his supernatural element",
+    "signature_move": "The Sevenfold Fold - he produces a litany of objects from his clothing (scarves, coins, cards, small mirrors) while attacking, creating a cascading visual assault that disorients opponents. The actual strikes are mediocre but the confusion they cause is devastating.",
+    "finishing_move": "Lady Luck's Kiss - he catches an opponent's strike, spins them using their own momentum while flipping his coin with his free hand, and delivers a precise strike to a pressure point. He claims the coin flip 'decides' whether they wake up or not (it always works).",
+    "known_weaknesses": [
+      "Against disciplined grapplers who can neutralize his chaotic striking - his ground game is virtually non-existent",
+      "When his supernatural ability is somehow suppressed (has happened rarely in arenas with certain equipment), he becomes an average fighter at best"
+    ]
+  },
+  "physical_stats": {
+    "strength": 45,
+    "speed": 80,
+    "endurance": 55,
+    "durability": 50,
+    "recovery": 60
+  },
+  "combat_stats": {
+    "striking": 65,
+    "grappling": 30,
+    "defense": 70,
+    "fight_iq": 60,
+    "finishing_instinct": 76
+  },
+  "psychological_stats": {
+    "aggression": 70,
+    "composure": 55,
+    "confidence": 87,
+    "resilience": 50,
+    "killer_instinct": 65
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 35
+  },
+  "record": {
+    "wins": 2,
+    "losses": 0,
+    "draws": 0,
+    "kos": 1,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [
+    "",
+    ""
+  ],
+  "rivalries": [],
+  "last_fight_date": "2026-03-06",
+  "ranking": null
+}

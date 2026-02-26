@@ -1,0 +1,39 @@
+{
+  "id": "e_92705f9b",
+  "date": "2026-03-10",
+  "name": "AFL Fight Night 3",
+  "matches": [
+    {
+      "match_id": "m_79b399e0",
+      "fighter1_id": "f_90c70054",
+      "fighter1_name": "BOREALIS",
+      "fighter2_id": "f_a38daf07",
+      "fighter2_name": "SIREN",
+      "completed": true,
+      "winner_id": "f_a38daf07",
+      "method": "submission"
+    },
+    {
+      "match_id": "m_6efad973",
+      "fighter1_id": "f_a3d5d09d",
+      "fighter1_name": "TALON",
+      "fighter2_id": "f_b96b91cb",
+      "fighter2_name": "BANYAN",
+      "completed": true,
+      "winner_id": "f_b96b91cb",
+      "method": "submission"
+    },
+    {
+      "match_id": "m_f011bc18",
+      "fighter1_id": "f_c19286a2",
+      "fighter1_name": "MALAPERTE",
+      "fighter2_id": "f_c79d3911",
+      "fighter2_name": "KRAKEN",
+      "completed": true,
+      "winner_id": "f_c79d3911",
+      "method": "ko_tko"
+    }
+  ],
+  "completed": true,
+  "summary": "SIREN wins by SUBMISSION (R3); BANYAN wins by SUBMISSION (R2); KRAKEN wins by KO TKO (R2)"
+}

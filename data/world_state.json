@@ -1,22 +1,38 @@
 {
-  "current_date": "2026-03-05",
-  "day_number": 7,
+  "current_date": "2026-03-12",
+  "day_number": 14,
   "rankings": [
-    "f_blaze05",
-    "f_ghost04",
-    "f_iron01",
-    "f_titan03",
-    "f_viper02"
+    "f_29b70018",
+    "f_66c356cd",
+    "f_a38daf07",
+    "f_b96b91cb",
+    "f_c79d3911",
+    "f_6b3f9037",
+    "f_b6496521",
+    "f_90c70054",
+    "f_a3d5d09d",
+    "f_c19286a2",
+    "f_464dacf2",
+    "f_79c295d4",
+    "f_d790dbe3",
+    "f_e29f6445",
+    "f_e2e2d696",
+    "f_e6021e05"
   ],
   "upcoming_events": [
-    "e_82484b41",
-    "e_71365863"
+    "e_878a9cd8",
+    "e_f35aba74"
   ],
   "completed_events": [
-    "e_fec89ae6"
+    "e_1c3cd846",
+    "e_f22c453f",
+    "e_92705f9b"
   ],
-  "active_injuries": {},
+  "active_injuries": {
+    "f_a3d5d09d": 41,
+    "f_c19286a2": 4
+  },
   "rivalry_graph": [],
-  "last_daily_summary": "Day 7 \u2014 2026-03-05",
-  "event_counter": 3
+  "last_daily_summary": "Day 14 \u2014 2026-03-12",
+  "event_counter": 5
 }

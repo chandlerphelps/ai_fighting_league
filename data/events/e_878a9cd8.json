@@ -1,0 +1,39 @@
+{
+  "id": "e_878a9cd8",
+  "date": "2026-03-14",
+  "name": "AFL Fight Night 4",
+  "matches": [
+    {
+      "match_id": "",
+      "fighter1_id": "f_90c70054",
+      "fighter1_name": "BOREALIS",
+      "fighter2_id": "f_a38daf07",
+      "fighter2_name": "SIREN",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    },
+    {
+      "match_id": "",
+      "fighter1_id": "f_a3d5d09d",
+      "fighter1_name": "TALON",
+      "fighter2_id": "f_b96b91cb",
+      "fighter2_name": "BANYAN",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    },
+    {
+      "match_id": "",
+      "fighter1_id": "f_c19286a2",
+      "fighter1_name": "MALAPERTE",
+      "fighter2_id": "f_c79d3911",
+      "fighter2_name": "KRAKEN",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    }
+  ],
+  "completed": false,
+  "summary": ""
+}

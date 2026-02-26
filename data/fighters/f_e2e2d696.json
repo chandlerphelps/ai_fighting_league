@@ -1,0 +1,81 @@
+{
+  "id": "f_e2e2d696",
+  "ring_name": "RENSEIGNEMENT",
+  "real_name": "C\u00e9leste Marchetti",
+  "age": 28,
+  "origin": "Lyon, Auvergne-Rh\u00f4ne-Alpes, France",
+  "alignment": "tweener",
+  "gender": "female",
+  "height": "5'7\"",
+  "weight": "134 lbs",
+  "build": "Lean and wiry with a swimmer's build - long limbs, narrow waist, broad shoulders, no bulk but dense lean muscle built through years of precise movement drills rather than heavy lifting. Looks like she could be a fencer or competitive swimmer.",
+  "distinguishing_features": "A small beauty mark above her left eyebrow (her signature feature), pale blue eyes that seem to calculate everything, a thin scar on her right forearm from a fencing accident in her youth, no tattoos - she considers body modification 'permanent noise that interferes with analysis.' Hair kept in a severe low bun that never loosens, the same style since her competitive fencing days.",
+  "ring_attire": "Clean white tailored shirt with French cuffs, the sleeves rolled precisely to her elbows - she keeps it on throughout fights, refusing the theatrical removal other fighters perform. Beneath: black high-waisted compression shorts with white pinstripes, giving a vintage boxing photograph aesthetic. Fights in pristine white leather boxing shoes with French flag laces - she polishes them before every match. White fingerless gloves with subtle gray palm padding, worn soft from use but immaculately maintained. A thin silver chain around her neck with a small key pendant - the only personal item she wears, origin unexplained.",
+  "backstory": "C\u00e9leste was a competitive \u00e9p\u00e9e fencer in the French national circuit, ranking third in Europe before a career-ending knee injury at twenty-two. The injury healed, but her coaches noticed something: she had spent years studying opponents' movements, timing, and tendencies to compensate for her lack of elite physical gifts. She had been analyzing fights, not just competing in them. A sports psychologist recognized her gift for pattern recognition and tactical analysis, connecting her with a retired Savate champion who saw her fencing footwork as a foundation for the French kickboxing style. She trained for four years in relative obscurity, developing a hyper-technical style that prioritizes distance management and point-scoring efficiency over spectacle. She fights because she proved everyone wrong once, and she refuses to let them forget it.",
+  "personality_traits": [
+    "Analytical - she processes fight footage constantly, memorizing opponent tendencies",
+    "Contemptuous of brute force - she considers strength a substitute for skill",
+    "Coldly confident - she speaks about opponents as if they've already lost",
+    "Perfectionist - becomes visibly irritated by her own minor mistakes"
+  ],
+  "fears_quirks": [
+    "Fear of losing to someone she considers technically inferior - it would invalidate her entire philosophy",
+    "Has a habit of touching her key pendant before every attack, a superstitious ritual she denies performing"
+  ],
+  "fighting_style": {
+    "primary_style": "Savate (French boxing) - emphasis on precision kicking at long range, using her fencing footwork to maintain perfect distance",
+    "secondary_style": "Boxing - classical French boxing technique, sharp jab-cross combinations to set up kicks",
+    "signature_move": "The Dossier - a systematic combination: jab to measure distance, low crescent kick to check footwork, then a high fouett\u00e9 kick to the head once she identifies her opponent's defensive pattern. She only uses it after 'filing' her opponent's tendencies.",
+    "finishing_move": "Classification Finale - a perfectly timed counter: she leans back from an incoming attack (her exceptional distance perception), simultaneously delivering a devastating uppercut while her opponent is committed to the strike, followed by a crushing head kick to the fallen opponent.",
+    "known_weaknesses": [
+      "Struggles against aggressive pressure fighters who ignore her distance game",
+      "Poor clinch work - prefers to keep opponents at striking range",
+      "Can be baited into exchanges by opponents who fake patterns"
+    ]
+  },
+  "physical_stats": {
+    "strength": 45,
+    "speed": 78,
+    "endurance": 68,
+    "durability": 52,
+    "recovery": 58
+  },
+  "combat_stats": {
+    "striking": 88,
+    "grappling": 32,
+    "defense": 91,
+    "fight_iq": 94,
+    "finishing_instinct": 65
+  },
+  "psychological_stats": {
+    "aggression": 38,
+    "composure": 82,
+    "confidence": 85,
+    "resilience": 55,
+    "killer_instinct": 48
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

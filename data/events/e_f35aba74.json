@@ -1,0 +1,39 @@
+{
+  "id": "e_f35aba74",
+  "date": "2026-03-18",
+  "name": "AFL Fight Night 5",
+  "matches": [
+    {
+      "match_id": "",
+      "fighter1_id": "f_d790dbe3",
+      "fighter1_name": "MANBO",
+      "fighter2_id": "f_e29f6445",
+      "fighter2_name": "ZAVOD",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    },
+    {
+      "match_id": "",
+      "fighter1_id": "f_e2e2d696",
+      "fighter1_name": "RENSEIGNEMENT",
+      "fighter2_id": "f_e6021e05",
+      "fighter2_name": "BABY ZEPHYR",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    },
+    {
+      "match_id": "",
+      "fighter1_id": "f_29b70018",
+      "fighter1_name": "JADU",
+      "fighter2_id": "f_66c356cd",
+      "fighter2_name": "PAPALOTL",
+      "completed": false,
+      "winner_id": null,
+      "method": null
+    }
+  ],
+  "completed": false,
+  "summary": ""
+}

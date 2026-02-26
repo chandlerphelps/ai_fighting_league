@@ -1,0 +1,89 @@
+{
+  "id": "f_a3d5d09d",
+  "ring_name": "TALON",
+  "real_name": "Amara Vestidas",
+  "age": 24,
+  "origin": "Manila, Philippines",
+  "alignment": "tweener",
+  "gender": "female",
+  "height": "5'4\"",
+  "weight": "118 lbs",
+  "build": "Compact and wiry with visible lean muscle; every inch of her frame bears the marks of survival - dense, functional muscle built through years of fighting for survival rather than any formal training. Cat-like shoulders, fast-twitch legs, hands scarred from countless bare-knuckle bouts.",
+  "distinguishing_features": "Extensive burn scarring covering her left forearm and side (from a childhood house fire), multiple scarification patterns on her knuckles forming crude tally marks, slightly crooked nose from being broken repeatedly,\u6c38\u8fdc\u8b66\u60d5\u7684\u773c\u795e - perpetually scanning her surroundings. Short-cropped black hair with a single streak of white at her left temple from the fire trauma.",
+  "ring_attire": "Worn olive cargo pants cut short to the thigh with utility pockets stripped away, leaving only frayed edges. Cropped tank top in faded army green, sleeves torn off to display her scarred left arm openly - she refuses to hide her history. Fingerless wrap gloves in tan leather, the wraps wound from her wrists to mid-forearm. Military boots so worn they're soft as leather, always untied in the traditional Filipino street fighter manner. A single brass knuckle dangles from her right pocket - not used as a weapon, but as a reminder of the night she escaped her past.",
+  "backstory": "Amara Vestidas was seven years old when the fire consumed her family's shanty in the Tondo slums of Manila. She crawled out through smoke and flame, her left arm permanently scarred, her younger brother clutched in her arms - his body already gone. The neighborhood remembered: a child carrying a corpse, walking calmly to the fire station, her eyes holding nothing but functional blankness. The orphan who didn't cry. She spent the next fifteen years surviving Tondo's brutal economy - stealing, running errands for gangsters, and eventually, fighting in the underground 'kuwentuhan' - literally 'storytelling' fights where combatants literally narrated their pain through violence, betting small sums of money on brutal bare-knuckle matches where the only rule was 'no dying.' She learned that pain was a language, that endurance was the only currency that mattered, that showing weakness invited predation. At nineteen, she killed a man - self-defense, she maintains, though the details remain murky. She fled to the boxing rings of Metro Manila, then the underground circuits abroad. Now she fights in the AFL not for glory but because the ring is the only place her survival instincts serve a purpose. She doesn't want to be here. She doesn't want to be anywhere. But she's here, and she'll outlast everyone.",
+  "personality_traits": [
+    "Emotionally guarded - vulnerability is a luxury she cannot afford",
+    "Tactically patient - willing to absorb punishment for hours waiting for an opening",
+    "Darkly pragmatic - views violence as a tool, not an expression",
+    "Quietly observant - watches everything, speaks little"
+  ],
+  "fears_quirks": [
+    "Cannot sleep without checking all exits and potential weapons in the room",
+    "Refuses to eat food she hasn't prepared herself - past poisoning left permanent intestinal damage"
+  ],
+  "fighting_style": {
+    "primary_style": "Filipino martial arts (Kali/Eskrima) - practical knife-and-stick fighting translated to empty-hand combat",
+    "secondary_style": "Street boxing with dirty infighting",
+    "signature_move": "The Kuwentuhan - she freezes mid-combat, staring at her opponent with that empty expression, waiting. When they hesitate or charge, she explodes with a rapid flurry of elbow strikes, knee taps, and eye gouges designed to tell 'the story' of her suffering through their pain.",
+    "finishing_move": "Tally Mark - after wearing opponents down, she grabs their head and drives them down while kneeing their face repeatedly, mimicking the scarification pattern on her own knuckles. She calls it 'counting their chapters.'",
+    "known_weaknesses": [
+      "Poor cardio relative to technical skill - survives through durability, not endurance",
+      "Struggles against opponents who refuse to engage - her patience has limits",
+      "Left arm has reduced flexibility from burn scarring, making certain grappling positions dangerous for her"
+    ]
+  },
+  "physical_stats": {
+    "strength": 46,
+    "speed": 78,
+    "endurance": 63,
+    "durability": 73,
+    "recovery": 58
+  },
+  "combat_stats": {
+    "striking": 67,
+    "grappling": 60,
+    "defense": 71,
+    "fight_iq": 75,
+    "finishing_instinct": 66
+  },
+  "psychological_stats": {
+    "aggression": 55,
+    "composure": 80,
+    "confidence": 62,
+    "resilience": 84,
+    "killer_instinct": 60
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 1,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "injured",
+    "injuries": [
+      {
+        "type": "neck strain",
+        "severity": "severe",
+        "recovery_days_remaining": 43
+      }
+    ],
+    "recovery_days_remaining": 43,
+    "morale": "low",
+    "momentum": "neutral"
+  },
+  "storyline_log": [
+    "For TALON, this loss was a brutal introduction to the sport's unforgiving nature\u2014a patient predator undone not by a blitz, but by a single mistake against someone equally"
+  ],
+  "rivalries": [],
+  "last_fight_date": "2026-03-10",
+  "ranking": null
+}

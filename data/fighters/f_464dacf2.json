@@ -1,0 +1,83 @@
+{
+  "id": "f_464dacf2",
+  "ring_name": "OLD GUARD",
+  "real_name": "Katya Voronova",
+  "age": "41",
+  "origin": "Moscow, Russia",
+  "alignment": "face",
+  "gender": "female",
+  "height": "5'7\"",
+  "weight": "142",
+  "build": "Once athletic but now softening with age - narrow shoulders, slight paunch from years of drinking, legs still surprisingly powerful from Muay Thai training, hands scarred and calloused from decades of fighting. She carries her weight poorly compared to her prime, the muscle replaced by tissue that wasn't there in her twenties.",
+  "distinguishing_features": "Severe scar across her nose from her first professional fight (broken and never set properly), deep laugh lines around her mouth and eyes, several missing teeth (replaced with gold), bruised and thickened ears from years of catches, small Soviet star tattoo on her left hip she got drunk in 2003 and regrets, faint track marks on her inner elbows from a brief period of substance issues - she got clean but the marks remain.",
+  "ring_attire": "Wears an old Soviet track jacket - red with white stripes down the sleeves, the name 'VORONOVA' still visible in faded letters - over a black sports bra. Below: gray sweatpants with the cuffs cut raggedly, revealing old white high-top sneakers held together with duct tape and prayer. She refuses to update her look, seeing it as a middle finger to the promotion's demands for 'sexier' attire. Before fights, she removes the jacket slowly, revealing arms covered in old bruises she doesn't bother hiding anymore. A battered leather bracelet on her right wrist - her father's, from his military service in Afghanistan.",
+  "backstory": "Katya Voronova was the most feared female striker in Eastern Europe during the early 2000s. She fought in underground pits across Russia, Ukraine, and Thailand, accumulating a 34-4 record with 28 knockouts before the AI Fighting League even existed. She was known for her iron chin, her relentless pressure, and her ability to eat punishment while walking forward like a machine that couldn't be stopped. She made her AIFL debut at 31, already past her prime but still dangerous. She won her first three matches by brutal knockout, reminding everyone why they called her 'The Babushka Bomber.' Then she faced a younger, faster opponent and everything changed. She took a knee to the face in round two and woke up in a hospital with a shattered orbital bone, a career-threatening concussion, and a message from her body that time was done waiting. She spent two years recovering, another year drinking, and nearly died from alcohol poisoning in 2019. She got clean, rebuilt herself slowly, and returned to the AIFL at 38 as a shadow of her former self. Now she fights not to win championships but to prove she still exists - that the legend isn't completely dead. She's become a mentor figure to young fighters, sharing knowledge she's accumulated over decades, but inside she burns with the shame of being remembered for what she was rather than what she is.",
+  "personality_traits": [
+    "BITTER YET WARM - She resents what age has taken but remains genuinely kind to fans and fellow fighters",
+    "HONESTLY SELF-DESTRUCTIVE - She acknowledges her flaws openly, sometimes to the point of oversharing",
+    "TECHNICAL HOARDER - She collects fighting knowledge obsessively, viewing techniques as treasures",
+    "REFUSES GRIEF - She hasn't accepted her decline and keeps fighting because stopping means dying"
+  ],
+  "fears_quirks": [
+    "TERRIFIED OF FORGETTING - She repeats old stories constantly, afraid she'll lose her memories like her skills",
+    "DRINKS VODKA BEFORE EVERY FIGHT - Just one shot, to 'take the edge off,' though it slows her reflexes"
+  ],
+  "fighting_style": {
+    "primary_style": "Muay Thai - faded but deadly, her teeps and clinch work still top-tier despite reduced speed",
+    "secondary_style": "Grappling defense - she can't take opponents down anymore but excels at preventing being taken down, using veteran savvy to stay upright",
+    "signature_move": "THE CORNERED RAT - A dirty clinch battle where she traps opponents against the cage/fence and unloads brutal knees to the body while leaning all her weight on them, grinding them down psychologically as much as physically. Named because she fights like she has nothing left to lose.",
+    "finishing_move": "THE FUNERAL DIRGE - A slow, grinding ground-and-pound from mount where she rains down short, precise elbows and fists, controlling position through weight and experience rather than athleticism. She finishes fights like she mourns them - methodically and with deep emotion.",
+    "known_weaknesses": [
+      "GAS TANK GONE - She fades badly after round two, her endurance destroyed by age and past injuries",
+      "SLOW STARTS - It takes her a full round to find her rhythm, and aggressive early fighters can overwhelm her"
+    ]
+  },
+  "physical_stats": {
+    "strength": 61,
+    "speed": 45,
+    "endurance": 41,
+    "durability": 77,
+    "recovery": 33
+  },
+  "combat_stats": {
+    "striking": 80,
+    "grappling": 53,
+    "defense": 85,
+    "fight_iq": 95,
+    "finishing_instinct": 72
+  },
+  "psychological_stats": {
+    "aggression": 65,
+    "composure": 91,
+    "confidence": 48,
+    "resilience": 95,
+    "killer_instinct": 41
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 2,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [
+    "The split decision felt like the universe splitting her in two\u2014one decision away from redemption, from proof she still belonged. Instead, she leaves with nothing but the cold comfort of \"almost\": her record a hollow zero, her refusal to grieve now cracked but not broken, and JADU's name etched into her mind as the one who proved age doesn't negotiate.",
+    ""
+  ],
+  "rivalries": [],
+  "last_fight_date": "2026-03-06",
+  "ranking": null
+}
