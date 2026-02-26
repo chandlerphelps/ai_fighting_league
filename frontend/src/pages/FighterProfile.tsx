@@ -62,7 +62,7 @@ export default function FighterProfile() {
           </span>
         </div>
         <p style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
-          {fighter.real_name} — Age {fighter.age} — {fighter.origin}
+          {fighter.real_name}{fighter.gender ? ` — ${fighter.gender.charAt(0).toUpperCase() + fighter.gender.slice(1)}` : ''}, Age {fighter.age} — {fighter.origin}
         </p>
       </div>
 

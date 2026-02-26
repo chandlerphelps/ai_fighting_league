@@ -66,6 +66,7 @@ export interface Fighter {
   age: number
   origin: string
   alignment: string
+  gender: string
   height: string
   weight: string
   build: string

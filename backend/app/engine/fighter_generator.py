@@ -44,13 +44,27 @@ def generate_fighter(
 
     existing_roster_text = ""
     if existing_fighters:
-        roster_lines = [
-            f"- {ef.get('ring_name', '?')} — {ef.get('archetype', '?')}, from {ef.get('origin', '?')}"
-            for ef in existing_fighters
-        ]
+        roster_lines = []
+        for ef in existing_fighters:
+            style = ef.get("fighting_style", {})
+            if isinstance(style, str):
+                style_text = style
+            else:
+                primary = style.get("primary_style", "?")
+                secondary = style.get("secondary_style", "")
+                style_text = f"{primary} / {secondary}" if secondary else primary
+            line = (
+                f"- {ef.get('ring_name', '?')} ({ef.get('gender', '?')}, {ef.get('height', '?')})"
+                f" — {ef.get('alignment', '?')}, from {ef.get('origin', '?')}"
+                f" | {ef.get('build', '?')}, {ef.get('distinguishing_features', '?')}"
+                f" | Attire: {ef.get('ring_attire', '?')}"
+                f" | {style_text}"
+            )
+            roster_lines.append(line)
         existing_roster_text = (
             "\n\nEXISTING ROSTER (you MUST create a COMPLETELY DIFFERENT character — "
-            "no duplicate ring names, different origin/nationality, different fighting style concept, different personality):\n"
+            "no duplicate ring names, different origin/nationality, different fighting style concept, "
+            "different physical appearance, different personality):\n"
             + "\n".join(roster_lines)
         )
 
@@ -73,6 +87,7 @@ Return ONLY valid JSON with this exact structure:
   "real_name": "<authentic name for their cultural background>",
   "age": <18-45>,
   "origin": "<specific city/region, country>",
+  "gender": "<male|female>",
   "alignment": "<face|heel|tweener>",
   "height": "<height in feet/inches>",
   "weight": "<weight in lbs>",
@@ -147,6 +162,7 @@ Return ONLY valid JSON with this exact structure:
         age=result.get("age", 25),
         origin=result.get("origin", "Unknown"),
         alignment=result.get("alignment", "tweener"),
+        gender=result.get("gender", ""),
         height=result.get("height", ""),
         weight=result.get("weight", ""),
         build=result.get("build", ""),

@@ -142,6 +142,7 @@ class Fighter:
     age: int = 25
     origin: str = ""
     alignment: str = "tweener"
+    gender: str = ""
     height: str = ""
     weight: str = ""
     build: str = ""
@@ -181,6 +182,7 @@ class Fighter:
             age=d.get("age", 25),
             origin=d.get("origin", ""),
             alignment=d.get("alignment", "tweener"),
+            gender=d.get("gender", ""),
             height=d.get("height", ""),
             weight=d.get("weight", ""),
             build=d.get("build", ""),

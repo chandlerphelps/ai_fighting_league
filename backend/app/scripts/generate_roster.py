@@ -26,7 +26,17 @@ def generate_roster():
 
     existing_on_disk = data_manager.load_all_fighters(config)
     existing_fighters = [
-        {"ring_name": f.get("ring_name"), "origin": f.get("origin"), "archetype": f.get("alignment")}
+        {
+            "ring_name": f.get("ring_name"),
+            "gender": f.get("gender", ""),
+            "height": f.get("height", ""),
+            "origin": f.get("origin"),
+            "alignment": f.get("alignment"),
+            "build": f.get("build", ""),
+            "distinguishing_features": f.get("distinguishing_features", ""),
+            "ring_attire": f.get("ring_attire", ""),
+            "fighting_style": f.get("fighting_style", {}),
+        }
         for f in existing_on_disk
     ]
 
@@ -40,9 +50,20 @@ def generate_roster():
             )
             data_manager.save_fighter(fighter, config)
             fighter_ids.append(fighter.id)
-            existing_fighters.append(
-                {"ring_name": fighter.ring_name, "origin": fighter.origin, "archetype": archetype}
-            )
+            existing_fighters.append({
+                "ring_name": fighter.ring_name,
+                "gender": fighter.gender,
+                "height": fighter.height,
+                "origin": fighter.origin,
+                "alignment": fighter.alignment,
+                "build": fighter.build,
+                "distinguishing_features": fighter.distinguishing_features,
+                "ring_attire": fighter.ring_attire,
+                "fighting_style": {
+                    "primary_style": fighter.fighting_style.primary_style,
+                    "secondary_style": fighter.fighting_style.secondary_style,
+                },
+            })
             print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin}")
             print(f"  Stats total: {fighter.total_core_stats()}")
         except Exception as e:
