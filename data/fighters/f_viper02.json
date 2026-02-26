@@ -1,0 +1,79 @@
+{
+  "id": "f_viper02",
+  "ring_name": "Viper",
+  "real_name": "Yuki Tanaka",
+  "age": 24,
+  "origin": "Osaka, Japan",
+  "alignment": "heel",
+  "height": "5'5\"",
+  "weight": "125 lbs",
+  "build": "Lean, whip-fast, compact",
+  "distinguishing_features": "Snake tattoo coiling up her spine, emerald green eyes",
+  "ring_attire": "High-cut black leotard with green scale pattern, thigh-high boots",
+  "backstory": "Yuki was raised in the underground fighting pits of Osaka's criminal underworld. Her father owed debts to the wrong people, and she was taken as collateral at age 14. They trained her to fight, but she trained herself to survive. She fights dirty because clean fighting gets you killed where she comes from. She escaped at 19 and now fights in the AFL \u2014 not for glory, but because violence is the only language she speaks fluently.",
+  "personality_traits": [
+    "cunning",
+    "ruthless",
+    "seductive",
+    "distrustful"
+  ],
+  "fears_quirks": [
+    "never turns her back to doors",
+    "smiles before she hurts someone"
+  ],
+  "fighting_style": {
+    "primary_style": "Jiu-Jitsu",
+    "secondary_style": "Dirty Boxing",
+    "signature_move": "Serpent's Coil \u2014 a flying armbar from clinch",
+    "finishing_move": "Venom Strike \u2014 a knee to the temple from Thai clinch",
+    "known_weaknesses": [
+      "Light frame, can't absorb heavy shots",
+      "Reckless when angry"
+    ]
+  },
+  "physical_stats": {
+    "strength": 40,
+    "speed": 90,
+    "endurance": 70,
+    "durability": 45,
+    "recovery": 75
+  },
+  "combat_stats": {
+    "striking": 65,
+    "grappling": 85,
+    "defense": 75,
+    "fight_iq": 80,
+    "finishing_instinct": 70
+  },
+  "psychological_stats": {
+    "aggression": 80,
+    "composure": 55,
+    "confidence": 75,
+    "resilience": 70,
+    "killer_instinct": 85
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

@@ -1,0 +1,79 @@
+{
+  "id": "f_titan03",
+  "ring_name": "The Butcher",
+  "real_name": "Dimitri Volkov",
+  "age": 34,
+  "origin": "Novosibirsk, Russia",
+  "alignment": "heel",
+  "height": "6'5\"",
+  "weight": "278 lbs",
+  "build": "Massive, barrel-chested, raw-muscled",
+  "distinguishing_features": "Burn scars across his back, missing left earlobe",
+  "ring_attire": "Cargo pants, bare-chested, steel-toed boots (removed for fights)",
+  "backstory": "Dimitri was a bare-knuckle fighter in Siberian logging camps before anyone gave him a proper fight. He has no formal training \u2014 he just shows up, absorbs punishment like a glacier absorbs rain, and then breaks people. He doesn't fight for money or glory. He fights because when he's in the cage, the noise in his head goes quiet. Nobody knows what happened to him in those camps. Nobody asks twice.",
+  "personality_traits": [
+    "silent",
+    "brutal",
+    "haunted",
+    "surprisingly gentle outside the cage"
+  ],
+  "fears_quirks": [
+    "doesn't speak before fights",
+    "collects small wooden figurines"
+  ],
+  "fighting_style": {
+    "primary_style": "Brawling",
+    "secondary_style": "Wrestling",
+    "signature_move": "Siberian Slam \u2014 picks opponents up and hurls them into the cage",
+    "finishing_move": "The Cleaver \u2014 a hammerfist from mount that ends fights",
+    "known_weaknesses": [
+      "Slow footwork",
+      "Gasses out in later rounds"
+    ]
+  },
+  "physical_stats": {
+    "strength": 95,
+    "speed": 35,
+    "endurance": 55,
+    "durability": 90,
+    "recovery": 50
+  },
+  "combat_stats": {
+    "striking": 60,
+    "grappling": 70,
+    "defense": 45,
+    "fight_iq": 40,
+    "finishing_instinct": 85
+  },
+  "psychological_stats": {
+    "aggression": 90,
+    "composure": 40,
+    "confidence": 70,
+    "resilience": 90,
+    "killer_instinct": 95
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

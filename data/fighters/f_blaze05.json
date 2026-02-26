@@ -1,0 +1,79 @@
+{
+  "id": "f_blaze05",
+  "ring_name": "Neon",
+  "real_name": "Jaylen Washington",
+  "age": 22,
+  "origin": "Atlanta, Georgia, USA",
+  "alignment": "face",
+  "height": "5'10\"",
+  "weight": "170 lbs",
+  "build": "Athletic, sculpted, explosive",
+  "distinguishing_features": "Neon green braids, always smiling, visible six-pack",
+  "ring_attire": "Neon green shorts, matching kicks, flashy entrance jacket",
+  "backstory": "Jaylen is the most exciting young fighter the AFL has seen in years. A former college wrestler who discovered he could strike like a middleweight and move like a flyweight. He's charismatic, fearless, and fights with a joy that's infectious. The crowd loves him. He's 22, undefeated in his mind, and convinced he's destined to be champion. Whether that confidence is warranted or just youth remains to be seen.",
+  "personality_traits": [
+    "charismatic",
+    "fearless",
+    "showman",
+    "occasionally reckless"
+  ],
+  "fears_quirks": [
+    "can't resist playing to the crowd mid-fight",
+    "superstitious about his green braids"
+  ],
+  "fighting_style": {
+    "primary_style": "MMA Wrestling",
+    "secondary_style": "Kickboxing",
+    "signature_move": "The Highlight Reel \u2014 a spinning back kick to the body",
+    "finishing_move": "Neon Lights \u2014 a flying knee that puts out the lights",
+    "known_weaknesses": [
+      "Showboating costs him positions",
+      "Inexperienced against veterans"
+    ]
+  },
+  "physical_stats": {
+    "strength": 65,
+    "speed": 85,
+    "endurance": 70,
+    "durability": 60,
+    "recovery": 70
+  },
+  "combat_stats": {
+    "striking": 75,
+    "grappling": 75,
+    "defense": 60,
+    "fight_iq": 55,
+    "finishing_instinct": 70
+  },
+  "psychological_stats": {
+    "aggression": 75,
+    "composure": 50,
+    "confidence": 90,
+    "resilience": 60,
+    "killer_instinct": 65
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

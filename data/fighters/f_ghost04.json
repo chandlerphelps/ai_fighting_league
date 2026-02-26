@@ -1,0 +1,79 @@
+{
+  "id": "f_ghost04",
+  "ring_name": "Whisper",
+  "real_name": "Linh Nguyen",
+  "age": 27,
+  "origin": "Ho Chi Minh City, Vietnam",
+  "alignment": "tweener",
+  "height": "5'2\"",
+  "weight": "112 lbs",
+  "build": "Tiny, willowy, deceptively strong core",
+  "distinguishing_features": "White streak in black hair, moves like she weighs nothing",
+  "ring_attire": "White silk wrap top, flowing white pants that conceal her kicks",
+  "backstory": "Linh trained in a remote Vietnamese monastery from age 6, learning a discipline that blends Wing Chun with chi manipulation. She is the smallest fighter in the AFL and possibly the most dangerous. She doesn't overpower opponents \u2014 she redirects their energy, finds the gaps in their defense, and dismantles them with surgical precision. She barely speaks, communicates through movement, and fights with an eerie calm that unsettles even the most composed opponents.",
+  "personality_traits": [
+    "serene",
+    "observant",
+    "enigmatic",
+    "compassionate"
+  ],
+  "fears_quirks": [
+    "meditates for exactly 30 minutes before every fight",
+    "has never raised her voice"
+  ],
+  "fighting_style": {
+    "primary_style": "Wing Chun",
+    "secondary_style": "Tai Chi",
+    "signature_move": "Stillwater Counter \u2014 redirects an opponent's strike into a joint lock",
+    "finishing_move": "Lotus Palm \u2014 a chi-enhanced palm strike to the solar plexus",
+    "known_weaknesses": [
+      "Fragile frame, one clean shot can end her",
+      "Struggles against relentless pressure fighters"
+    ]
+  },
+  "physical_stats": {
+    "strength": 30,
+    "speed": 85,
+    "endurance": 65,
+    "durability": 35,
+    "recovery": 80
+  },
+  "combat_stats": {
+    "striking": 75,
+    "grappling": 60,
+    "defense": 90,
+    "fight_iq": 90,
+    "finishing_instinct": 60
+  },
+  "psychological_stats": {
+    "aggression": 25,
+    "composure": 95,
+    "confidence": 70,
+    "resilience": 65,
+    "killer_instinct": 40
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 45,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

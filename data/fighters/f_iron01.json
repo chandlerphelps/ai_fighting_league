@@ -1,0 +1,79 @@
+{
+  "id": "f_iron01",
+  "ring_name": "Iron Fist",
+  "real_name": "Marcus Cole",
+  "age": 29,
+  "origin": "Detroit, Michigan, USA",
+  "alignment": "face",
+  "height": "6'1\"",
+  "weight": "210 lbs",
+  "build": "Muscular, athletic",
+  "distinguishing_features": "Tribal tattoo sleeve on left arm, broken nose",
+  "ring_attire": "Black shorts with gold trim, hand wraps",
+  "backstory": "Marcus grew up in the roughest neighborhoods of Detroit. Boxing saved his life \u2014 a local gym owner took him in at age 12 and taught him discipline through the sweet science. He fought his way out of poverty, earning a reputation as one of the hardest punchers in underground circuits before going legit. He fights clean, hits hard, and never quits.",
+  "personality_traits": [
+    "honorable",
+    "determined",
+    "quiet intensity",
+    "protective"
+  ],
+  "fears_quirks": [
+    "fears disappointing his mentor",
+    "always wraps his own hands \u2014 ritual"
+  ],
+  "fighting_style": {
+    "primary_style": "Boxing",
+    "secondary_style": "Muay Thai",
+    "signature_move": "The Detroit Hook \u2014 a devastating left hook to the body",
+    "finishing_move": "Iron Curtain \u2014 an overhand right that drops opponents cold",
+    "known_weaknesses": [
+      "Limited ground game",
+      "Slow against faster strikers"
+    ]
+  },
+  "physical_stats": {
+    "strength": 85,
+    "speed": 60,
+    "endurance": 75,
+    "durability": 80,
+    "recovery": 65
+  },
+  "combat_stats": {
+    "striking": 90,
+    "grappling": 35,
+    "defense": 70,
+    "fight_iq": 65,
+    "finishing_instinct": 80
+  },
+  "psychological_stats": {
+    "aggression": 70,
+    "composure": 75,
+    "confidence": 80,
+    "resilience": 85,
+    "killer_instinct": 75
+  },
+  "supernatural_stats": {
+    "arcane_power": 0,
+    "chi_mastery": 0,
+    "elemental_affinity": 0,
+    "dark_arts": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}
