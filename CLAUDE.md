@@ -97,7 +97,7 @@ File-based JSON storage shared between backend and frontend:
 
 ```bash
 cd backend
-python -m venv venv && source venv/bin/activate
+pyenv activate aifl
 pip install -r requirements.txt
 python -m app.run_day              # Advance one day
 python -m app.scripts.generate_roster  # Generate initial roster
