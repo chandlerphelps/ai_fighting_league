@@ -31,7 +31,8 @@ ARCHETYPE GUIDELINES:
 
 
 def generate_fighter(
-    config: Config, archetype: str = None, has_supernatural: bool = False
+    config: Config, archetype: str = None, has_supernatural: bool = False,
+    existing_fighters: list[dict] = None,
 ) -> Fighter:
     supernatural_instruction = ""
     if has_supernatural:
@@ -41,9 +42,21 @@ def generate_fighter(
 
     archetype_text = f"Primary archetype: {archetype}" if archetype else "Choose a fitting archetype"
 
+    existing_roster_text = ""
+    if existing_fighters:
+        roster_lines = [
+            f"- {ef.get('ring_name', '?')} — {ef.get('archetype', '?')}, from {ef.get('origin', '?')}"
+            for ef in existing_fighters
+        ]
+        existing_roster_text = (
+            "\n\nEXISTING ROSTER (you MUST create a COMPLETELY DIFFERENT character — "
+            "no duplicate ring names, different origin/nationality, different fighting style concept, different personality):\n"
+            + "\n".join(roster_lines)
+        )
+
     prompt = f"""{CHARACTER_PHILOSOPHY}
 
-Generate a unique fighter for the AI Fighting League. {archetype_text}.
+Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing_roster_text}
 
 {supernatural_instruction}
 

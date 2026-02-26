@@ -24,13 +24,25 @@ def generate_roster():
 
     random.shuffle(slots)
 
-    fighter_ids = []
+    existing_on_disk = data_manager.load_all_fighters(config)
+    existing_fighters = [
+        {"ring_name": f.get("ring_name"), "origin": f.get("origin"), "archetype": f.get("alignment")}
+        for f in existing_on_disk
+    ]
+
+    fighter_ids = [f.get("id") for f in existing_on_disk]
     for i, (archetype, has_supernatural) in enumerate(slots):
         print(f"[{i + 1}/{len(slots)}] Generating {archetype} {'(supernatural)' if has_supernatural else ''}...")
         try:
-            fighter = generate_fighter(config, archetype=archetype, has_supernatural=has_supernatural)
+            fighter = generate_fighter(
+                config, archetype=archetype, has_supernatural=has_supernatural,
+                existing_fighters=existing_fighters,
+            )
             data_manager.save_fighter(fighter, config)
             fighter_ids.append(fighter.id)
+            existing_fighters.append(
+                {"ring_name": fighter.ring_name, "origin": fighter.origin, "archetype": archetype}
+            )
             print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin}")
             print(f"  Stats total: {fighter.total_core_stats()}")
         except Exception as e:

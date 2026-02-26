@@ -240,7 +240,7 @@ FIGHTER 1: {f1_name}
 - Signature Move: {fighter1.get('fighting_style', {}).get('signature_move', '')}
 - Finishing Move: {fighter1.get('fighting_style', {}).get('finishing_move', '')}
 - Backstory Summary: {fighter1.get('backstory', '')[:300]}
-- Supernatural: {fighter1.get('supernatural_stats', {{}})}
+- Supernatural: {fighter1.get('supernatural_stats', {})}
 - Personality: {', '.join(fighter1.get('personality_traits', []))}
 
 FIGHTER 2: {f2_name}
@@ -252,7 +252,7 @@ FIGHTER 2: {f2_name}
 - Signature Move: {fighter2.get('fighting_style', {}).get('signature_move', '')}
 - Finishing Move: {fighter2.get('fighting_style', {}).get('finishing_move', '')}
 - Backstory Summary: {fighter2.get('backstory', '')[:300]}
-- Supernatural: {fighter2.get('supernatural_stats', {{}})}
+- Supernatural: {fighter2.get('supernatural_stats', {})}
 - Personality: {', '.join(fighter2.get('personality_traits', []))}
 
 MATCHUP ANALYSIS:
