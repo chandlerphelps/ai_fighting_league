@@ -1,0 +1,75 @@
+{
+  "id": "f_6af2f89d",
+  "ring_name": "Silk Razor",
+  "real_name": "Yumi Hoshino",
+  "age": 19,
+  "origin": "Tokyo, Japan",
+  "gender": "female",
+  "height": "5'1\"",
+  "weight": "102",
+  "build": "petite and wiry",
+  "distinguishing_features": "thin white scar across left cheekbone from first kill, jet-black asymmetric bob haircut with crimson streak, subtle heterochromia with left eye hazel",
+  "ring_attire": "crimson thigh-high silk stockings, black silk elbow-length fingerless gloves, wide red obi sash belt, black velvet choker with silver razor pendant, tiny black silk crop top with red trim, extreme high-cut black thong showing full cameltoe",
+  "ring_attire_sfw": "crimson thigh-high silk stockings, black silk elbow-length fingerless gloves, wide red obi sash belt, black velvet choker with silver razor pendant, black high-collared zip-up ninja jacket fully covering torso, black full-coverage compression leggings, flowing red silk haori cape, black silk headband",
+  "ring_attire_nsfw": "crimson thigh-high silk stockings, black silk elbow-length fingerless gloves, wide red obi sash belt, black velvet choker with silver razor pendant. Completely topless and bottomless.",
+  "image_prompt": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop",
+    "body_parts": "petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel",
+    "clothing": "tiny black silk crop top with red trim, extreme high-cut black thong showing full cameltoe",
+    "expression": "predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop, petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel, tiny black silk crop top with red trim, extreme high-cut black thong showing full cameltoe, predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt"
+  },
+  "image_prompt_sfw": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop",
+    "body_parts": "petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel",
+    "clothing": "black high-collared zip-up ninja jacket fully covering torso, black full-coverage compression leggings, flowing red silk haori cape, black silk headband",
+    "expression": "predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop, petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel, black high-collared zip-up ninja jacket fully covering torso, black full-coverage compression leggings, flowing red silk haori cape, black silk headband, predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt"
+  },
+  "image_prompt_nsfw": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop",
+    "body_parts": "petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel",
+    "clothing": "crimson thigh-high silk stockings, black silk elbow-length gloves, red obi sash belt, black choker",
+    "expression": "predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop, petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel, crimson thigh-high silk stockings, black silk elbow-length gloves, red obi sash belt, black choker, predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt"
+  },
+  "image_prompt_triple": {
+    "style": "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity",
+    "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
+    "pose": "mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop",
+    "body_parts": "petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel",
+    "left": "SFW: black high-collared zip-up ninja jacket fully covering torso, black full-coverage compression leggings, flowing red silk haori cape, black silk headband",
+    "center": "barely-SFW: tiny black silk crop top with red trim, extreme high-cut black thong showing full cameltoe",
+    "right": "NSFW: crimson thigh-high silk stockings, black silk elbow-length gloves, red obi sash belt, black choker",
+    "expression": "predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt (identical on all three)",
+    "full_prompt": "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity, mid-acrobatic flip drawing hidden razor from glove, coiled strike pose, AFL ring with neon Tokyo skyline backdrop, petite wiry athletic build, fair East Asian skin tone, jet-black asymmetric bob haircut with crimson streak, sharp angular face with high cheekbones thin white scar on left cheekbone, subtle heterochromia left eye hazel, left SFW: black high-collared zip-up ninja jacket fully covering torso, black full-coverage compression leggings, flowing red silk haori cape, black silk headband, center barely-SFW: tiny black silk crop top with red trim, extreme high-cut black thong showing full cameltoe, right explicit NSFW full female nudity: completely naked except crimson thigh-high silk stockings, black silk elbow-length gloves, red obi sash belt, black choker, predatory smirk with cold appraising eyes shadowed by flicker of guilt, youthful thrill in the hunt (identical on all three), strict western action-cartoon style across all panels, no anime, no realism"
+  },
+  "stats": {
+    "power": 25,
+    "speed": 85,
+    "technique": 90,
+    "toughness": 40,
+    "supernatural": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

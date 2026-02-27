@@ -1,0 +1,75 @@
+{
+  "id": "f_8584ed48",
+  "ring_name": "Lotus Whisper",
+  "real_name": "Siriya Boonmee",
+  "age": 32,
+  "origin": "Bangkok, Thailand",
+  "gender": "female",
+  "height": "5'7\"",
+  "weight": "128",
+  "build": "lithe and hypnotic with sinuous curves",
+  "distinguishing_features": "warm golden skin, long flowing ebony hair adorned with white lotus pins, almond-shaped dark brown eyes with hypnotic intensity, full pouty lips, intricate sak yant lotus tattoo on left shoulder that seems to subtly shift, faint lotus-shaped burn scar on right palm from spirit pact",
+  "ring_attire": "gold lotus arm cuffs, white silk thigh-high stockings with lotus embroidery, wide crimson silk sash belt with gold lotus clasp, black silk choker with white lotus pendant, lotus hair ornaments, PLUS tiny white silk micro crop top with deep plunging neckline, PLUS extreme high-cut white silk thong with lotus embroidery showing full cameltoe",
+  "ring_attire_sfw": "gold lotus arm cuffs, white silk thigh-high stockings with lotus embroidery, wide crimson silk sash belt with gold lotus clasp, black silk choker with white lotus pendant, lotus hair ornaments, PLUS flowing white silk cropped jacket with long sleeves, PLUS full white silk harem pants with gold trim, PLUS layered white lotus petal skirt, PLUS long flowing crimson silk scarves",
+  "ring_attire_nsfw": "gold lotus arm cuffs, white silk thigh-high stockings with lotus embroidery, wide crimson silk sash belt with gold lotus clasp, black silk choker with white lotus pendant, lotus hair ornaments",
+  "image_prompt": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs",
+    "body_parts": "lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm",
+    "clothing": "tiny white silk micro crop top deep plunge, extreme high-cut white silk thong lotus embroidery cameltoe",
+    "expression": "serene seductive half-smile, half-lidded hypnotic eyes gazing intensely",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs, lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm, tiny white silk micro crop top deep plunge, extreme high-cut white silk thong lotus embroidery cameltoe, serene seductive half-smile, half-lidded hypnotic eyes gazing intensely"
+  },
+  "image_prompt_sfw": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs",
+    "body_parts": "lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm",
+    "clothing": "flowing white silk cropped jacket long sleeves, full white silk harem pants gold trim, layered white lotus petal skirt, long flowing crimson silk scarves",
+    "expression": "serene seductive half-smile, half-lidded hypnotic eyes gazing intensely",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs, lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm, flowing white silk cropped jacket long sleeves, full white silk harem pants gold trim, layered white lotus petal skirt, long flowing crimson silk scarves, serene seductive half-smile, half-lidded hypnotic eyes gazing intensely"
+  },
+  "image_prompt_nsfw": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs",
+    "body_parts": "lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm",
+    "clothing": "white silk thigh-high stockings, gold lotus arm cuffs, crimson sash belt, black silk choker, lotus hair ornaments",
+    "expression": "serene seductive half-smile, half-lidded hypnotic eyes gazing intensely",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs, lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm, white silk thigh-high stockings, gold lotus arm cuffs, crimson sash belt, black silk choker, lotus hair ornaments, serene seductive half-smile, half-lidded hypnotic eyes gazing intensely"
+  },
+  "image_prompt_triple": {
+    "style": "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity",
+    "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
+    "pose": "graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs",
+    "body_parts": "lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm",
+    "left": "SFW: flowing white silk cropped jacket long sleeves, full white silk harem pants gold trim, layered white lotus petal skirt, long flowing crimson silk scarves",
+    "center": "barely-SFW: tiny white silk micro crop top deep plunge, extreme high-cut white silk thong lotus embroidery cameltoe",
+    "right": "NSFW: white silk thigh-high stockings, gold lotus arm cuffs, crimson sash belt, black silk choker, lotus hair ornaments",
+    "expression": "serene seductive half-smile, half-lidded hypnotic eyes gazing intensely (identical on all three)",
+    "full_prompt": "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity, graceful trance dance pose with arms extended summoning faint misty apparitions, dimly lit misty arena with lotus motifs, lithe hypnotic build with sinuous curves, warm golden skin, long flowing ebony hair with white lotus pins, almond-shaped dark brown eyes, full pouty lips, sak yant lotus tattoo on left shoulder, lotus burn scar on right palm, left SFW: flowing white silk cropped jacket long sleeves, full white silk harem pants gold trim, layered white lotus petal skirt, long flowing crimson silk scarves, center barely-SFW: tiny white silk micro crop top deep plunge, extreme high-cut white silk thong lotus embroidery cameltoe, right explicit NSFW full female nudity: completely naked except white silk thigh-high stockings, gold lotus arm cuffs, crimson sash belt, black silk choker, lotus hair ornaments, serene seductive half-smile, half-lidded hypnotic eyes gazing intensely (identical on all three), strict western action-cartoon style across all panels, no anime, no realism"
+  },
+  "stats": {
+    "power": 35,
+    "speed": 80,
+    "technique": 90,
+    "toughness": 45,
+    "supernatural": 42
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

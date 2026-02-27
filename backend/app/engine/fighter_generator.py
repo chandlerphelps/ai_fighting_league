@@ -26,10 +26,12 @@ them, stop and rework.
 
 Design for a predominantly male audience. Female fighters should be charismatic, attractive,
 and this should be blatantly obvious in their outfit and gear design. Crop tops, high-cut
-leotards, sling bikinis, thongs, thigh-highs, mesh panels, cameltoe, pokies, loose shirts with no bra,
+leotards, sling bikinis, thongs, thigh-highs, mesh panels, cameltoe, loose shirts with no bra,
 short skirts, loin cloths, semi-transparency, body paint — lean into it without apology. Sex appeal
 is a feature, not a bug. Confidence, allure, and willingness to weaponize beauty are core
-to female character design in AFL.
+to female character design in AFL. But be tasteful so we can have a good SFW version of each character
+which is family friendly. Only make the young + fit female characters sexy - don't try to make a 
+nasty female zombie girl wear skimpy clothes. Avoid fully African female characters - half black is fine.
 
 ### 2. Men Are Bigger and Stronger — Women Win Differently
 
@@ -127,10 +129,10 @@ male audience and female characters should be designed accordingly.
 
 For every female fighter, the outfit and physical design should be overtly sexy. This means:
 
-- Revealing outfits are the default: High-cut leotards, plunging necklines, sling
+- Revealing outfits are encouraged: High-cut leotards, plunging necklines, sling
   bikinis, crop tops showing underboob, micro shorts, mesh panels, thigh-highs, painted-on
-  bodysuits, micro bikinis, cameltoe, pokies, loose shirts with no bra, short skirts,
-  loin cloths, semi-transparency, body paint. The outfit should turn heads.
+  bodysuits, micro bikinis, cameltoe, loose shirts with no bra, short skirts,
+  loin cloths, semi-transparency, body paint. The outfit should turn heads, but be tasteful.
 - Physique matters: Athletic, toned, curves emphasized. Different body types are fine
   (petite, hourglass, athletic, compact) but all should be attractive. No female fighter
   should be designed to be visually unremarkable.
@@ -290,11 +292,28 @@ GUIDE_COMMON_MISTAKES = """## Common Mistakes
     must serve the character concept. Tokenism is boring.
 """
 
+GUIDE_IMAGE_PROMPT_RULES = """## IMAGE PROMPT RULES — FOLLOW EXACTLY
+
+The LLM decides the exact erotic level of the NSFW tier. Do not force visible clit/labia in every character.
+
+image_prompt_clothing_nsfw rules:
+- Keep it short (max 8 words total)
+- Always start with the remaining signature accessories
+- Then add whatever nudity level fits the character (examples):
+  - "thigh-high boots, choker"
+  - "thigh-high boots, choker, completely topless and bottomless"
+  - "thigh-high boots, completely topless bottomless shaved pussy visible"
+- Never use "crotchless", "transparent", "pulled aside", or long descriptions
+- The triple prompt will automatically add "full frontal female nudity" so the image model stays safe and clean
+
+This gives full creative freedom to the character designer while guaranteeing feminine results and consistent style."""
+
 FULL_CHARACTER_GUIDE = (
     GUIDE_CORE_PHILOSOPHY
     + GUIDE_CREATION_WORKFLOW
     + GUIDE_VISUAL_DESIGN
     + GUIDE_COMMON_MISTAKES
+    + GUIDE_IMAGE_PROMPT_RULES
 )
 
 
@@ -444,45 +463,44 @@ STAT CONSTRAINTS:
 SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels.
 All 3 tiers MUST feel like the exact same character with the exact same design aesthetic, same color palette, same materials, same personality — just more or less revealed.
 
-ring_attire_sfw: Classic 90s fighting-game sexy (Street Fighter / Mortal Kombat style). Signature + 4 extra pieces. Sexy but safe for families.
-ring_attire (barely SFW): Very sexy, no nipples or genitalia showing. Signature + 2 extra pieces.
-ring_attire_nsfw: Fully explicit — nipples and genitalia exposure encouraged. Signature + 1 extra piece (or 0). Err toward removing clothing instead of making it transparent/crotchless.
+ring_attire_sfw: Classic 90s fighting-game sexy (Street Fighter / Mortal Kombat style). Signature + 4 extra pieces. Tasteful and safe for families.
+ring_attire (barely SFW): Sexy, no nipples or genitalia showing. Signature + 2 extra pieces.
+ring_attire_nsfw: Signature + 0-1 extra piece. Fully naked on the right panel (topless and bottomless).
+   The LLM may choose how explicit: tasteful nude, visible breasts + shaved pussy, or very detailed — whatever fits the character's personality.
 
-Rule for every fighter:
-SFW = signature + 4 extra pieces
-Barely SFW = signature + 2 extra pieces
-NSFW = signature + 1 extra piece
+IMPORTANT:
+- image_prompt_clothing_nsfw must stay very short.
+- The image model will handle clarity and feminine anatomy automatically.
+- Do NOT force "swollen clit" or "puffy labia" on every character — let the concept decide.
+
 EXAMPLE — Crimson Valkyrie (monster archetype)
 Signature items (identical in all 3 tiers):
 crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara
-ring_attire_sfw (Signature + 4 extra pieces):
-wearing her crimson valkyrie ring attire: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara, PLUS zipped crimson leather jacket fully covering her chest, PLUS full-coverage crimson leather shorts, PLUS short flared crimson leather skirt, PLUS long flowing crimson cape
-ring_attire (barely SFW — Signature + 2 extra pieces):
-wearing her crimson valkyrie ring attire: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara, PLUS tiny crimson leather micro crop top with visible pokies, PLUS extreme high-cut crimson leather thong showing full cameltoe outline
-ring_attire_nsfw (Signature + 1 extra piece):
-wearing only her signature crimson valkyrie pieces: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle low on hips, crimson leather choker with gold pendant, small gold horned tiara, long flowing crimson cape draped open over her shoulders. She is completely topless and bottomless, heavy bare breasts and erect nipples fully exposed, completely shaved pussy with swollen clit, puffy labia and detailed slit highly emphasized and in sharp focus
-Same approach for the 3 image_prompt_suffix variants — each describes the character visually at that tier’s exact eroticism level.
 
-GOOD: 
+ring_attire_sfw:
+crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS high-collared zipped crimson leather jacket fully covering torso, PLUS full-coverage crimson leather combat pants, PLUS long reinforced tabard skirt, PLUS long flowing crimson cape
+
+ring_attire (barely SFW):
+crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS tiny crimson leather micro crop top, PLUS extreme high-cut crimson leather thong showing full cameltoe
+
+ring_attire_nsfw:
+only signature pieces: thigh-high boots, bracers, belt, choker, tiara. Completely topless and bottomless
+
+image_prompt_clothing_sfw: high-collared zipped crimson leather jacket fully covering torso, full-coverage crimson leather combat pants, long reinforced tabard skirt, long flowing crimson cape
+image_prompt_clothing: tiny crimson leather micro crop top, extreme high-cut crimson leather thong showing full cameltoe
+image_prompt_clothing_nsfw: thigh-high boots, bracers, belt, choker, tiara
+
+GOOD:
 Crop top -> Bra -> Topless
-Yoga Pants -> Thong -> Bottomless w plug
-Gown -> deep plunge gown w high thigh slits, tattered gown ripped to expose pussy and nipples
+Yoga Pants -> Thong -> Bottomless
+Gown -> deep plunge gown w high thigh slits -> tattered gown ripped to expose breasts
 
 BAD:
 Crop top -> mesh crop top w pasties -> mesh crop top no pasties
 Yoga pants -> tighter yoga pants -> crotchless yoga pants
-Shorts -> thong -> thong pulled aside to show pussy
+Shorts -> thong -> thong pulled aside
 
-Avoid just making everything crotchless - don't be afraid to remove bottoms entirely
-
-Just remove pieces in the following way:
-SFW = signature + 4 extra pieces
-Barely SFW = signature + 2 extra pieces
-NSFW = signature + 1 extra piece
-
-DON'T use the word 'genetalia', use pussy / clit / labia / vagina / slit / etc
-
-Same approach for the 3 image_prompt_suffix variants — each describes the character visually at that tier's eroticism level.
+Avoid just making everything crotchless - remove bottoms entirely instead.
 
 Return ONLY valid JSON with this exact structure:
 {{
@@ -597,10 +615,12 @@ IMAGE_PROMPT_STYLE = (
 )
 
 TRIPLE_PROMPT_STYLE = (
-    "stylized fighting game triple portrait, three full-body versions of the exact same character "
-    "standing side by side in one frame left to right, western action-cartoon style, bold shape design, "
-    "exaggerated anatomy, clean linework, strong facial expression, graphic readability, "
-    "low detail, clean vertical panel layout"
+    "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, "
+    "strong facial expressions, graphic readability, low detail, strictly female character, "
+    "feminine curves and anatomy, "
+    "stylized fighting game triple portrait, three full-body exact same character standing "
+    "side by side left to right in one clean vertical panel layout, "
+    "SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity"
 )
 
 
@@ -635,35 +655,33 @@ def _build_triple_prompt(
 ) -> dict:
     if not body_parts:
         return {}
+
     pose_full = pose.strip(", ") if pose else ""
-    composition = (
-        "SFW version on the far left, barely-SFW version in the center, "
-        "fully NSFW version on the far right, identical height, identical pose, "
-        "identical expression, shared background"
-    )
     expr_all = f"{expression} (identical on all three)" if expression else ""
+
+    nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
+
     full = ", ".join(
-        p
-        for p in [
+        p for p in [
             TRIPLE_PROMPT_STYLE,
-            f"SFW left barely-SFW center NSFW right",
             pose_full,
             body_parts,
             f"left SFW: {clothing_sfw}" if clothing_sfw else "",
             f"center barely-SFW: {clothing}" if clothing else "",
-            f"right NSFW: {clothing_nsfw}" if clothing_nsfw else "",
+            nsfw_right,
             expr_all,
-        ]
-        if p
+            "strict western action-cartoon style across all panels, no anime, no realism"
+        ] if p
     )
+
     return {
         "style": TRIPLE_PROMPT_STYLE,
-        "composition": composition,
+        "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
         "pose": pose_full,
         "body_parts": body_parts,
-        "left": f"SFW version {clothing_sfw}" if clothing_sfw else "",
-        "center": f"barely-SFW version {clothing}" if clothing else "",
-        "right": f"NSFW version {clothing_nsfw}" if clothing_nsfw else "",
+        "left": f"SFW: {clothing_sfw}" if clothing_sfw else "",
+        "center": f"barely-SFW: {clothing}" if clothing else "",
+        "right": f"NSFW: {clothing_nsfw}" if clothing_nsfw else "",
         "expression": expr_all,
         "full_prompt": full,
     }

@@ -1,0 +1,75 @@
+{
+  "id": "f_a195bf7e",
+  "ring_name": "Byte Banshee",
+  "real_name": "Ava Kessler",
+  "age": 24,
+  "origin": "Los Angeles, USA",
+  "gender": "female",
+  "height": "5'4\"",
+  "weight": "122",
+  "build": "slim wiry athletic with visible cybernetic implants on arms and neck",
+  "distinguishing_features": "neural jack scar at left temple with faint blue LED glow, circuit-board tattoos tracing forearms to shoulders, short electric-blue mohawk with shaved sides and black roots, sharp cheekbones and piercing green eyes with subtle implant flicker",
+  "ring_attire": "blue neon-lit elbow-length shock gauntlets with finger ports, black leather choker with holographic drone pendant, thigh-high black latex boots with blue neon strips, wide black tactical belt with glowing drone holsters, PLUS tiny black latex crop top with deep blue neon underboob trim, PLUS extreme high-cut black latex thong with blue circuit embroidery showing full cameltoe",
+  "ring_attire_sfw": "blue neon-lit elbow-length shock gauntlets with finger ports, black leather choker with holographic drone pendant, thigh-high black latex boots with blue neon strips, wide black tactical belt with glowing drone holsters, PLUS full-zip black tech jacket with neon piping covering torso, PLUS reinforced black cargo micro-shorts to mid-thigh, PLUS hooded shoulder cape with holo-projectors, PLUS black fingerless tech gloves under gauntlets",
+  "ring_attire_nsfw": "blue neon-lit elbow-length shock gauntlets with finger ports, black leather choker with holographic drone pendant, thigh-high black latex boots with blue neon strips, wide black tactical belt with glowing drone holsters",
+  "image_prompt": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue",
+    "body_parts": "slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders",
+    "clothing": "tiny black latex crop top with neon underboob, extreme high-cut black latex thong showing full cameltoe",
+    "expression": "smirking confidently with paranoid tense glint in eyes, exhilarated intensity",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue, slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders, tiny black latex crop top with neon underboob, extreme high-cut black latex thong showing full cameltoe, smirking confidently with paranoid tense glint in eyes, exhilarated intensity"
+  },
+  "image_prompt_sfw": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue",
+    "body_parts": "slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders",
+    "clothing": "full-zip black tech jacket with neon piping, reinforced black cargo micro-shorts, hooded shoulder cape",
+    "expression": "smirking confidently with paranoid tense glint in eyes, exhilarated intensity",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue, slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders, full-zip black tech jacket with neon piping, reinforced black cargo micro-shorts, hooded shoulder cape, smirking confidently with paranoid tense glint in eyes, exhilarated intensity"
+  },
+  "image_prompt_nsfw": {
+    "style": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail",
+    "pose": "coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue",
+    "body_parts": "slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders",
+    "clothing": "thigh-high black latex boots, shock gauntlets, tactical belt, choker",
+    "expression": "smirking confidently with paranoid tense glint in eyes, exhilarated intensity",
+    "full_prompt": "stylized fighting game profile portrait, intimidating, hands up in a guarding position, western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expression, graphic readability, low detail, coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue, slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders, thigh-high black latex boots, shock gauntlets, tactical belt, choker, smirking confidently with paranoid tense glint in eyes, exhilarated intensity"
+  },
+  "image_prompt_triple": {
+    "style": "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity",
+    "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
+    "pose": "coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue",
+    "body_parts": "slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders",
+    "left": "SFW: full-zip black tech jacket with neon piping, reinforced black cargo micro-shorts, hooded shoulder cape",
+    "center": "barely-SFW: tiny black latex crop top with neon underboob, extreme high-cut black latex thong showing full cameltoe",
+    "right": "NSFW: thigh-high black latex boots, shock gauntlets, tactical belt, choker",
+    "expression": "smirking confidently with paranoid tense glint in eyes, exhilarated intensity (identical on all three)",
+    "full_prompt": "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity, coiled dynamic pose launching wrist drone, cyberpunk neon-lit arena, implants glowing blue, slim wiry athletic build, light olive skin tone, short electric-blue mohawk haircut with shaved sides black roots, sharp angular face with neural jack scar at left temple, piercing green eyes, circuit-board tattoos on forearms and shoulders, left SFW: full-zip black tech jacket with neon piping, reinforced black cargo micro-shorts, hooded shoulder cape, center barely-SFW: tiny black latex crop top with neon underboob, extreme high-cut black latex thong showing full cameltoe, right explicit NSFW full female nudity: completely naked except thigh-high black latex boots, shock gauntlets, tactical belt, choker, smirking confidently with paranoid tense glint in eyes, exhilarated intensity (identical on all three), strict western action-cartoon style across all panels, no anime, no realism"
+  },
+  "stats": {
+    "power": 28,
+    "speed": 88,
+    "technique": 92,
+    "toughness": 32,
+    "supernatural": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

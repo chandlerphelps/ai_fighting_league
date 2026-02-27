@@ -14,7 +14,7 @@ class Config:
     default_model: str = "x-ai/grok-4.1-fast"
     narrative_model: str = "x-ai/grok-4.1-fast"
 
-    roster_size: int = 6
+    roster_size: int = 12
     fights_per_event: int = 3
     events_per_week: int = 2
     rounds_per_fight: int = 3

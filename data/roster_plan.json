@@ -1,110 +1,110 @@
 [
   {
-    "concept_hook": "Petite cyber-hacker prodigy who hacks enemy cybernetics mid-fight while blowing mocking kisses.",
-    "ring_name": "Neon Kiss",
+    "concept_hook": "19-year-old Japanese prodigy who dispatches foes with hidden razor blades and acrobatic precision, feeling a thrill in the perfect kill but guilt over her rising body count.",
+    "ring_name": "Silk Razor",
     "gender": "female",
-    "age": 21,
-    "origin": "Shibuya, Japan",
+    "age": 19,
+    "origin": "Tokyo, Japan",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Experiment",
+    "secondary_archetype": "Technician",
     "has_supernatural": false,
-    "body_type": "petite curvaceous with neon-lit implants and thigh-high stockings",
+    "body_type": "petite and wiry",
     "power_tier": "prospect",
-    "narrative_role": "cocky upstart disrupting the veterans with tech savvy",
+    "narrative_role": "the prodigious upstart challenging established stars",
     "rivalry_seeds": [
-      "Shadow Siren",
-      "Fleshwarp"
+      "Serpent Queen",
+      "Byte Banshee"
     ],
-    "media_archetype_inspiration": "Ghost in the Shell hacker waifu"
+    "media_archetype_inspiration": "kunoichi assassin from Ninja Scroll anime"
   },
   {
-    "concept_hook": "Veteran KGB chemist who deploys custom toxins via seductive lipstick kisses and syringes.",
-    "ring_name": "Venom Widow",
+    "concept_hook": "38-year-old Brazilian veteran who blends capoeira rhythms with flirtatious taunts and groin strikes, loving the dance of dominance but weary of endless pain.",
+    "ring_name": "Serpent Queen",
     "gender": "female",
     "age": 38,
-    "origin": "Moscow, Russia",
-    "primary_archetype": "Veteran",
-    "secondary_archetype": "Technician",
-    "has_supernatural": false,
-    "body_type": "voluptuous hourglass in sheer black lace and stiletto boots",
-    "power_tier": "gatekeeper",
-    "narrative_role": "bitter gatekeeper who poisons dreamers' ambitions",
-    "rivalry_seeds": [
-      "Blood Hex",
-      "Iron Legacy"
-    ],
-    "media_archetype_inspiration": "Black Widow spy assassin"
-  },
-  {
-    "concept_hook": "Capoeira seductress who mesmerizes with hypnotic dances and spiked hair ornaments.",
-    "ring_name": "Shadow Siren",
-    "gender": "female",
-    "age": 26,
     "origin": "Rio de Janeiro, Brazil",
-    "primary_archetype": "Seductress",
-    "secondary_archetype": "Wildcard",
+    "primary_archetype": "Veteran",
+    "secondary_archetype": "Seductress",
     "has_supernatural": false,
-    "body_type": "lithe caramel-skinned dancer in sling bikini and beaded thigh straps",
-    "power_tier": "contender",
-    "narrative_role": "flirtatious crowd-pleaser weaving chaos through charm",
+    "body_type": "curvaceous and battle-hardened",
+    "power_tier": "gatekeeper",
+    "narrative_role": "the cunning gatekeeper schooling cocky newcomers",
     "rivalry_seeds": [
-      "Neon Kiss",
-      "Iron Legacy"
+      "Silk Razor",
+      "Lotus Whisper"
     ],
-    "media_archetype_inspiration": "Dead or Alive seductive ninja"
+    "media_archetype_inspiration": "seductive capoeira master from Street Fighter series"
   },
   {
-    "concept_hook": "Voodoo survivor who binds foes' souls with doll curses, savoring their spiritual agony.",
-    "ring_name": "Blood Hex",
+    "concept_hook": "27-year-old Russian cursed by ancient rituals, her body spawning corrupting tendrils that invade and dissolve flesh\u2014she savors the screams but clings to fading memories of mercy.",
+    "ring_name": "Gloom Lash",
     "gender": "female",
-    "age": 32,
-    "origin": "New Orleans, Louisiana, USA",
-    "primary_archetype": "Mystic",
+    "age": 27,
+    "origin": "Novosibirsk, Russia",
+    "primary_archetype": "Monster",
     "secondary_archetype": "Survivor",
     "has_supernatural": true,
-    "body_type": "curvy ebony goddess in semi-sheer ritual veils and bone jewelry",
-    "power_tier": "champion",
-    "narrative_role": "haunted title defender with vengeful spirits",
-    "rivalry_seeds": [
-      "Venom Widow",
-      "Fleshwarp"
-    ],
-    "media_archetype_inspiration": "American Horror Story voodoo priestess"
-  },
-  {
-    "concept_hook": "Lab-corrupted monster whose oozing tentacles and flesh mutations lash out in body horror frenzies.",
-    "ring_name": "Fleshwarp",
-    "gender": "female",
-    "age": 29,
-    "origin": "Berlin, Germany",
-    "primary_archetype": "Monster",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": true,
-    "body_type": "grotesquely alluring with pallid skin, writhing appendages, and torn mesh lingerie",
+    "body_type": "pale and unnaturally supple",
     "power_tier": "contender",
-    "narrative_role": "pitiful horror unleashing rage on her tormentors",
+    "narrative_role": "the eldritch horror terrorizing the roster",
     "rivalry_seeds": [
-      "Neon Kiss",
-      "Blood Hex"
+      "Lotus Whisper",
+      "Feral Helix"
     ],
-    "media_archetype_inspiration": "Resident Evil body horror tyrant"
+    "media_archetype_inspiration": "body horror parasite host from Parasyte manga"
   },
   {
-    "concept_hook": "Nanobot-augmented dynasty heir who self-repairs in battle, honoring her bloodline's brutal creed.",
-    "ring_name": "Iron Legacy",
+    "concept_hook": "24-year-old LA tech whiz who unleashes hacking drones and shock gauntlets to paralyze nerves, exhilarated by control but paranoid about her implants failing mid-fight.",
+    "ring_name": "Byte Banshee",
     "gender": "female",
-    "age": 34,
-    "origin": "London, England",
-    "primary_archetype": "Legacy",
-    "secondary_archetype": "Technician",
+    "age": 24,
+    "origin": "Los Angeles, USA",
+    "primary_archetype": "Technician",
+    "secondary_archetype": "Wildcard",
     "has_supernatural": false,
-    "body_type": "toned feminine frame with metallic accents, cropped tank, and micro-shorts",
+    "body_type": "slim with glowing implants",
     "power_tier": "gatekeeper",
-    "narrative_role": "honor-bound traditionalist clashing with innovators",
+    "narrative_role": "the gadget-savvy innovator disrupting traditional fights",
     "rivalry_seeds": [
-      "Shadow Siren",
-      "Venom Widow"
+      "Silk Razor",
+      "Feral Helix"
     ],
-    "media_archetype_inspiration": "Mortal Kombat Sonya Blade legacy warrior"
+    "media_archetype_inspiration": "cyberpunk netrunner from Cyberpunk 2077"
+  },
+  {
+    "concept_hook": "32-year-old Thai spirit medium whose trance dances summon draining apparitions and poisoned chi strikes, finding peace in the spirits she unleashes despite the lives she steals.",
+    "ring_name": "Lotus Whisper",
+    "gender": "female",
+    "age": 32,
+    "origin": "Bangkok, Thailand",
+    "primary_archetype": "Mystic",
+    "secondary_archetype": "Seductress",
+    "has_supernatural": true,
+    "body_type": "lithe and hypnotic",
+    "power_tier": "champion",
+    "narrative_role": "the reigning ethereal champion weaving fates",
+    "rivalry_seeds": [
+      "Serpent Queen",
+      "Gloom Lash"
+    ],
+    "media_archetype_inspiration": "spirit-channeling dancer from Mortal Kombat's Jade"
+  },
+  {
+    "concept_hook": "25-year-old French lab escapee spliced with feline DNA, slashing with retractable claws in berserk rages\u2014she hates the beast within but craves the raw freedom of the hunt.",
+    "ring_name": "Feral Helix",
+    "gender": "female",
+    "age": 25,
+    "origin": "Paris, France",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Survivor",
+    "has_supernatural": true,
+    "body_type": "sleek and feline-proportioned",
+    "power_tier": "contender",
+    "narrative_role": "the tormented hybrid clawing for humanity",
+    "rivalry_seeds": [
+      "Gloom Lash",
+      "Byte Banshee"
+    ],
+    "media_archetype_inspiration": "feral cat hybrid from Catwoman comics"
   }
 ]
