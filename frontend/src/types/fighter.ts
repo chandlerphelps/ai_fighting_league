@@ -28,6 +28,27 @@ export interface Condition {
   momentum: string
 }
 
+export interface ImagePrompt {
+  style: string
+  pose: string
+  body_parts: string
+  clothing: string
+  expression: string
+  full_prompt: string
+}
+
+export interface ImagePromptTriple {
+  style: string
+  composition: string
+  pose: string
+  body_parts: string
+  left: string
+  center: string
+  right: string
+  expression: string
+  full_prompt: string
+}
+
 export interface Fighter {
   id: string
   ring_name: string
@@ -42,9 +63,10 @@ export interface Fighter {
   ring_attire: string
   ring_attire_sfw: string
   ring_attire_nsfw: string
-  image_prompt: string
-  image_prompt_sfw: string
-  image_prompt_nsfw: string
+  image_prompt: ImagePrompt
+  image_prompt_sfw: ImagePrompt
+  image_prompt_nsfw: ImagePrompt
+  image_prompt_triple: ImagePromptTriple
   stats: Stats
   record: Record
   condition: Condition

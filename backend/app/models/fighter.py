@@ -86,9 +86,10 @@ class Fighter:
     ring_attire: str = ""
     ring_attire_sfw: str = ""
     ring_attire_nsfw: str = ""
-    image_prompt: str = ""
-    image_prompt_sfw: str = ""
-    image_prompt_nsfw: str = ""
+    image_prompt: dict = field(default_factory=dict)
+    image_prompt_sfw: dict = field(default_factory=dict)
+    image_prompt_nsfw: dict = field(default_factory=dict)
+    image_prompt_triple: dict = field(default_factory=dict)
     stats: Stats = field(default_factory=Stats)
     record: Record = field(default_factory=Record)
     condition: Condition = field(default_factory=Condition)
@@ -119,9 +120,10 @@ class Fighter:
             ring_attire=d.get("ring_attire", ""),
             ring_attire_sfw=d.get("ring_attire_sfw", ""),
             ring_attire_nsfw=d.get("ring_attire_nsfw", ""),
-            image_prompt=d.get("image_prompt", ""),
-            image_prompt_sfw=d.get("image_prompt_sfw", ""),
-            image_prompt_nsfw=d.get("image_prompt_nsfw", ""),
+            image_prompt=d.get("image_prompt", {}),
+            image_prompt_sfw=d.get("image_prompt_sfw", {}),
+            image_prompt_nsfw=d.get("image_prompt_nsfw", {}),
+            image_prompt_triple=d.get("image_prompt_triple", {}),
             stats=Stats.from_dict(d.get("stats", {})),
             record=Record.from_dict(d.get("record", {})),
             condition=Condition.from_dict(d.get("condition", {})),

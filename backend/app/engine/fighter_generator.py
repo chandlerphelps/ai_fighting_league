@@ -344,7 +344,6 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "secondary_archetype": "<from the 10 archetypes>",
     "has_supernatural": <true|false>,
     "body_type": "<brief body type description>",
-    "ring_attire": "<1-2 sentence outfit description — be specific and vivid>",
     "power_tier": "<prospect|gatekeeper|contender|champion>",
     "narrative_role": "<what they bring to the story>",
     "rivalry_seeds": ["<ring_name of 1-2 other fighters in this plan>"],
@@ -442,12 +441,27 @@ STAT CONSTRAINTS:
 - No fighter should be elite at everything — balance strengths with clear weaknesses
 - Stats should reflect the archetype (Monsters have high power/toughness, Technicians have high technique/speed, etc.)
 
-SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels:
-- ring_attire_sfw: Classic 90s fighting game sexy — think Street Fighter, Mortal Kombat. Sexy but safe for families. Signature + 4 pieces
-- ring_attire (barely SFW): Very sexy, no nipples or genitalia showing. Sling bikinis, pasties, g-strings, mesh panels, extreme cuts, thongs, cameltoe outlines, pokies through fabric. Signature + 2 pieces
-- ring_attire_nsfw: Fully explicit — nipples and genitalia exposure encouraged. Topless, open-front designs, sheer/see-through, body paint only, crotchless, bottomless, mini skirts with no panties, loin cloths with no panties, fully transparent clothing, etc. Make it simple, err toward removing clothing instead of altering it. You need to REALLY emphasize the pussy / clit / etc otherwise the image gen will ignore it. Signature + 0-1 pieces.
+SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels.
+All 3 tiers MUST feel like the exact same character with the exact same design aesthetic, same color palette, same materials, same personality — just more or less revealed.
 
-All 3 tiers MUST feel like the SAME character with the SAME design aesthetic, just dialed to different eroticism levels. The same color palette, same materials theme, same personality expressed through clothing — just more or less revealed. Best policy is to give more clothing elements in the SFW tier and less in the NSFW tier instead of just making things transparent / crotchless / etc. 
+ring_attire_sfw: Classic 90s fighting-game sexy (Street Fighter / Mortal Kombat style). Signature + 4 extra pieces. Sexy but safe for families.
+ring_attire (barely SFW): Very sexy, no nipples or genitalia showing. Signature + 2 extra pieces.
+ring_attire_nsfw: Fully explicit — nipples and genitalia exposure encouraged. Signature + 1 extra piece (or 0). Err toward removing clothing instead of making it transparent/crotchless.
+
+Rule for every fighter:
+SFW = signature + 4 extra pieces
+Barely SFW = signature + 2 extra pieces
+NSFW = signature + 1 extra piece
+EXAMPLE — Crimson Valkyrie (monster archetype)
+Signature items (identical in all 3 tiers):
+crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara
+ring_attire_sfw (Signature + 4 extra pieces):
+wearing her crimson valkyrie ring attire: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara, PLUS zipped crimson leather jacket fully covering her chest, PLUS full-coverage crimson leather shorts, PLUS short flared crimson leather skirt, PLUS long flowing crimson cape
+ring_attire (barely SFW — Signature + 2 extra pieces):
+wearing her crimson valkyrie ring attire: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara, PLUS tiny crimson leather micro crop top with visible pokies, PLUS extreme high-cut crimson leather thong showing full cameltoe outline
+ring_attire_nsfw (Signature + 1 extra piece):
+wearing only her signature crimson valkyrie pieces: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle low on hips, crimson leather choker with gold pendant, small gold horned tiara, long flowing crimson cape draped open over her shoulders. She is completely topless and bottomless, heavy bare breasts and erect nipples fully exposed, completely shaved pussy with swollen clit, puffy labia and detailed slit highly emphasized and in sharp focus
+Same approach for the 3 image_prompt_suffix variants — each describes the character visually at that tier’s exact eroticism level.
 
 GOOD: 
 Crop top -> Bra -> Topless
@@ -484,9 +498,12 @@ Return ONLY valid JSON with this exact structure:
   "ring_attire_sfw": "<SFW tier outfit description>",
   "ring_attire": "<barely SFW tier outfit description>",
   "ring_attire_nsfw": "<NSFW tier outfit description>",
-  "image_prompt_suffix_sfw": "<SFW tier visual description for image generation>",
-  "image_prompt_suffix": "<barely SFW tier visual description for image generation>",
-  "image_prompt_suffix_nsfw": "<NSFW tier visual description for image generation>",
+  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all 3 tiers>",
+  "image_prompt_expression": "<facial expression and attitude — shared across all 3 tiers>",
+  "image_prompt_pose": "<pose and setting details — shared across all 3 tiers>",
+  "image_prompt_clothing_sfw": "<SFW tier clothing description for image gen>",
+  "image_prompt_clothing": "<barely SFW tier clothing description for image gen>",
+  "image_prompt_clothing_nsfw": "<NSFW tier clothing description for image gen>",
   "stats": {{
     "power": <15-95>,
     "speed": <15-95>,
@@ -507,6 +524,13 @@ Return ONLY valid JSON with this exact structure:
     stats = _extract_stats(result.get("stats", {}), has_supernatural, config)
     _normalize_core_stats(stats, config)
 
+    body_parts = result.get("image_prompt_body_parts", "")
+    expression = result.get("image_prompt_expression", "")
+    pose = result.get("image_prompt_pose", "")
+    clothing_sfw = result.get("image_prompt_clothing_sfw", "")
+    clothing = result.get("image_prompt_clothing", "")
+    clothing_nsfw = result.get("image_prompt_clothing_nsfw", "")
+
     return Fighter(
         id=fighter_id,
         ring_name=result.get("ring_name", "Unknown"),
@@ -521,10 +545,15 @@ Return ONLY valid JSON with this exact structure:
         ring_attire=result.get("ring_attire", ""),
         ring_attire_sfw=result.get("ring_attire_sfw", ""),
         ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
-        image_prompt=_build_image_prompt(result.get("image_prompt_suffix", "")),
-        image_prompt_sfw=_build_image_prompt(result.get("image_prompt_suffix_sfw", "")),
-        image_prompt_nsfw=_build_image_prompt(
-            result.get("image_prompt_suffix_nsfw", "")
+        image_prompt=_build_image_prompt_obj(body_parts, clothing, expression, pose),
+        image_prompt_sfw=_build_image_prompt_obj(
+            body_parts, clothing_sfw, expression, pose
+        ),
+        image_prompt_nsfw=_build_image_prompt_obj(
+            body_parts, clothing_nsfw, expression, pose
+        ),
+        image_prompt_triple=_build_triple_prompt(
+            body_parts, clothing_sfw, clothing, clothing_nsfw, expression, pose
         ),
         stats=stats,
         record=Record(),
@@ -561,18 +590,83 @@ def _extract_stats(data: dict, has_supernatural: bool, config: Config) -> Stats:
     )
 
 
-IMAGE_PROMPT_PREFIX = (
-    "stylized fighting game profile portrait, full body head to toe, "
-    "intimidating, hands up in a guarding position, 1990s comic book style, "
-    "heavy inks, exaggerated muscles, punchy color contrast, dynamic "
-    "foreshortening, arcade-era bravado"
+IMAGE_PROMPT_STYLE = (
+    "stylized fighting game profile portrait, intimidating, hands up in a guarding position, "
+    "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, "
+    "strong facial expression, graphic readability, low detail"
+)
+
+TRIPLE_PROMPT_STYLE = (
+    "stylized fighting game triple portrait, three full-body versions of the exact same character "
+    "standing side by side in one frame left to right, western action-cartoon style, bold shape design, "
+    "exaggerated anatomy, clean linework, strong facial expression, graphic readability, "
+    "low detail, clean vertical panel layout"
 )
 
 
-def _build_image_prompt(suffix: str) -> str:
-    if not suffix:
-        return ""
-    return f"{IMAGE_PROMPT_PREFIX}, {suffix.lstrip(', ')}"
+def _build_image_prompt_obj(
+    body_parts: str, clothing: str, expression: str, pose: str
+) -> dict:
+    if not body_parts:
+        return {}
+    pose_full = pose.strip(", ") if pose else ""
+    full = ", ".join(
+        p
+        for p in [IMAGE_PROMPT_STYLE, pose_full, body_parts, clothing, expression]
+        if p
+    )
+    return {
+        "style": IMAGE_PROMPT_STYLE,
+        "pose": pose_full,
+        "body_parts": body_parts,
+        "clothing": clothing,
+        "expression": expression,
+        "full_prompt": full,
+    }
+
+
+def _build_triple_prompt(
+    body_parts: str,
+    clothing_sfw: str,
+    clothing: str,
+    clothing_nsfw: str,
+    expression: str,
+    pose: str,
+) -> dict:
+    if not body_parts:
+        return {}
+    pose_full = pose.strip(", ") if pose else ""
+    composition = (
+        "SFW version on the far left, barely-SFW version in the center, "
+        "fully NSFW version on the far right, identical height, identical pose, "
+        "identical expression, shared background"
+    )
+    expr_all = f"{expression} (identical on all three)" if expression else ""
+    full = ", ".join(
+        p
+        for p in [
+            TRIPLE_PROMPT_STYLE,
+            f"SFW left barely-SFW center NSFW right",
+            pose_full,
+            body_parts,
+            f"left SFW: {clothing_sfw}" if clothing_sfw else "",
+            f"center barely-SFW: {clothing}" if clothing else "",
+            f"right NSFW: {clothing_nsfw}" if clothing_nsfw else "",
+            expr_all,
+        ]
+        if p
+    )
+    return {
+        "style": TRIPLE_PROMPT_STYLE,
+        "composition": composition,
+        "pose": pose_full,
+        "body_parts": body_parts,
+        "left": f"SFW version {clothing_sfw}" if clothing_sfw else "",
+        "center": f"barely-SFW version {clothing}" if clothing else "",
+        "right": f"NSFW version {clothing_nsfw}" if clothing_nsfw else "",
+        "expression": expr_all,
+        "full_prompt": full,
+    }
 
 
 def _normalize_core_stats(stats: Stats, config: Config):
