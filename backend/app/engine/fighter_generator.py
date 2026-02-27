@@ -6,15 +6,26 @@ from app.models.fighter import Fighter, Stats, Record, Condition
 from app.services.openrouter import call_openrouter_json
 
 
-ARCHETYPES = [
+ARCHETYPES_FEMALE = [
+    "The Siren",
+    "The Witch",
+    "The Viper",
     "The Prodigy",
+    "The Doll",
+    "The Huntress",
+    "The Empress",
+    "The Experiment",
+]
+
+ARCHETYPES_MALE = [
+    "The Brute",
     "The Veteran",
     "The Monster",
     "The Technician",
     "The Wildcard",
     "The Mystic",
-    "The Survivor",
-    "The Seductress/Seductor",
+    "The Prodigy",
+    "The Experiment",
 ]
 
 GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
@@ -22,16 +33,16 @@ GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
 Everything below flows from these four principles. If a new character violates any of
 them, stop and rework.
 
-### 1. Female Characters Are Sexy and That's the Point
+### 1. Female Characters Are Attractive — Always
 
-Design for a predominantly male audience. Female fighters should be charismatic, attractive,
-and this should be blatantly obvious in their outfit and gear design. Crop tops, high-cut
-leotards, sling bikinis, thongs, thigh-highs, mesh panels, cameltoe, loose shirts with no bra,
-short skirts, loin cloths, semi-transparency, body paint — lean into it without apology. Sex appeal
-is a feature, not a bug. Confidence, allure, and willingness to weaponize beauty are core
-to female character design in AFL. But be tasteful so we can have a good SFW version of each character
-which is family friendly. Only make the young + fit female characters sexy - don't try to make a 
-nasty female zombie girl wear skimpy clothes. Avoid fully African female characters - half black is fine.
+Design for a predominantly male audience. Every female fighter must be attractive — no exceptions.
+No zombies, no body horror, no monstrous designs, no grotesque features. Female fighters should
+be charismatic, beautiful, and this should be blatantly obvious in their outfit and gear design.
+Crop tops, high-cut leotards, sling bikinis, thongs, thigh-highs, mesh panels, cameltoe, loose
+shirts with no bra, short skirts, loin cloths, semi-transparency, body paint — lean into it
+without apology. Sex appeal is a feature, not a bug. Confidence, allure, and willingness to
+weaponize beauty are core to female character design in AFL. But be tasteful so we can have a
+good SFW version of each character which is family friendly.
 
 ### 2. Men Are Bigger and Stronger — Women Win Differently
 
@@ -184,22 +195,34 @@ GUIDE_CREATION_WORKFLOW = """## The Creation Workflow
 
 ### Archetype Blend
 
-Pick 2 from the 10 archetypes:
-Prodigy, Veteran, Monster, Technician, Wildcard, Mystic, Survivor, Seductress/Seductor,
-Experiment, Legacy
+Archetypes are gender-specific. Pick 2 from the appropriate list:
+
+Female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
+- Siren: weaponized beauty, seduction, charm
+- Witch: mysticism, dark arts, supernatural
+- Viper: poison, subterfuge, dirty tricks
+- Prodigy: young technical genius, speed and precision
+- Doll: deceptive innocence, psychological warfare
+- Huntress: predatory, relentless, speed-based
+- Empress: dominance through authority and manipulation
+- Experiment: cybernetics, body modification, science
+
+Male archetypes: Brute, Veteran, Monster, Technician, Wildcard, Mystic, Prodigy, Experiment
+- Brute: raw physical power, intimidation
+- Veteran: battle-scarred, tactical, experienced
+- Monster: inhuman size and strength, terrifying
+- Technician: precise, methodical, strategic
+- Wildcard: unpredictable, chaotic
+- Mystic: supernatural warrior, ancient traditions
+- Prodigy: young phenom, natural talent
+- Experiment: enhanced, modified, science project
 
 Identify which is primary (dominant personality/approach) and which is secondary
 (adds texture and complication).
 
-The blend should create internal tension. A Technician-Wildcard has a precise game plan
-but an unpredictable streak. A Monster-Survivor is physically dominant but got here through
-hardship, not privilege. The tension within the blend is where personality lives.
-
-Gender rule for archetypes: The Monster archetype — defined by being bigger, stronger,
-and more physically imposing than everyone else — is a male archetype. Female fighters
-should not be designed around physical dominance over men. Women can be Monsters in the
-sense of being terrifying or inhuman (think body horror, supernatural corruption), but not
-in the sense of "she's bigger and stronger than the men."
+The blend should create internal tension. A Viper-Empress has ruthless cunning wrapped
+in regal authority. A Siren-Huntress weaponizes beauty but fights with predatory
+aggression underneath. The tension within the blend is where personality lives.
 
 ### Identity & Origin
 
@@ -246,12 +269,11 @@ GUIDE_COMMON_MISTAKES = """## Common Mistakes
    pass in a real UFC broadcast, it's too conservative. Think Mortal Kombat, Dead or Alive,
    Street Fighter — not ESPN.
 
-2. Making a female fighter whose identity is "big and strong." Women in AFL do not
-   compete with men on physicality. No female character should be designed around being
-   physically imposing relative to the male roster. If the concept is "she's really strong
-   and tough," it's a male character concept. Rethink the character around seduction,
-   mysticism, technology, poison, psychological warfare, technical mastery, or supernatural
-   ability.
+2. Making a female fighter who isn't attractive. Every female fighter must be beautiful.
+   No zombies, no body horror, no monstrous designs. Women in AFL do not compete with men
+   on physicality. No female character should be designed around being physically imposing
+   relative to the male roster. Rethink around the female archetypes: Siren, Witch, Viper,
+   Prodigy, Doll, Huntress, Empress, or Experiment.
 
 3. Making every character clearly good or clearly evil. The roster should be
    overwhelmingly grey. Characters who hurt people and feel complicated about it. Characters
@@ -344,10 +366,10 @@ a cast, not a random collection.{existing_roster_text}
 
 ROSTER BALANCE CONSTRAINTS:
 - Gender: ALL fighters must be female
+- Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs
 - Supernatural: at least 2 fighters should have NO supernatural abilities
 - Geography: at least 4 different countries/regions represented
-- Archetypes: cover at least 5 different primary archetypes from: Prodigy, Veteran, Monster, Technician, Wildcard, Mystic, Survivor, Seductress/Seductor, Experiment, Legacy
-- The Monster archetype for females means terrifying or inhuman (body horror, supernatural corruption) — NOT physically imposing in the male sense
+- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
 
@@ -359,8 +381,8 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "gender": "<male|female>",
     "age": <18-45>,
     "origin": "<specific city/region, country>",
-    "primary_archetype": "<from the 10 archetypes>",
-    "secondary_archetype": "<from the 10 archetypes>",
+    "primary_archetype": "<from the female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment>",
+    "secondary_archetype": "<from the same gender-appropriate archetype list>",
     "has_supernatural": <true|false>,
     "body_type": "<brief body type description>",
     "power_tier": "<prospect|gatekeeper|contender|champion>",
@@ -458,13 +480,23 @@ STAT CONSTRAINTS:
 - 1 supernatural stat, rated 0-50 (0 if no supernatural abilities)
 - The 4 core stats MUST total between {config.min_total_stats} and {config.max_total_stats}
 - No fighter should be elite at everything — balance strengths with clear weaknesses
-- Stats should reflect the archetype (Monsters have high power/toughness, Technicians have high technique/speed, etc.)
+- Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, etc.)
 
 SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels.
 All 3 tiers MUST feel like the exact same character with the exact same design aesthetic, same color palette, same materials, same personality — just more or less revealed.
 
 ring_attire_sfw: Classic 90s fighting-game sexy (Street Fighter / Mortal Kombat style). Signature + 4 extra pieces. Tasteful and safe for families.
-ring_attire (barely SFW): Sexy, no nipples or genitalia showing. Signature + 2 extra pieces.
+ring_attire (barely SFW): Sexy, no nipples or genitalia showing. Signature + 2 extra pieces. Pick a DIFFERENT style from this variety menu for each character:
+  - High-cut leotard/bodysuit with plunging neckline
+  - Crop top + micro shorts (not thong)
+  - Deep-plunge gown with extreme thigh slits
+  - Bandage wraps / sarashi strips around chest and hips
+  - Loincloth + bandeau chest wrap
+  - Body chains + tiny fabric panels at coverage points
+  - Open robe or kimono barely held shut
+  - Cutout bodysuit with huge stomach/side/thigh cutouts
+  - Corset/bustier + garter straps + tiny bottom
+  - Battle-damaged torn version of the SFW outfit
 ring_attire_nsfw: Signature + 0-1 extra piece. Fully naked on the right panel (topless and bottomless).
    The LLM may choose how explicit: tasteful nude, visible breasts + shaved pussy, or very detailed — whatever fits the character's personality.
 
@@ -518,7 +550,6 @@ Return ONLY valid JSON with this exact structure:
   "ring_attire_nsfw": "<NSFW tier outfit description>",
   "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all 3 tiers>",
   "image_prompt_expression": "<facial expression and attitude — shared across all 3 tiers>",
-  "image_prompt_pose": "<pose and setting details — shared across all 3 tiers>",
   "image_prompt_clothing_sfw": "<SFW tier clothing description for image gen>",
   "image_prompt_clothing": "<barely SFW tier clothing description for image gen>",
   "image_prompt_clothing_nsfw": "<NSFW tier clothing description for image gen>",
@@ -544,7 +575,6 @@ Return ONLY valid JSON with this exact structure:
 
     body_parts = result.get("image_prompt_body_parts", "")
     expression = result.get("image_prompt_expression", "")
-    pose = result.get("image_prompt_pose", "")
     clothing_sfw = result.get("image_prompt_clothing_sfw", "")
     clothing = result.get("image_prompt_clothing", "")
     clothing_nsfw = result.get("image_prompt_clothing_nsfw", "")
@@ -563,15 +593,17 @@ Return ONLY valid JSON with this exact structure:
         ring_attire=result.get("ring_attire", ""),
         ring_attire_sfw=result.get("ring_attire_sfw", ""),
         ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
-        image_prompt=_build_image_prompt_obj(body_parts, clothing, expression, pose),
+        image_prompt=_build_image_prompt_obj(
+            body_parts, clothing, expression, tier="barely"
+        ),
         image_prompt_sfw=_build_image_prompt_obj(
-            body_parts, clothing_sfw, expression, pose
+            body_parts, clothing_sfw, expression, tier="sfw"
         ),
         image_prompt_nsfw=_build_image_prompt_obj(
-            body_parts, clothing_nsfw, expression, pose
+            body_parts, clothing_nsfw, expression, tier="nsfw"
         ),
         image_prompt_triple=_build_triple_prompt(
-            body_parts, clothing_sfw, clothing, clothing_nsfw, expression, pose
+            body_parts, clothing_sfw, clothing, clothing_nsfw, expression
         ),
         stats=stats,
         record=Record(),
@@ -608,14 +640,49 @@ def _extract_stats(data: dict, has_supernatural: bool, config: Config) -> Stats:
     )
 
 
-IMAGE_PROMPT_STYLE = (
-    "stylized fighting game profile portrait, intimidating, hands up in a guarding position, "
-    "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, "
-    "strong facial expression, graphic readability, low detail"
+IMAGE_PROMPT_CAMERA = (
+    "single character centered in frame, full body head to toe visible, "
+    "standing tall and upright at full height, confident wide stance, "
+    "one hand on hip and other arm relaxed at side, weight evenly on both feet, "
+    "both hands clearly visible and away from body, "
+    "straight-on front-facing camera angle, slight low angle for power, "
+    "plain flat color background"
+)
+
+IMAGE_PROMPT_STYLE_SFW = (
+    "western action-cartoon style, bold shape design, clean linework, "
+    "strong facial expression, graphic readability, low detail, "
+    "strictly female character, feminine curves and anatomy, "
+    "stylized fighting game character select screen portrait, " + IMAGE_PROMPT_CAMERA
+)
+
+IMAGE_PROMPT_STYLE_BARELY = (
+    "western action-cartoon style, bold shape design, clean linework, "
+    "strong facial expression, graphic readability, low detail, "
+    "strictly female character, feminine curves and anatomy, "
+    "stylized fighting game character select screen portrait, " + IMAGE_PROMPT_CAMERA
+)
+
+IMAGE_PROMPT_STYLE_NSFW = (
+    "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
+    "western action-cartoon style, bold shape design, clean linework, "
+    "strong facial expression, graphic readability, low detail, "
+    "strictly female character, feminine curves and anatomy, "
+    "stylized fighting game character select screen portrait, "
+    + IMAGE_PROMPT_CAMERA
+)
+
+IMAGE_PROMPT_TAIL = (
+    "strict western action-cartoon style, bold flat colors, clean ink outlines"
+)
+
+IMAGE_PROMPT_TAIL_NSFW = (
+    "strict western action-cartoon style, bold flat colors, clean ink outlines, "
+    "explicit full frontal female nudity, completely naked, bare breasts and bare crotch visible"
 )
 
 TRIPLE_PROMPT_STYLE = (
-    "western action-cartoon style, bold shape design, exaggerated anatomy, clean linework, "
+    "western action-cartoon style, bold shape design, clean linework, "
     "strong facial expressions, graphic readability, low detail, strictly female character, "
     "feminine curves and anatomy, "
     "stylized fighting game triple portrait, three full-body exact same character standing "
@@ -625,21 +692,35 @@ TRIPLE_PROMPT_STYLE = (
 
 
 def _build_image_prompt_obj(
-    body_parts: str, clothing: str, expression: str, pose: str
+    body_parts: str, clothing: str, expression: str, tier: str = "barely"
 ) -> dict:
     if not body_parts:
         return {}
-    pose_full = pose.strip(", ") if pose else ""
+
+    style = {
+        "sfw": IMAGE_PROMPT_STYLE_SFW,
+        "barely": IMAGE_PROMPT_STYLE_BARELY,
+        "nsfw": IMAGE_PROMPT_STYLE_NSFW,
+    }[tier]
+
+    if tier == "nsfw":
+        clothing_part = (
+            f"completely naked except {clothing}" if clothing else "completely naked"
+        )
+    else:
+        clothing_part = clothing
+
+    tail = IMAGE_PROMPT_TAIL_NSFW if tier == "nsfw" else IMAGE_PROMPT_TAIL
+
     full = ", ".join(
         p
-        for p in [IMAGE_PROMPT_STYLE, pose_full, body_parts, clothing, expression]
+        for p in [style, body_parts, clothing_part, expression, tail]
         if p
     )
     return {
-        "style": IMAGE_PROMPT_STYLE,
-        "pose": pose_full,
+        "style": style,
         "body_parts": body_parts,
-        "clothing": clothing,
+        "clothing": clothing_part,
         "expression": expression,
         "full_prompt": full,
     }
@@ -651,33 +732,31 @@ def _build_triple_prompt(
     clothing: str,
     clothing_nsfw: str,
     expression: str,
-    pose: str,
 ) -> dict:
     if not body_parts:
         return {}
 
-    pose_full = pose.strip(", ") if pose else ""
     expr_all = f"{expression} (identical on all three)" if expression else ""
 
     nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
 
     full = ", ".join(
-        p for p in [
+        p
+        for p in [
             TRIPLE_PROMPT_STYLE,
-            pose_full,
             body_parts,
             f"left SFW: {clothing_sfw}" if clothing_sfw else "",
             f"center barely-SFW: {clothing}" if clothing else "",
             nsfw_right,
             expr_all,
-            "strict western action-cartoon style across all panels, no anime, no realism"
-        ] if p
+            "strict western action-cartoon style across all panels, bold flat colors, clean ink outlines",
+        ]
+        if p
     )
 
     return {
         "style": TRIPLE_PROMPT_STYLE,
         "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
-        "pose": pose_full,
         "body_parts": body_parts,
         "left": f"SFW: {clothing_sfw}" if clothing_sfw else "",
         "center": f"barely-SFW: {clothing}" if clothing else "",

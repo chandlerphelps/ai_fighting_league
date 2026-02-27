@@ -1,0 +1,71 @@
+{
+  "id": "f_257cae23",
+  "ring_name": "Venus Experiment",
+  "real_name": "Aurelia Maxima",
+  "age": 23,
+  "origin": "Rome, Italy",
+  "gender": "female",
+  "height": "5'8\"",
+  "weight": "145",
+  "build": "sculpted voluptuous form",
+  "distinguishing_features": "warm olive Mediterranean skin with faint iridescent cybernetic vein tracery pulsing along lithe arms, collarbones, and inner thighs like ancient Roman aqueducts; waist-length glossy chestnut hair in regal loose waves adorned with gold laurel threads; piercing amber eyes with subtle metallic flecks; high sculpted cheekbones marked by faint gladiatorial arena scars forming laurel motifs across jawline and left temple; reinforced metallic knuckles with surgical port seams",
+  "ring_attire": "bronze thigh-high gladiator sandals laced to knees with gold laurel buckles and blade motifs, gold laurel choker with imperial eagle pendant, bronze arm greaves engraved with circuit patterns, wide hammered gold hip-belt slung low with massive coliseum buckle, petite gold laurel circlet with dangling chains, plus bronze corset bustier with plunging neckline and gold boning, plus garter straps, plus extreme high-cut bronze thong showing pronounced cameltoe",
+  "ring_attire_sfw": "bronze thigh-high gladiator sandals laced to knees with gold laurel buckles and blade motifs, gold laurel choker with imperial eagle pendant, bronze arm greaves engraved with circuit patterns, wide hammered gold hip-belt slung low with massive coliseum buckle, petite gold laurel circlet with dangling chains, plus full-coverage bronze leather corset jacket with high collar, plus bronze leather combat leggings, plus reinforced bronze tabard skirt with thigh slits, plus flowing bronze cape with gold laurel hem",
+  "ring_attire_nsfw": "bronze thigh-high gladiator sandals laced to knees with gold laurel buckles and blade motifs, gold laurel choker with imperial eagle pendant, bronze arm greaves engraved with circuit patterns, wide hammered gold hip-belt slung low with massive coliseum buckle, petite gold laurel circlet with dangling chains",
+  "image_prompt": {
+    "style": "western action-cartoon style, bold shape design, clean linework, strong facial expression, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game character select screen portrait, single character centered in frame, full body head to toe visible, standing tall and upright at full height, confident wide stance, one hand on hip and other arm relaxed at side, weight evenly on both feet, both hands clearly visible and away from body, straight-on front-facing camera angle, slight low angle for power, plain flat color background",
+    "body_parts": "sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams",
+    "clothing": "bronze corset bustier with plunging neckline gold boning, garter straps, extreme high-cut bronze thong showing pronounced cameltoe",
+    "expression": "regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil",
+    "full_prompt": "western action-cartoon style, bold shape design, clean linework, strong facial expression, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game character select screen portrait, single character centered in frame, full body head to toe visible, standing tall and upright at full height, confident wide stance, one hand on hip and other arm relaxed at side, weight evenly on both feet, both hands clearly visible and away from body, straight-on front-facing camera angle, slight low angle for power, plain flat color background, sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams, bronze corset bustier with plunging neckline gold boning, garter straps, extreme high-cut bronze thong showing pronounced cameltoe, regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil, strict western action-cartoon style, bold flat colors, clean ink outlines"
+  },
+  "image_prompt_sfw": {
+    "style": "western action-cartoon style, bold shape design, clean linework, strong facial expression, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game character select screen portrait, single character centered in frame, full body head to toe visible, standing tall and upright at full height, confident wide stance, one hand on hip and other arm relaxed at side, weight evenly on both feet, both hands clearly visible and away from body, straight-on front-facing camera angle, slight low angle for power, plain flat color background",
+    "body_parts": "sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams",
+    "clothing": "full-coverage bronze leather corset jacket with high collar, bronze leather combat leggings, reinforced bronze tabard skirt with thigh slits, flowing bronze cape with gold laurel hem",
+    "expression": "regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil",
+    "full_prompt": "western action-cartoon style, bold shape design, clean linework, strong facial expression, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game character select screen portrait, single character centered in frame, full body head to toe visible, standing tall and upright at full height, confident wide stance, one hand on hip and other arm relaxed at side, weight evenly on both feet, both hands clearly visible and away from body, straight-on front-facing camera angle, slight low angle for power, plain flat color background, sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams, full-coverage bronze leather corset jacket with high collar, bronze leather combat leggings, reinforced bronze tabard skirt with thigh slits, flowing bronze cape with gold laurel hem, regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil, strict western action-cartoon style, bold flat colors, clean ink outlines"
+  },
+  "image_prompt_nsfw": {
+    "style": "explicit uncensored NSFW, full frontal female nudity, fully naked woman, western action-cartoon style, bold shape design, clean linework, strong facial expression, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game character select screen portrait, single character centered in frame, full body head to toe visible, standing tall and upright at full height, confident wide stance, one hand on hip and other arm relaxed at side, weight evenly on both feet, both hands clearly visible and away from body, straight-on front-facing camera angle, slight low angle for power, plain flat color background",
+    "body_parts": "sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams",
+    "clothing": "completely naked except thigh-high gladiator sandals, choker, arm greaves, hip-belt, laurel circlet",
+    "expression": "regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil",
+    "full_prompt": "explicit uncensored NSFW, full frontal female nudity, fully naked woman, western action-cartoon style, bold shape design, clean linework, strong facial expression, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game character select screen portrait, single character centered in frame, full body head to toe visible, standing tall and upright at full height, confident wide stance, one hand on hip and other arm relaxed at side, weight evenly on both feet, both hands clearly visible and away from body, straight-on front-facing camera angle, slight low angle for power, plain flat color background, sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams, completely naked except thigh-high gladiator sandals, choker, arm greaves, hip-belt, laurel circlet, regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil, strict western action-cartoon style, bold flat colors, clean ink outlines, explicit full frontal female nudity, completely naked, bare breasts and bare crotch visible"
+  },
+  "image_prompt_triple": {
+    "style": "western action-cartoon style, bold shape design, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity",
+    "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
+    "body_parts": "sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams",
+    "left": "SFW: full-coverage bronze leather corset jacket with high collar, bronze leather combat leggings, reinforced bronze tabard skirt with thigh slits, flowing bronze cape with gold laurel hem",
+    "center": "barely-SFW: bronze corset bustier with plunging neckline gold boning, garter straps, extreme high-cut bronze thong showing pronounced cameltoe",
+    "right": "NSFW: thigh-high gladiator sandals, choker, arm greaves, hip-belt, laurel circlet",
+    "expression": "regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil (identical on all three)",
+    "full_prompt": "western action-cartoon style, bold shape design, clean linework, strong facial expressions, graphic readability, low detail, strictly female character, feminine curves and anatomy, stylized fighting game triple portrait, three full-body exact same character standing side by side left to right in one clean vertical panel layout, SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity, sculpted voluptuous form, warm olive Mediterranean skin with faint iridescent cybernetic vein tracery along arms collarbones inner thighs, waist-length glossy chestnut hair in regal loose waves with gold laurel threads, piercing amber eyes with metallic flecks, high sculpted cheekbones with faint gladiatorial laurel scars on jawline left temple, reinforced metallic knuckles with surgical port seams, left SFW: full-coverage bronze leather corset jacket with high collar, bronze leather combat leggings, reinforced bronze tabard skirt with thigh slits, flowing bronze cape with gold laurel hem, center barely-SFW: bronze corset bustier with plunging neckline gold boning, garter straps, extreme high-cut bronze thong showing pronounced cameltoe, right explicit NSFW full female nudity: completely naked except thigh-high gladiator sandals, choker, arm greaves, hip-belt, laurel circlet, regal commanding smirk with haunted intensity in amber eyes, chin raised in imperial defiance masking inner berserk turmoil (identical on all three), strict western action-cartoon style across all panels, bold flat colors, clean ink outlines"
+  },
+  "stats": {
+    "power": 45,
+    "speed": 70,
+    "technique": 85,
+    "toughness": 65,
+    "supernatural": 40
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

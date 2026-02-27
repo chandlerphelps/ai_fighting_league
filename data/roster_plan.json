@@ -1,110 +1,146 @@
 [
   {
-    "concept_hook": "19-year-old Japanese prodigy who dispatches foes with hidden razor blades and acrobatic precision, feeling a thrill in the perfect kill but guilt over her rising body count.",
-    "ring_name": "Silk Razor",
-    "gender": "female",
-    "age": 19,
-    "origin": "Tokyo, Japan",
-    "primary_archetype": "Prodigy",
-    "secondary_archetype": "Technician",
-    "has_supernatural": false,
-    "body_type": "petite and wiry",
-    "power_tier": "prospect",
-    "narrative_role": "the prodigious upstart challenging established stars",
-    "rivalry_seeds": [
-      "Serpent Queen",
-      "Byte Banshee"
-    ],
-    "media_archetype_inspiration": "kunoichi assassin from Ninja Scroll anime"
-  },
-  {
-    "concept_hook": "38-year-old Brazilian veteran who blends capoeira rhythms with flirtatious taunts and groin strikes, loving the dance of dominance but weary of endless pain.",
-    "ring_name": "Serpent Queen",
-    "gender": "female",
-    "age": 38,
-    "origin": "Rio de Janeiro, Brazil",
-    "primary_archetype": "Veteran",
-    "secondary_archetype": "Seductress",
-    "has_supernatural": false,
-    "body_type": "curvaceous and battle-hardened",
-    "power_tier": "gatekeeper",
-    "narrative_role": "the cunning gatekeeper schooling cocky newcomers",
-    "rivalry_seeds": [
-      "Silk Razor",
-      "Lotus Whisper"
-    ],
-    "media_archetype_inspiration": "seductive capoeira master from Street Fighter series"
-  },
-  {
-    "concept_hook": "27-year-old Russian cursed by ancient rituals, her body spawning corrupting tendrils that invade and dissolve flesh\u2014she savors the screams but clings to fading memories of mercy.",
-    "ring_name": "Gloom Lash",
-    "gender": "female",
-    "age": 27,
-    "origin": "Novosibirsk, Russia",
-    "primary_archetype": "Monster",
-    "secondary_archetype": "Survivor",
-    "has_supernatural": true,
-    "body_type": "pale and unnaturally supple",
-    "power_tier": "contender",
-    "narrative_role": "the eldritch horror terrorizing the roster",
-    "rivalry_seeds": [
-      "Lotus Whisper",
-      "Feral Helix"
-    ],
-    "media_archetype_inspiration": "body horror parasite host from Parasyte manga"
-  },
-  {
-    "concept_hook": "24-year-old LA tech whiz who unleashes hacking drones and shock gauntlets to paralyze nerves, exhilarated by control but paranoid about her implants failing mid-fight.",
-    "ring_name": "Byte Banshee",
-    "gender": "female",
-    "age": 24,
-    "origin": "Los Angeles, USA",
-    "primary_archetype": "Technician",
-    "secondary_archetype": "Wildcard",
-    "has_supernatural": false,
-    "body_type": "slim with glowing implants",
-    "power_tier": "gatekeeper",
-    "narrative_role": "the gadget-savvy innovator disrupting traditional fights",
-    "rivalry_seeds": [
-      "Silk Razor",
-      "Feral Helix"
-    ],
-    "media_archetype_inspiration": "cyberpunk netrunner from Cyberpunk 2077"
-  },
-  {
-    "concept_hook": "32-year-old Thai spirit medium whose trance dances summon draining apparitions and poisoned chi strikes, finding peace in the spirits she unleashes despite the lives she steals.",
-    "ring_name": "Lotus Whisper",
-    "gender": "female",
-    "age": 32,
-    "origin": "Bangkok, Thailand",
-    "primary_archetype": "Mystic",
-    "secondary_archetype": "Seductress",
-    "has_supernatural": true,
-    "body_type": "lithe and hypnotic",
-    "power_tier": "champion",
-    "narrative_role": "the reigning ethereal champion weaving fates",
-    "rivalry_seeds": [
-      "Serpent Queen",
-      "Gloom Lash"
-    ],
-    "media_archetype_inspiration": "spirit-channeling dancer from Mortal Kombat's Jade"
-  },
-  {
-    "concept_hook": "25-year-old French lab escapee spliced with feline DNA, slashing with retractable claws in berserk rages\u2014she hates the beast within but craves the raw freedom of the hunt.",
-    "ring_name": "Feral Helix",
+    "concept_hook": "A Bollywood siren whose mesmerizing dances lure opponents into vulnerable stances for razor-sharp ankle blade strikes, delighting in their graceful collapses.",
+    "ring_name": "Monsoon Lash",
     "gender": "female",
     "age": 25,
-    "origin": "Paris, France",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Survivor",
-    "has_supernatural": true,
-    "body_type": "sleek and feline-proportioned",
+    "origin": "Mumbai, India",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "curvaceous dancer's physique",
     "power_tier": "contender",
-    "narrative_role": "the tormented hybrid clawing for humanity",
+    "narrative_role": "charismatic seductress captivating and dividing the audience",
     "rivalry_seeds": [
-      "Gloom Lash",
-      "Byte Banshee"
+      "Neon Doll",
+      "Eisen Empress"
     ],
-    "media_archetype_inspiration": "feral cat hybrid from Catwoman comics"
+    "media_archetype_inspiration": "Mai Shiranui from King of Fighters"
+  },
+  {
+    "concept_hook": "An Irish banshee whose ethereal wails invoke spectral terror that shatters concentration and bones, tormented by the spirits she unleashes.",
+    "ring_name": "Banshee Hex",
+    "gender": "female",
+    "age": 29,
+    "origin": "Dublin, Ireland",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Siren",
+    "has_supernatural": true,
+    "body_type": "slender pale allure",
+    "power_tier": "champion",
+    "narrative_role": "haunted mystic wrestling inner demons",
+    "rivalry_seeds": [
+      "Venus Experiment",
+      "Savanna Huntress"
+    ],
+    "media_archetype_inspiration": "Bayonetta"
+  },
+  {
+    "concept_hook": "A cartel viper who feigns flirtation to deliver lab-brewed neurotoxins via spiked heels and lipstick darts, coldly timing their agonizing peak.",
+    "ring_name": "Jade Fang",
+    "gender": "female",
+    "age": 31,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Doll",
+    "has_supernatural": false,
+    "body_type": "toned hourglass",
+    "power_tier": "gatekeeper",
+    "narrative_role": "cynical survivor enforcing her justice",
+    "rivalry_seeds": [
+      "Polar Prodigy",
+      "Savanna Huntress"
+    ],
+    "media_archetype_inspiration": "Black Widow from Marvel"
+  },
+  {
+    "concept_hook": "A prodigious acrobat who chains aerial flips into crippling joint locks, her fury igniting in brutal takedowns when momentum breaks.",
+    "ring_name": "Polar Prodigy",
+    "gender": "female",
+    "age": 19,
+    "origin": "Vancouver, Canada",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Doll",
+    "has_supernatural": false,
+    "body_type": "petite agile stunner",
+    "power_tier": "prospect",
+    "narrative_role": "eager phenom forging her legend",
+    "rivalry_seeds": [
+      "Jade Fang",
+      "Neon Doll"
+    ],
+    "media_archetype_inspiration": "Tracer from Overwatch"
+  },
+  {
+    "concept_hook": "A K-pop doll masking lethal intent behind bubbly poses, popping out segmented blades to vivisect with gleeful precision.",
+    "ring_name": "Neon Doll",
+    "gender": "female",
+    "age": 21,
+    "origin": "Seoul, South Korea",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": false,
+    "body_type": "slim perky idol",
+    "power_tier": "prospect",
+    "narrative_role": "deceptive star harboring ruthless drive",
+    "rivalry_seeds": [
+      "Monsoon Lash",
+      "Polar Prodigy"
+    ],
+    "media_archetype_inspiration": "Akali from League of Legends"
+  },
+  {
+    "concept_hook": "A spirit-guided huntress who sets ethereal traps and hurls homing javelins, howling in primal joy at the impalement.",
+    "ring_name": "Savanna Huntress",
+    "gender": "female",
+    "age": 27,
+    "origin": "Lagos, Nigeria",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "lean athletic goddess",
+    "power_tier": "gatekeeper",
+    "narrative_role": "fierce guardian of primal traditions",
+    "rivalry_seeds": [
+      "Jade Fang",
+      "Banshee Hex"
+    ],
+    "media_archetype_inspiration": "Lara Croft from Tomb Raider"
+  },
+  {
+    "concept_hook": "A commanding empress whose dominating presence compels psychic fealty, pummeling dissenters with powered gauntlets in imperial rage.",
+    "ring_name": "Eisen Empress",
+    "gender": "female",
+    "age": 34,
+    "origin": "Berlin, Germany",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Experiment",
+    "has_supernatural": true,
+    "body_type": "statuesque vixen",
+    "power_tier": "contender",
+    "narrative_role": "imperious overlord expanding her domain",
+    "rivalry_seeds": [
+      "Monsoon Lash",
+      "Neon Doll"
+    ],
+    "media_archetype_inspiration": "Esdeath from Akame ga Kill"
+  },
+  {
+    "concept_hook": "A gladiatorial experiment who seamlessly morphs lithe limbs into bladed whips and regenerative plating, surgically ending fights while quelling berserk urges.",
+    "ring_name": "Venus Experiment",
+    "gender": "female",
+    "age": 23,
+    "origin": "Rome, Italy",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Empress",
+    "has_supernatural": true,
+    "body_type": "sculpted voluptuous form",
+    "power_tier": "gatekeeper",
+    "narrative_role": "tragic mutant claiming her destiny",
+    "rivalry_seeds": [
+      "Banshee Hex",
+      "Eisen Empress"
+    ],
+    "media_archetype_inspiration": "Mystique from X-Men"
   }
 ]
