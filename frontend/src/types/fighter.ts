@@ -40,7 +40,11 @@ export interface Fighter {
   build: string
   distinguishing_features: string
   ring_attire: string
+  ring_attire_sfw: string
+  ring_attire_nsfw: string
   image_prompt: string
+  image_prompt_sfw: string
+  image_prompt_nsfw: string
   stats: Stats
   record: Record
   condition: Condition

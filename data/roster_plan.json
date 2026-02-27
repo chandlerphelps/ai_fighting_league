@@ -1,0 +1,230 @@
+[
+  {
+    "concept_hook": "Prodigy Muay Thai savant who shatters knees with hypnotic precision strikes, her thrill in the snap tempered by post-fight tears for broken foes.",
+    "ring_name": "Knee Phantom",
+    "gender": "female",
+    "age": 21,
+    "origin": "Bangkok, Thailand",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Technician",
+    "has_supernatural": false,
+    "body_type": "lean wiry with chiseled calves and abs",
+    "ring_attire": "vibrant gold crop top straining over firm breasts with deep sideboob cuts, matching thong bottoms riding high to expose hip bones and cameltoe outline, black fishnet thigh-highs.",
+    "power_tier": "prospect",
+    "narrative_role": "innocent-faced rising pure striker who exposes league's dirty tricks",
+    "rivalry_seeds": [
+      "Venom Lips",
+      "Chrome Siren"
+    ],
+    "media_archetype_inspiration": "Chun-Li from Street Fighter"
+  },
+  {
+    "concept_hook": "Veteran submission artist who methodically hyperextends joints while cooing insults, her calm facade hiding rage at her own scarred body.",
+    "ring_name": "Twist Siren",
+    "gender": "female",
+    "age": 34,
+    "origin": "Las Vegas, USA",
+    "primary_archetype": "Veteran",
+    "secondary_archetype": "Technician",
+    "has_supernatural": false,
+    "body_type": "toned athletic with powerful thighs and broad shoulders",
+    "ring_attire": "sheer white tank top loose and braless with visible pokies and underboob, tiny black spandex shorts wedged deep, elbow wraps.",
+    "power_tier": "gatekeeper",
+    "narrative_role": "cynical gatekeeper testing newcomers' resolve through prolonged agony",
+    "rivalry_seeds": [
+      "Iron Widow",
+      "Ghost Blade"
+    ],
+    "media_archetype_inspiration": "Ronda Rousey as a sultry grappler from WWE"
+  },
+  {
+    "concept_hook": "Seductress who seduces with hypnotic dances before scratching paralytic toxin from razor nails, savoring the betrayal in their eyes.",
+    "ring_name": "Venom Lips",
+    "gender": "female",
+    "age": 27,
+    "origin": "Rio de Janeiro, Brazil",
+    "primary_archetype": "Seductress",
+    "secondary_archetype": "Wildcard",
+    "has_supernatural": false,
+    "body_type": "curvaceous hourglass with full hips and ample cleavage",
+    "ring_attire": "emerald sling bikini with thin strings digging into soft flesh, glossy thigh-high stockings, extended nail claws painted blood red.",
+    "power_tier": "contender",
+    "narrative_role": "playful heel who weaponizes crowd lust against prudes",
+    "rivalry_seeds": [
+      "Knee Phantom",
+      "Blood Legacy"
+    ],
+    "media_archetype_inspiration": "Black Widow from James Bond films"
+  },
+  {
+    "concept_hook": "Cybernetic experiment with monowire whips that flay skin layer by layer, her detached efficiency masking grief for her stolen humanity.",
+    "ring_name": "Chrome Siren",
+    "gender": "female",
+    "age": 29,
+    "origin": "Tokyo, Japan",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Technician",
+    "has_supernatural": false,
+    "body_type": "lithe augmented with chrome limbs and subtle implants",
+    "ring_attire": "shimmering silver micro bikini with mesh panels revealing cybernetic tattoos, high-leg cut exposing labia lines, glowing wrist whips.",
+    "power_tier": "contender",
+    "narrative_role": "tragic tech prodigy clashing with league traditionalists",
+    "rivalry_seeds": [
+      "Knee Phantom",
+      "Nano Queen"
+    ],
+    "media_archetype_inspiration": "Major from Ghost in the Shell"
+  },
+  {
+    "concept_hook": "Voodoo mystic who puppets foes' bodies with loa possession, her ecstasy in their screams haunted by visions of her cursed family.",
+    "ring_name": "Loa Whisper",
+    "gender": "female",
+    "age": 32,
+    "origin": "Port-au-Prince, Haiti",
+    "primary_archetype": "Mystic",
+    "secondary_archetype": "Seductress",
+    "has_supernatural": true,
+    "body_type": "voluptuous with ritual scars and swaying curves",
+    "ring_attire": "sheer black body paint mimicking skeletal lace over nipples and thong area, beaded loincloth parting for hip sways, bare feet.",
+    "power_tier": "contender",
+    "narrative_role": "enigmatic spirit channeler drawing cult following",
+    "rivalry_seeds": [
+      "Saint Fury",
+      "Flesh Weaver"
+    ],
+    "media_archetype_inspiration": "Marie Laveau voodoo queen from American Horror Story"
+  },
+  {
+    "concept_hook": "Body horror monster whose living tendrils burrow into flesh to liquefy organs slowly, her monstrous form hiding a desperate plea for death.",
+    "ring_name": "Flesh Weaver",
+    "gender": "female",
+    "age": 38,
+    "origin": "Bucharest, Romania",
+    "primary_archetype": "Monster",
+    "secondary_archetype": "Survivor",
+    "has_supernatural": true,
+    "body_type": "pale elongated with writhing tendril limbs and translucent skin",
+    "ring_attire": "shredded leather straps forming X over heaving breasts and crotch pasties of pulsating flesh, thigh garters dripping ichor.",
+    "power_tier": "champion",
+    "narrative_role": "unsettling apex predator forcing moral dilemmas in fans",
+    "rivalry_seeds": [
+      "Saint Fury",
+      "Loa Whisper"
+    ],
+    "media_archetype_inspiration": "Nemesis from Resident Evil, feminized body horror"
+  },
+  {
+    "concept_hook": "Mech-suited wildcard unleashing razor drone swarms while kiting in exposed underarmor, her bravado cracking under swarm feedback pain.",
+    "ring_name": "Iron Widow",
+    "gender": "female",
+    "age": 25,
+    "origin": "Moscow, Russia",
+    "primary_archetype": "Wildcard",
+    "secondary_archetype": "Experiment",
+    "has_supernatural": false,
+    "body_type": "compact muscular with pilot harness scars",
+    "ring_attire": "red latex harness bikini under open exosuit plates revealing sideboob and ass cheeks, knee-high armored boots with thrusters.",
+    "power_tier": "gatekeeper",
+    "narrative_role": "gadget spammer disrupting ground game purists",
+    "rivalry_seeds": [
+      "Twist Siren",
+      "Nano Queen"
+    ],
+    "media_archetype_inspiration": "Gundam mecha pilot from Mobile Suit Gundam Wing"
+  },
+  {
+    "concept_hook": "Legacy kickboxer avenging her family's massacre with spinning heel kicks that cave skulls, burdened by inherited blood debt.",
+    "ring_name": "Blood Legacy",
+    "gender": "female",
+    "age": 31,
+    "origin": "London, UK",
+    "primary_archetype": "Legacy",
+    "secondary_archetype": "Veteran",
+    "has_supernatural": false,
+    "body_type": "athletic build with long legs and scarred knuckles",
+    "ring_attire": "union jack micro skirt flipped up over thong, cropped Union Jack tube top with underboob flash, shin guards.",
+    "power_tier": "gatekeeper",
+    "narrative_role": "haunted noble warrior upholding fading honor code",
+    "rivalry_seeds": [
+      "Venom Lips",
+      "Ghost Blade"
+    ],
+    "media_archetype_inspiration": "Adonis Creed heir from Creed films, kickbox variant"
+  },
+  {
+    "concept_hook": "Teenage prodigy hacker deploying muscle-melting nanobots via smart dust clouds, her genius arrogance shattered by implant rejection pains.",
+    "ring_name": "Nano Queen",
+    "gender": "female",
+    "age": 19,
+    "origin": "Mumbai, India",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Experiment",
+    "has_supernatural": false,
+    "body_type": "petite slender with tech port tattoos",
+    "ring_attire": "neon henna circuit bikini glowing under blacklight, loose sari drape slipping off shoulders for constant wardrobe malfunctions, anklets.",
+    "power_tier": "prospect",
+    "narrative_role": "arrogant wunderkind upending veteran hierarchies",
+    "rivalry_seeds": [
+      "Chrome Siren",
+      "Iron Widow"
+    ],
+    "media_archetype_inspiration": "Zero Cool hacker from Hackers"
+  },
+  {
+    "concept_hook": "Cartel survivor who strikes from blindspots with monoblade fans, her cold kills fueled by survivor's guilt over betrayed loved ones.",
+    "ring_name": "Ghost Blade",
+    "gender": "female",
+    "age": 36,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Survivor",
+    "secondary_archetype": "Technician",
+    "has_supernatural": false,
+    "body_type": "sinewy with cartel tattoos and knife scars",
+    "ring_attire": "fringed leather crop top with tassels swaying over pokies, low-rise hip-slung skirt short enough for thong flashes, wrist fans.",
+    "power_tier": "contender",
+    "narrative_role": "stealthy assassin embodying street grit",
+    "rivalry_seeds": [
+      "Twist Siren",
+      "Blood Legacy"
+    ],
+    "media_archetype_inspiration": "Santos assassin from Machete Kills"
+  },
+  {
+    "concept_hook": "Disgraced exorcist veteran wielding thorned rosary whips that burn sin from flesh, her zeal twisted by forbidden demonic temptations.",
+    "ring_name": "Saint Fury",
+    "gender": "female",
+    "age": 40,
+    "origin": "Rome, Italy",
+    "primary_archetype": "Veteran",
+    "secondary_archetype": "Mystic",
+    "has_supernatural": true,
+    "body_type": "statuesque with holy stigmata scars",
+    "ring_attire": "torn nun habit draped as micro cape over red lace bra and g-string, cross thigh-highs with garter belts.",
+    "power_tier": "champion",
+    "narrative_role": "righteous zealot purging league's darkness at personal cost",
+    "rivalry_seeds": [
+      "Loa Whisper",
+      "Flesh Weaver"
+    ],
+    "media_archetype_inspiration": "John Constantine exorcist from Hellblazer"
+  },
+  {
+    "concept_hook": "Technician outback huntress mastering boomerang ricochets and bullwhip lashes that flense meat from bone, her feral joy soured by lost tribe.",
+    "ring_name": "Dust Reaper",
+    "gender": "female",
+    "age": 26,
+    "origin": "Sydney, Australia",
+    "primary_archetype": "Technician",
+    "secondary_archetype": "Survivor",
+    "has_supernatural": false,
+    "body_type": "sun-kissed lean with tribal markings",
+    "ring_attire": "ochre body paint stripes over bare breasts save nipple tassels, kangaroo leather loincloth barely covering mound, ankled boomerang holsters.",
+    "power_tier": "gatekeeper",
+    "narrative_role": "primal thrower bridging wild and civilized divides",
+    "rivalry_seeds": [
+      "Knee Phantom",
+      "Iron Widow"
+    ],
+    "media_archetype_inspiration": "Furiosa survivalist from Mad Max: Fury Road"
+  }
+]

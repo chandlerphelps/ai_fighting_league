@@ -7,8 +7,14 @@ from app.services.openrouter import call_openrouter_json
 
 
 ARCHETYPES = [
-    "The Prodigy", "The Veteran", "The Monster", "The Technician",
-    "The Wildcard", "The Mystic", "The Survivor", "The Seductress/Seductor",
+    "The Prodigy",
+    "The Veteran",
+    "The Monster",
+    "The Technician",
+    "The Wildcard",
+    "The Mystic",
+    "The Survivor",
+    "The Seductress/Seductor",
 ]
 
 GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
@@ -292,7 +298,9 @@ FULL_CHARACTER_GUIDE = (
 )
 
 
-def plan_roster(config: Config, roster_size: int = 8, existing_fighters: list[dict] = None) -> list[dict]:
+def plan_roster(
+    config: Config, roster_size: int = 8, existing_fighters: list[dict] = None
+) -> list[dict]:
     existing_roster_text = ""
     if existing_fighters:
         roster_lines = []
@@ -316,10 +324,11 @@ Design all {roster_size} fighters as an interconnected ensemble — they should 
 a cast, not a random collection.{existing_roster_text}
 
 ROSTER BALANCE CONSTRAINTS:
-- Gender: roughly half male, half female (within 1)
+- Gender: ALL fighters must be female
 - Supernatural: at least 2 fighters should have NO supernatural abilities
 - Geography: at least 4 different countries/regions represented
 - Archetypes: cover at least 5 different primary archetypes from: Prodigy, Veteran, Monster, Technician, Wildcard, Mystic, Survivor, Seductress/Seductor, Experiment, Legacy
+- The Monster archetype for females means terrifying or inhuman (body horror, supernatural corruption) — NOT physically imposing in the male sense
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
 
@@ -350,21 +359,29 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     )
 
     result = call_openrouter_json(
-        prompt, config, system_prompt=system_prompt,
-        temperature=0.9, max_tokens=8192,
+        prompt,
+        config,
+        system_prompt=system_prompt,
+        temperature=0.9,
+        max_tokens=8192,
     )
 
     if isinstance(result, dict) and "roster" in result:
         result = result["roster"]
     if not isinstance(result, list):
-        raise RuntimeError(f"Expected a JSON array from roster planning, got: {type(result)}")
+        raise RuntimeError(
+            f"Expected a JSON array from roster planning, got: {type(result)}"
+        )
 
     return result
 
 
 def generate_fighter(
-    config: Config, archetype: str = None, has_supernatural: bool = False,
-    existing_fighters: list[dict] = None, roster_plan_entry: dict = None,
+    config: Config,
+    archetype: str = None,
+    has_supernatural: bool = False,
+    existing_fighters: list[dict] = None,
+    roster_plan_entry: dict = None,
 ) -> Fighter:
     if roster_plan_entry:
         blueprint_text = (
@@ -389,7 +406,9 @@ def generate_fighter(
     else:
         supernatural_instruction = "This fighter has NO supernatural abilities. The supernatural stat must be 0."
 
-    archetype_text = f"Primary archetype: {archetype}" if archetype else "Choose a fitting archetype"
+    archetype_text = (
+        f"Primary archetype: {archetype}" if archetype else "Choose a fitting archetype"
+    )
 
     existing_roster_text = ""
     if existing_fighters:
@@ -405,8 +424,7 @@ def generate_fighter(
         existing_roster_text = (
             "\n\nEXISTING ROSTER (you MUST create a COMPLETELY DIFFERENT character — "
             "no duplicate ring names, different origin/nationality, "
-            "different physical appearance):\n"
-            + "\n".join(roster_lines)
+            "different physical appearance):\n" + "\n".join(roster_lines)
         )
 
     prompt = f"""{FULL_CHARACTER_GUIDE}
@@ -424,6 +442,34 @@ STAT CONSTRAINTS:
 - No fighter should be elite at everything — balance strengths with clear weaknesses
 - Stats should reflect the archetype (Monsters have high power/toughness, Technicians have high technique/speed, etc.)
 
+SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels:
+- ring_attire_sfw: Classic 90s fighting game sexy — think Street Fighter, Mortal Kombat. Sexy but safe for families. Signature + 4 pieces
+- ring_attire (barely SFW): Very sexy, no nipples or genitalia showing. Sling bikinis, pasties, g-strings, mesh panels, extreme cuts, thongs, cameltoe outlines, pokies through fabric. Signature + 2 pieces
+- ring_attire_nsfw: Fully explicit — nipples and genitalia exposure encouraged. Topless, open-front designs, sheer/see-through, body paint only, crotchless, bottomless, mini skirts with no panties, loin cloths with no panties, fully transparent clothing, etc. Make it simple, err toward removing clothing instead of altering it. You need to REALLY emphasize the pussy / clit / etc otherwise the image gen will ignore it. Signature + 0-1 pieces.
+
+All 3 tiers MUST feel like the SAME character with the SAME design aesthetic, just dialed to different eroticism levels. The same color palette, same materials theme, same personality expressed through clothing — just more or less revealed. Best policy is to give more clothing elements in the SFW tier and less in the NSFW tier instead of just making things transparent / crotchless / etc. 
+
+GOOD: 
+Crop top -> Bra -> Topless
+Yoga Pants -> Thong -> Bottomless w plug
+Gown -> deep plunge gown w high thigh slits, tattered gown ripped to expose pussy and nipples
+
+BAD:
+Crop top -> mesh crop top w pasties -> mesh crop top no pasties
+Yoga pants -> tighter yoga pants -> crotchless yoga pants
+Shorts -> thong -> thong pulled aside to show pussy
+
+Avoid just making everything crotchless - don't be afraid to remove bottoms entirely
+
+Just remove pieces in the following way:
+SFW = signature + 4 extra pieces
+Barely SFW = signature + 2 extra pieces
+NSFW = signature + 1 extra piece
+
+DON'T use the word 'genetalia', use pussy / clit / labia / vagina / slit / etc
+
+Same approach for the 3 image_prompt_suffix variants — each describes the character visually at that tier's eroticism level.
+
 Return ONLY valid JSON with this exact structure:
 {{
   "ring_name": "<evocative 1-2 word ring name>",
@@ -435,8 +481,12 @@ Return ONLY valid JSON with this exact structure:
   "weight": "<weight in lbs>",
   "build": "<body type description>",
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
-  "ring_attire": "<detailed outfit description>",
-  "image_prompt_suffix": "<vivid visual description of the character for image generation — physical build, skin tone, hair, face, expression, outfit, distinguishing features, pose details. NO style instructions, just the character.>",
+  "ring_attire_sfw": "<SFW tier outfit description>",
+  "ring_attire": "<barely SFW tier outfit description>",
+  "ring_attire_nsfw": "<NSFW tier outfit description>",
+  "image_prompt_suffix_sfw": "<SFW tier visual description for image generation>",
+  "image_prompt_suffix": "<barely SFW tier visual description for image generation>",
+  "image_prompt_suffix_nsfw": "<NSFW tier visual description for image generation>",
   "stats": {{
     "power": <15-95>,
     "speed": <15-95>,
@@ -448,7 +498,9 @@ Return ONLY valid JSON with this exact structure:
 
     system_prompt = "You are a character designer for a fighting league. Create unique, compelling fighters. Always respond with valid JSON only."
 
-    result = call_openrouter_json(prompt, config, system_prompt=system_prompt, temperature=0.9)
+    result = call_openrouter_json(
+        prompt, config, system_prompt=system_prompt, temperature=0.5
+    )
 
     fighter_id = f"f_{uuid.uuid4().hex[:8]}"
 
@@ -467,7 +519,13 @@ Return ONLY valid JSON with this exact structure:
         build=result.get("build", ""),
         distinguishing_features=result.get("distinguishing_features", ""),
         ring_attire=result.get("ring_attire", ""),
+        ring_attire_sfw=result.get("ring_attire_sfw", ""),
+        ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
         image_prompt=_build_image_prompt(result.get("image_prompt_suffix", "")),
+        image_prompt_sfw=_build_image_prompt(result.get("image_prompt_suffix_sfw", "")),
+        image_prompt_nsfw=_build_image_prompt(
+            result.get("image_prompt_suffix_nsfw", "")
+        ),
         stats=stats,
         record=Record(),
         condition=Condition(),
@@ -481,16 +539,25 @@ Return ONLY valid JSON with this exact structure:
 def _extract_stats(data: dict, has_supernatural: bool, config: Config) -> Stats:
     power = max(config.stat_min, min(config.stat_max, int(data.get("power", 50))))
     speed = max(config.stat_min, min(config.stat_max, int(data.get("speed", 50))))
-    technique = max(config.stat_min, min(config.stat_max, int(data.get("technique", 50))))
-    toughness = max(config.stat_min, min(config.stat_max, int(data.get("toughness", 50))))
+    technique = max(
+        config.stat_min, min(config.stat_max, int(data.get("technique", 50)))
+    )
+    toughness = max(
+        config.stat_min, min(config.stat_max, int(data.get("toughness", 50)))
+    )
 
     supernatural = 0
     if has_supernatural:
-        supernatural = max(0, min(config.supernatural_cap, int(data.get("supernatural", 0))))
+        supernatural = max(
+            0, min(config.supernatural_cap, int(data.get("supernatural", 0)))
+        )
 
     return Stats(
-        power=power, speed=speed, technique=technique,
-        toughness=toughness, supernatural=supernatural,
+        power=power,
+        speed=speed,
+        technique=technique,
+        toughness=toughness,
+        supernatural=supernatural,
     )
 
 

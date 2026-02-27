@@ -1,0 +1,43 @@
+{
+  "id": "f_44c7e9da",
+  "ring_name": "Mech Muse",
+  "real_name": "Lee Soo-ah",
+  "age": 24,
+  "origin": "Seoul, South Korea",
+  "gender": "female",
+  "height": "5'6\"",
+  "weight": "125",
+  "build": "slim and cyber-enhanced with glowing implants",
+  "distinguishing_features": "subtle surgical scars framing neon-blue glowing implant ports on collarbones, spine, and inner thighs; razor-sharp jet-black bob haircut with embedded fiber-optic strands flickering during sync; piercing almond-shaped eyes with subtle iris implants reflecting faint data streams; metallic data-port piercing at nape of neck and lower lip",
+  "ring_attire": "glossy black liquid latex sling bikini exosuit armor with neon blue circuits, deep cleavage ports, and high-cut thong bottom outlining cameltoe + thigh-high tech fishnets + fingerless circuit gloves",
+  "ring_attire_sfw": "glossy black liquid latex high-cut leotard exosuit with neon blue circuit patterns and exposed midriff/cleavage implant ports + cropped armored tech vest + thigh-high futuristic boots + elbow-length circuit gloves + holographic choker display + wrist-mounted control bands",
+  "ring_attire_nsfw": "glossy black liquid latex micro bikini exosuit top straining over perky breasts with exposed cleavage ports and pokies + thigh-high tech fishnets",
+  "image_prompt": "stylized fighting game profile portrait, full body head to toe, intimidating, hands up in a guarding position, 1990s comic book style, heavy inks, exaggerated muscles, punchy color contrast, dynamic foreshortening, arcade-era bravado, slim Korean woman with razor-sharp bob haircut, surgical scars and glowing implants, seductive detached smirk, in liquid latex sling bikini exosuit with cameltoe outline, thigh-high fishnets, fingerless gloves, hip-cocked pose highlighting cleavage ports and toned legs",
+  "image_prompt_sfw": "stylized fighting game profile portrait, full body head to toe, intimidating, hands up in a guarding position, 1990s comic book style, heavy inks, exaggerated muscles, punchy color contrast, dynamic foreshortening, arcade-era bravado, slim Korean woman with razor-sharp bob haircut, surgical scars and glowing implants, seductive detached smirk, piloting full high-cut leotard exosuit with cropped vest, boots, gloves, choker, confident pose emphasizing curves and midriff",
+  "image_prompt_nsfw": "stylized fighting game profile portrait, full body head to toe, intimidating, hands up in a guarding position, 1990s comic book style, heavy inks, exaggerated muscles, punchy color contrast, dynamic foreshortening, arcade-era bravado, slim Korean woman with razor-sharp bob haircut, surgical scars and glowing implants, seductive detached smirk, topless in minimal liquid latex micro bikini bottom exposing pussy and clit with thigh-high fishnets, arched back pose thrusting hips forward",
+  "stats": {
+    "power": 35,
+    "speed": 70,
+    "technique": 90,
+    "toughness": 45,
+    "supernatural": 40
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

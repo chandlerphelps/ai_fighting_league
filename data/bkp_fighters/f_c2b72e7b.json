@@ -1,0 +1,43 @@
+{
+  "id": "f_c2b72e7b",
+  "ring_name": "Nano Nymphet",
+  "real_name": "Zoe Harlan",
+  "age": 19,
+  "origin": "Silicon Valley, USA",
+  "gender": "female",
+  "height": "5'2\"",
+  "weight": "102",
+  "build": "petite and wiry with perky assets",
+  "distinguishing_features": "asymmetric bob haircut with neon pink streaks, circuit-board tattoos snaking up her wiry arms, heterochromia (one electric blue eye, one hazel), perpetual mischievous smirk with a silver tongue piercing",
+  "ring_attire": "neon-lit micro bikini with circuit patterns that hug her cameltoe and pokies, thigh-high fishnets, holographic projectors on her hips",
+  "ring_attire_sfw": "neon-lit crop top with glowing circuit patterns, high-cut boy shorts with circuit embroidery hugging her curves, thigh-high fishnets, fingerless gloves with embedded holographic projectors, chunky platform sneakers with LED soles",
+  "ring_attire_nsfw": "neon-lit micro thong with circuit patterns framing her exposed pussy and clit, thigh-high fishnets, holographic projectors on her hips, topless with perky nipples",
+  "image_prompt": "stylized fighting game profile portrait, full body head to toe, intimidating, hands up in a guarding position, 1990s comic book style, heavy inks, exaggerated muscles, punchy color contrast, dynamic foreshortening, arcade-era bravado, petite wiry teenage girl with perky assets and visible cameltoe pokies, asymmetric bob haircut with neon pink streaks, circuit tattoos on arms, heterochromia blue-hazel eyes, giggling mischievously, neon micro bikini with tight circuit patterns, thigh-high fishnets, hip holograms, agile evasive stance",
+  "image_prompt_sfw": "stylized fighting game profile portrait, full body head to toe, intimidating, hands up in a guarding position, 1990s comic book style, heavy inks, exaggerated muscles, punchy color contrast, dynamic foreshortening, arcade-era bravado, petite wiry teenage girl with perky assets, asymmetric bob haircut with neon pink streaks, circuit tattoos on arms, heterochromia blue-hazel eyes, smirking playfully, neon crop top and high-cut shorts with glowing circuits, thigh-high fishnets, gloves and platform sneakers with holograms, dynamic hacker pose dancing lightly",
+  "image_prompt_nsfw": "stylized fighting game profile portrait, full body head to toe, intimidating, hands up in a guarding position, 1990s comic book style, heavy inks, exaggerated muscles, punchy color contrast, dynamic foreshortening, arcade-era bravado, petite wiry teenage girl with perky assets, exposed pussy clit nipples, asymmetric bob haircut with neon pink streaks, circuit tattoos on arms, heterochromia blue-hazel eyes, giggling sadistically, neon micro thong framing genitals, thigh-high fishnets, hip holograms, taunting dance pose",
+  "stats": {
+    "power": 22,
+    "speed": 88,
+    "technique": 92,
+    "toughness": 28,
+    "supernatural": 0
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}
