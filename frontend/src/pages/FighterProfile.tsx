@@ -42,28 +42,12 @@ export default function FighterProfile() {
   if (loading) return <div style={{ color: colors.textMuted, padding: spacing.lg }}>Loading...</div>
   if (!fighter) return <NoData />
 
-  const alignmentColor = fighter.alignment === 'face' ? colors.face
-    : fighter.alignment === 'heel' ? colors.heel
-    : colors.tweener
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xl }}>
       <div style={{ display: 'flex', gap: spacing.lg, alignItems: 'flex-start' }}>
         <FighterPortrait fighterId={fighter.id} name={fighter.ring_name} size={96} />
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md, marginBottom: spacing.xs }}>
-            <h1 style={{ fontSize: fontSizes.xxl, color: colors.accent }}>{fighter.ring_name}</h1>
-            <span style={{
-              fontSize: fontSizes.xs,
-              color: alignmentColor,
-              padding: `2px ${spacing.sm}`,
-              border: `1px solid ${withAlpha(alignmentColor, 0.5)}`,
-              borderRadius: '3px',
-              textTransform: 'uppercase',
-            }}>
-              {fighter.alignment}
-            </span>
-          </div>
+          <h1 style={{ fontSize: fontSizes.xxl, color: colors.accent, marginBottom: spacing.xs }}>{fighter.ring_name}</h1>
           <p style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
             {fighter.real_name}{fighter.gender ? ` — ${fighter.gender.charAt(0).toUpperCase() + fighter.gender.slice(1)}` : ''}, Age {fighter.age} — {fighter.origin}
           </p>
@@ -93,60 +77,14 @@ export default function FighterProfile() {
 
       <section>
         <h2 style={sectionHeader}>Stats</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: spacing.lg }}>
-          <div style={cardStyle}>
-            <h3 style={subHeader}>Physical</h3>
-            {Object.entries(fighter.physical_stats).map(([key, val]) => (
-              <StatBar key={key} name={key} value={val} />
-            ))}
-          </div>
-          <div style={cardStyle}>
-            <h3 style={subHeader}>Combat</h3>
-            {Object.entries(fighter.combat_stats).map(([key, val]) => (
-              <StatBar key={key} name={key} value={val} />
-            ))}
-          </div>
-          <div style={cardStyle}>
-            <h3 style={subHeader}>Psychological</h3>
-            {Object.entries(fighter.psychological_stats).map(([key, val]) => (
-              <StatBar key={key} name={key} value={val} />
-            ))}
-          </div>
-          {hasSupernaturalStats(fighter.supernatural_stats) && (
-            <div style={cardStyle}>
-              <h3 style={{ ...subHeader, color: colors.tweener }}>Supernatural</h3>
-              {Object.entries(fighter.supernatural_stats)
-                .filter(([_, val]) => val > 0)
-                .map(([key, val]) => (
-                  <StatBar key={key} name={key} value={val} />
-                ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section>
-        <h2 style={sectionHeader}>Fighting Style</h2>
         <div style={cardStyle}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing.sm, fontSize: fontSizes.sm }}>
-            <div><span style={labelStyle}>Primary:</span> {fighter.fighting_style.primary_style}</div>
-            <div><span style={labelStyle}>Secondary:</span> {fighter.fighting_style.secondary_style}</div>
-            <div><span style={labelStyle}>Signature:</span> {fighter.fighting_style.signature_move}</div>
-            <div><span style={labelStyle}>Finisher:</span> {fighter.fighting_style.finishing_move}</div>
-          </div>
-          {fighter.fighting_style.known_weaknesses.length > 0 && (
-            <div style={{ marginTop: spacing.sm, fontSize: fontSizes.sm }}>
-              <span style={labelStyle}>Weaknesses:</span>{' '}
-              <span style={{ color: colors.injured }}>{fighter.fighting_style.known_weaknesses.join(', ')}</span>
-            </div>
+          <StatBar name="power" value={fighter.stats.power} />
+          <StatBar name="speed" value={fighter.stats.speed} />
+          <StatBar name="technique" value={fighter.stats.technique} />
+          <StatBar name="toughness" value={fighter.stats.toughness} />
+          {fighter.stats.supernatural > 0 && (
+            <StatBar name="supernatural" value={fighter.stats.supernatural} />
           )}
-        </div>
-      </section>
-
-      <section>
-        <h2 style={sectionHeader}>Backstory</h2>
-        <div style={{ ...cardStyle, lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
-          {fighter.backstory}
         </div>
       </section>
 
@@ -284,22 +222,12 @@ export default function FighterProfile() {
   )
 }
 
-function hasSupernaturalStats(stats: { arcane_power: number; chi_mastery: number; elemental_affinity: number; dark_arts: number }): boolean {
-  return stats.arcane_power > 0 || stats.chi_mastery > 0 || stats.elemental_affinity > 0 || stats.dark_arts > 0
-}
-
 const sectionHeader: React.CSSProperties = {
   fontSize: fontSizes.md,
   color: colors.text,
   marginBottom: spacing.sm,
   paddingBottom: spacing.xs,
   borderBottom: `1px solid ${colors.border}`,
-}
-
-const subHeader: React.CSSProperties = {
-  fontSize: fontSizes.sm,
-  color: colors.accent,
-  marginBottom: spacing.sm,
 }
 
 const cardStyle: React.CSSProperties = {

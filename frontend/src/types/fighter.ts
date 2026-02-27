@@ -1,40 +1,9 @@
-export interface FightingStyle {
-  primary_style: string
-  secondary_style: string
-  signature_move: string
-  finishing_move: string
-  known_weaknesses: string[]
-}
-
-export interface PhysicalStats {
-  strength: number
+export interface Stats {
+  power: number
   speed: number
-  endurance: number
-  durability: number
-  recovery: number
-}
-
-export interface CombatStats {
-  striking: number
-  grappling: number
-  defense: number
-  fight_iq: number
-  finishing_instinct: number
-}
-
-export interface PsychologicalStats {
-  aggression: number
-  composure: number
-  confidence: number
-  resilience: number
-  killer_instinct: number
-}
-
-export interface SupernaturalStats {
-  arcane_power: number
-  chi_mastery: number
-  elemental_affinity: number
-  dark_arts: number
+  technique: number
+  toughness: number
+  supernatural: number
 }
 
 export interface Record {
@@ -65,21 +34,14 @@ export interface Fighter {
   real_name: string
   age: number
   origin: string
-  alignment: string
   gender: string
   height: string
   weight: string
   build: string
   distinguishing_features: string
   ring_attire: string
-  backstory: string
-  personality_traits: string[]
-  fears_quirks: string[]
-  fighting_style: FightingStyle
-  physical_stats: PhysicalStats
-  combat_stats: CombatStats
-  psychological_stats: PsychologicalStats
-  supernatural_stats: SupernaturalStats
+  image_prompt: string
+  stats: Stats
   record: Record
   condition: Condition
   storyline_log: string[]

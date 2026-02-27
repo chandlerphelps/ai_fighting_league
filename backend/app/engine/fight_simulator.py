@@ -172,19 +172,17 @@ This is a known rivalry — factor in the psychological weight of their history.
     prompt = f"""Analyze this fighting matchup and return a JSON probability assessment.
 
 FIGHTER 1: {f1_name}
-- Stats: Physical={fighter1.get('physical_stats', {})}, Combat={fighter1.get('combat_stats', {})}, Psychological={fighter1.get('psychological_stats', {})}
-- Supernatural: {fighter1.get('supernatural_stats', {})}
-- Style: {fighter1.get('fighting_style', {})}
+- Stats: {fighter1.get('stats', {})}
 - Record: {fighter1.get('record', {})}
 - Condition: {fighter1.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter1.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter1.get('condition', {}).get('momentum', 'neutral')}
 
 FIGHTER 2: {f2_name}
-- Stats: Physical={fighter2.get('physical_stats', {})}, Combat={fighter2.get('combat_stats', {})}, Psychological={fighter2.get('psychological_stats', {})}
-- Supernatural: {fighter2.get('supernatural_stats', {})}
-- Style: {fighter2.get('fighting_style', {})}
+- Stats: {fighter2.get('stats', {})}
 - Record: {fighter2.get('record', {})}
 - Condition: {fighter2.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter2.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter2.get('condition', {}).get('momentum', 'neutral')}
 {rivalry_text}
+
+Stats are: power (striking/grappling force), speed (quickness/reflexes), technique (skill/fight IQ/defense), toughness (durability/endurance/recovery), supernatural (optional supernatural ability, 0 = none).
 
 Return ONLY valid JSON with this exact structure:
 {{
@@ -229,31 +227,26 @@ def generate_narrative(
         method_display = outcome.method.replace("_", " ").upper()
         outcome_text = f"{winner_name} defeats {loser_name} by {method_display} in Round {outcome.round_ended}."
 
+    f1_stats = fighter1.get('stats', {})
+    f2_stats = fighter2.get('stats', {})
+
     prompt = f"""Write a dramatic fight narrative for this match. The outcome is predetermined — you must write toward it.
 
 FIGHTER 1: {f1_name}
 - Real Name: {fighter1.get('real_name', '')}
 - Origin: {fighter1.get('origin', '')}
-- Alignment: {fighter1.get('alignment', '')}
 - Build: {fighter1.get('build', '')}, {fighter1.get('height', '')}, {fighter1.get('weight', '')}
-- Style: Primary {fighter1.get('fighting_style', {}).get('primary_style', '')}, Secondary {fighter1.get('fighting_style', {}).get('secondary_style', '')}
-- Signature Move: {fighter1.get('fighting_style', {}).get('signature_move', '')}
-- Finishing Move: {fighter1.get('fighting_style', {}).get('finishing_move', '')}
-- Backstory Summary: {fighter1.get('backstory', '')[:300]}
-- Supernatural: {fighter1.get('supernatural_stats', {})}
-- Personality: {', '.join(fighter1.get('personality_traits', []))}
+- Distinguishing Features: {fighter1.get('distinguishing_features', '')}
+- Attire: {fighter1.get('ring_attire', '')}
+- Stats: Power {f1_stats.get('power', 50)}, Speed {f1_stats.get('speed', 50)}, Technique {f1_stats.get('technique', 50)}, Toughness {f1_stats.get('toughness', 50)}, Supernatural {f1_stats.get('supernatural', 0)}
 
 FIGHTER 2: {f2_name}
 - Real Name: {fighter2.get('real_name', '')}
 - Origin: {fighter2.get('origin', '')}
-- Alignment: {fighter2.get('alignment', '')}
 - Build: {fighter2.get('build', '')}, {fighter2.get('height', '')}, {fighter2.get('weight', '')}
-- Style: Primary {fighter2.get('fighting_style', {}).get('primary_style', '')}, Secondary {fighter2.get('fighting_style', {}).get('secondary_style', '')}
-- Signature Move: {fighter2.get('fighting_style', {}).get('signature_move', '')}
-- Finishing Move: {fighter2.get('fighting_style', {}).get('finishing_move', '')}
-- Backstory Summary: {fighter2.get('backstory', '')[:300]}
-- Supernatural: {fighter2.get('supernatural_stats', {})}
-- Personality: {', '.join(fighter2.get('personality_traits', []))}
+- Distinguishing Features: {fighter2.get('distinguishing_features', '')}
+- Attire: {fighter2.get('ring_attire', '')}
+- Stats: Power {f2_stats.get('power', 50)}, Speed {f2_stats.get('speed', 50)}, Technique {f2_stats.get('technique', 50)}, Toughness {f2_stats.get('toughness', 50)}, Supernatural {f2_stats.get('supernatural', 0)}
 
 MATCHUP ANALYSIS:
 - Key Factors: {', '.join(analysis.key_factors)}
@@ -262,11 +255,11 @@ PREDETERMINED OUTCOME: {outcome_text}
 
 Write the narrative including:
 1. Pre-fight scene setting (1 paragraph — atmosphere, crowd, fighters entering)
-2. Round-by-round action (key moments, momentum shifts, signature moves used)
+2. Round-by-round action (key moments, momentum shifts)
 3. The finish or decision
 4. Post-fight aftermath (winner's reaction, loser's state, any story hooks for future)
 
-Reference each fighter's actual moves, personality, and style. If a fighter has supernatural abilities (non-zero supernatural stats), weave subtle supernatural flavor into key moments — but keep it grounded.
+Use each fighter's physical description, attire, and distinguishing features to make the prose vivid. If a fighter has supernatural > 0, weave subtle supernatural flavor into key moments — but keep it grounded.
 
 Target length: {config.narrative_min_words}-{config.narrative_max_words} words of dramatic prose. Write in present tense for immediacy."""
 

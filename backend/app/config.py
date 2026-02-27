@@ -9,16 +9,18 @@ from dotenv import load_dotenv
 class Config:
     openrouter_api_key: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
-    default_model: str = "minimax/minimax-m2.5"
-    narrative_model: str = "minimax/minimax-m2.5"
+    # default_model: str = "minimax/minimax-m2.5"
+    # narrative_model: str = "minimax/minimax-m2.5"
+    default_model: str = "x-ai/grok-4.1-fast"
+    narrative_model: str = "x-ai/grok-4.1-fast"
 
-    roster_size: int = 16
+    roster_size: int = 12
     fights_per_event: int = 3
     events_per_week: int = 2
     rounds_per_fight: int = 3
 
-    min_total_stats: int = 900
-    max_total_stats: int = 1100
+    min_total_stats: int = 120
+    max_total_stats: int = 340
     stat_min: int = 15
     stat_max: int = 95
     supernatural_cap: int = 50
@@ -34,7 +36,9 @@ class Config:
     narrative_min_words: int = 800
     narrative_max_words: int = 1500
 
-    data_dir: Path = field(default_factory=lambda: Path(__file__).resolve().parent.parent.parent / "data")
+    data_dir: Path = field(
+        default_factory=lambda: Path(__file__).resolve().parent.parent.parent / "data"
+    )
 
 
 def load_config() -> Config:

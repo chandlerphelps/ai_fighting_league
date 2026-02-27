@@ -131,9 +131,7 @@ function StatSnapshot({ label, snapshot, fighterId, winnerId }: {
   winnerId?: string
 }) {
   const isWinner = winnerId === fighterId
-  const physical = snapshot.physical_stats as Record<string, number> | undefined
-  const combat = snapshot.combat_stats as Record<string, number> | undefined
-  const psychological = snapshot.psychological_stats as Record<string, number> | undefined
+  const stats = snapshot.stats as Record<string, number> | undefined
 
   return (
     <div style={{
@@ -149,30 +147,11 @@ function StatSnapshot({ label, snapshot, fighterId, winnerId }: {
       }}>
         {label} {isWinner && '(W)'}
       </h3>
-      {physical && (
-        <div style={{ marginBottom: spacing.sm }}>
-          <p style={{ fontSize: fontSizes.xs, color: colors.textDim, marginBottom: '4px' }}>Physical</p>
-          {Object.entries(physical).map(([k, v]) => (
-            <StatBar key={k} name={k} value={v} />
-          ))}
-        </div>
-      )}
-      {combat && (
-        <div style={{ marginBottom: spacing.sm }}>
-          <p style={{ fontSize: fontSizes.xs, color: colors.textDim, marginBottom: '4px' }}>Combat</p>
-          {Object.entries(combat).map(([k, v]) => (
-            <StatBar key={k} name={k} value={v} />
-          ))}
-        </div>
-      )}
-      {psychological && (
-        <div>
-          <p style={{ fontSize: fontSizes.xs, color: colors.textDim, marginBottom: '4px' }}>Psychological</p>
-          {Object.entries(psychological).map(([k, v]) => (
-            <StatBar key={k} name={k} value={v} />
-          ))}
-        </div>
-      )}
+      {stats && Object.entries(stats)
+        .filter(([k, v]) => k !== 'supernatural' || v > 0)
+        .map(([k, v]) => (
+          <StatBar key={k} name={k} value={v} />
+        ))}
     </div>
   )
 }

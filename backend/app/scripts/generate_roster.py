@@ -1,28 +1,71 @@
+import argparse
+import json
 import random
 import time
 from datetime import date
 
 from app.config import load_config
-from app.engine.fighter_generator import generate_fighter, ARCHETYPES
+from app.engine.fighter_generator import generate_fighter, plan_roster
 from app.models.world_state import WorldState
 from app.services import data_manager
 
 
-SUPERNATURAL_ARCHETYPES = {"The Mystic"}
-POSSIBLE_SUPERNATURAL = {"The Wildcard", "The Seductress/Seductor", "The Survivor"}
-
-
-def generate_roster():
+def plan_roster_cmd():
     config = load_config()
     data_manager.ensure_data_dirs(config)
 
-    slots = []
-    for archetype in ARCHETYPES:
-        slots.append((archetype, archetype in SUPERNATURAL_ARCHETYPES))
-        has_super = archetype in POSSIBLE_SUPERNATURAL and random.random() < 0.5
-        slots.append((archetype, has_super))
+    existing_on_disk = data_manager.load_all_fighters(config)
+    existing_fighters = [
+        {
+            "ring_name": f.get("ring_name"),
+            "gender": f.get("gender", ""),
+            "origin": f.get("origin"),
+        }
+        for f in existing_on_disk
+    ] or None
 
-    random.shuffle(slots)
+    print(f"Planning roster of {config.roster_size} fighters...")
+    roster_plan = plan_roster(config, roster_size=config.roster_size, existing_fighters=existing_fighters)
+
+    plan_path = config.data_dir / "roster_plan.json"
+    with open(plan_path, "w") as f:
+        json.dump(roster_plan, f, indent=2)
+
+    print(f"\nRoster plan saved to {plan_path}")
+    print(f"  Fighters planned: {len(roster_plan)}")
+    print()
+    for i, entry in enumerate(roster_plan):
+        supernatural_tag = f" [{entry.get('supernatural_type', '')}]" if entry.get("has_supernatural") else ""
+        print(
+            f"  {i + 1}. {entry.get('ring_name', '?')} — {entry.get('gender', '?')}, "
+            f"{entry.get('alignment', '?')}, {entry.get('primary_archetype', '?')}"
+            f"{supernatural_tag}"
+        )
+        print(f"     {entry.get('concept_hook', '')}")
+        print(f"     Style: {entry.get('fighting_style_concept', '')}")
+        print(f"     From: {entry.get('origin', '?')} | Tier: {entry.get('power_tier', '?')}")
+        rivals = entry.get("rivalry_seeds", [])
+        if rivals:
+            print(f"     Rivals: {', '.join(rivals)}")
+        print()
+
+    print("Review the plan, then run with --generate to create the fighters.")
+
+
+def generate_from_plan():
+    config = load_config()
+    data_manager.ensure_data_dirs(config)
+
+    plan_path = config.data_dir / "roster_plan.json"
+    if not plan_path.exists():
+        print(f"No roster plan found at {plan_path}")
+        print("Run with --plan first to create one.")
+        return
+
+    with open(plan_path) as f:
+        roster_plan = json.load(f)
+
+    print(f"Generating {len(roster_plan)} fighters from plan...")
 
     existing_on_disk = data_manager.load_all_fighters(config)
     existing_fighters = [
@@ -31,22 +74,22 @@ def generate_roster():
             "gender": f.get("gender", ""),
             "height": f.get("height", ""),
             "origin": f.get("origin"),
-            "alignment": f.get("alignment"),
             "build": f.get("build", ""),
             "distinguishing_features": f.get("distinguishing_features", ""),
             "ring_attire": f.get("ring_attire", ""),
-            "fighting_style": f.get("fighting_style", {}),
         }
         for f in existing_on_disk
     ]
 
     fighter_ids = [f.get("id") for f in existing_on_disk]
-    for i, (archetype, has_supernatural) in enumerate(slots):
-        print(f"[{i + 1}/{len(slots)}] Generating {archetype} {'(supernatural)' if has_supernatural else ''}...")
+
+    for i, entry in enumerate(roster_plan):
+        print(f"[{i + 1}/{len(roster_plan)}] Generating {entry.get('ring_name', '?')}...")
         try:
             fighter = generate_fighter(
-                config, archetype=archetype, has_supernatural=has_supernatural,
+                config,
                 existing_fighters=existing_fighters,
+                roster_plan_entry=entry,
             )
             data_manager.save_fighter(fighter, config)
             fighter_ids.append(fighter.id)
@@ -55,14 +98,9 @@ def generate_roster():
                 "gender": fighter.gender,
                 "height": fighter.height,
                 "origin": fighter.origin,
-                "alignment": fighter.alignment,
                 "build": fighter.build,
                 "distinguishing_features": fighter.distinguishing_features,
                 "ring_attire": fighter.ring_attire,
-                "fighting_style": {
-                    "primary_style": fighter.fighting_style.primary_style,
-                    "secondary_style": fighter.fighting_style.secondary_style,
-                },
             })
             print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin}")
             print(f"  Stats total: {fighter.total_core_stats()}")
@@ -70,7 +108,7 @@ def generate_roster():
             print(f"  ERROR generating fighter: {e}")
             continue
 
-        if i < len(slots) - 1:
+        if i < len(roster_plan) - 1:
             time.sleep(1)
 
     random.shuffle(fighter_ids)
@@ -95,5 +133,21 @@ def generate_roster():
     print(f"  World state saved to data/world_state.json")
 
 
+def generate_roster():
+    plan_roster_cmd()
+    print("\n" + "=" * 60 + "\n")
+    generate_from_plan()
+
+
 if __name__ == "__main__":
-    generate_roster()
+    parser = argparse.ArgumentParser(description="Generate AFL roster")
+    parser.add_argument("--plan", action="store_true", help="Phase 1: plan roster only (saves to data/roster_plan.json)")
+    parser.add_argument("--generate", action="store_true", help="Phase 2: generate fighters from existing plan")
+    args = parser.parse_args()
+
+    if args.plan:
+        plan_roster_cmd()
+    elif args.generate:
+        generate_from_plan()
+    else:
+        generate_roster()

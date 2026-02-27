@@ -93,7 +93,7 @@ def _apply_stat_adjustments(fighter: Fighter, outcome, is_fighter1: bool) -> dic
     changes = {}
 
     if outcome.is_draw:
-        _adjust_stat(fighter.psychological_stats, "resilience", 1, changes)
+        _adjust_stat(fighter.stats, "toughness", 1, changes)
         return changes
 
     performance = outcome.fighter1_performance if is_fighter1 else outcome.fighter2_performance
@@ -101,34 +101,33 @@ def _apply_stat_adjustments(fighter: Fighter, outcome, is_fighter1: bool) -> dic
 
     if is_winner:
         if performance == "dominant":
-            _adjust_stat(fighter.psychological_stats, "confidence", random.randint(2, 3), changes)
-            _adjust_stat(fighter.psychological_stats, "killer_instinct", 1, changes)
+            _adjust_stat(fighter.stats, "technique", random.randint(1, 2), changes)
+            _adjust_stat(fighter.stats, "power", 1, changes)
         else:
-            _adjust_stat(fighter.psychological_stats, "confidence", 1, changes)
+            _adjust_stat(fighter.stats, "technique", 1, changes)
 
         if outcome.method == "ko_tko":
-            _adjust_stat(fighter.combat_stats, "finishing_instinct", 1, changes)
+            _adjust_stat(fighter.stats, "power", 1, changes)
         elif outcome.method == "submission":
-            _adjust_stat(fighter.combat_stats, "grappling", 1, changes)
+            _adjust_stat(fighter.stats, "technique", 1, changes)
     else:
         if performance == "poor":
-            _adjust_stat(fighter.psychological_stats, "confidence", -2, changes)
+            _adjust_stat(fighter.stats, "technique", -2, changes)
         else:
-            _adjust_stat(fighter.psychological_stats, "confidence", -1, changes)
+            _adjust_stat(fighter.stats, "technique", -1, changes)
 
         if outcome.method == "ko_tko":
-            _adjust_stat(fighter.psychological_stats, "composure", -1, changes)
-            _adjust_stat(fighter.psychological_stats, "resilience", 1, changes)
+            _adjust_stat(fighter.stats, "toughness", 1, changes)
         elif outcome.method == "submission":
-            _adjust_stat(fighter.combat_stats, "defense", 1, changes)
+            _adjust_stat(fighter.stats, "technique", 1, changes)
 
     return changes
 
 
-def _adjust_stat(stat_group, stat_name: str, delta: int, changes: dict):
-    old_val = getattr(stat_group, stat_name)
+def _adjust_stat(stats, stat_name: str, delta: int, changes: dict):
+    old_val = getattr(stats, stat_name)
     new_val = max(15, min(95, old_val + delta))
-    setattr(stat_group, stat_name, new_val)
+    setattr(stats, stat_name, new_val)
     if new_val != old_val:
         changes[stat_name] = {"old": old_val, "new": new_val, "delta": new_val - old_val}
 
@@ -165,7 +164,6 @@ def _generate_storyline_entry(
     prompt = f"""Write 2-3 sentences about what this fight meant for {fighter.ring_name} narratively.
 
 {fighter.ring_name} {result_text} {opponent.ring_name} by {method} in round {outcome.round_ended}.
-Fighter personality: {', '.join(fighter.personality_traits)}
 Current record: {fighter.record.wins}-{fighter.record.losses}-{fighter.record.draws}
 
 Capture the emotional/narrative significance — confidence building, humbling loss, rivalry intensifying, etc. Be concise and dramatic."""
