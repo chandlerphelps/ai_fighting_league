@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { EventMatch } from '../types/event'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import FighterLink from './FighterLink'
+import FighterPortrait from './FighterPortrait'
 
 interface FightCardProps {
   matches: EventMatch[]
@@ -28,6 +29,7 @@ export default function FightCard({ matches }: FightCardProps) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1 }}>
+            <FighterPortrait fighterId={match.fighter1_id} name={match.fighter1_name} size={28} />
             <span style={{
               color: match.completed && match.winner_id === match.fighter1_id ? colors.win : colors.text,
               fontWeight: match.completed && match.winner_id === match.fighter1_id ? 'bold' : 'normal',
@@ -41,6 +43,7 @@ export default function FightCard({ matches }: FightCardProps) {
             }}>
               <FighterLink id={match.fighter2_id} name={match.fighter2_name} />
             </span>
+            <FighterPortrait fighterId={match.fighter2_id} name={match.fighter2_name} size={28} />
           </div>
           {match.completed && (
             <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>

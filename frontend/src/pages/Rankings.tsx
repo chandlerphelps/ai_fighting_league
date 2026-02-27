@@ -5,6 +5,7 @@ import { loadAllMatches } from '../lib/data'
 import type { Fighter } from '../types/fighter'
 import type { Match } from '../types/match'
 import FighterLink from '../components/FighterLink'
+import FighterPortrait from '../components/FighterPortrait'
 import InjuryBadge from '../components/InjuryBadge'
 import NoData from '../components/NoData'
 
@@ -74,6 +75,7 @@ export default function Rankings() {
               {rank}
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+              <FighterPortrait fighterId={fighter.id} name={fighter.ring_name} size={28} />
               <FighterLink id={fighter.id} name={fighter.ring_name} />
               {isInjured && <InjuryBadge daysRemaining={fighter.condition.recovery_days_remaining} />}
             </div>

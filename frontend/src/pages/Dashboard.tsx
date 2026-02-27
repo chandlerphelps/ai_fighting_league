@@ -6,6 +6,7 @@ import type { Event } from '../types/event'
 import type { Match } from '../types/match'
 import FightCard from '../components/FightCard'
 import FighterLink from '../components/FighterLink'
+import FighterPortrait from '../components/FighterPortrait'
 import InjuryBadge from '../components/InjuryBadge'
 import NoData from '../components/NoData'
 
@@ -176,9 +177,11 @@ export default function Dashboard() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
                   <span style={{ color: colors.textDim, width: '80px' }}>{match.date}</span>
+                  <FighterPortrait fighterId={match.fighter1_id} name={match.fighter1_name} size={24} />
                   <FighterLink id={match.fighter1_id} name={match.fighter1_name} />
                   <span style={{ color: colors.textDim }}>vs</span>
                   <FighterLink id={match.fighter2_id} name={match.fighter2_name} />
+                  <FighterPortrait fighterId={match.fighter2_id} name={match.fighter2_name} size={24} />
                 </div>
                 {match.outcome && (
                   <span style={{
