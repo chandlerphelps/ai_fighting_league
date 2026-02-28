@@ -205,9 +205,10 @@ TIER_PROMPT_KEYS = {
 }
 
 
-def build_moment_image_prompt(
-    fighter1: dict, fighter2: dict, attacker_id: str, action: str, tier: str = "barely"
-) -> str:
+MOMENT_VARIANTS = ["A", "B", "C", "D", "E"]
+
+
+def _extract_moment_context(fighter1, fighter2, attacker_id, action, tier):
     from app.engine.image_style import ART_STYLE_BASE, get_art_style_tail
 
     tier_key = TIER_PROMPT_KEYS.get(tier, "image_prompt")
@@ -234,29 +235,141 @@ def build_moment_image_prompt(
     atk_desc = ", ".join(p for p in [atk_body, atk_clothing] if p)
     def_desc = ", ".join(p for p in [def_body, def_clothing] if p)
 
+    ref_sheet = "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter"
+    consistency = "exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    tail = get_art_style_tail(atk_gender)
+
+    return {
+        "ART_STYLE_BASE": ART_STYLE_BASE,
+        "atk_name": atk_name, "def_name": def_name,
+        "atk_gender": atk_gender, "def_gender": def_gender,
+        "atk_height": atk_height, "def_height": def_height,
+        "atk_desc": atk_desc, "def_desc": def_desc,
+        "action": action,
+        "ref_sheet": ref_sheet, "consistency": consistency, "tail": tail,
+    }
+
+
+def _build_variant_a(c):
     action_composition = (
-        f"dynamic combat action shot, {atk_name} landing {action}, "
+        f"dynamic combat action shot, {c['atk_name']} landing {c['action']}, "
         f"dramatic impact moment, motion blur on strike, "
         f"arena lighting, dark moody atmosphere, "
         f"full body visible for both fighters"
     )
-
-    atk_fighter = f"attacking fighter ({atk_gender}, {atk_name}, {atk_height}): {atk_desc}"
-    def_fighter = f"defending fighter ({def_gender}, {def_name}, {def_height}): {def_desc}"
-
-    tail = get_art_style_tail(atk_gender)
-
-    parts = [
-        ART_STYLE_BASE,
-        action_composition,
-        "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter",
-        atk_fighter,
-        def_fighter,
-        tail,
-        "exactly two distinct characters, each maintains their exact original design from their reference sheet",
+    impact_reaction = (
+        f"{c['def_name']} recoiling from the hit, grimacing in pain, "
+        f"head snapping back, sweat and spit flying from impact, staggering off-balance"
+    )
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    return [
+        c["ART_STYLE_BASE"], action_composition, impact_reaction,
+        c["ref_sheet"], atk_fighter, def_fighter, c["tail"], c["consistency"],
     ]
 
-    return ", ".join(parts)
+
+def _build_variant_b(c):
+    defender_reaction = (
+        f"devastating impact on {c['def_name']}, face contorted in agony, "
+        f"body crumpling from the force, eyes wide with shock and pain, "
+        f"jaw twisted from the blow, sweat spraying on impact"
+    )
+    attack = (
+        f"{c['atk_name']} delivering {c['action']} with full force, "
+        f"fist connecting flush, muscles tensed at moment of impact"
+    )
+    scene = "dynamic combat shot, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike"
+    def_fighter = f"defending fighter taking the hit ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    return [
+        c["ART_STYLE_BASE"], defender_reaction, attack, scene,
+        c["ref_sheet"], def_fighter, atk_fighter, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_c(c):
+    frozen_moment = (
+        f"frozen instant of impact, {c['atk_name']}'s {c['action']} connecting hard against {c['def_name']}, "
+        f"visible shockwave ripple at point of contact, skin deforming under the strike"
+    )
+    atk_detail = (
+        f"{c['atk_name']} fully committed to the strike, fierce determined expression, "
+        f"weight behind the blow, aggressive fighting stance"
+    )
+    def_detail = (
+        f"{c['def_name']} absorbing the hit, face twisted in pain, eyes squeezed shut, "
+        f"body buckling, guard broken, knocked off balance"
+    )
+    scene = "extreme dynamic angle, arena spotlights, dark moody atmosphere, full body visible for both fighters, speed lines and motion blur"
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    return [
+        c["ART_STYLE_BASE"], frozen_moment, atk_detail, def_detail, scene,
+        c["ref_sheet"], atk_fighter, def_fighter, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_d(c):
+    camera = (
+        f"low-angle action shot focused on the point of impact, "
+        f"close enough to see the damage, showing both fighters full body"
+    )
+    impact_desc = (
+        f"{c['atk_name']} smashing {c['action']} into {c['def_name']}, "
+        f"brutal visible contact, flesh compressing at strike point, "
+        f"sweat droplets exploding off {c['def_name']}'s body"
+    )
+    expressions = (
+        f"{c['atk_name']}: aggressive snarl, killer intent in eyes. "
+        f"{c['def_name']}: mouth open in pain, eyes rolling, dazed expression, body going limp"
+    )
+    scene = "arena lighting, dark moody atmosphere, motion blur on the strike, dramatic volumetric lighting"
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    return [
+        c["ART_STYLE_BASE"], camera, impact_desc, expressions, scene,
+        c["ref_sheet"], atk_fighter, def_fighter, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_e(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    sequence = (
+        f"the exact moment {c['atk_name']}'s {c['action']} lands square on {c['def_name']}, "
+        f"{c['atk_name']} lunging forward with full body rotation behind the strike, "
+        f"{c['def_name']}'s head whipping sideways from the force, "
+        f"spit and sweat flying from {c['def_name']}'s face, "
+        f"{c['def_name']}'s legs buckling, expression of shock and pain"
+    )
+    scene = (
+        "brutal combat action shot, visceral impact, "
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "motion blur on strike, dramatic angle"
+    )
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        sequence, scene, c["tail"], c["consistency"],
+    ]
+
+
+_VARIANT_BUILDERS = {
+    "A": _build_variant_a,
+    "B": _build_variant_b,
+    "C": _build_variant_c,
+    "D": _build_variant_d,
+    "E": _build_variant_e,
+}
+
+
+def build_moment_image_prompt(
+    fighter1: dict, fighter2: dict, attacker_id: str, action: str,
+    tier: str = "barely", variant: str = "A",
+) -> str:
+    c = _extract_moment_context(fighter1, fighter2, attacker_id, action, tier)
+    builder = _VARIANT_BUILDERS.get(variant, _build_variant_a)
+    return ", ".join(builder(c))
 
 
 def run_fight(
