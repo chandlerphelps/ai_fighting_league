@@ -1,4 +1,5 @@
 import argparse
+import json
 import random
 import itertools
 from pathlib import Path
@@ -143,12 +144,78 @@ def generate_matchup_image(prompt_data: dict, config, output_dir: Path) -> Path 
 TIERS = ["barely", "sfw", "nsfw"]
 
 
+def run_fight_simulation(fighter_a: dict, fighter_b: dict, config):
+    from app.engine.fight_simulator import calculate_probabilities, determine_outcome, generate_moments
+
+    print("  Calculating probabilities...")
+    analysis = calculate_probabilities(fighter_a, fighter_b, config)
+    print(f"  Win prob: {fighter_a['ring_name']} {analysis.fighter1_win_prob:.0%} / {fighter_b['ring_name']} {analysis.fighter2_win_prob:.0%}")
+
+    outcome = determine_outcome(fighter_a, fighter_b, analysis, config)
+    if outcome.is_draw:
+        print(f"  Outcome: DRAW after round {outcome.round_ended}")
+    else:
+        winner_name = fighter_a["ring_name"] if outcome.winner_id == fighter_a["id"] else fighter_b["ring_name"]
+        print(f"  Outcome: {winner_name} wins by {outcome.method} in round {outcome.round_ended}")
+
+    print("  Generating moments...")
+    moments = generate_moments(fighter_a, fighter_b, analysis, outcome, config)
+    print(f"  Got {len(moments)} moments")
+
+    return analysis, outcome, moments
+
+
+def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, output_dir: Path, matchup_idx: int, tier: str = "barely") -> Path | None:
+    img_a = find_fighter_image(fighter_a["id"], config.data_dir, tier=tier)
+    img_b = find_fighter_image(fighter_b["id"], config.data_dir, tier=tier)
+
+    if not img_a or not img_b:
+        missing = []
+        if not img_a:
+            missing.append(f"{fighter_a['ring_name']} ({fighter_a['id']})")
+        if not img_b:
+            missing.append(f"{fighter_b['ring_name']} ({fighter_b['id']})")
+        print(f"    Missing {tier} character sheet images: {', '.join(missing)}")
+        return None
+
+    atk_id = moment.attacker_id
+    if atk_id == fighter_a["id"]:
+        image_paths = [img_a, img_b]
+    else:
+        image_paths = [img_b, img_a]
+
+    print(f"    Ref images: {image_paths[0].name}, {image_paths[1].name}")
+    print(f"    Calling Grok image edit API...")
+
+    urls = edit_image(
+        prompt=moment.image_prompt,
+        image_paths=image_paths,
+        config=config,
+        aspect_ratio="16:9",
+        resolution="2k",
+        n=1,
+    )
+
+    slug_a = fighter_a["ring_name"].lower().replace(" ", "_")
+    slug_b = fighter_b["ring_name"].lower().replace(" ", "_")
+    filename = f"fight_{slug_a}_vs_{slug_b}_moment{moment.moment_number}_{tier}.png"
+    save_path = output_dir / filename
+
+    download_image(urls[0], save_path)
+    return save_path
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate matchup face-off images")
     parser.add_argument("--count", type=int, default=3, help="Number of matchups to generate")
     parser.add_argument("--tiers", nargs="*", default=TIERS, choices=TIERS, help="Tiers to generate (default: all three)")
     parser.add_argument("--prompt-only", action="store_true", help="Only generate prompts, skip image generation")
+    parser.add_argument("--fight", action="store_true", help="Also run fight simulation and generate moment image prompts")
+    parser.add_argument("--fight-images", action="store_true", help="Generate actual moment images (implies --fight)")
     args = parser.parse_args()
+
+    if args.fight_images:
+        args.fight = True
 
     config = load_config()
     fighters = data_manager.load_all_fighters(config)
@@ -195,6 +262,59 @@ def main():
                     lines.append(f"**Error:** {e}\n")
 
             lines.append("")
+
+        if args.fight:
+            print(f"\n  --- FIGHT SIMULATION ---")
+            lines.append(f"### Fight Simulation\n")
+            try:
+                analysis, outcome, moments = run_fight_simulation(a, b, config)
+
+                if outcome.is_draw:
+                    result_text = f"DRAW after round {outcome.round_ended}"
+                else:
+                    winner_name = ring_a if outcome.winner_id == a["id"] else ring_b
+                    result_text = f"{winner_name} wins by {outcome.method.replace('_', ' ')} in round {outcome.round_ended}"
+
+                lines.append(f"**Result:** {result_text}\n")
+                lines.append(f"**Key Factors:** {', '.join(analysis.key_factors)}\n")
+                lines.append(f"\n#### Moments\n")
+
+                for moment in moments:
+                    print(f"    Moment {moment.moment_number}: {moment.description}")
+                    lines.append(f"**Moment {moment.moment_number}:** {moment.description}\n")
+                    lines.append(f"```\n{moment.image_prompt}\n```\n")
+
+                    if args.fight_images:
+                        try:
+                            tier = args.tiers[0] if args.tiers else "barely"
+                            saved = generate_moment_image(moment, a, b, config, output_dir, i, tier=tier)
+                            if saved:
+                                print(f"    Saved: {saved}")
+                                lines.append(f"**Image:** `{saved.name}`\n")
+                        except Exception as e:
+                            print(f"    IMAGE ERROR: {e}")
+                            lines.append(f"**Error:** {e}\n")
+
+                    lines.append("")
+
+                moments_json = [
+                    {
+                        "moment_number": m.moment_number,
+                        "description": m.description,
+                        "attacker_id": m.attacker_id,
+                        "image_prompt": m.image_prompt,
+                    }
+                    for m in moments
+                ]
+                json_path = output_dir / f"fight_{ring_a.lower().replace(' ', '_')}_vs_{ring_b.lower().replace(' ', '_')}_moments.json"
+                json_path.write_text(json.dumps(moments_json, indent=2))
+                print(f"  Moments JSON saved to {json_path}")
+
+            except Exception as e:
+                print(f"  FIGHT ERROR: {e}")
+                lines.append(f"**Error:** {e}\n")
+                import traceback
+                traceback.print_exc()
 
     output_path.write_text("\n".join(lines))
     print(f"\nPrompts written to {output_path}")
