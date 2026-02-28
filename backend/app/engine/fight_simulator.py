@@ -245,6 +245,8 @@ def _extract_moment_context(fighter1, fighter2, attacker_id, action, tier):
         "atk_gender": atk_gender, "def_gender": def_gender,
         "atk_height": atk_height, "def_height": def_height,
         "atk_desc": atk_desc, "def_desc": def_desc,
+        "atk_body": atk_body, "atk_clothing": atk_clothing,
+        "def_body": def_body, "def_clothing": def_clothing,
         "action": action,
         "ref_sheet": ref_sheet, "consistency": consistency, "tail": tail,
     }
@@ -354,12 +356,100 @@ def _build_variant_e(c):
     ]
 
 
+def _e_sequence(c):
+    return (
+        f"the exact moment {c['atk_name']}'s {c['action']} lands square on {c['def_name']}, "
+        f"{c['atk_name']} lunging forward with full body rotation behind the strike, "
+        f"{c['def_name']}'s head whipping sideways from the force, "
+        f"spit and sweat flying from {c['def_name']}'s face, "
+        f"{c['def_name']}'s legs buckling, expression of shock and pain"
+    )
+
+
+def _e_scene():
+    return (
+        "brutal combat action shot, visceral impact, "
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "motion blur on strike, dramatic angle"
+    )
+
+
+def _build_variant_e1_no_body(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_clothing']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_clothing']}"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_e2_no_clothing(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_body']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_body']}"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_e3_no_body_or_clothing(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']})"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']})"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_e4_no_height(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}): {c['def_desc']}"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_e5_no_gender(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_e6_no_tail(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["consistency"],
+    ]
+
+
+def _build_variant_e7_no_style(c):
+    atk_fighter = f"attacking fighter ({c['atk_gender']}, {c['atk_name']}, {c['atk_height']}): {c['atk_desc']}"
+    def_fighter = f"defending fighter ({c['def_gender']}, {c['def_name']}, {c['def_height']}): {c['def_desc']}"
+    return [
+        c["ref_sheet"], atk_fighter, def_fighter,
+        _e_sequence(c), _e_scene(), c["tail"], c["consistency"],
+    ]
+
+
 _VARIANT_BUILDERS = {
     "A": _build_variant_a,
     "B": _build_variant_b,
     "C": _build_variant_c,
     "D": _build_variant_d,
     "E": _build_variant_e,
+    "E1": _build_variant_e1_no_body,
+    "E2": _build_variant_e2_no_clothing,
+    "E3": _build_variant_e3_no_body_or_clothing,
+    "E4": _build_variant_e4_no_height,
+    "E5": _build_variant_e5_no_gender,
+    "E6": _build_variant_e6_no_tail,
+    "E7": _build_variant_e7_no_style,
 }
 
 
