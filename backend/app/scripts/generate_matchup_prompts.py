@@ -143,7 +143,6 @@ def generate_matchup_image(prompt_data: dict, config, output_dir: Path) -> Path 
 
 
 TIERS = ["barely", "sfw", "nsfw"]
-VARIANTS = ["A", "B", "C", "D", "E", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "F", "G", "F1", "F2", "F3", "F4", "F5"]
 
 
 def run_fight_simulation(fighter_a: dict, fighter_b: dict, config):
@@ -167,7 +166,7 @@ def run_fight_simulation(fighter_a: dict, fighter_b: dict, config):
     return analysis, outcome, moments
 
 
-def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, output_dir: Path, matchup_idx: int, tier: str = "barely", variant: str = "A") -> Path | None:
+def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, output_dir: Path, matchup_idx: int, tier: str = "barely") -> Path | None:
     from app.engine.fight_simulator import build_moment_image_prompt
 
     img_a = find_fighter_image(fighter_a["id"], config.data_dir, tier=tier)
@@ -188,11 +187,11 @@ def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, outp
     else:
         image_paths = [img_b, img_a]
 
-    prompt = build_moment_image_prompt(fighter_a, fighter_b, atk_id, moment.action, tier=tier, variant=variant)
+    prompt = build_moment_image_prompt(fighter_a, fighter_b, atk_id, moment.action, config=config, tier=tier)
 
     print(f"    Prompt: {prompt}")
     print(f"    Ref images: {image_paths[0].name}, {image_paths[1].name}")
-    print(f"    Calling Grok image edit API ({tier}, variant {variant})...")
+    print(f"    Calling Grok image edit API ({tier})...")
 
     urls = edit_image(
         prompt=prompt,
@@ -205,7 +204,7 @@ def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, outp
 
     slug_a = fighter_a["ring_name"].lower().replace(" ", "_")
     slug_b = fighter_b["ring_name"].lower().replace(" ", "_")
-    filename = f"fight_{slug_a}_vs_{slug_b}_moment{moment.moment_number}_{tier}_v{variant}.png"
+    filename = f"fight_{slug_a}_vs_{slug_b}_moment{moment.moment_number}_{tier}.png"
     save_path = output_dir / filename
 
     download_image(urls[0], save_path)
@@ -219,7 +218,6 @@ def main():
     parser.add_argument("--prompt-only", action="store_true", help="Only generate prompts, skip image generation")
     parser.add_argument("--fight", action="store_true", help="Also run fight simulation and generate moment image prompts")
     parser.add_argument("--fight-images", action="store_true", help="Generate actual moment images (implies --fight)")
-    parser.add_argument("--variants", nargs="*", default=["A"], choices=VARIANTS, help="Prompt variants to generate for moments (default: A)")
     args = parser.parse_args()
 
     if args.fight_images:
@@ -292,48 +290,40 @@ def main():
                     lines.append(f"\n#### Moment {moment.moment_number}: {moment.description}\n")
                     print(f"\n  --- MOMENT {moment.moment_number}: {moment.description} ---")
 
-                    for variant in args.variants:
-                        for tier in args.tiers:
-                            label = f"Variant {variant} / {tier.upper()}"
-                            prompt = build_moment_image_prompt(a, b, moment.attacker_id, moment.action, tier=tier, variant=variant)
-                            print(f"    {label}")
-                            lines.append(f"**{label}:**\n")
-                            lines.append(f"```\n{prompt}\n```\n")
+                    for tier in args.tiers:
+                        prompt = build_moment_image_prompt(a, b, moment.attacker_id, moment.action, config=config, tier=tier)
+                        print(f"    {tier.upper()}")
+                        lines.append(f"**{tier.upper()}:**\n")
+                        lines.append(f"```\n{prompt}\n```\n")
 
-                            key = f"{moment.moment_number}_{variant}"
-                            existing = next((m for m in moments_json if m.get("_key") == key), None)
-                            if existing:
-                                existing["image_prompts"][tier] = prompt
-                            else:
-                                moments_json.append({
-                                    "_key": key,
-                                    "moment_number": moment.moment_number,
-                                    "variant": variant,
-                                    "description": moment.description,
-                                    "attacker_id": moment.attacker_id,
-                                    "action": moment.action,
-                                    "image_prompts": {tier: prompt},
-                                })
+                        existing = next((m for m in moments_json if m.get("moment_number") == moment.moment_number), None)
+                        if existing:
+                            existing["image_prompts"][tier] = prompt
+                        else:
+                            moments_json.append({
+                                "moment_number": moment.moment_number,
+                                "description": moment.description,
+                                "attacker_id": moment.attacker_id,
+                                "action": moment.action,
+                                "image_prompts": {tier: prompt},
+                            })
 
-                            if args.fight_images:
-                                try:
-                                    saved = generate_moment_image(moment, a, b, config, output_dir, i, tier=tier, variant=variant)
-                                    if saved:
-                                        print(f"    Saved: {saved}")
-                                        lines.append(f"**Image:** `{saved.name}`\n")
-                                        existing = next((m for m in moments_json if m.get("_key") == key), None)
-                                        if existing:
-                                            existing.setdefault("image_paths", {})[tier] = str(saved)
-                                except Exception as e:
-                                    print(f"    IMAGE ERROR: {e}")
-                                    lines.append(f"**Error:** {e}\n")
+                        if args.fight_images:
+                            try:
+                                saved = generate_moment_image(moment, a, b, config, output_dir, i, tier=tier)
+                                if saved:
+                                    print(f"    Saved: {saved}")
+                                    lines.append(f"**Image:** `{saved.name}`\n")
+                                    existing = next((m for m in moments_json if m.get("moment_number") == moment.moment_number), None)
+                                    if existing:
+                                        existing.setdefault("image_paths", {})[tier] = str(saved)
+                            except Exception as e:
+                                print(f"    IMAGE ERROR: {e}")
+                                lines.append(f"**Error:** {e}\n")
 
-                            lines.append("")
-                            json_path.write_text(json.dumps(
-                                [{k: v for k, v in m.items() if k != "_key"} for m in moments_json],
-                                indent=2,
-                            ))
-                            output_path.write_text("\n".join(lines))
+                        lines.append("")
+                        json_path.write_text(json.dumps(moments_json, indent=2))
+                        output_path.write_text("\n".join(lines))
 
                 print(f"  Moments JSON saved to {json_path}")
 
