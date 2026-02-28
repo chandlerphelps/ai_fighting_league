@@ -19,8 +19,6 @@ class Config:
     roster_size: int = 8
     fights_per_event: int = 3
     events_per_week: int = 2
-    rounds_per_fight: int = 3
-
     min_total_stats: int = 120
     max_total_stats: int = 340
     stat_min: int = 15
@@ -33,9 +31,6 @@ class Config:
 
     rematch_cooldown_days: int = 14
     max_idle_days: int = 14
-    draw_probability: float = 0.03
-
-    moments_per_fight: int = 4
 
     data_dir: Path = field(
         default_factory=lambda: Path(__file__).resolve().parent.parent.parent / "data"

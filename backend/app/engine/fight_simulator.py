@@ -1,129 +1,54 @@
 import random
 import uuid
-from dataclasses import asdict
 
 from app.config import Config
 from app.models.match import MatchupAnalysis, MatchOutcome, Match, FightMoment
 from app.services import data_manager
 
 
-VALID_METHODS = ["ko_tko", "submission", "decision_unanimous", "decision_split"]
+def _calc_moment_count(winner_prob: float) -> int:
+    lopsidedness = abs(winner_prob - 0.5) * 2
+    return 3 + round(3 * (1 - lopsidedness))
+
+
+def _assess_performance(winner_prob: float) -> tuple[str, str]:
+    if winner_prob >= 0.70:
+        return "dominant", "poor"
+    if winner_prob <= 0.30:
+        return "dominant", "poor"
+    return "competitive", "competitive"
 
 
 def determine_outcome(
     fighter1: dict, fighter2: dict, analysis: MatchupAnalysis, config: Config
 ) -> MatchOutcome:
-    if random.random() < config.draw_probability:
-        return MatchOutcome(
-            winner_id="",
-            loser_id=None,
-            method="draw",
-            round_ended=config.rounds_per_fight,
-            fighter1_performance="competitive",
-            fighter2_performance="competitive",
-            fighter1_injuries=_roll_injuries("decision", config, 0.1),
-            fighter2_injuries=_roll_injuries("decision", config, 0.1),
-            is_draw=True,
-        )
-
     f1_id = fighter1["id"]
     f2_id = fighter2["id"]
 
     if random.random() < analysis.fighter1_win_prob:
         winner_id, loser_id = f1_id, f2_id
-        winner_methods = analysis.fighter1_methods
         prob = analysis.fighter1_win_prob
     else:
         winner_id, loser_id = f2_id, f1_id
-        winner_methods = analysis.fighter2_methods
         prob = analysis.fighter2_win_prob
 
-    method = _roll_method(winner_methods)
-    round_ended = _roll_round(method, config.rounds_per_fight)
-    winner_perf, loser_perf = _assess_performance(prob, method)
-
-    loser_injury_base = {"ko_tko": 0.40, "submission": 0.30}.get(method, 0.15)
-    winner_injury_base = 0.10
+    winner_perf, loser_perf = _assess_performance(prob)
+    moment_count = _calc_moment_count(prob)
 
     return MatchOutcome(
         winner_id=winner_id,
         loser_id=loser_id,
-        method=method,
-        round_ended=round_ended,
+        method="ko_tko",
+        round_ended=moment_count,
         fighter1_performance=winner_perf if winner_id == f1_id else loser_perf,
         fighter2_performance=winner_perf if winner_id == f2_id else loser_perf,
-        fighter1_injuries=_roll_injuries(method, config, winner_injury_base if winner_id == f1_id else loser_injury_base),
-        fighter2_injuries=_roll_injuries(method, config, winner_injury_base if winner_id == f2_id else loser_injury_base),
+        fighter1_injuries=_roll_injuries(config, 0.10 if winner_id == f1_id else 0.40),
+        fighter2_injuries=_roll_injuries(config, 0.10 if winner_id == f2_id else 0.40),
         is_draw=False,
     )
 
 
-def _roll_method(methods: dict) -> str:
-    if not methods:
-        methods = {
-            "ko_tko": 0.3,
-            "submission": 0.2,
-            "decision_unanimous": 0.35,
-            "decision_split": 0.15,
-        }
-
-    items = list(methods.items())
-    total = sum(w for _, w in items)
-    if total <= 0:
-        return random.choice(VALID_METHODS)
-
-    roll = random.random() * total
-    cumulative = 0
-    for method, weight in items:
-        cumulative += weight
-        if roll <= cumulative:
-            return method
-    return items[-1][0]
-
-
-def _roll_round(method: str, max_rounds: int) -> int:
-    if method in ("decision_unanimous", "decision_split"):
-        return max_rounds
-
-    if method == "ko_tko":
-        weights = [0.30, 0.40, 0.30]
-    elif method == "submission":
-        weights = [0.15, 0.35, 0.50]
-    else:
-        weights = [0.33, 0.34, 0.33]
-
-    weights = weights[:max_rounds]
-    total = sum(weights)
-    roll = random.random() * total
-    cumulative = 0
-    for i, w in enumerate(weights):
-        cumulative += w
-        if roll <= cumulative:
-            return i + 1
-    return max_rounds
-
-
-def _assess_performance(winner_prob: float, method: str) -> tuple[str, str]:
-    if winner_prob >= 0.70:
-        winner_perf = "dominant"
-        loser_perf = "poor"
-    elif winner_prob >= 0.55:
-        winner_perf = "competitive"
-        loser_perf = "competitive"
-    elif winner_prob >= 0.35:
-        winner_perf = "competitive"
-        loser_perf = "competitive"
-    else:
-        winner_perf = "dominant"
-        loser_perf = "poor"
-
-    if method == "ko_tko" and winner_prob < 0.35:
-        winner_perf = "dominant"
-
-    return winner_perf, loser_perf
-
-
-def _roll_injuries(method: str, config: Config, base_chance: float) -> list[dict]:
+def _roll_injuries(config: Config, base_chance: float) -> list[dict]:
     if random.random() > base_chance:
         return []
 
@@ -139,13 +64,7 @@ def _roll_injuries(method: str, config: Config, base_chance: float) -> list[dict
         recovery_range = config.severe_recovery
 
     recovery_days = random.randint(recovery_range[0], recovery_range[1])
-
-    injury_types = {
-        "ko_tko": ["concussion", "facial laceration", "broken nose", "orbital fracture"],
-        "submission": ["hyperextended elbow", "torn ligament", "neck strain", "dislocated shoulder"],
-    }
-    default_types = ["bruised ribs", "sprained wrist", "muscle strain", "cut above eye"]
-    injury_type = random.choice(injury_types.get(method, default_types))
+    injury_type = random.choice(["concussion", "facial laceration", "broken nose", "orbital fracture"])
 
     return [{
         "type": injury_type,
@@ -169,7 +88,7 @@ RIVALRY CONTEXT: These fighters have fought {rivalry_context.get('fights', 0)} t
 {f1_name} has won {rivalry_context.get('fighter1_wins', 0)} and {f2_name} has won {rivalry_context.get('fighter2_wins', 0)}.
 This is a known rivalry — factor in the psychological weight of their history."""
 
-    prompt = f"""Analyze this fighting matchup and return a JSON probability assessment.
+    prompt = f"""Analyze this fighting matchup and return a JSON probability assessment. All fights end in KO.
 
 FIGHTER 1: {f1_name}
 - Stats: {fighter1.get('stats', {})}
@@ -182,18 +101,16 @@ FIGHTER 2: {f2_name}
 - Condition: {fighter2.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter2.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter2.get('condition', {}).get('momentum', 'neutral')}
 {rivalry_text}
 
-Stats are: power (striking/grappling force), speed (quickness/reflexes), technique (skill/fight IQ/defense), toughness (durability/endurance/recovery), supernatural (optional supernatural ability, 0 = none).
+Stats are: power (striking force), speed (quickness/reflexes), technique (skill/fight IQ/defense), toughness (durability/endurance/recovery), supernatural (optional supernatural ability, 0 = none).
 
 Return ONLY valid JSON with this exact structure:
 {{
   "fighter1_win_prob": <float between 0.05 and 0.95>,
   "fighter2_win_prob": <float between 0.05 and 0.95, must sum to ~1.0 with fighter1_win_prob>,
-  "fighter1_methods": {{"ko_tko": <float>, "submission": <float>, "decision_unanimous": <float>, "decision_split": <float>}},
-  "fighter2_methods": {{"ko_tko": <float>, "submission": <float>, "decision_unanimous": <float>, "decision_split": <float>}},
   "key_factors": ["<factor 1>", "<factor 2>", "<factor 3>"]
 }}
 
-Supernatural abilities should be factored as a modest edge, not a dominator. Method probabilities for each fighter should sum to approximately 1.0."""
+Supernatural abilities should be factored as a modest edge, not a dominator."""
 
     system_prompt = "You are a fight analyst. Analyze matchups objectively based on fighter stats, styles, and conditions. Always respond with valid JSON only."
 
@@ -205,8 +122,6 @@ Supernatural abilities should be factored as a modest edge, not a dominator. Met
     return MatchupAnalysis(
         fighter1_win_prob=round(f1_prob, 3),
         fighter2_win_prob=round(f2_prob, 3),
-        fighter1_methods=result.get("fighter1_methods", {"ko_tko": 0.3, "submission": 0.2, "decision_unanimous": 0.35, "decision_split": 0.15}),
-        fighter2_methods=result.get("fighter2_methods", {"ko_tko": 0.3, "submission": 0.2, "decision_unanimous": 0.35, "decision_split": 0.15}),
         key_factors=result.get("key_factors", []),
     )
 
@@ -221,17 +136,11 @@ def generate_moments(
     f1_name = fighter1.get("ring_name", "Fighter 1")
     f2_name = fighter2.get("ring_name", "Fighter 2")
 
-    if outcome.is_draw:
-        outcome_text = f"The fight ends in a DRAW after {outcome.round_ended} rounds."
-    else:
-        winner_name = f1_name if outcome.winner_id == f1_id else f2_name
-        loser_name = f2_name if outcome.winner_id == f1_id else f1_name
-        method_display = outcome.method.replace("_", " ").upper()
-        outcome_text = f"{winner_name} defeats {loser_name} by {method_display} in Round {outcome.round_ended}."
+    winner_name = f1_name if outcome.winner_id == f1_id else f2_name
+    loser_name = f2_name if outcome.winner_id == f1_id else f1_name
+    target = outcome.round_ended
 
-    target = config.moments_per_fight
-
-    prompt = f"""Generate {target} key moments for this fight. The outcome is predetermined — build toward it.
+    prompt = f"""Generate exactly {target} key moments for this fight. Every fight ends in KO.
 
 FIGHTER 1: {f1_name} (ID: {f1_id})
 - Build: {fighter1.get('build', '')}, {fighter1.get('height', '')}, {fighter1.get('weight', '')}
@@ -241,7 +150,7 @@ FIGHTER 2: {f2_name} (ID: {f2_id})
 - Build: {fighter2.get('build', '')}, {fighter2.get('height', '')}, {fighter2.get('weight', '')}
 - Stats: Power {fighter2.get('stats', {}).get('power', 50)}, Speed {fighter2.get('stats', {}).get('speed', 50)}, Technique {fighter2.get('stats', {}).get('technique', 50)}
 
-PREDETERMINED OUTCOME: {outcome_text}
+PREDETERMINED OUTCOME: {winner_name} knocks out {loser_name}
 
 Return ONLY valid JSON with this structure:
 {{
@@ -249,18 +158,17 @@ Return ONLY valid JSON with this structure:
     {{
       "moment_number": 1,
       "attacker_id": "<fighter ID of who lands the strike>",
-      "action": "<short action phrase: e.g. 'spinning back kick to the ribs', 'right cross to the jaw', 'armbar from guard'>"
+      "action": "<short action phrase: e.g. 'spinning back kick to the ribs', 'right cross to the jaw', 'devastating uppercut'>"
     }}
   ]
 }}
 
 Rules:
-- Each moment is one fighter landing a clean strike, takedown, or submission attempt on the other
-- The action should be a specific fighting move (punch, kick, elbow, knee, takedown, submission hold)
-- Build momentum toward the predetermined winner — the last moment should be the finishing blow or decisive action
-- Keep actions simple and visual — one clear action per moment
-- Both fighters should land hits, but the winner should land more/better ones
-- For decisions, the final moment should be a strong hit that seals the judges' decision"""
+- Each moment is one fighter landing a clean strike on the other
+- The action should be a specific striking move (punch, kick, elbow, knee)
+- Build momentum toward the KO — the last moment MUST be the knockout blow from {winner_name}
+- Keep actions simple and visual — one clear strike per moment
+- Both fighters should land hits, but {winner_name} should land more/harder ones"""
 
     system_prompt = "You are a fight choreographer. Return concise JSON fight moments. Each moment is one specific strike or grappling action."
 

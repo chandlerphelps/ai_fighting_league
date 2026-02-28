@@ -32,7 +32,7 @@ class MatchupAnalysis:
 class MatchOutcome:
     winner_id: str = ""
     loser_id: Optional[str] = None
-    method: str = "decision_unanimous"
+    method: str = "ko_tko"
     round_ended: int = 3
     fighter1_performance: str = "competitive"
     fighter2_performance: str = "competitive"
