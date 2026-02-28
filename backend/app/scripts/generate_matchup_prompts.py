@@ -283,6 +283,9 @@ def main():
                 lines.append(f"**Result:** {result_text}\n")
                 lines.append(f"**Key Factors:** {', '.join(analysis.key_factors)}\n")
 
+                json_path = output_dir / f"fight_{ring_a.lower().replace(' ', '_')}_vs_{ring_b.lower().replace(' ', '_')}_moments.json"
+                moments_json = []
+
                 for tier in args.tiers:
                     lines.append(f"\n#### Moments — {tier.upper()}\n")
                     print(f"\n  --- MOMENTS ({tier.upper()}) ---")
@@ -293,33 +296,35 @@ def main():
                         lines.append(f"**Moment {moment.moment_number}:** {moment.description}\n")
                         lines.append(f"```\n{prompt}\n```\n")
 
+                        existing = next((m for m in moments_json if m["moment_number"] == moment.moment_number), None)
+                        if existing:
+                            existing["image_prompts"][tier] = prompt
+                        else:
+                            moments_json.append({
+                                "moment_number": moment.moment_number,
+                                "description": moment.description,
+                                "attacker_id": moment.attacker_id,
+                                "action": moment.action,
+                                "image_prompts": {tier: prompt},
+                            })
+
                         if args.fight_images:
                             try:
                                 saved = generate_moment_image(moment, a, b, config, output_dir, i, tier=tier)
                                 if saved:
                                     print(f"    Saved: {saved}")
                                     lines.append(f"**Image:** `{saved.name}`\n")
+                                    existing = next((m for m in moments_json if m["moment_number"] == moment.moment_number), None)
+                                    if existing:
+                                        existing.setdefault("image_paths", {})[tier] = str(saved)
                             except Exception as e:
                                 print(f"    IMAGE ERROR: {e}")
                                 lines.append(f"**Error:** {e}\n")
 
                         lines.append("")
+                        json_path.write_text(json.dumps(moments_json, indent=2))
+                        output_path.write_text("\n".join(lines))
 
-                moments_json = [
-                    {
-                        "moment_number": m.moment_number,
-                        "description": m.description,
-                        "attacker_id": m.attacker_id,
-                        "action": m.action,
-                        "image_prompts": {
-                            tier: build_moment_image_prompt(a, b, m.attacker_id, m.action, tier=tier)
-                            for tier in args.tiers
-                        },
-                    }
-                    for m in moments
-                ]
-                json_path = output_dir / f"fight_{ring_a.lower().replace(' ', '_')}_vs_{ring_b.lower().replace(' ', '_')}_moments.json"
-                json_path.write_text(json.dumps(moments_json, indent=2))
                 print(f"  Moments JSON saved to {json_path}")
 
             except Exception as e:
