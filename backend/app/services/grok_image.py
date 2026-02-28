@@ -1,9 +1,12 @@
 import base64
 import re
+import time
 import requests
 from pathlib import Path
 
 from app.config import Config
+
+MAX_RETRIES = 2
 
 
 def _slugify(name: str) -> str:
@@ -38,24 +41,33 @@ def generate_image(
     resolution: str = "2k",
     n: int = 1,
 ) -> list[str]:
-    resp = requests.post(
-        f"{config.grok_base_url}/images/generations",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {config.grok_api_key}",
-        },
-        json={
-            "model": "grok-imagine-image",
-            "prompt": prompt,
-            "aspect_ratio": aspect_ratio,
-            "resolution": resolution,
-            "n": n,
-            "response_format": "url",
-        },
-        timeout=120,
-    )
-    resp.raise_for_status()
-    return [item["url"] for item in resp.json()["data"]]
+    last_exc = None
+    for attempt in range(1 + MAX_RETRIES):
+        resp = requests.post(
+            f"{config.grok_base_url}/images/generations",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {config.grok_api_key}",
+            },
+            json={
+                "model": "grok-imagine-image",
+                "prompt": prompt,
+                "aspect_ratio": aspect_ratio,
+                "resolution": resolution,
+                "n": n,
+                "response_format": "url",
+            },
+            timeout=120,
+        )
+        if resp.status_code == 400:
+            last_exc = requests.HTTPError(response=resp)
+            print(f"    400 error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {resp.text[:200]}")
+            if attempt < MAX_RETRIES:
+                time.sleep(2)
+                continue
+            raise last_exc
+        resp.raise_for_status()
+        return [item["url"] for item in resp.json()["data"]]
 
 
 def edit_image(
@@ -82,17 +94,26 @@ def edit_image(
     else:
         body["images"] = encoded
 
-    resp = requests.post(
-        f"{config.grok_base_url}/images/edits",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {config.grok_api_key}",
-        },
-        json=body,
-        timeout=120,
-    )
-    resp.raise_for_status()
-    return [item["url"] for item in resp.json()["data"]]
+    last_exc = None
+    for attempt in range(1 + MAX_RETRIES):
+        resp = requests.post(
+            f"{config.grok_base_url}/images/edits",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {config.grok_api_key}",
+            },
+            json=body,
+            timeout=120,
+        )
+        if resp.status_code == 400:
+            last_exc = requests.HTTPError(response=resp)
+            print(f"    400 error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {resp.text[:200]}")
+            if attempt < MAX_RETRIES:
+                time.sleep(2)
+                continue
+            raise last_exc
+        resp.raise_for_status()
+        return [item["url"] for item in resp.json()["data"]]
 
 
 def download_image(url: str, save_path: Path) -> Path:
@@ -153,6 +174,27 @@ def generate_charsheet_images(
         save_path = output_dir / filename
         download_image(urls[0], save_path)
         saved[tier] = save_path
+        print(f"    Saved: {filename}")
+
+    triple_data = (
+        getattr(fighter, "image_prompt_triple", None)
+        if hasattr(fighter, "image_prompt_triple")
+        else fighter.get("image_prompt_triple", {})
+    )
+    triple_prompt = triple_data.get("full_prompt", "") if isinstance(triple_data, dict) else ""
+    if triple_prompt:
+        print(f"    Generating triple charsheet...")
+        urls = generate_image(
+            prompt=triple_prompt,
+            config=config,
+            aspect_ratio="16:9",
+            resolution="2k",
+            n=1,
+        )
+        filename = f"{base}_triple.png"
+        save_path = output_dir / filename
+        download_image(urls[0], save_path)
+        saved["triple"] = save_path
         print(f"    Saved: {filename}")
 
     return saved

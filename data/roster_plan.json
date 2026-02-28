@@ -1,146 +1,146 @@
 [
   {
-    "concept_hook": "Seductive cartel chemist who lures opponents into lethal embraces before delivering custom neurotoxin kisses.",
-    "ring_name": "Venom Kiss",
+    "concept_hook": "A hypnotic lounge singer who disarms massive foes with irresistible songs and teasing grapples before striking vital points.",
+    "ring_name": "Velvet Siren",
     "gender": "female",
-    "age": 29,
-    "origin": "Tijuana, Mexico",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "curvaceous hourglass with sun-kissed olive skin",
+    "age": 27,
+    "origin": "Las Vegas, Nevada, USA",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Doll",
+    "has_supernatural": true,
+    "body_type": "voluptuous hourglass with glossy lips and cascading waves of hair",
     "power_tier": "contender",
-    "narrative_role": "ruthless opportunist bound by a twisted family code",
+    "narrative_role": "The charismatic crowd favorite who weaponizes allure to create dramatic upsets",
     "rivalry_seeds": [
-      "Porcelain Doll",
-      "Jungle Huntress"
+      "Jungle Huntress",
+      "Iron Empress"
     ],
-    "media_archetype_inspiration": "Vernita Green from Kill Bill as a cartel enforcer"
+    "media_archetype_inspiration": "Ivy Valentine from Soul Calibur"
   },
   {
-    "concept_hook": "Teenage karate prodigy who outmaneuvers giants with surgical strikes and unbreakable focus.",
-    "ring_name": "Blade Prodigy",
+    "concept_hook": "A enigmatic spellweaver who revels in the agony of her curses, whispering incantations that rot flesh from within while she dances untouched.",
+    "ring_name": "Hex Vixen",
+    "gender": "female",
+    "age": 31,
+    "origin": "Transylvania, Romania",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Viper",
+    "has_supernatural": true,
+    "body_type": "slender pale beauty with piercing green eyes and intricate tattoos glowing under stress",
+    "power_tier": "contender",
+    "narrative_role": "The brooding mystic whose dark rituals fuel intense personal vendettas",
+    "rivalry_seeds": [
+      "Nano Experiment",
+      "Cobra Kiss"
+    ],
+    "media_archetype_inspiration": "Bayonetta from Bayonetta series"
+  },
+  {
+    "concept_hook": "A seductive cartel chemist who blows kisses loaded with custom neurotoxins, giggling as victims convulse while she picks them apart.",
+    "ring_name": "Cobra Kiss",
+    "gender": "female",
+    "age": 29,
+    "origin": "Bogot\u00e1, Colombia",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Experiment",
+    "has_supernatural": false,
+    "body_type": "curvy athletic with full lips and hip-swaying confidence",
+    "power_tier": "gatekeeper",
+    "narrative_role": "The gleeful poisoner who blurs the line between fighter and assassin",
+    "rivalry_seeds": [
+      "Hex Vixen",
+      "Jungle Huntress"
+    ],
+    "media_archetype_inspiration": "Poison Ivy from Batman"
+  },
+  {
+    "concept_hook": "A prodigious judo savant who thrives on the thrill of perfect counters, dismantling overconfident veterans with surgical precision.",
+    "ring_name": "Silk Prodigy",
     "gender": "female",
     "age": 19,
     "origin": "Tokyo, Japan",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Doll",
+    "secondary_archetype": "Huntress",
     "has_supernatural": false,
-    "body_type": "petite agile frame with flawless porcelain skin",
+    "body_type": "petite toned dynamo with sharp features and boundless energy",
     "power_tier": "prospect",
-    "narrative_role": "wide-eyed phenom defying veteran gatekeepers",
+    "narrative_role": "The cocky upstart challenging the established order",
     "rivalry_seeds": [
-      "Frost Empress",
-      "Monsoon Witch"
+      "Porcelain Doll",
+      "Velvet Siren"
     ],
     "media_archetype_inspiration": "Hit-Girl from Kick-Ass"
   },
   {
-    "concept_hook": "Cybernetic fashion mannequin with hidden razor appendages and disorienting strobe facades.",
+    "concept_hook": "A ballerina assassin whose porcelain facade shatters into bladed frenzy, haunted by the kills she commits with elegant remorse.",
     "ring_name": "Porcelain Doll",
     "gender": "female",
     "age": 25,
-    "origin": "Los Angeles, USA",
+    "origin": "Berlin, Germany",
     "primary_archetype": "Doll",
-    "secondary_archetype": "Experiment",
+    "secondary_archetype": "Siren",
     "has_supernatural": true,
-    "body_type": "sculpted athletic curves with glossy synthetic sheen",
+    "body_type": "delicate yet flexible with flawless skin and haunting doe eyes",
     "power_tier": "gatekeeper",
-    "narrative_role": "corporate lab escapee fueled by payback rage",
+    "narrative_role": "The tragic performer whose beauty hides a fractured psyche",
     "rivalry_seeds": [
-      "Venom Kiss",
-      "Neon Helix"
+      "Silk Prodigy",
+      "Nano Experiment"
     ],
-    "media_archetype_inspiration": "Alita Battle Angel"
+    "media_archetype_inspiration": "Lili Rochefort from Tekken"
   },
   {
-    "concept_hook": "Primal tracker who ensnares prey with vines, blow darts, and ferocious takedowns from the canopy.",
+    "concept_hook": "A relentless tracker who savors the hunt's chase, binding prey with bolas and delivering kills with spears she crafts from the arena.",
     "ring_name": "Jungle Huntress",
     "gender": "female",
-    "age": 27,
-    "origin": "Manaus, Brazil",
+    "age": 23,
+    "origin": "Amazonas, Brazil",
     "primary_archetype": "Huntress",
-    "secondary_archetype": "Viper",
+    "secondary_archetype": "Prodigy",
     "has_supernatural": false,
-    "body_type": "toned bronzed physique adorned with ritual scars",
+    "body_type": "lithe muscular curves with sun-kissed skin and feral grace",
     "power_tier": "gatekeeper",
-    "narrative_role": "wilderness guardian clashing against civilization",
+    "narrative_role": "The primal survivor forcing civilized fighters out of their comfort zones",
     "rivalry_seeds": [
-      "Venom Kiss",
-      "Lotus Siren"
+      "Velvet Siren",
+      "Cobra Kiss"
     ],
-    "media_archetype_inspiration": "Neytiri from Avatar"
+    "media_archetype_inspiration": "Artemis from DC Comics"
   },
   {
-    "concept_hook": "Arrogant tsarina who commands obedience with psychic dominance and glacial energy blasts.",
-    "ring_name": "Frost Empress",
+    "concept_hook": "A exiled noble who summons illusory guards with fan strikes, masking her quiet addiction to the violence she publicly condemns.",
+    "ring_name": "Iron Empress",
     "gender": "female",
     "age": 34,
-    "origin": "St. Petersburg, Russia",
+    "origin": "Shanghai, China",
     "primary_archetype": "Empress",
     "secondary_archetype": "Witch",
     "has_supernatural": true,
-    "body_type": "statuesque voluptuous form with piercing ice-blue eyes",
+    "body_type": "statuesque elegant with commanding presence and silken robes",
     "power_tier": "champion",
-    "narrative_role": "imperious overlord crushing upstarts",
+    "narrative_role": "The haughty title defender whose falls shake the league",
     "rivalry_seeds": [
-      "Blade Prodigy",
-      "Monsoon Witch"
+      "Velvet Siren",
+      "Hex Vixen"
     ],
-    "media_archetype_inspiration": "Xena Warrior Princess with icy mysticism"
+    "media_archetype_inspiration": "Akame from Akame ga Kill"
   },
   {
-    "concept_hook": "Lab-forged mutant whose body morphs tentacles and claws mid-fight for adaptive predation.",
-    "ring_name": "Neon Helix",
+    "concept_hook": "A rogue lab escapee swarming with nanobots that repair her mid-fight, driven by rage at her creators but thrilled by her invincibility.",
+    "ring_name": "Nano Experiment",
     "gender": "female",
-    "age": 26,
-    "origin": "Seoul, South Korea",
+    "age": 22,
+    "origin": "Novosibirsk, Russia",
     "primary_archetype": "Experiment",
-    "secondary_archetype": "Huntress",
+    "secondary_archetype": "Empress",
     "has_supernatural": true,
-    "body_type": "sleek muscular build with bioluminescent vein patterns",
-    "power_tier": "contender",
-    "narrative_role": "feral prototype hunting her shadowy creators",
+    "body_type": "sleek cyber-athletic with glowing implants and defiant stare",
+    "power_tier": "prospect",
+    "narrative_role": "The unstable wildcard threatening to disrupt the hierarchy",
     "rivalry_seeds": [
-      "Porcelain Doll",
-      "Jungle Huntress"
+      "Hex Vixen",
+      "Porcelain Doll"
     ],
-    "media_archetype_inspiration": "Genetically enhanced Black Widow from Marvel"
-  },
-  {
-    "concept_hook": "Hypnotic temple dancer whose fluid strikes and aura pulses shatter enemy resolve.",
-    "ring_name": "Lotus Siren",
-    "gender": "female",
-    "age": 24,
-    "origin": "Bangkok, Thailand",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": true,
-    "body_type": "supple curvaceous silhouette with radiant golden hue",
-    "power_tier": "gatekeeper",
-    "narrative_role": "coy enchantress concealing brutal precision",
-    "rivalry_seeds": [
-      "Jungle Huntress",
-      "Frost Empress"
-    ],
-    "media_archetype_inspiration": "Poison from Street Fighter"
-  },
-  {
-    "concept_hook": "Tantric curse-weaver who ensnares rivals in ecstatic visions and venomous spirit coils.",
-    "ring_name": "Monsoon Witch",
-    "gender": "female",
-    "age": 31,
-    "origin": "Mumbai, India",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Siren",
-    "has_supernatural": true,
-    "body_type": "lush voluptuous figure etched in intricate henna",
-    "power_tier": "contender",
-    "narrative_role": "conflicted sorceress battling her corrupting gifts",
-    "rivalry_seeds": [
-      "Blade Prodigy",
-      "Frost Empress"
-    ],
-    "media_archetype_inspiration": "Bayonetta infused with Indian occultism"
+    "media_archetype_inspiration": "Alita from Battle Angel Alita"
   }
 ]

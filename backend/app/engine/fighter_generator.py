@@ -659,14 +659,18 @@ CHARSHEET_STYLE_BARELY = CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
 
 CHARSHEET_STYLE_NSFW = (
     "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
-    + CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
+    + CHARSHEET_STYLE_BASE
+    + ", "
+    + CHARSHEET_LAYOUT
 )
 
-CHARSHEET_TAIL = ART_STYLE_TAIL + ", character reference sheet turnaround, three consistent views"
+CHARSHEET_TAIL = (
+    ART_STYLE_TAIL + ", character reference sheet turnaround, three consistent views"
+)
 
 CHARSHEET_TAIL_NSFW = (
     ART_STYLE_TAIL + ", "
-    "explicit full frontal female nudity, completely naked, bare breasts and bare crotch visible, "
+    "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
     "character reference sheet turnaround, three consistent views"
 )
 
@@ -674,7 +678,7 @@ TRIPLE_PROMPT_STYLE = (
     ART_STYLE + ", "
     "stylized fighting game triple portrait, three full-body exact same character standing "
     "side by side left to right in one clean vertical panel layout, "
-    "SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity"
+    "SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible"
 )
 
 
@@ -697,9 +701,21 @@ def _build_charsheet_prompt(
     else:
         clothing_part = clothing
 
-    front_view = f"front view: {body_parts}, {clothing_part}" if clothing_part else f"front view: {body_parts}"
-    three_quarter_view = f"three-quarter angle view: {body_parts}, {clothing_part}" if clothing_part else f"three-quarter angle view: {body_parts}"
-    back_view = f"rear view: {body_parts}, {clothing_part}" if clothing_part else f"rear view: {body_parts}"
+    front_view = (
+        f"front view: {body_parts}, {clothing_part}"
+        if clothing_part
+        else f"front view: {body_parts}"
+    )
+    three_quarter_view = (
+        f"three-quarter angle view: {body_parts}, {clothing_part}"
+        if clothing_part
+        else f"three-quarter angle view: {body_parts}"
+    )
+    back_view = (
+        f"rear view: {body_parts}, {clothing_part}"
+        if clothing_part
+        else f"rear view: {body_parts}"
+    )
 
     tail = CHARSHEET_TAIL_NSFW if tier == "nsfw" else CHARSHEET_TAIL
 
