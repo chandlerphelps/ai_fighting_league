@@ -437,6 +437,45 @@ def _build_variant_e7_no_style(c):
     ]
 
 
+def _f_sequence(c):
+    return (
+        f"the exact moment {c['atk_name']}'s {c['action']} lands square on {c['def_name']}, "
+        f"professional UFC championship fighters with black belt form and elite technique, "
+        f"{c['atk_name']} lunging forward with full body rotation behind the strike, "
+        f"realistic clothing deformation and body compression from high impact collision, "
+        f"{c['def_name']}'s head whipping sideways from the force, "
+        f"spit and sweat flying from {c['def_name']}'s face, "
+        f"{c['def_name']}'s legs buckling, expression of shock and pain"
+    )
+
+
+def _f_scene():
+    return (
+        "professional UFC championship fight, brutal combat action shot, visceral impact, "
+        "realistic body physics and deformation on impact, professional athletic form, "
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "motion blur on strike, dramatic low angle, photorealistic combat photography"
+    )
+
+
+def _build_variant_f(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        _f_sequence(c), _f_scene(), c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_g(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    return [
+        c["ref_sheet"], atk_fighter, def_fighter,
+        _f_sequence(c), _f_scene(), c["consistency"],
+    ]
+
+
 _VARIANT_BUILDERS = {
     "A": _build_variant_a,
     "B": _build_variant_b,
@@ -450,6 +489,8 @@ _VARIANT_BUILDERS = {
     "E5": _build_variant_e5_no_gender,
     "E6": _build_variant_e6_no_tail,
     "E7": _build_variant_e7_no_style,
+    "F": _build_variant_f,
+    "G": _build_variant_g,
 }
 
 
