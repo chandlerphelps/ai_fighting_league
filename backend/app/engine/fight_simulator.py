@@ -3,7 +3,7 @@ import uuid
 from dataclasses import asdict
 
 from app.config import Config
-from app.models.match import MatchupAnalysis, MatchOutcome, Match
+from app.models.match import MatchupAnalysis, MatchOutcome, Match, FightMoment
 from app.services import data_manager
 
 
@@ -211,64 +211,138 @@ Supernatural abilities should be factored as a modest edge, not a dominator. Met
     )
 
 
-def generate_narrative(
+def generate_moments(
     fighter1: dict, fighter2: dict, analysis: MatchupAnalysis, outcome: MatchOutcome, config: Config
-) -> str:
-    from app.services.openrouter import call_openrouter
+) -> list[FightMoment]:
+    from app.services.openrouter import call_openrouter_json
 
+    f1_id = fighter1["id"]
+    f2_id = fighter2["id"]
     f1_name = fighter1.get("ring_name", "Fighter 1")
     f2_name = fighter2.get("ring_name", "Fighter 2")
 
     if outcome.is_draw:
         outcome_text = f"The fight ends in a DRAW after {outcome.round_ended} rounds."
     else:
-        winner_name = f1_name if outcome.winner_id == fighter1["id"] else f2_name
-        loser_name = f2_name if outcome.winner_id == fighter1["id"] else f1_name
+        winner_name = f1_name if outcome.winner_id == f1_id else f2_name
+        loser_name = f2_name if outcome.winner_id == f1_id else f1_name
         method_display = outcome.method.replace("_", " ").upper()
         outcome_text = f"{winner_name} defeats {loser_name} by {method_display} in Round {outcome.round_ended}."
 
-    f1_stats = fighter1.get('stats', {})
-    f2_stats = fighter2.get('stats', {})
+    target = config.moments_per_fight
 
-    prompt = f"""Write a dramatic fight narrative for this match. The outcome is predetermined — you must write toward it.
+    prompt = f"""Generate {target} key moments for this fight. The outcome is predetermined — build toward it.
 
-FIGHTER 1: {f1_name}
-- Real Name: {fighter1.get('real_name', '')}
-- Origin: {fighter1.get('origin', '')}
+FIGHTER 1: {f1_name} (ID: {f1_id})
 - Build: {fighter1.get('build', '')}, {fighter1.get('height', '')}, {fighter1.get('weight', '')}
-- Distinguishing Features: {fighter1.get('distinguishing_features', '')}
-- Attire: {fighter1.get('ring_attire', '')}
-- Stats: Power {f1_stats.get('power', 50)}, Speed {f1_stats.get('speed', 50)}, Technique {f1_stats.get('technique', 50)}, Toughness {f1_stats.get('toughness', 50)}, Supernatural {f1_stats.get('supernatural', 0)}
+- Stats: Power {fighter1.get('stats', {}).get('power', 50)}, Speed {fighter1.get('stats', {}).get('speed', 50)}, Technique {fighter1.get('stats', {}).get('technique', 50)}
 
-FIGHTER 2: {f2_name}
-- Real Name: {fighter2.get('real_name', '')}
-- Origin: {fighter2.get('origin', '')}
+FIGHTER 2: {f2_name} (ID: {f2_id})
 - Build: {fighter2.get('build', '')}, {fighter2.get('height', '')}, {fighter2.get('weight', '')}
-- Distinguishing Features: {fighter2.get('distinguishing_features', '')}
-- Attire: {fighter2.get('ring_attire', '')}
-- Stats: Power {f2_stats.get('power', 50)}, Speed {f2_stats.get('speed', 50)}, Technique {f2_stats.get('technique', 50)}, Toughness {f2_stats.get('toughness', 50)}, Supernatural {f2_stats.get('supernatural', 0)}
-
-MATCHUP ANALYSIS:
-- Key Factors: {', '.join(analysis.key_factors)}
+- Stats: Power {fighter2.get('stats', {}).get('power', 50)}, Speed {fighter2.get('stats', {}).get('speed', 50)}, Technique {fighter2.get('stats', {}).get('technique', 50)}
 
 PREDETERMINED OUTCOME: {outcome_text}
 
-Write the narrative including:
-1. Pre-fight scene setting (1 paragraph — atmosphere, crowd, fighters entering)
-2. Round-by-round action (key moments, momentum shifts)
-3. The finish or decision
-4. Post-fight aftermath (winner's reaction, loser's state, any story hooks for future)
+Return ONLY valid JSON with this structure:
+{{
+  "moments": [
+    {{
+      "moment_number": 1,
+      "attacker_id": "<fighter ID of who lands the strike>",
+      "action": "<short action phrase: e.g. 'spinning back kick to the ribs', 'right cross to the jaw', 'armbar from guard'>"
+    }}
+  ]
+}}
 
-Use each fighter's physical description, attire, and distinguishing features to make the prose vivid. If a fighter has supernatural > 0, weave subtle supernatural flavor into key moments — but keep it grounded.
+Rules:
+- Each moment is one fighter landing a clean strike, takedown, or submission attempt on the other
+- The action should be a specific fighting move (punch, kick, elbow, knee, takedown, submission hold)
+- Build momentum toward the predetermined winner — the last moment should be the finishing blow or decisive action
+- Keep actions simple and visual — one clear action per moment
+- Both fighters should land hits, but the winner should land more/better ones
+- For decisions, the final moment should be a strong hit that seals the judges' decision"""
 
-Target length: {config.narrative_min_words}-{config.narrative_max_words} words of dramatic prose. Write in present tense for immediacy."""
+    system_prompt = "You are a fight choreographer. Return concise JSON fight moments. Each moment is one specific strike or grappling action."
 
-    system_prompt = "You are an elite combat sports writer. Write vivid, dramatic fight narratives that bring characters to life. Your prose should be exciting and immersive, referencing each fighter's unique traits and fighting style."
+    result = call_openrouter_json(prompt, config, model=config.narrative_model, system_prompt=system_prompt)
+    raw_moments = result.get("moments", [])
 
-    narrative = call_openrouter(
-        prompt, config, model=config.narrative_model, system_prompt=system_prompt, temperature=0.8
+    moments = []
+    for m in raw_moments:
+        attacker_id = m.get("attacker_id", "")
+        if attacker_id == f1_id:
+            attacker_name = f1_name
+            defender_name = f2_name
+        else:
+            attacker_name = f2_name
+            defender_name = f1_name
+
+        action = m.get("action", "")
+        description = f"{attacker_name} lands {action} on {defender_name}"
+        image_prompt = _build_moment_image_prompt(
+            fighter1, fighter2, attacker_id, action
+        )
+
+        moments.append(FightMoment(
+            moment_number=m.get("moment_number", 0),
+            description=description,
+            attacker_id=attacker_id,
+            image_prompt=image_prompt,
+        ))
+
+    return moments
+
+
+def _build_moment_image_prompt(
+    fighter1: dict, fighter2: dict, attacker_id: str, action: str
+) -> str:
+    from app.engine.image_style import ART_STYLE_BASE, get_art_style_tail
+
+    if attacker_id == fighter1["id"]:
+        attacker, defender = fighter1, fighter2
+    else:
+        attacker, defender = fighter2, fighter1
+
+    atk_prompt = attacker.get("image_prompt", {})
+    def_prompt = defender.get("image_prompt", {})
+    atk_body = atk_prompt.get("body_parts", "")
+    atk_clothing = atk_prompt.get("clothing", "")
+    def_body = def_prompt.get("body_parts", "")
+    def_clothing = def_prompt.get("clothing", "")
+
+    atk_name = attacker.get("ring_name", "Attacker")
+    def_name = defender.get("ring_name", "Defender")
+    atk_gender = attacker.get("gender", "female")
+    def_gender = defender.get("gender", "female")
+    atk_height = attacker.get("height", "")
+    def_height = defender.get("height", "")
+
+    atk_desc = ", ".join(p for p in [atk_body, atk_clothing] if p)
+    def_desc = ", ".join(p for p in [def_body, def_clothing] if p)
+
+    action_composition = (
+        f"dynamic combat action shot, {atk_name} landing {action}, "
+        f"dramatic impact moment, motion blur on strike, "
+        f"arena lighting, dark moody atmosphere, "
+        f"full body visible for both fighters"
     )
-    return narrative
+
+    atk_fighter = f"attacking fighter ({atk_gender}, {atk_name}, {atk_height}): {atk_desc}"
+    def_fighter = f"defending fighter ({def_gender}, {def_name}, {def_height}): {def_desc}"
+
+    tail = get_art_style_tail(atk_gender)
+
+    parts = [
+        ART_STYLE_BASE,
+        action_composition,
+        "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter",
+        atk_fighter,
+        def_fighter,
+        tail,
+        "exactly two distinct characters, each maintains their exact original design from their reference sheet",
+    ]
+
+    return ", ".join(parts)
 
 
 def run_fight(
@@ -287,7 +361,7 @@ def run_fight(
 
     analysis = calculate_probabilities(fighter1, fighter2, config, rivalry_context)
     outcome = determine_outcome(fighter1, fighter2, analysis, config)
-    narrative = generate_narrative(fighter1, fighter2, analysis, outcome, config)
+    moments = generate_moments(fighter1, fighter2, analysis, outcome, config)
 
     match_id = f"m_{uuid.uuid4().hex[:8]}"
 
@@ -301,7 +375,7 @@ def run_fight(
         fighter2_name=fighter2.get("ring_name", ""),
         analysis=analysis,
         outcome=outcome,
-        narrative=narrative,
+        moments=moments,
         fighter1_snapshot=fighter1_snapshot,
         fighter2_snapshot=fighter2_snapshot,
     )

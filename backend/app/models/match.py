@@ -3,6 +3,19 @@ from typing import Optional
 
 
 @dataclass
+class FightMoment:
+    moment_number: int = 0
+    description: str = ""
+    attacker_id: str = ""
+    image_prompt: str = ""
+    image_path: str = ""
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "FightMoment":
+        return cls(**{k: v for k, v in d.items() if k in cls.__dataclass_fields__})
+
+
+@dataclass
 class MatchupAnalysis:
     fighter1_win_prob: float = 0.5
     fighter2_win_prob: float = 0.5
@@ -44,6 +57,7 @@ class Match:
     analysis: Optional[MatchupAnalysis] = None
     outcome: Optional[MatchOutcome] = None
     narrative: str = ""
+    moments: list[FightMoment] = field(default_factory=list)
     fighter1_snapshot: dict = field(default_factory=dict)
     fighter2_snapshot: dict = field(default_factory=dict)
     post_fight_updates: dict = field(default_factory=dict)
@@ -59,6 +73,7 @@ class Match:
         outcome = None
         if d.get("outcome"):
             outcome = MatchOutcome.from_dict(d["outcome"])
+        moments = [FightMoment.from_dict(m) for m in d.get("moments", [])]
         return cls(
             id=d.get("id", ""),
             event_id=d.get("event_id", ""),
@@ -70,6 +85,7 @@ class Match:
             analysis=analysis,
             outcome=outcome,
             narrative=d.get("narrative", ""),
+            moments=moments,
             fighter1_snapshot=d.get("fighter1_snapshot", {}),
             fighter2_snapshot=d.get("fighter2_snapshot", {}),
             post_fight_updates=d.get("post_fight_updates", {}),

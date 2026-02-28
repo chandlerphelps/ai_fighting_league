@@ -35,8 +35,7 @@ class Config:
     max_idle_days: int = 14
     draw_probability: float = 0.03
 
-    narrative_min_words: int = 800
-    narrative_max_words: int = 1500
+    moments_per_fight: int = 4
 
     data_dir: Path = field(
         default_factory=lambda: Path(__file__).resolve().parent.parent.parent / "data"

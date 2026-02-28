@@ -18,6 +18,14 @@ export interface MatchOutcome {
   is_draw: boolean
 }
 
+export interface FightMoment {
+  moment_number: number
+  description: string
+  attacker_id: string
+  image_prompt: string
+  image_path: string
+}
+
 export interface Match {
   id: string
   event_id: string
@@ -29,6 +37,7 @@ export interface Match {
   analysis: MatchupAnalysis | null
   outcome: MatchOutcome | null
   narrative: string
+  moments: FightMoment[]
   fighter1_snapshot: Record<string, unknown>
   fighter2_snapshot: Record<string, unknown>
   post_fight_updates: Record<string, unknown>

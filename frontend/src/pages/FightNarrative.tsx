@@ -90,19 +90,57 @@ export default function FightNarrative() {
       </section>
 
       <section>
-        <h2 style={sectionHeader}>Fight Narrative</h2>
-        <div style={{
-          padding: spacing.lg,
-          backgroundColor: colors.surfaceLight,
-          borderRadius: '4px',
-          border: `1px solid ${colors.border}`,
-          lineHeight: '1.9',
-          fontSize: fontSizes.md,
-          maxWidth: '750px',
-          whiteSpace: 'pre-wrap',
-        }}>
-          {match.narrative || 'No narrative available.'}
-        </div>
+        <h2 style={sectionHeader}>Key Moments</h2>
+        {match.moments && match.moments.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md, maxWidth: '750px' }}>
+            {match.moments.map((moment, i) => {
+              const isAttackerF1 = moment.attacker_id === match.fighter1_id
+              const attackerName = isAttackerF1 ? match.fighter1_name : match.fighter2_name
+              return (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'flex-start', gap: spacing.md,
+                  padding: spacing.md,
+                  backgroundColor: colors.surfaceLight,
+                  borderRadius: '4px',
+                  border: `1px solid ${colors.border}`,
+                  borderLeft: `3px solid ${colors.accent}`,
+                }}>
+                  <span style={{
+                    color: colors.accentDim, fontSize: fontSizes.lg,
+                    fontWeight: 'bold', minWidth: '24px',
+                  }}>
+                    {moment.moment_number}
+                  </span>
+                  <p style={{ color: colors.text, fontSize: fontSizes.md, margin: 0, lineHeight: '1.6' }}>
+                    {moment.description.split(attackerName).map((part, j, arr) =>
+                      j < arr.length - 1 ? (
+                        <span key={j}>
+                          {part}
+                          <span style={{ color: colors.accent, fontWeight: 'bold' }}>{attackerName}</span>
+                        </span>
+                      ) : part
+                    )}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        ) : match.narrative ? (
+          <div style={{
+            padding: spacing.lg,
+            backgroundColor: colors.surfaceLight,
+            borderRadius: '4px',
+            border: `1px solid ${colors.border}`,
+            lineHeight: '1.9',
+            fontSize: fontSizes.md,
+            maxWidth: '750px',
+            whiteSpace: 'pre-wrap',
+          }}>
+            {match.narrative}
+          </div>
+        ) : (
+          <p style={{ color: colors.textMuted }}>No fight data available.</p>
+        )}
       </section>
 
       {match.post_fight_updates && Object.keys(match.post_fight_updates).length > 0 && (
