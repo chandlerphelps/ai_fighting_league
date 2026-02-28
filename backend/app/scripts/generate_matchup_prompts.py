@@ -288,16 +288,16 @@ def main():
                 json_path = output_dir / f"fight_{ring_a.lower().replace(' ', '_')}_vs_{ring_b.lower().replace(' ', '_')}_moments.json"
                 moments_json = []
 
-                for variant in args.variants:
-                    for tier in args.tiers:
-                        label = f"{tier.upper()} / Variant {variant}"
-                        lines.append(f"\n#### Moments — {label}\n")
-                        print(f"\n  --- MOMENTS ({label}) ---")
+                for moment in moments:
+                    lines.append(f"\n#### Moment {moment.moment_number}: {moment.description}\n")
+                    print(f"\n  --- MOMENT {moment.moment_number}: {moment.description} ---")
 
-                        for moment in moments:
+                    for variant in args.variants:
+                        for tier in args.tiers:
+                            label = f"Variant {variant} / {tier.upper()}"
                             prompt = build_moment_image_prompt(a, b, moment.attacker_id, moment.action, tier=tier, variant=variant)
-                            print(f"    Moment {moment.moment_number}: {moment.description}")
-                            lines.append(f"**Moment {moment.moment_number}:** {moment.description}\n")
+                            print(f"    {label}")
+                            lines.append(f"**{label}:**\n")
                             lines.append(f"```\n{prompt}\n```\n")
 
                             key = f"{moment.moment_number}_{variant}"
