@@ -311,6 +311,10 @@ def main():
                         "description": m.description,
                         "attacker_id": m.attacker_id,
                         "action": m.action,
+                        "image_prompts": {
+                            tier: build_moment_image_prompt(a, b, m.attacker_id, m.action, tier=tier)
+                            for tier in args.tiers
+                        },
                     }
                     for m in moments
                 ]
