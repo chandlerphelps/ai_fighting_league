@@ -21,6 +21,10 @@ A two-part system: a Python engine that generates fighters, simulates fights wit
 2. **Find functionality** - Read `simple_file_summaries.md` to find where code lives. Do NOT guess names and search
 3. **Understand details** - Check `detailed_file_summaries.md` (read first 200 lines or in 1000-line chunks, then search)
 
+### Image Generation (Grok API)
+
+- **Grok image gen does NOT support negative prompts** — never use "no X", "not Y", "without Z" in image prompts. Only describe what you WANT to see, not what you don't.
+
 ### Development Guidelines
 
 - No comments in code - make code self-documenting

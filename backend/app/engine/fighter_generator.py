@@ -2,7 +2,7 @@ import json
 import uuid
 
 from app.config import Config
-from app.engine.image_style import ART_STYLE, ART_STYLE_TAIL
+from app.engine.image_style import get_art_style, get_art_style_tail
 from app.models.fighter import Fighter, Stats, Record, Condition
 from app.services.openrouter import call_openrouter_json
 
@@ -579,6 +579,7 @@ Return ONLY valid JSON with this exact structure:
     clothing_sfw = result.get("image_prompt_clothing_sfw", "")
     clothing = result.get("image_prompt_clothing", "")
     clothing_nsfw = result.get("image_prompt_clothing_nsfw", "")
+    gender = result.get("gender", "female")
 
     return Fighter(
         id=fighter_id,
@@ -586,7 +587,7 @@ Return ONLY valid JSON with this exact structure:
         real_name=result.get("real_name", "Unknown"),
         age=result.get("age", 25),
         origin=result.get("origin", "Unknown"),
-        gender=result.get("gender", ""),
+        gender=gender,
         height=result.get("height", ""),
         weight=result.get("weight", ""),
         build=result.get("build", ""),
@@ -595,16 +596,17 @@ Return ONLY valid JSON with this exact structure:
         ring_attire_sfw=result.get("ring_attire_sfw", ""),
         ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
         image_prompt=_build_charsheet_prompt(
-            body_parts, clothing, expression, tier="barely"
+            body_parts, clothing, expression, tier="barely", gender=gender,
         ),
         image_prompt_sfw=_build_charsheet_prompt(
-            body_parts, clothing_sfw, expression, tier="sfw"
+            body_parts, clothing_sfw, expression, tier="sfw", gender=gender,
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
-            body_parts, clothing_nsfw, expression, tier="nsfw"
+            body_parts, clothing_nsfw, expression, tier="nsfw", gender=gender,
         ),
         image_prompt_triple=_build_triple_prompt(
-            body_parts, clothing_sfw, clothing, clothing_nsfw, expression
+            body_parts, clothing_sfw, clothing, clothing_nsfw, expression,
+            gender=gender,
         ),
         stats=stats,
         record=Record(),
@@ -651,48 +653,59 @@ CHARSHEET_LAYOUT = (
     "plain flat color background, organized reference sheet layout"
 )
 
-CHARSHEET_STYLE_BASE = ART_STYLE + ", character design reference sheet"
+def _charsheet_style_base(gender: str = "female") -> str:
+    return get_art_style(gender) + ", character design reference sheet"
 
-CHARSHEET_STYLE_SFW = CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
 
-CHARSHEET_STYLE_BARELY = CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
+def _charsheet_style(gender: str = "female", tier: str = "barely") -> str:
+    base = _charsheet_style_base(gender)
+    if tier == "nsfw":
+        if gender.lower() == "male":
+            nudity_prefix = "explicit uncensored NSFW, full frontal male nudity, fully naked man, "
+        else:
+            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
+        return nudity_prefix + base + ", " + CHARSHEET_LAYOUT
+    return base + ", " + CHARSHEET_LAYOUT
 
-CHARSHEET_STYLE_NSFW = (
-    "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
-    + CHARSHEET_STYLE_BASE
-    + ", "
-    + CHARSHEET_LAYOUT
-)
 
-CHARSHEET_TAIL = (
-    ART_STYLE_TAIL + ", character reference sheet turnaround, three consistent views"
-)
+def _charsheet_tail(gender: str = "female", tier: str = "barely") -> str:
+    tail_base = get_art_style_tail(gender) + ", character reference sheet turnaround, three consistent views"
+    if tier == "nsfw":
+        if gender.lower() == "male":
+            return (
+                get_art_style_tail(gender) + ", "
+                "explicit full frontal male nudity, completely naked, muscular physique fully visible, "
+                "character reference sheet turnaround, three consistent views"
+            )
+        return (
+            get_art_style_tail(gender) + ", "
+            "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
+            "character reference sheet turnaround, three consistent views"
+        )
+    return tail_base
 
-CHARSHEET_TAIL_NSFW = (
-    ART_STYLE_TAIL + ", "
-    "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
-    "character reference sheet turnaround, three consistent views"
-)
 
-TRIPLE_PROMPT_STYLE = (
-    ART_STYLE + ", "
-    "stylized fighting game triple portrait, three full-body exact same character standing "
-    "side by side left to right in one clean vertical panel layout, "
-    "SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible"
-)
+def _triple_prompt_style(gender: str = "female") -> str:
+    if gender.lower() == "male":
+        nsfw_part = "explicit uncensored NSFW right with full frontal male nudity"
+    else:
+        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible"
+    return (
+        get_art_style(gender) + ", "
+        "stylized fighting game triple portrait, three full-body exact same character standing "
+        "side by side left to right in one clean vertical panel layout, "
+        "SFW left, barely-SFW center, " + nsfw_part
+    )
 
 
 def _build_charsheet_prompt(
-    body_parts: str, clothing: str, expression: str, tier: str = "barely"
+    body_parts: str, clothing: str, expression: str,
+    tier: str = "barely", gender: str = "female",
 ) -> dict:
     if not body_parts:
         return {}
 
-    style = {
-        "sfw": CHARSHEET_STYLE_SFW,
-        "barely": CHARSHEET_STYLE_BARELY,
-        "nsfw": CHARSHEET_STYLE_NSFW,
-    }[tier]
+    style = _charsheet_style(gender, tier)
 
     if tier == "nsfw":
         clothing_part = (
@@ -717,7 +730,7 @@ def _build_charsheet_prompt(
         else f"rear view: {body_parts}"
     )
 
-    tail = CHARSHEET_TAIL_NSFW if tier == "nsfw" else CHARSHEET_TAIL
+    tail = _charsheet_tail(gender, tier)
 
     full = ", ".join(
         p
@@ -743,30 +756,37 @@ def _build_triple_prompt(
     clothing: str,
     clothing_nsfw: str,
     expression: str,
+    gender: str = "female",
 ) -> dict:
     if not body_parts:
         return {}
 
+    triple_style = _triple_prompt_style(gender)
     expr_all = f"{expression} (identical on all three)" if expression else ""
 
-    nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
+    if gender.lower() == "male":
+        nsfw_right = f"right explicit NSFW full male nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
+    else:
+        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
+
+    tail = get_art_style_tail(gender) + " across all panels"
 
     full = ", ".join(
         p
         for p in [
-            TRIPLE_PROMPT_STYLE,
+            triple_style,
             body_parts,
             f"left SFW: {clothing_sfw}" if clothing_sfw else "",
             f"center barely-SFW: {clothing}" if clothing else "",
             nsfw_right,
             expr_all,
-            ART_STYLE_TAIL + " across all panels",
+            tail,
         ]
         if p
     )
 
     return {
-        "style": TRIPLE_PROMPT_STYLE,
+        "style": triple_style,
         "composition": "SFW left, barely-SFW center, explicit NSFW right, identical pose/expression/background",
         "body_parts": body_parts,
         "left": f"SFW: {clothing_sfw}" if clothing_sfw else "",
