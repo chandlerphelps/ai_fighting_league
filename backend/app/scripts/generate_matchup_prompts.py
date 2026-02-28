@@ -143,7 +143,7 @@ def generate_matchup_image(prompt_data: dict, config, output_dir: Path) -> Path 
 
 
 TIERS = ["barely", "sfw", "nsfw"]
-VARIANTS = ["A", "B", "C", "D", "E", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "F", "G"]
+VARIANTS = ["A", "B", "C", "D", "E", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "F", "G", "F1", "F2", "F3", "F4", "F5"]
 
 
 def run_fight_simulation(fighter_a: dict, fighter_b: dict, config):

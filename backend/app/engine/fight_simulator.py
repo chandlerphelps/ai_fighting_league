@@ -476,6 +476,120 @@ def _build_variant_g(c):
     ]
 
 
+def _build_variant_f1(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    sequence = (
+        f"the exact moment {c['atk_name']}'s {c['action']} connects with {c['def_name']}, "
+        f"{c['atk_name']} with ice-cold focused expression and perfect martial arts form, "
+        f"full body rotation driving through the strike, "
+        f"{c['def_name']}'s body crumpling from the impact, clothing and flesh deforming at the strike point, "
+        f"shockwave ripple visible through {c['def_name']}'s body, sweat exploding off skin"
+    )
+    scene = (
+        "fighting game action shot, dutch angle tilted camera 30 degrees, "
+        "skilled brutal combat with precise technique, visceral physical impact, "
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "motion blur on strike, speed lines radiating from impact point"
+    )
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        sequence, scene, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_f2(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    sequence = (
+        f"the exact moment {c['atk_name']}'s {c['action']} lands flush on {c['def_name']}, "
+        f"{c['atk_name']} with laser-focused killing intent in their eyes, elite fighting technique, "
+        f"weight transferring through the strike with devastating power, "
+        f"{c['def_name']}'s face distorting from impact force, body bending unnaturally, "
+        f"spit and sweat trailing from {c['def_name']}'s face"
+    )
+    scene = (
+        "fighting game action shot, extreme worm's-eye low angle looking up at the fighters, "
+        "towering powerful figures filling the frame, "
+        "skilled brutal combat, visceral physical impact, "
+        "arena lighting from above, dark moody atmosphere, full body visible for both fighters, "
+        "dramatic foreshortening, motion blur on strike"
+    )
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        sequence, scene, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_f3(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    sequence = (
+        f"the exact moment {c['atk_name']}'s {c['action']} crashes into {c['def_name']}, "
+        f"{c['atk_name']} with steely determined expression and textbook martial arts execution, "
+        f"muscles tensed at peak extension of the strike, "
+        f"{c['def_name']}'s clothing rippling and skin compressing at the impact zone, "
+        f"{c['def_name']}'s expression shifting to shock, body folding around the strike"
+    )
+    scene = (
+        "fighting game action shot, over-the-shoulder camera behind the attacker, "
+        f"looking past {c['atk_name']}'s shoulder at {c['def_name']} receiving the blow, "
+        "skilled brutal combat, visceral physical impact, "
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "shallow depth of field, motion blur on strike"
+    )
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        sequence, scene, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_f4(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    sequence = (
+        f"the exact moment {c['atk_name']}'s {c['action']} detonates on {c['def_name']}, "
+        f"{c['atk_name']} with calm predatory focus, flawless fighting stance and form, "
+        f"explosive follow-through on the strike, "
+        f"{c['def_name']}'s flesh and clothing warping grotesquely at the point of contact, "
+        f"impact crater forming in {c['def_name']}'s body, sweat and spit frozen mid-spray"
+    )
+    scene = (
+        "fighting game action shot, extreme close-up fish-eye wide angle lens, "
+        "camera inches from the impact point, barrel distortion warping the edges, "
+        "skilled brutal combat, visceral physical impact, "
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "frozen moment in time, particles and debris suspended in air"
+    )
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        sequence, scene, c["tail"], c["consistency"],
+    ]
+
+
+def _build_variant_f5(c):
+    atk_fighter = f"attacking fighter ({c['atk_name']})"
+    def_fighter = f"defending fighter ({c['def_name']})"
+    sequence = (
+        f"the exact moment {c['atk_name']}'s {c['action']} smashes into {c['def_name']}, "
+        f"{c['atk_name']} with intense razor-sharp focus, masterful combat technique, "
+        f"whole body coiled and unleashing through the strike, "
+        f"{c['def_name']}'s body absorbing catastrophic impact, clothing stretched and deformed, "
+        f"shockwave pushing {c['def_name']}'s hair and loose clothing outward from strike point"
+    )
+    scene = (
+        "fighting game action shot, dramatic top-down bird's-eye camera looking straight down, "
+        "fighters seen from directly above in the center of the arena, "
+        "skilled brutal combat, visceral physical impact, "
+        "ring of arena lights surrounding the fighters, dark moody atmosphere, "
+        "full body visible for both fighters, circular composition, motion blur on strike"
+    )
+    return [
+        c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
+        sequence, scene, c["tail"], c["consistency"],
+    ]
+
+
 _VARIANT_BUILDERS = {
     "A": _build_variant_a,
     "B": _build_variant_b,
@@ -491,6 +605,11 @@ _VARIANT_BUILDERS = {
     "E7": _build_variant_e7_no_style,
     "F": _build_variant_f,
     "G": _build_variant_g,
+    "F1": _build_variant_f1,
+    "F2": _build_variant_f2,
+    "F3": _build_variant_f3,
+    "F4": _build_variant_f4,
+    "F5": _build_variant_f5,
 }
 
 
