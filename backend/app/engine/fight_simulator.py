@@ -187,32 +187,38 @@ Rules:
 
         action = m.get("action", "")
         description = f"{attacker_name} lands {action} on {defender_name}"
-        image_prompt = _build_moment_image_prompt(
-            fighter1, fighter2, attacker_id, action
-        )
 
         moments.append(FightMoment(
             moment_number=m.get("moment_number", 0),
             description=description,
             attacker_id=attacker_id,
-            image_prompt=image_prompt,
+            action=action,
         ))
 
     return moments
 
 
-def _build_moment_image_prompt(
-    fighter1: dict, fighter2: dict, attacker_id: str, action: str
+TIER_PROMPT_KEYS = {
+    "sfw": "image_prompt_sfw",
+    "barely": "image_prompt",
+    "nsfw": "image_prompt_nsfw",
+}
+
+
+def build_moment_image_prompt(
+    fighter1: dict, fighter2: dict, attacker_id: str, action: str, tier: str = "barely"
 ) -> str:
     from app.engine.image_style import ART_STYLE_BASE, get_art_style_tail
+
+    tier_key = TIER_PROMPT_KEYS.get(tier, "image_prompt")
 
     if attacker_id == fighter1["id"]:
         attacker, defender = fighter1, fighter2
     else:
         attacker, defender = fighter2, fighter1
 
-    atk_prompt = attacker.get("image_prompt", {})
-    def_prompt = defender.get("image_prompt", {})
+    atk_prompt = attacker.get(tier_key, attacker.get("image_prompt", {}))
+    def_prompt = defender.get(tier_key, defender.get("image_prompt", {}))
     atk_body = atk_prompt.get("body_parts", "")
     atk_clothing = atk_prompt.get("clothing", "")
     def_body = def_prompt.get("body_parts", "")

@@ -22,6 +22,7 @@ export interface FightMoment {
   moment_number: number
   description: string
   attacker_id: string
+  action: string
   image_prompt: string
   image_path: string
 }

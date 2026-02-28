@@ -166,6 +166,8 @@ def run_fight_simulation(fighter_a: dict, fighter_b: dict, config):
 
 
 def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, output_dir: Path, matchup_idx: int, tier: str = "barely") -> Path | None:
+    from app.engine.fight_simulator import build_moment_image_prompt
+
     img_a = find_fighter_image(fighter_a["id"], config.data_dir, tier=tier)
     img_b = find_fighter_image(fighter_b["id"], config.data_dir, tier=tier)
 
@@ -184,11 +186,13 @@ def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, outp
     else:
         image_paths = [img_b, img_a]
 
+    prompt = build_moment_image_prompt(fighter_a, fighter_b, atk_id, moment.action, tier=tier)
+
     print(f"    Ref images: {image_paths[0].name}, {image_paths[1].name}")
-    print(f"    Calling Grok image edit API...")
+    print(f"    Calling Grok image edit API ({tier})...")
 
     urls = edit_image(
-        prompt=moment.image_prompt,
+        prompt=prompt,
         image_paths=image_paths,
         config=config,
         aspect_ratio="16:9",
@@ -264,45 +268,47 @@ def main():
             lines.append("")
 
         if args.fight:
+            from app.engine.fight_simulator import build_moment_image_prompt
+
             print(f"\n  --- FIGHT SIMULATION ---")
             lines.append(f"### Fight Simulation\n")
             try:
                 analysis, outcome, moments = run_fight_simulation(a, b, config)
 
-                if outcome.is_draw:
-                    result_text = f"DRAW after round {outcome.round_ended}"
-                else:
-                    winner_name = ring_a if outcome.winner_id == a["id"] else ring_b
-                    result_text = f"{winner_name} wins by {outcome.method.replace('_', ' ')} in round {outcome.round_ended}"
+                winner_name = ring_a if outcome.winner_id == a["id"] else ring_b
+                result_text = f"{winner_name} wins by KO ({outcome.round_ended} moments)"
 
                 lines.append(f"**Result:** {result_text}\n")
                 lines.append(f"**Key Factors:** {', '.join(analysis.key_factors)}\n")
-                lines.append(f"\n#### Moments\n")
 
-                for moment in moments:
-                    print(f"    Moment {moment.moment_number}: {moment.description}")
-                    lines.append(f"**Moment {moment.moment_number}:** {moment.description}\n")
-                    lines.append(f"```\n{moment.image_prompt}\n```\n")
+                for tier in args.tiers:
+                    lines.append(f"\n#### Moments — {tier.upper()}\n")
+                    print(f"\n  --- MOMENTS ({tier.upper()}) ---")
 
-                    if args.fight_images:
-                        try:
-                            tier = args.tiers[0] if args.tiers else "barely"
-                            saved = generate_moment_image(moment, a, b, config, output_dir, i, tier=tier)
-                            if saved:
-                                print(f"    Saved: {saved}")
-                                lines.append(f"**Image:** `{saved.name}`\n")
-                        except Exception as e:
-                            print(f"    IMAGE ERROR: {e}")
-                            lines.append(f"**Error:** {e}\n")
+                    for moment in moments:
+                        prompt = build_moment_image_prompt(a, b, moment.attacker_id, moment.action, tier=tier)
+                        print(f"    Moment {moment.moment_number}: {moment.description}")
+                        lines.append(f"**Moment {moment.moment_number}:** {moment.description}\n")
+                        lines.append(f"```\n{prompt}\n```\n")
 
-                    lines.append("")
+                        if args.fight_images:
+                            try:
+                                saved = generate_moment_image(moment, a, b, config, output_dir, i, tier=tier)
+                                if saved:
+                                    print(f"    Saved: {saved}")
+                                    lines.append(f"**Image:** `{saved.name}`\n")
+                            except Exception as e:
+                                print(f"    IMAGE ERROR: {e}")
+                                lines.append(f"**Error:** {e}\n")
+
+                        lines.append("")
 
                 moments_json = [
                     {
                         "moment_number": m.moment_number,
                         "description": m.description,
                         "attacker_id": m.attacker_id,
-                        "image_prompt": m.image_prompt,
+                        "action": m.action,
                     }
                     for m in moments
                 ]

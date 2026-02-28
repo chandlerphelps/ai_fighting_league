@@ -7,6 +7,7 @@ class FightMoment:
     moment_number: int = 0
     description: str = ""
     attacker_id: str = ""
+    action: str = ""
     image_prompt: str = ""
     image_path: str = ""
 
