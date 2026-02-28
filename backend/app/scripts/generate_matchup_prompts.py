@@ -120,6 +120,7 @@ def generate_matchup_image(prompt_data: dict, config, output_dir: Path) -> Path 
         print(f"  Missing {tier} character sheet images: {', '.join(missing)}")
         return None
 
+    print(f"  Prompt: {prompt_data['full_prompt']}")
     print(f"  Ref images: {img_a.name}, {img_b.name}")
     print(f"  Calling Grok image edit API ({tier})...")
 
@@ -188,6 +189,7 @@ def generate_moment_image(moment, fighter_a: dict, fighter_b: dict, config, outp
 
     prompt = build_moment_image_prompt(fighter_a, fighter_b, atk_id, moment.action, tier=tier)
 
+    print(f"    Prompt: {prompt}")
     print(f"    Ref images: {image_paths[0].name}, {image_paths[1].name}")
     print(f"    Calling Grok image edit API ({tier})...")
 
