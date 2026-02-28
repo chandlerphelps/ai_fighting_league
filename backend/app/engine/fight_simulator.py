@@ -578,11 +578,11 @@ def _build_variant_f5(c):
         f"shockwave pushing {c['def_name']}'s hair and loose clothing outward from strike point"
     )
     scene = (
-        "fighting game action shot, dramatic top-down bird's-eye camera looking straight down, "
-        "fighters seen from directly above in the center of the arena, "
+        "fighting game action shot, choose the most cinematic and visually striking camera angle "
+        "to capture this specific strike and its impact, "
         "skilled brutal combat, visceral physical impact, "
-        "ring of arena lights surrounding the fighters, dark moody atmosphere, "
-        "full body visible for both fighters, circular composition, motion blur on strike"
+        "arena lighting, dark moody atmosphere, full body visible for both fighters, "
+        "motion blur on strike"
     )
     return [
         c["ART_STYLE_BASE"], c["ref_sheet"], atk_fighter, def_fighter,
