@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 class Config:
     openrouter_api_key: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    grok_api_key: str = ""
+    grok_base_url: str = "https://api.x.ai/v1"
     # default_model: str = "minimax/minimax-m2.5"
     # narrative_model: str = "minimax/minimax-m2.5"
     default_model: str = "x-ai/grok-4.1-fast"
@@ -46,4 +48,5 @@ def load_config() -> Config:
     load_dotenv(env_path)
     return Config(
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY", ""),
+        grok_api_key=os.getenv("GROK_API_KEY", ""),
     )

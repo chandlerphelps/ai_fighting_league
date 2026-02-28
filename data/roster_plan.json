@@ -1,146 +1,146 @@
 [
   {
-    "concept_hook": "A Bollywood siren whose mesmerizing dances lure opponents into vulnerable stances for razor-sharp ankle blade strikes, delighting in their graceful collapses.",
-    "ring_name": "Monsoon Lash",
-    "gender": "female",
-    "age": 25,
-    "origin": "Mumbai, India",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Viper",
-    "has_supernatural": false,
-    "body_type": "curvaceous dancer's physique",
-    "power_tier": "contender",
-    "narrative_role": "charismatic seductress captivating and dividing the audience",
-    "rivalry_seeds": [
-      "Neon Doll",
-      "Eisen Empress"
-    ],
-    "media_archetype_inspiration": "Mai Shiranui from King of Fighters"
-  },
-  {
-    "concept_hook": "An Irish banshee whose ethereal wails invoke spectral terror that shatters concentration and bones, tormented by the spirits she unleashes.",
-    "ring_name": "Banshee Hex",
+    "concept_hook": "Seductive cartel chemist who lures opponents into lethal embraces before delivering custom neurotoxin kisses.",
+    "ring_name": "Venom Kiss",
     "gender": "female",
     "age": 29,
-    "origin": "Dublin, Ireland",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Siren",
-    "has_supernatural": true,
-    "body_type": "slender pale allure",
-    "power_tier": "champion",
-    "narrative_role": "haunted mystic wrestling inner demons",
-    "rivalry_seeds": [
-      "Venus Experiment",
-      "Savanna Huntress"
-    ],
-    "media_archetype_inspiration": "Bayonetta"
-  },
-  {
-    "concept_hook": "A cartel viper who feigns flirtation to deliver lab-brewed neurotoxins via spiked heels and lipstick darts, coldly timing their agonizing peak.",
-    "ring_name": "Jade Fang",
-    "gender": "female",
-    "age": 31,
-    "origin": "Mexico City, Mexico",
+    "origin": "Tijuana, Mexico",
     "primary_archetype": "Viper",
-    "secondary_archetype": "Doll",
+    "secondary_archetype": "Huntress",
     "has_supernatural": false,
-    "body_type": "toned hourglass",
-    "power_tier": "gatekeeper",
-    "narrative_role": "cynical survivor enforcing her justice",
+    "body_type": "curvaceous hourglass with sun-kissed olive skin",
+    "power_tier": "contender",
+    "narrative_role": "ruthless opportunist bound by a twisted family code",
     "rivalry_seeds": [
-      "Polar Prodigy",
-      "Savanna Huntress"
+      "Porcelain Doll",
+      "Jungle Huntress"
     ],
-    "media_archetype_inspiration": "Black Widow from Marvel"
+    "media_archetype_inspiration": "Vernita Green from Kill Bill as a cartel enforcer"
   },
   {
-    "concept_hook": "A prodigious acrobat who chains aerial flips into crippling joint locks, her fury igniting in brutal takedowns when momentum breaks.",
-    "ring_name": "Polar Prodigy",
+    "concept_hook": "Teenage karate prodigy who outmaneuvers giants with surgical strikes and unbreakable focus.",
+    "ring_name": "Blade Prodigy",
     "gender": "female",
     "age": 19,
-    "origin": "Vancouver, Canada",
+    "origin": "Tokyo, Japan",
     "primary_archetype": "Prodigy",
     "secondary_archetype": "Doll",
     "has_supernatural": false,
-    "body_type": "petite agile stunner",
+    "body_type": "petite agile frame with flawless porcelain skin",
     "power_tier": "prospect",
-    "narrative_role": "eager phenom forging her legend",
+    "narrative_role": "wide-eyed phenom defying veteran gatekeepers",
     "rivalry_seeds": [
-      "Jade Fang",
-      "Neon Doll"
+      "Frost Empress",
+      "Monsoon Witch"
     ],
-    "media_archetype_inspiration": "Tracer from Overwatch"
+    "media_archetype_inspiration": "Hit-Girl from Kick-Ass"
   },
   {
-    "concept_hook": "A K-pop doll masking lethal intent behind bubbly poses, popping out segmented blades to vivisect with gleeful precision.",
-    "ring_name": "Neon Doll",
+    "concept_hook": "Cybernetic fashion mannequin with hidden razor appendages and disorienting strobe facades.",
+    "ring_name": "Porcelain Doll",
     "gender": "female",
-    "age": 21,
-    "origin": "Seoul, South Korea",
+    "age": 25,
+    "origin": "Los Angeles, USA",
     "primary_archetype": "Doll",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": false,
-    "body_type": "slim perky idol",
-    "power_tier": "prospect",
-    "narrative_role": "deceptive star harboring ruthless drive",
-    "rivalry_seeds": [
-      "Monsoon Lash",
-      "Polar Prodigy"
-    ],
-    "media_archetype_inspiration": "Akali from League of Legends"
-  },
-  {
-    "concept_hook": "A spirit-guided huntress who sets ethereal traps and hurls homing javelins, howling in primal joy at the impalement.",
-    "ring_name": "Savanna Huntress",
-    "gender": "female",
-    "age": 27,
-    "origin": "Lagos, Nigeria",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Witch",
-    "has_supernatural": true,
-    "body_type": "lean athletic goddess",
-    "power_tier": "gatekeeper",
-    "narrative_role": "fierce guardian of primal traditions",
-    "rivalry_seeds": [
-      "Jade Fang",
-      "Banshee Hex"
-    ],
-    "media_archetype_inspiration": "Lara Croft from Tomb Raider"
-  },
-  {
-    "concept_hook": "A commanding empress whose dominating presence compels psychic fealty, pummeling dissenters with powered gauntlets in imperial rage.",
-    "ring_name": "Eisen Empress",
-    "gender": "female",
-    "age": 34,
-    "origin": "Berlin, Germany",
-    "primary_archetype": "Empress",
     "secondary_archetype": "Experiment",
     "has_supernatural": true,
-    "body_type": "statuesque vixen",
-    "power_tier": "contender",
-    "narrative_role": "imperious overlord expanding her domain",
+    "body_type": "sculpted athletic curves with glossy synthetic sheen",
+    "power_tier": "gatekeeper",
+    "narrative_role": "corporate lab escapee fueled by payback rage",
     "rivalry_seeds": [
-      "Monsoon Lash",
-      "Neon Doll"
+      "Venom Kiss",
+      "Neon Helix"
     ],
-    "media_archetype_inspiration": "Esdeath from Akame ga Kill"
+    "media_archetype_inspiration": "Alita Battle Angel"
   },
   {
-    "concept_hook": "A gladiatorial experiment who seamlessly morphs lithe limbs into bladed whips and regenerative plating, surgically ending fights while quelling berserk urges.",
-    "ring_name": "Venus Experiment",
+    "concept_hook": "Primal tracker who ensnares prey with vines, blow darts, and ferocious takedowns from the canopy.",
+    "ring_name": "Jungle Huntress",
     "gender": "female",
-    "age": 23,
-    "origin": "Rome, Italy",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Empress",
-    "has_supernatural": true,
-    "body_type": "sculpted voluptuous form",
+    "age": 27,
+    "origin": "Manaus, Brazil",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "toned bronzed physique adorned with ritual scars",
     "power_tier": "gatekeeper",
-    "narrative_role": "tragic mutant claiming her destiny",
+    "narrative_role": "wilderness guardian clashing against civilization",
     "rivalry_seeds": [
-      "Banshee Hex",
-      "Eisen Empress"
+      "Venom Kiss",
+      "Lotus Siren"
     ],
-    "media_archetype_inspiration": "Mystique from X-Men"
+    "media_archetype_inspiration": "Neytiri from Avatar"
+  },
+  {
+    "concept_hook": "Arrogant tsarina who commands obedience with psychic dominance and glacial energy blasts.",
+    "ring_name": "Frost Empress",
+    "gender": "female",
+    "age": 34,
+    "origin": "St. Petersburg, Russia",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "statuesque voluptuous form with piercing ice-blue eyes",
+    "power_tier": "champion",
+    "narrative_role": "imperious overlord crushing upstarts",
+    "rivalry_seeds": [
+      "Blade Prodigy",
+      "Monsoon Witch"
+    ],
+    "media_archetype_inspiration": "Xena Warrior Princess with icy mysticism"
+  },
+  {
+    "concept_hook": "Lab-forged mutant whose body morphs tentacles and claws mid-fight for adaptive predation.",
+    "ring_name": "Neon Helix",
+    "gender": "female",
+    "age": 26,
+    "origin": "Seoul, South Korea",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": true,
+    "body_type": "sleek muscular build with bioluminescent vein patterns",
+    "power_tier": "contender",
+    "narrative_role": "feral prototype hunting her shadowy creators",
+    "rivalry_seeds": [
+      "Porcelain Doll",
+      "Jungle Huntress"
+    ],
+    "media_archetype_inspiration": "Genetically enhanced Black Widow from Marvel"
+  },
+  {
+    "concept_hook": "Hypnotic temple dancer whose fluid strikes and aura pulses shatter enemy resolve.",
+    "ring_name": "Lotus Siren",
+    "gender": "female",
+    "age": 24,
+    "origin": "Bangkok, Thailand",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": true,
+    "body_type": "supple curvaceous silhouette with radiant golden hue",
+    "power_tier": "gatekeeper",
+    "narrative_role": "coy enchantress concealing brutal precision",
+    "rivalry_seeds": [
+      "Jungle Huntress",
+      "Frost Empress"
+    ],
+    "media_archetype_inspiration": "Poison from Street Fighter"
+  },
+  {
+    "concept_hook": "Tantric curse-weaver who ensnares rivals in ecstatic visions and venomous spirit coils.",
+    "ring_name": "Monsoon Witch",
+    "gender": "female",
+    "age": 31,
+    "origin": "Mumbai, India",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Siren",
+    "has_supernatural": true,
+    "body_type": "lush voluptuous figure etched in intricate henna",
+    "power_tier": "contender",
+    "narrative_role": "conflicted sorceress battling her corrupting gifts",
+    "rivalry_seeds": [
+      "Blade Prodigy",
+      "Frost Empress"
+    ],
+    "media_archetype_inspiration": "Bayonetta infused with Indian occultism"
   }
 ]

@@ -8,6 +8,7 @@ from app.config import load_config
 from app.engine.fighter_generator import generate_fighter, plan_roster
 from app.models.world_state import WorldState
 from app.services import data_manager
+from app.services.grok_image import generate_charsheet_images
 
 
 def plan_roster_cmd():
@@ -52,7 +53,7 @@ def plan_roster_cmd():
     print("Review the plan, then run with --generate to create the fighters.")
 
 
-def generate_from_plan():
+def generate_from_plan(generate_images: bool = False):
     config = load_config()
     data_manager.ensure_data_dirs(config)
 
@@ -104,6 +105,13 @@ def generate_from_plan():
             })
             print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin}")
             print(f"  Stats total: {fighter.total_core_stats()}")
+
+            if generate_images:
+                try:
+                    fighters_dir = config.data_dir / "fighters"
+                    generate_charsheet_images(fighter, config, fighters_dir)
+                except Exception as img_err:
+                    print(f"  WARNING: Image generation failed: {img_err}")
         except Exception as e:
             print(f"  ERROR generating fighter: {e}")
             continue
@@ -133,21 +141,22 @@ def generate_from_plan():
     print(f"  World state saved to data/world_state.json")
 
 
-def generate_roster():
+def generate_roster(generate_images: bool = False):
     plan_roster_cmd()
     print("\n" + "=" * 60 + "\n")
-    generate_from_plan()
+    generate_from_plan(generate_images=generate_images)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate AFL roster")
     parser.add_argument("--plan", action="store_true", help="Phase 1: plan roster only (saves to data/roster_plan.json)")
     parser.add_argument("--generate", action="store_true", help="Phase 2: generate fighters from existing plan")
+    parser.add_argument("--images", action="store_true", help="Generate character sheet images for each fighter via Grok API")
     args = parser.parse_args()
 
     if args.plan:
         plan_roster_cmd()
     elif args.generate:
-        generate_from_plan()
+        generate_from_plan(generate_images=args.images)
     else:
-        generate_roster()
+        generate_roster(generate_images=args.images)

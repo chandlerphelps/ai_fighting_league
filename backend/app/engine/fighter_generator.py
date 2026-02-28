@@ -2,6 +2,7 @@ import json
 import uuid
 
 from app.config import Config
+from app.engine.image_style import ART_STYLE, ART_STYLE_TAIL
 from app.models.fighter import Fighter, Stats, Record, Condition
 from app.services.openrouter import call_openrouter_json
 
@@ -593,13 +594,13 @@ Return ONLY valid JSON with this exact structure:
         ring_attire=result.get("ring_attire", ""),
         ring_attire_sfw=result.get("ring_attire_sfw", ""),
         ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
-        image_prompt=_build_image_prompt_obj(
+        image_prompt=_build_charsheet_prompt(
             body_parts, clothing, expression, tier="barely"
         ),
-        image_prompt_sfw=_build_image_prompt_obj(
+        image_prompt_sfw=_build_charsheet_prompt(
             body_parts, clothing_sfw, expression, tier="sfw"
         ),
-        image_prompt_nsfw=_build_image_prompt_obj(
+        image_prompt_nsfw=_build_charsheet_prompt(
             body_parts, clothing_nsfw, expression, tier="nsfw"
         ),
         image_prompt_triple=_build_triple_prompt(
@@ -640,67 +641,53 @@ def _extract_stats(data: dict, has_supernatural: bool, config: Config) -> Stats:
     )
 
 
-IMAGE_PROMPT_CAMERA = (
-    "single character centered in frame, full body head to toe visible, "
-    "standing tall and upright at full height, confident wide stance, "
-    "one hand on hip and other arm relaxed at side, weight evenly on both feet, "
-    "both hands clearly visible and away from body, "
-    "straight-on front-facing camera angle, slight low angle for power, "
-    "plain flat color background"
+CHARSHEET_LAYOUT = (
+    "character model sheet, character reference sheet turnaround, "
+    "three full-body views of the exact same character side by side: "
+    "front-facing view on the left, three-quarter angle view in the center, "
+    "rear view on the right, "
+    "consistent pose and outfit across all three views, "
+    "full body head to toe visible in each panel, standing tall at full height, "
+    "plain flat color background, organized reference sheet layout"
 )
 
-IMAGE_PROMPT_STYLE_SFW = (
-    "western action-cartoon style, bold shape design, clean linework, "
-    "strong facial expression, graphic readability, low detail, "
-    "strictly female character, feminine curves and anatomy, "
-    "stylized fighting game character select screen portrait, " + IMAGE_PROMPT_CAMERA
-)
+CHARSHEET_STYLE_BASE = ART_STYLE + ", character design reference sheet"
 
-IMAGE_PROMPT_STYLE_BARELY = (
-    "western action-cartoon style, bold shape design, clean linework, "
-    "strong facial expression, graphic readability, low detail, "
-    "strictly female character, feminine curves and anatomy, "
-    "stylized fighting game character select screen portrait, " + IMAGE_PROMPT_CAMERA
-)
+CHARSHEET_STYLE_SFW = CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
 
-IMAGE_PROMPT_STYLE_NSFW = (
+CHARSHEET_STYLE_BARELY = CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
+
+CHARSHEET_STYLE_NSFW = (
     "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
-    "western action-cartoon style, bold shape design, clean linework, "
-    "strong facial expression, graphic readability, low detail, "
-    "strictly female character, feminine curves and anatomy, "
-    "stylized fighting game character select screen portrait, "
-    + IMAGE_PROMPT_CAMERA
+    + CHARSHEET_STYLE_BASE + ", " + CHARSHEET_LAYOUT
 )
 
-IMAGE_PROMPT_TAIL = (
-    "strict western action-cartoon style, bold flat colors, clean ink outlines"
-)
+CHARSHEET_TAIL = ART_STYLE_TAIL + ", character reference sheet turnaround, three consistent views"
 
-IMAGE_PROMPT_TAIL_NSFW = (
-    "strict western action-cartoon style, bold flat colors, clean ink outlines, "
-    "explicit full frontal female nudity, completely naked, bare breasts and bare crotch visible"
+CHARSHEET_TAIL_NSFW = (
+    ART_STYLE_TAIL + ", "
+    "explicit full frontal female nudity, completely naked, bare breasts and bare crotch visible, "
+    "character reference sheet turnaround, three consistent views"
 )
 
 TRIPLE_PROMPT_STYLE = (
-    "western action-cartoon style, bold shape design, clean linework, "
-    "strong facial expressions, graphic readability, low detail, strictly female character, "
-    "feminine curves and anatomy, "
+    ART_STYLE + ", "
     "stylized fighting game triple portrait, three full-body exact same character standing "
     "side by side left to right in one clean vertical panel layout, "
     "SFW left, barely-SFW center, explicit uncensored NSFW right with full frontal female nudity"
 )
 
 
-def _build_image_prompt_obj(
+def _build_charsheet_prompt(
     body_parts: str, clothing: str, expression: str, tier: str = "barely"
 ) -> dict:
     if not body_parts:
         return {}
 
     style = {
-        "sfw": IMAGE_PROMPT_STYLE_SFW,
-        "barely": IMAGE_PROMPT_STYLE_BARELY,
-        "nsfw": IMAGE_PROMPT_STYLE_NSFW,
+        "sfw": CHARSHEET_STYLE_SFW,
+        "barely": CHARSHEET_STYLE_BARELY,
+        "nsfw": CHARSHEET_STYLE_NSFW,
     }[tier]
 
     if tier == "nsfw":
@@ -710,17 +697,25 @@ def _build_image_prompt_obj(
     else:
         clothing_part = clothing
 
-    tail = IMAGE_PROMPT_TAIL_NSFW if tier == "nsfw" else IMAGE_PROMPT_TAIL
+    front_view = f"front view: {body_parts}, {clothing_part}" if clothing_part else f"front view: {body_parts}"
+    three_quarter_view = f"three-quarter angle view: {body_parts}, {clothing_part}" if clothing_part else f"three-quarter angle view: {body_parts}"
+    back_view = f"rear view: {body_parts}, {clothing_part}" if clothing_part else f"rear view: {body_parts}"
+
+    tail = CHARSHEET_TAIL_NSFW if tier == "nsfw" else CHARSHEET_TAIL
 
     full = ", ".join(
         p
-        for p in [style, body_parts, clothing_part, expression, tail]
+        for p in [style, front_view, three_quarter_view, back_view, expression, tail]
         if p
     )
     return {
         "style": style,
+        "layout": CHARSHEET_LAYOUT,
         "body_parts": body_parts,
         "clothing": clothing_part,
+        "front_view": front_view,
+        "three_quarter_view": three_quarter_view,
+        "back_view": back_view,
         "expression": expression,
         "full_prompt": full,
     }
@@ -749,7 +744,7 @@ def _build_triple_prompt(
             f"center barely-SFW: {clothing}" if clothing else "",
             nsfw_right,
             expr_all,
-            "strict western action-cartoon style across all panels, bold flat colors, clean ink outlines",
+            ART_STYLE_TAIL + " across all panels",
         ]
         if p
     )
