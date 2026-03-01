@@ -600,8 +600,14 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
 
 
 def _roll_skimpiness(weights: list[int] | None) -> int:
-    # TODO: restore weighted roll after testing
-    return random.choice([2, 3, 4])
+    if not weights or len(weights) != 4:
+        weights = [15, 35, 35, 15]
+    total = sum(weights)
+    if total <= 0:
+        weights = [15, 35, 35, 15]
+        total = 100
+    normalized = [w / total for w in weights]
+    return random.choices([1, 2, 3, 4], weights=normalized, k=1)[0]
 
 
 def _generate_outfits(
