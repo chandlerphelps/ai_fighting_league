@@ -334,42 +334,56 @@ This gives full creative freedom to the character designer while guaranteeing fe
 
 SKIMPINESS_LEVELS = {
     1: {
+        "sfw_label": "Covered & Composed",
         "sfw_skin_pct": "15-25",
         "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
         "sfw_guidance": "Conservative — only face, hands, and forearms visible. Full coverage everywhere else.",
+        "barely_label": "Flirty",
         "barely_skin_pct": "45-55",
         "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
         "nsfw_adjective": "Tasteful",
         "nsfw_description": "Artistic, elegant posing, minimal anatomical detail. Classical painting energy.",
     },
     2: {
+        "sfw_label": "Sporty & Attractive",
         "sfw_skin_pct": "30-45",
         "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
         "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
+        "barely_label": "Risqué",
         "barely_skin_pct": "60-70",
         "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
         "nsfw_adjective": "Confident",
         "nsfw_description": "Unapologetic nudity, pin-up energy, some anatomical detail.",
     },
     3: {
+        "sfw_label": "Revealing",
         "sfw_skin_pct": "50-65",
         "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
         "sfw_guidance": "Revealing — exposed midriff, thighs, cleavage, bare back. Fighting-game sexy.",
+        "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
         "nsfw_adjective": "Explicit",
         "nsfw_description": "Anatomical detail visible, nothing hidden. Full display.",
     },
     4: {
+        "sfw_label": "Maximum Skin",
         "sfw_skin_pct": "70-85",
         "sfw_hard_rules": "No nipples, no genitalia. Sideboob and cameltoe hints are OK at this level.",
         "sfw_guidance": "Maximum SFW — as much skin as possible without showing nipples or genitalia. Sideboob and cameltoe hints allowed.",
+        "barely_label": "Extreme",
         "barely_skin_pct": "95-99",
         "barely_guidance": "Extreme — nipple tape and a tiny strip over the crotch would qualify. Only the absolute anatomical minimums are covered. Body chains, adhesive strips, micro pasties, or paint standing in for actual clothing.",
         "nsfw_adjective": "Provocative",
         "nsfw_description": "Maximum anatomical detail, erotic emphasis. Nothing left to imagination.",
     },
 }
+
+
+OUTFIT_STYLE_RULES = """STYLE RULES (apply to ALL tiers):
+- Be CONCISE. No fluff or purple prose. "chain necklace with sickle pendant" not "kusarigama chain necklace with sickle pendant swaying menacingly".
+- List MORE pieces of apparel. Include footwear (boots, heels, sandals, sneakers), gloves/hand wraps, jewelry (rings, earrings, bracelets, anklets, chokers), belts, and accessories.
+- Every outfit should have at least 4-5 distinct items. Even minimal outfits should specify shoes, jewelry, and accessories."""
 
 
 def _build_tier_prompt(tier: str, skimpiness_level: int, character_summary: dict) -> str:
@@ -388,57 +402,63 @@ SKIMPINESS LEVEL: {skimpiness_level} of 4"""
     if tier == "sfw":
         return f"""{char_context}
 
-Generate the SFW outfit for this character.
+Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {skimpiness_level}/4).
+
+{OUTFIT_STYLE_RULES}
 
 RULES:
   HARD RULES: {level['sfw_hard_rules']}
   SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
-  {level['sfw_guidance']}
+  VIBE: {level['sfw_label']} — {level['sfw_guidance']}
   Iconic features + additional clothing pieces to hit the skin target.
 
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 Return ONLY valid JSON:
 {{
-  "ring_attire_sfw": "<full SFW outfit description incorporating iconic features>",
-  "image_prompt_clothing_sfw": "<SFW clothing description for image gen — just the clothing pieces, not accessories>"
+  "ring_attire_sfw": "<concise SFW outfit description — list each item plainly, no flowery language>",
+  "image_prompt_clothing_sfw": "<SFW clothing for image gen — just the clothing pieces, no adjective fluff>"
 }}"""
 
     elif tier == "barely":
         return f"""{char_context}
 
-Generate the barely-SFW outfit for this character.
+Generate the "{level['barely_label']}" tier outfit for this character (skimpiness {skimpiness_level}/4).
+
+{OUTFIT_STYLE_RULES}
 
 RULES:
   HARD RULES: No nipples, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.
   SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
-  {level['barely_guidance']}
-  Iconic features + minimal additional pieces to hit the skin target.
+  VIBE: {level['barely_label']} — {level['barely_guidance']}
+  Iconic features + additional pieces to hit the skin target.
 
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 Return ONLY valid JSON:
 {{
-  "ring_attire": "<full barely-SFW outfit description incorporating iconic features>",
-  "image_prompt_clothing": "<barely-SFW clothing description for image gen — just the clothing pieces>"
+  "ring_attire": "<concise outfit description — list each item plainly, no flowery language>",
+  "image_prompt_clothing": "<clothing for image gen — just the clothing pieces, no adjective fluff>"
 }}"""
 
     else:
         return f"""{char_context}
 
-Generate the NSFW outfit for this character.
+Generate the NSFW outfit for this character. Tone: {level['nsfw_adjective']}.
+
+{OUTFIT_STYLE_RULES}
+ADDITIONAL: Even fully nude characters should still have accessories — boots/heels, gloves, jewelry, chokers, belts, etc. The nudity is the body; the outfit is what remains ON the body.
 
 RULES:
-  HARD RULES: Fully nude — topless AND bottomless. Only iconic features remain.
+  HARD RULES: Fully nude — topless AND bottomless. Only iconic features and accessories remain.
   TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
-  The character should feel {level['nsfw_adjective'].lower()} — whatever fits their personality.
 
 {GUIDE_IMAGE_PROMPT_RULES}
 
 Return ONLY valid JSON:
 {{
-  "ring_attire_nsfw": "<NSFW outfit description — nude except iconic features>",
-  "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — max 8 words, just the remaining accessories>"
+  "ring_attire_nsfw": "<concise NSFW description — nude plus each remaining accessory listed plainly>",
+  "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — max 8 words, remaining accessories only>"
 }}"""
 
 
