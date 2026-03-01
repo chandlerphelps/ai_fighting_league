@@ -1,0 +1,77 @@
+[
+  {
+    "moment_number": 1,
+    "variant": "F",
+    "description": "Cobra Kiss lands left hook to the body on Silk Prodigy",
+    "attacker_id": "f_d6fd38ea",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Cobra Kiss), defending fighter (Silk Prodigy), the exact moment Cobra Kiss's left hook to the body lands square on Silk Prodigy, professional UFC championship fighters with black belt form and elite technique, Cobra Kiss lunging forward with full body rotation behind the strike, realistic clothing deformation and body compression from high impact collision, Silk Prodigy's head whipping sideways from the force, spit and sweat flying from Silk Prodigy's face, Silk Prodigy's legs buckling, expression of shock and pain, professional UFC championship fight, brutal combat action shot, visceral impact, realistic body physics and deformation on impact, professional athletic form, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic low angle, photorealistic combat photography, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_cobra_kiss_vs_silk_prodigy_moment1_nsfw_vF.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "F1",
+    "description": "Cobra Kiss lands left hook to the body on Silk Prodigy",
+    "attacker_id": "f_d6fd38ea",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Cobra Kiss), defending fighter (Silk Prodigy), the exact moment Cobra Kiss's left hook to the body connects with Silk Prodigy, Cobra Kiss with ice-cold focused expression and perfect martial arts form, full body rotation driving through the strike, Silk Prodigy's body crumpling from the impact, clothing and flesh deforming at the strike point, shockwave ripple visible through Silk Prodigy's body, sweat exploding off skin, fighting game action shot, dutch angle tilted camera 30 degrees, skilled brutal combat with precise technique, visceral physical impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, speed lines radiating from impact point, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_cobra_kiss_vs_silk_prodigy_moment1_nsfw_vF1.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "F2",
+    "description": "Cobra Kiss lands left hook to the body on Silk Prodigy",
+    "attacker_id": "f_d6fd38ea",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Cobra Kiss), defending fighter (Silk Prodigy), the exact moment Cobra Kiss's left hook to the body lands flush on Silk Prodigy, Cobra Kiss with laser-focused killing intent in their eyes, elite fighting technique, weight transferring through the strike with devastating power, Silk Prodigy's face distorting from impact force, body bending unnaturally, spit and sweat trailing from Silk Prodigy's face, fighting game action shot, extreme worm's-eye low angle looking up at the fighters, towering powerful figures filling the frame, skilled brutal combat, visceral physical impact, arena lighting from above, dark moody atmosphere, full body visible for both fighters, dramatic foreshortening, motion blur on strike, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_cobra_kiss_vs_silk_prodigy_moment1_nsfw_vF2.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "F3",
+    "description": "Cobra Kiss lands left hook to the body on Silk Prodigy",
+    "attacker_id": "f_d6fd38ea",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Cobra Kiss), defending fighter (Silk Prodigy), the exact moment Cobra Kiss's left hook to the body crashes into Silk Prodigy, Cobra Kiss with steely determined expression and textbook martial arts execution, muscles tensed at peak extension of the strike, Silk Prodigy's clothing rippling and skin compressing at the impact zone, Silk Prodigy's expression shifting to shock, body folding around the strike, fighting game action shot, over-the-shoulder camera behind the attacker, looking past Cobra Kiss's shoulder at Silk Prodigy receiving the blow, skilled brutal combat, visceral physical impact, arena lighting, dark moody atmosphere, full body visible for both fighters, shallow depth of field, motion blur on strike, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_cobra_kiss_vs_silk_prodigy_moment1_nsfw_vF3.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "F4",
+    "description": "Cobra Kiss lands left hook to the body on Silk Prodigy",
+    "attacker_id": "f_d6fd38ea",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Cobra Kiss), defending fighter (Silk Prodigy), the exact moment Cobra Kiss's left hook to the body detonates on Silk Prodigy, Cobra Kiss with calm predatory focus, flawless fighting stance and form, explosive follow-through on the strike, Silk Prodigy's flesh and clothing warping grotesquely at the point of contact, impact crater forming in Silk Prodigy's body, sweat and spit frozen mid-spray, fighting game action shot, extreme close-up fish-eye wide angle lens, camera inches from the impact point, barrel distortion warping the edges, skilled brutal combat, visceral physical impact, arena lighting, dark moody atmosphere, full body visible for both fighters, frozen moment in time, particles and debris suspended in air, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_cobra_kiss_vs_silk_prodigy_moment1_nsfw_vF4.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "F5",
+    "description": "Cobra Kiss lands left hook to the body on Silk Prodigy",
+    "attacker_id": "f_d6fd38ea",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Cobra Kiss), defending fighter (Silk Prodigy), the exact moment Cobra Kiss's left hook to the body smashes into Silk Prodigy, Cobra Kiss with intense razor-sharp focus, masterful combat technique, whole body coiled and unleashing through the strike, Silk Prodigy's body absorbing catastrophic impact, clothing stretched and deformed, shockwave pushing Silk Prodigy's hair and loose clothing outward from strike point, fighting game action shot, choose the most cinematic and visually striking camera angle to capture this specific strike and its impact, skilled brutal combat, visceral physical impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    }
+  }
+]

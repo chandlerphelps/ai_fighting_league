@@ -1,0 +1,54 @@
+[
+  {
+    "moment_number": 1,
+    "variant": "F",
+    "description": "Hex Vixen lands left hook to the body on Porcelain Doll",
+    "attacker_id": "f_a14a5904",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "sfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Hex Vixen), defending fighter (Porcelain Doll), the exact moment Hex Vixen's left hook to the body lands square on Porcelain Doll, professional UFC championship fighters with black belt form and elite technique, Hex Vixen lunging forward with full body rotation behind the strike, realistic clothing deformation and body compression from high impact collision, Porcelain Doll's head whipping sideways from the force, spit and sweat flying from Porcelain Doll's face, Porcelain Doll's legs buckling, expression of shock and pain, professional UFC championship fight, brutal combat action shot, visceral impact, realistic body physics and deformation on impact, professional athletic form, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic low angle, photorealistic combat photography, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "sfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_porcelain_doll_vs_hex_vixen_moment1_sfw_vF.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "G",
+    "description": "Hex Vixen lands left hook to the body on Porcelain Doll",
+    "attacker_id": "f_a14a5904",
+    "action": "left hook to the body",
+    "image_prompts": {
+      "sfw": "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Hex Vixen), defending fighter (Porcelain Doll), the exact moment Hex Vixen's left hook to the body lands square on Porcelain Doll, professional UFC championship fighters with black belt form and elite technique, Hex Vixen lunging forward with full body rotation behind the strike, realistic clothing deformation and body compression from high impact collision, Porcelain Doll's head whipping sideways from the force, spit and sweat flying from Porcelain Doll's face, Porcelain Doll's legs buckling, expression of shock and pain, professional UFC championship fight, brutal combat action shot, visceral impact, realistic body physics and deformation on impact, professional athletic form, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic low angle, photorealistic combat photography, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "sfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_porcelain_doll_vs_hex_vixen_moment1_sfw_vG.png"
+    }
+  },
+  {
+    "moment_number": 2,
+    "variant": "F",
+    "description": "Porcelain Doll lands quick jab to the nose on Hex Vixen",
+    "attacker_id": "f_6a4efda7",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "sfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Porcelain Doll), defending fighter (Hex Vixen), the exact moment Porcelain Doll's quick jab to the nose lands square on Hex Vixen, professional UFC championship fighters with black belt form and elite technique, Porcelain Doll lunging forward with full body rotation behind the strike, realistic clothing deformation and body compression from high impact collision, Hex Vixen's head whipping sideways from the force, spit and sweat flying from Hex Vixen's face, Hex Vixen's legs buckling, expression of shock and pain, professional UFC championship fight, brutal combat action shot, visceral impact, realistic body physics and deformation on impact, professional athletic form, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic low angle, photorealistic combat photography, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "sfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_porcelain_doll_vs_hex_vixen_moment2_sfw_vF.png"
+    }
+  },
+  {
+    "moment_number": 2,
+    "variant": "G",
+    "description": "Porcelain Doll lands quick jab to the nose on Hex Vixen",
+    "attacker_id": "f_6a4efda7",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "sfw": "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Porcelain Doll), defending fighter (Hex Vixen), the exact moment Porcelain Doll's quick jab to the nose lands square on Hex Vixen, professional UFC championship fighters with black belt form and elite technique, Porcelain Doll lunging forward with full body rotation behind the strike, realistic clothing deformation and body compression from high impact collision, Hex Vixen's head whipping sideways from the force, spit and sweat flying from Hex Vixen's face, Hex Vixen's legs buckling, expression of shock and pain, professional UFC championship fight, brutal combat action shot, visceral impact, realistic body physics and deformation on impact, professional athletic form, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic low angle, photorealistic combat photography, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "sfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_porcelain_doll_vs_hex_vixen_moment2_sfw_vG.png"
+    }
+  }
+]

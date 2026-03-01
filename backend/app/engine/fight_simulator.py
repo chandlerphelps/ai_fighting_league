@@ -64,13 +64,17 @@ def _roll_injuries(config: Config, base_chance: float) -> list[dict]:
         recovery_range = config.severe_recovery
 
     recovery_days = random.randint(recovery_range[0], recovery_range[1])
-    injury_type = random.choice(["concussion", "facial laceration", "broken nose", "orbital fracture"])
+    injury_type = random.choice(
+        ["concussion", "facial laceration", "broken nose", "orbital fracture"]
+    )
 
-    return [{
-        "type": injury_type,
-        "severity": severity,
-        "recovery_days_remaining": recovery_days,
-    }]
+    return [
+        {
+            "type": injury_type,
+            "severity": severity,
+            "recovery_days_remaining": recovery_days,
+        }
+    ]
 
 
 def calculate_probabilities(
@@ -127,7 +131,11 @@ Supernatural abilities should be factored as a modest edge, not a dominator."""
 
 
 def generate_moments(
-    fighter1: dict, fighter2: dict, analysis: MatchupAnalysis, outcome: MatchOutcome, config: Config
+    fighter1: dict,
+    fighter2: dict,
+    analysis: MatchupAnalysis,
+    outcome: MatchOutcome,
+    config: Config,
 ) -> list[FightMoment]:
     from app.services.openrouter import call_openrouter_json
 
@@ -172,7 +180,9 @@ Rules:
 
     system_prompt = "You are a fight choreographer. Return concise JSON fight moments. Each moment is one specific strike or grappling action."
 
-    result = call_openrouter_json(prompt, config, model=config.narrative_model, system_prompt=system_prompt)
+    result = call_openrouter_json(
+        prompt, config, model=config.narrative_model, system_prompt=system_prompt
+    )
     raw_moments = result.get("moments", [])
 
     moments = []
@@ -188,17 +198,21 @@ Rules:
         action = m.get("action", "")
         description = f"{attacker_name} lands {action} on {defender_name}"
 
-        moments.append(FightMoment(
-            moment_number=m.get("moment_number", 0),
-            description=description,
-            attacker_id=attacker_id,
-            action=action,
-        ))
+        moments.append(
+            FightMoment(
+                moment_number=m.get("moment_number", 0),
+                description=description,
+                attacker_id=attacker_id,
+                action=action,
+            )
+        )
 
     return moments
 
 
-def _generate_action_description(atk_name: str, def_name: str, action: str, config: Config) -> str:
+def _generate_action_description(
+    atk_name: str, def_name: str, action: str, config: Config
+) -> str:
     from app.services.openrouter import call_openrouter
 
     prompt = f"""You are writing a concise image prompt for a fight scene. The action is:
@@ -206,13 +220,14 @@ def _generate_action_description(atk_name: str, def_name: str, action: str, conf
 {atk_name}'s {action} on {def_name}
 
 Write a SHORT image-generator description (3 sentences max) that specifies:
-1. EXACTLY where on {def_name}'s body the strike makes contact (be anatomically specific)
-2. {atk_name}'s exact body position, form, and facial expression appropriate for this specific strike
-3. {def_name}'s exact physical reaction specific to WHERE they were hit (face hit = head snap, body hit = doubling over, etc.)
+1. Where on {def_name}'s body the strike makes contact
+2. {atk_name}'s attack type and facial expression appropriate for this specific strike
+3. {def_name}'s exact physical reaction specific to WHERE they were hit (side of face hit = head snap to the side, front of face hit = head snaps back, abs hit = doubling over forward, kidney shot = double over at an angle, etc.)
 4. The single most cinematic camera angle to capture this specific strike
 
 Rules:
-- Be concise and visual — this is for an image generator
+- Be extremely concise and visual — this is for an image generator so NO fluff
+- This is the moment of impact, so the defender's reaction is whatever physics dictates. It's a snapshot in time.
 - Only describe what to show, never say what to avoid
 - Use fighter names, not pronouns
 - Return ONLY the description, nothing else"""
@@ -220,16 +235,23 @@ Rules:
     system_prompt = "You are an expert fight choreographer writing concise image prompts. Return only the visual description."
 
     return call_openrouter(
-        prompt, config, system_prompt=system_prompt,
-        temperature=0.9, max_tokens=256,
+        prompt,
+        config,
+        system_prompt=system_prompt,
+        temperature=0.5,
+        max_tokens=180,
     ).strip()
 
 
 def build_moment_image_prompt(
-    fighter1: dict, fighter2: dict, attacker_id: str, action: str,
-    config: Config, tier: str = "barely",
+    fighter1: dict,
+    fighter2: dict,
+    attacker_id: str,
+    action: str,
+    config: Config,
+    tier: str = "barely",
 ) -> str:
-    from app.engine.image_style import ART_STYLE_BASE, get_art_style_tail
+    from app.engine.image_style import ART_STYLE_BASE
 
     if attacker_id == fighter1["id"]:
         attacker, defender = fighter1, fighter2
@@ -238,26 +260,35 @@ def build_moment_image_prompt(
 
     atk_name = attacker.get("ring_name", "Attacker")
     def_name = defender.get("ring_name", "Defender")
-    atk_gender = attacker.get("gender", "female")
 
-    ref_sheet = "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter"
-    consistency = "exactly two distinct characters, each maintains their exact original design from their reference sheet"
-    tail = get_art_style_tail(atk_gender)
+    prompt_key = {
+        "sfw": "image_prompt_sfw",
+        "barely": "image_prompt",
+        "nsfw": "image_prompt_nsfw",
+    }[tier]
+    atk_prompt = attacker.get(prompt_key, attacker.get("image_prompt", {}))
+    def_prompt = defender.get(prompt_key, defender.get("image_prompt", {}))
 
-    atk_fighter = f"attacking fighter ({atk_name})"
-    def_fighter = f"defending fighter ({def_name})"
+    atk_body = atk_prompt.get("body_parts", "")
+    def_body = def_prompt.get("body_parts", "")
+    atk_clothing = atk_prompt.get("clothing", "")
+    def_clothing = def_prompt.get("clothing", "")
 
     action_desc = _generate_action_description(atk_name, def_name, action, config)
 
-    scene = (
-        "fighting game action shot, skilled brutal combat, visceral physical impact, "
-        "arena lighting, dark moody atmosphere, full body visible for both fighters"
-    )
+    return f"""ACTION: {action_desc}
 
-    return ", ".join([
-        ART_STYLE_BASE, ref_sheet, atk_fighter, def_fighter,
-        action_desc, scene, tail, consistency,
-    ])
+REFERENCE SHEETS: First image is the character sheet for the attacking fighter {atk_name}, second image is the character sheet for the defending fighter {def_name}.
+
+SCENE: Fighting game action shot, skilled brutal combat, visceral physical impact, arena lighting, dark moody atmosphere, full body visible for both fighters.
+
+ART STYLE: {ART_STYLE_BASE}
+
+CONSISTENCY: Exactly two distinct characters, each maintains their exact original design from their reference sheet.
+
+CHARACTER BODIES: {atk_name}: {atk_body}. {def_name}: {def_body}.
+
+CHARACTER CLOTHING: {atk_name} wears {atk_clothing}. {def_name} wears {def_clothing}."""
 
 
 def run_fight(
@@ -296,7 +327,9 @@ def run_fight(
     )
 
 
-def _get_rivalry_context(fighter1_id: str, fighter2_id: str, config: Config) -> dict | None:
+def _get_rivalry_context(
+    fighter1_id: str, fighter2_id: str, config: Config
+) -> dict | None:
     ws = data_manager.load_world_state(config)
     if not ws:
         return None

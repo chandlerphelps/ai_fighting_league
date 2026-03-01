@@ -1,0 +1,106 @@
+[
+  {
+    "moment_number": 1,
+    "variant": "E",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen, 5'9\"): slender lithe pale athletic build, porcelain skin, long wavy raven-black hair to hips with silver chains, elegant sharp features, piercing emerald green eyes, intricate glowing occult serpent tattoos on arms neck torso thighs, completely naked except thigh-high black leather boots silver serpent buckles, elbow-length black lace thorn gloves, black velvet choker ruby pendant, silver occult rune armbands, defending fighter (female, Velvet Siren, 5'7\"): voluptuous hourglass figure, sun-kissed olive skin, cascading waves of midnight black hair with silver highlights, high cheekbones, full glossy lips, heterochromia violet left eye emerald right eye, beauty mark above upper lip, long black nails with silver tips, completely naked except black velvet choker, satin gloves, thigh-high fishnets, silver stiletto boots, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E1",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen, 5'9\"): completely naked except thigh-high black leather boots silver serpent buckles, elbow-length black lace thorn gloves, black velvet choker ruby pendant, silver occult rune armbands, defending fighter (female, Velvet Siren, 5'7\"): completely naked except black velvet choker, satin gloves, thigh-high fishnets, silver stiletto boots, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE1.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E2",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen, 5'9\"): slender lithe pale athletic build, porcelain skin, long wavy raven-black hair to hips with silver chains, elegant sharp features, piercing emerald green eyes, intricate glowing occult serpent tattoos on arms neck torso thighs, defending fighter (female, Velvet Siren, 5'7\"): voluptuous hourglass figure, sun-kissed olive skin, cascading waves of midnight black hair with silver highlights, high cheekbones, full glossy lips, heterochromia violet left eye emerald right eye, beauty mark above upper lip, long black nails with silver tips, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE2.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E3",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen, 5'9\"), defending fighter (female, Velvet Siren, 5'7\"), the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE3.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E4",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen): slender lithe pale athletic build, porcelain skin, long wavy raven-black hair to hips with silver chains, elegant sharp features, piercing emerald green eyes, intricate glowing occult serpent tattoos on arms neck torso thighs, completely naked except thigh-high black leather boots silver serpent buckles, elbow-length black lace thorn gloves, black velvet choker ruby pendant, silver occult rune armbands, defending fighter (female, Velvet Siren): voluptuous hourglass figure, sun-kissed olive skin, cascading waves of midnight black hair with silver highlights, high cheekbones, full glossy lips, heterochromia violet left eye emerald right eye, beauty mark above upper lip, long black nails with silver tips, completely naked except black velvet choker, satin gloves, thigh-high fishnets, silver stiletto boots, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE4.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E5",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (Hex Vixen, 5'9\"): slender lithe pale athletic build, porcelain skin, long wavy raven-black hair to hips with silver chains, elegant sharp features, piercing emerald green eyes, intricate glowing occult serpent tattoos on arms neck torso thighs, completely naked except thigh-high black leather boots silver serpent buckles, elbow-length black lace thorn gloves, black velvet choker ruby pendant, silver occult rune armbands, defending fighter (Velvet Siren, 5'7\"): voluptuous hourglass figure, sun-kissed olive skin, cascading waves of midnight black hair with silver highlights, high cheekbones, full glossy lips, heterochromia violet left eye emerald right eye, beauty mark above upper lip, long black nails with silver tips, completely naked except black velvet choker, satin gloves, thigh-high fishnets, silver stiletto boots, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE5.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E6",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen, 5'9\"): slender lithe pale athletic build, porcelain skin, long wavy raven-black hair to hips with silver chains, elegant sharp features, piercing emerald green eyes, intricate glowing occult serpent tattoos on arms neck torso thighs, completely naked except thigh-high black leather boots silver serpent buckles, elbow-length black lace thorn gloves, black velvet choker ruby pendant, silver occult rune armbands, defending fighter (female, Velvet Siren, 5'7\"): voluptuous hourglass figure, sun-kissed olive skin, cascading waves of midnight black hair with silver highlights, high cheekbones, full glossy lips, heterochromia violet left eye emerald right eye, beauty mark above upper lip, long black nails with silver tips, completely naked except black velvet choker, satin gloves, thigh-high fishnets, silver stiletto boots, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE6.png"
+    }
+  },
+  {
+    "moment_number": 1,
+    "variant": "E7",
+    "description": "Hex Vixen lands quick jab to the nose on Velvet Siren",
+    "attacker_id": "f_a14a5904",
+    "action": "quick jab to the nose",
+    "image_prompts": {
+      "nsfw": "first image is the character sheet for the attacking fighter, second image is the character sheet for the defending fighter, attacking fighter (female, Hex Vixen, 5'9\"): slender lithe pale athletic build, porcelain skin, long wavy raven-black hair to hips with silver chains, elegant sharp features, piercing emerald green eyes, intricate glowing occult serpent tattoos on arms neck torso thighs, completely naked except thigh-high black leather boots silver serpent buckles, elbow-length black lace thorn gloves, black velvet choker ruby pendant, silver occult rune armbands, defending fighter (female, Velvet Siren, 5'7\"): voluptuous hourglass figure, sun-kissed olive skin, cascading waves of midnight black hair with silver highlights, high cheekbones, full glossy lips, heterochromia violet left eye emerald right eye, beauty mark above upper lip, long black nails with silver tips, completely naked except black velvet choker, satin gloves, thigh-high fishnets, silver stiletto boots, the exact moment Hex Vixen's quick jab to the nose lands square on Velvet Siren, Hex Vixen lunging forward with full body rotation behind the strike, Velvet Siren's head whipping sideways from the force, spit and sweat flying from Velvet Siren's face, Velvet Siren's legs buckling, expression of shock and pain, brutal combat action shot, visceral impact, arena lighting, dark moody atmosphere, full body visible for both fighters, motion blur on strike, dramatic angle, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, exactly two distinct characters, each maintains their exact original design from their reference sheet"
+    },
+    "image_paths": {
+      "nsfw": "/Users/chandlerphelps/repos/ai_fighting_league/data/matchups/fight_velvet_siren_vs_hex_vixen_moment1_nsfw_vE7.png"
+    }
+  }
+]
