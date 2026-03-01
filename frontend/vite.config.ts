@@ -32,5 +32,11 @@ export default defineConfig({
   plugins: [react(), serveDataPlugin()],
   server: {
     port: 8080,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
   },
 })

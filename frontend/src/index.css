@@ -45,3 +45,7 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #3a3a4a;
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

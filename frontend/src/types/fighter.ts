@@ -52,6 +52,8 @@ export interface Fighter {
   build: string
   distinguishing_features: string
   iconic_features?: string
+  personality?: string
+  image_prompt_personality_pose?: string
   ring_attire: string
   ring_attire_sfw: string
   ring_attire_nsfw: string
@@ -66,4 +68,5 @@ export interface Fighter {
   rivalries: string[]
   last_fight_date: string | null
   ranking: number | null
+  _available_images?: string[]
 }

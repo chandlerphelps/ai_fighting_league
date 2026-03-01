@@ -5,6 +5,7 @@ import FighterProfile from './pages/FighterProfile'
 import Rankings from './pages/Rankings'
 import Schedule from './pages/Schedule'
 import FightNarrative from './pages/FightNarrative'
+import RosterManager from './pages/RosterManager'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/rankings" element={<Rankings />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/match/:id" element={<FightNarrative />} />
+        <Route path="/roster" element={<RosterManager />} />
       </Routes>
     </Layout>
   )
