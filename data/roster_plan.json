@@ -1,146 +1,194 @@
 [
   {
-    "concept_hook": "Sultry chanteuse whose hypnotic voice seduces foes into self-inflicted submission.",
-    "ring_name": "Velvet Siren",
-    "gender": "female",
-    "age": 29,
-    "origin": "Miami, USA",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Witch",
-    "has_supernatural": true,
-    "body_type": "voluptuous hourglass figure",
-    "power_tier": "contender",
-    "narrative_role": "Charismatic heel who revels in psychological torment but spares those who submit.",
-    "rivalry_seeds": [
-      "Voodoo Vixen",
-      "Iron Empress"
-    ],
-    "media_archetype_inspiration": "Bayonetta from Bayonetta"
-  },
-  {
-    "concept_hook": "Voodoo priestess summoning wrathful spirits to possess and shatter enemy wills.",
-    "ring_name": "Voodoo Vixen",
-    "gender": "female",
-    "age": 33,
-    "origin": "Port-au-Prince, Haiti",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Siren",
-    "has_supernatural": true,
-    "body_type": "slender curvaceous with ritual allure",
-    "power_tier": "gatekeeper",
-    "narrative_role": "Tormented mystic who loathes her addictive power yet craves its thrill.",
-    "rivalry_seeds": [
-      "Velvet Siren",
-      "Jungle Huntress"
-    ],
-    "media_archetype_inspiration": "Voodoo priestess from Live and Let Die"
-  },
-  {
-    "concept_hook": "Stealthy toxin specialist delivering paralytics via hidden needles and tainted kisses.",
-    "ring_name": "Cobra Kiss",
+    "concept_hook": "Feral tracker who savors the prolonged stalk, her joy peaking in the terrified final strike, but recoils in primal rage when cornered.",
+    "ring_name": "Seren Huntress",
     "gender": "female",
     "age": 27,
-    "origin": "Bangkok, Thailand",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": false,
-    "body_type": "lithe flexible with venomous sensuality",
-    "power_tier": "gatekeeper",
-    "narrative_role": "Pragmatic survivor numb to suffering but protective of the vulnerable.",
-    "rivalry_seeds": [
-      "Porcelain Doll",
-      "Jungle Huntress"
-    ],
-    "media_archetype_inspiration": "Poison assassin from Killer Instinct"
-  },
-  {
-    "concept_hook": "Teenage martial prodigy outsmarting bruisers with surgical precision strikes.",
-    "ring_name": "Shadow Prodigy",
-    "gender": "female",
-    "age": 20,
-    "origin": "Tokyo, Japan",
-    "primary_archetype": "Prodigy",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "petite toned with agile allure",
-    "power_tier": "prospect",
-    "narrative_role": "Innocent riser whose thrill for victory edges into obsession.",
-    "rivalry_seeds": [
-      "Iron Empress",
-      "Jungle Huntress"
-    ],
-    "media_archetype_inspiration": "Sakura Kasugano from Street Fighter"
-  },
-  {
-    "concept_hook": "Possessed marionette twisting foes with razor wires and contortionist snaps.",
-    "ring_name": "Porcelain Doll",
-    "gender": "female",
-    "age": 22,
-    "origin": "Prague, Czech Republic",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": true,
-    "body_type": "delicate busty with porcelain perfection",
-    "power_tier": "prospect",
-    "narrative_role": "Childlike killer giggling through pain while fearing her own fragility.",
-    "rivalry_seeds": [
-      "Cobra Kiss",
-      "Neon Hybrid"
-    ],
-    "media_archetype_inspiration": "Suigintou from Rozen Maiden"
-  },
-  {
-    "concept_hook": "Tribal spearwoman trapping prey in brutal ambushes amid simulated jungles.",
-    "ring_name": "Jungle Huntress",
-    "gender": "female",
-    "age": 35,
-    "origin": "Manaus, Brazil",
+    "origin": "Serengeti Plains, Tanzania",
     "primary_archetype": "Huntress",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "lithe athletic with bronzed skin and ritual scars",
+    "power_tier": "contender",
+    "narrative_role": "primal disruptor of refined fighters",
+    "rivalry_seeds": [
+      "Rune Witch",
+      "Nile Empress"
+    ],
+    "media_archetype_inspiration": "Katniss Everdeen crossed with Sheva from Mortal Kombat",
+    "skimpiness_weights": [
+      5,
+      20,
+      35,
+      40
+    ]
+  },
+  {
+    "concept_hook": "Corporate cyborg who coldly calculates pain thresholds, deriving quiet satisfaction from systematic disassembly, yet glitches into fury when outpredicted.",
+    "ring_name": "Cyber Empress",
+    "gender": "female",
+    "age": 33,
+    "origin": "Shenzhen, China",
+    "primary_archetype": "Experiment",
     "secondary_archetype": "Empress",
     "has_supernatural": false,
-    "body_type": "toned curvaceous amazonian build",
-    "power_tier": "gatekeeper",
-    "narrative_role": "Honorable predator who hunts for glory but weeps for the fallen.",
+    "body_type": "toned statuesque with sleek chrome implants",
+    "power_tier": "champion",
+    "narrative_role": "technocratic tyrant enforcing hierarchy",
     "rivalry_seeds": [
-      "Voodoo Vixen",
-      "Shadow Prodigy"
+      "Karma Prodigy",
+      "Jade Viper"
     ],
-    "media_archetype_inspiration": "Aloy from Horizon Zero Dawn"
+    "media_archetype_inspiration": "Major Kusanagi from Ghost in the Shell",
+    "skimpiness_weights": [
+      20,
+      30,
+      30,
+      20
+    ]
   },
   {
-    "concept_hook": "Ancestral warlord channeling ghostly legions to crush rebellions.",
-    "ring_name": "Iron Empress",
+    "concept_hook": "Vision-plagued runecaster who etches curses with reluctant precision, haunted by echoes of inflicted agony, striking back savagely when her foresight fails.",
+    "ring_name": "Rune Witch",
     "gender": "female",
-    "age": 40,
-    "origin": "Xi'an, China",
+    "age": 31,
+    "origin": "Troms\u00f8, Norway",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": true,
+    "body_type": "pale voluptuous with etched rune tattoos",
+    "power_tier": "gatekeeper",
+    "narrative_role": "tormented oracle burdened by foresight",
+    "rivalry_seeds": [
+      "Aria Siren",
+      "Coral Doll"
+    ],
+    "media_archetype_inspiration": "Jeanne from Bayonetta",
+    "skimpiness_weights": [
+      15,
+      25,
+      35,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Operatic virtuoso whose shattering notes break bodies and spirits alike, reveling in applause amid screams, but silences in vulnerable whispers when silenced.",
+    "ring_name": "Aria Siren",
+    "gender": "female",
+    "age": 29,
+    "origin": "Vienna, Austria",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": false,
+    "body_type": "elegant curvaceous with mesmerizing poise",
+    "power_tier": "contender",
+    "narrative_role": "aristocratic temptress scorning savagery",
+    "rivalry_seeds": [
+      "Jade Viper",
+      "Seren Huntress"
+    ],
+    "media_archetype_inspiration": "Ikaruga from Senran Kagura",
+    "skimpiness_weights": [
+      10,
+      20,
+      30,
+      40
+    ]
+  },
+  {
+    "concept_hook": "Venom-slick assassin who toys with slowing paralysis, grinning at panicked flails, but unleashes berserk frenzy when toxins backfire on her.",
+    "ring_name": "Jade Viper",
+    "gender": "female",
+    "age": 25,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Empress",
+    "has_supernatural": false,
+    "body_type": "supple hourglass with serpentine tattoos",
+    "power_tier": "gatekeeper",
+    "narrative_role": "street-hardened cartel climber",
+    "rivalry_seeds": [
+      "Cyber Empress",
+      "Nile Empress"
+    ],
+    "media_archetype_inspiration": "Talia al Ghul from Batman with Narcos cartel edge",
+    "skimpiness_weights": [
+      15,
+      30,
+      30,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Contortionist savant who redirects force flawlessly, giggling at foes' self-inflicted ruin, but freezes in doubt when patterns break.",
+    "ring_name": "Karma Prodigy",
+    "gender": "female",
+    "age": 20,
+    "origin": "Mumbai, India",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Doll",
+    "has_supernatural": false,
+    "body_type": "petite hyper-flexible with graceful limbs",
+    "power_tier": "prospect",
+    "narrative_role": "calculating underdog flipping the script",
+    "rivalry_seeds": [
+      "Cyber Empress",
+      "Rune Witch"
+    ],
+    "media_archetype_inspiration": "Yoruichi Shihouin from Bleach",
+    "skimpiness_weights": [
+      40,
+      35,
+      20,
+      5
+    ]
+  },
+  {
+    "concept_hook": "Wave-whisperer who drowns rivals in illusory riptides, laughing through the surf, but thrashes in silent panic when beached.",
+    "ring_name": "Coral Doll",
+    "gender": "female",
+    "age": 22,
+    "origin": "Sydney, Australia",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "tanned bikini-toned athletic",
+    "power_tier": "prospect",
+    "narrative_role": "laid-back mystic with turbulent depths",
+    "rivalry_seeds": [
+      "Rune Witch",
+      "Nile Empress"
+    ],
+    "media_archetype_inspiration": "Nami from One Piece",
+    "skimpiness_weights": [
+      20,
+      25,
+      30,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Pharaonic warlord who summons binding shades with imperious glee, pitying the unworthy as they shatter, yet crumbles inwardly when disobeyed.",
+    "ring_name": "Nile Empress",
+    "gender": "female",
+    "age": 34,
+    "origin": "Luxor, Egypt",
     "primary_archetype": "Empress",
     "secondary_archetype": "Huntress",
     "has_supernatural": true,
-    "body_type": "tall statuesque with commanding curves",
-    "power_tier": "champion",
-    "narrative_role": "Lone sovereign seeking a successor amid her growing isolation.",
+    "body_type": "regal hourglass with golden hieroglyphs",
+    "power_tier": "gatekeeper",
+    "narrative_role": "haughty dynast demanding fealty",
     "rivalry_seeds": [
-      "Shadow Prodigy",
-      "Neon Hybrid"
+      "Seren Huntress",
+      "Jade Viper"
     ],
-    "media_archetype_inspiration": "Sun Shang Xiang from Dynasty Warriors"
-  },
-  {
-    "concept_hook": "Unstable cyborg berserker overloading enhancements to tear through defenses.",
-    "ring_name": "Neon Hybrid",
-    "gender": "female",
-    "age": 28,
-    "origin": "Moscow, Russia",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Viper",
-    "has_supernatural": true,
-    "body_type": "sculpted cybernetic bombshell physique",
-    "power_tier": "contender",
-    "narrative_role": "Furious lab reject punishing creators through glorious, risky rampages.",
-    "rivalry_seeds": [
-      "Porcelain Doll",
-      "Iron Empress"
-    ],
-    "media_archetype_inspiration": "Motoko Kusanagi from Ghost in the Shell"
+    "media_archetype_inspiration": "Anck-su-namun from The Mummy",
+    "skimpiness_weights": [
+      25,
+      35,
+      25,
+      15
+    ]
   }
 ]

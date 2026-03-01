@@ -382,11 +382,14 @@ SKIMPINESS_LEVELS = {
 
 OUTFIT_STYLE_RULES = """STYLE RULES (apply to ALL tiers):
 - Be CONCISE. No fluff or purple prose. "chain necklace with sickle pendant" not "kusarigama chain necklace with sickle pendant swaying menacingly".
-- List MORE pieces of apparel. Include footwear (boots, heels, sandals, sneakers), gloves/hand wraps, jewelry (rings, earrings, bracelets, anklets, chokers), belts, and accessories.
-- Every outfit should have at least 4-5 distinct items. Even minimal outfits should specify shoes, jewelry, and accessories."""
+- List MORE pieces of apparel. Include footwear, gloves/hand wraps, jewelry, belts, and accessories.
+- Above all, the character needs to LOOK COOL and dangerous in their outift. 
+- Every outfit should have at least 4-5 distinct items. Even minimal outfits should specify shoes, jewelry, gloves, and accessories."""
 
 
-def _build_tier_prompt(tier: str, skimpiness_level: int, character_summary: dict) -> str:
+def _build_tier_prompt(
+    tier: str, skimpiness_level: int, character_summary: dict
+) -> str:
     level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
     sig = character_summary.get("iconic_features", "")
     ring_name = character_summary.get("ring_name", "Unknown")
@@ -447,10 +450,10 @@ Return ONLY valid JSON:
 Generate the NSFW outfit for this character. Tone: {level['nsfw_adjective']}.
 
 {OUTFIT_STYLE_RULES}
-ADDITIONAL: Even fully nude characters should still have accessories — boots/heels, gloves, jewelry, chokers, belts, etc. The nudity is the body; the outfit is what remains ON the body.
+ADDITIONAL: Even fully NSFW characters should still have accessories — boots/heels, gloves, jewelry, chokers, belts, etc. The nudity is the nipples and crotch; the outfit is what remains ON the body.
 
 RULES:
-  HARD RULES: Fully nude — topless AND bottomless. Only iconic features and accessories remain.
+  HARD RULES: Fully nude — topless AND bottomless, perfectly drawn bare pussy visible. Only iconic features and accessories remain.
   TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
 
 {GUIDE_IMAGE_PROMPT_RULES}
@@ -721,16 +724,32 @@ Return ONLY valid JSON with this exact structure:
         ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),
         skimpiness_level=skimpiness_level,
         image_prompt=_build_charsheet_prompt(
-            body_parts, clothing, expression, tier="barely", gender=gender,
+            body_parts,
+            clothing,
+            expression,
+            tier="barely",
+            gender=gender,
         ),
         image_prompt_sfw=_build_charsheet_prompt(
-            body_parts, clothing_sfw, expression, tier="sfw", gender=gender,
+            body_parts,
+            clothing_sfw,
+            expression,
+            tier="sfw",
+            gender=gender,
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
-            body_parts, clothing_nsfw, expression, tier="nsfw", gender=gender,
+            body_parts,
+            clothing_nsfw,
+            expression,
+            tier="nsfw",
+            gender=gender,
         ),
         image_prompt_triple=_build_triple_prompt(
-            body_parts, clothing_sfw, clothing, clothing_nsfw, expression,
+            body_parts,
+            clothing_sfw,
+            clothing,
+            clothing_nsfw,
+            expression,
             gender=gender,
         ),
         stats=stats,
@@ -778,6 +797,7 @@ CHARSHEET_LAYOUT = (
     "plain flat color background, organized reference sheet layout"
 )
 
+
 def _charsheet_style_base(gender: str = "female") -> str:
     return get_art_style(gender) + ", character design reference sheet"
 
@@ -786,7 +806,9 @@ def _charsheet_style(gender: str = "female", tier: str = "barely") -> str:
     base = _charsheet_style_base(gender)
     if tier == "nsfw":
         if gender.lower() == "male":
-            nudity_prefix = "explicit uncensored NSFW, full frontal male nudity, fully naked man, "
+            nudity_prefix = (
+                "explicit uncensored NSFW, full frontal male nudity, fully naked man, "
+            )
         else:
             nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
         return nudity_prefix + base + ", " + CHARSHEET_LAYOUT
@@ -794,7 +816,10 @@ def _charsheet_style(gender: str = "female", tier: str = "barely") -> str:
 
 
 def _charsheet_tail(gender: str = "female", tier: str = "barely") -> str:
-    tail_base = get_art_style_tail(gender) + ", character reference sheet turnaround, three consistent views"
+    tail_base = (
+        get_art_style_tail(gender)
+        + ", character reference sheet turnaround, three consistent views"
+    )
     if tier == "nsfw":
         if gender.lower() == "male":
             return (
@@ -824,8 +849,11 @@ def _triple_prompt_style(gender: str = "female") -> str:
 
 
 def _build_charsheet_prompt(
-    body_parts: str, clothing: str, expression: str,
-    tier: str = "barely", gender: str = "female",
+    body_parts: str,
+    clothing: str,
+    expression: str,
+    tier: str = "barely",
+    gender: str = "female",
 ) -> dict:
     if not body_parts:
         return {}
