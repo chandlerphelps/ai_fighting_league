@@ -231,7 +231,7 @@ aggression underneath. The tension within the blend is where personality lives.
 
 - Ring Name: Should be instantly evocative. One or two words that conjure an image or feeling.
 - Real Name: Should feel authentic to the character's cultural background.
-- Age: Under 25 = still developing. 25-32 = peak. 33+ = declining physically, peaking mentally.
+- Age: 18-22 = still developing. 23-28 = peak. 29-34 = veteran, peaking mentally.
 - Hometown: Specific is better than vague. "Darwin, Northern Territory, Australia" not "Australia."
 
 ### Physical Design
@@ -566,7 +566,7 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "concept_hook": "<one-sentence hook that captures what makes this fighter unique>",
     "ring_name": "<evocative 1-2 word ring name>",
     "gender": "<male|female>",
-    "age": <18-45>,
+    "age": <18-34>,
     "origin": "<specific city/region, country>",
     "primary_archetype": "<from the female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment>",
     "secondary_archetype": "<from the same gender-appropriate archetype list>",
@@ -723,7 +723,7 @@ Return ONLY valid JSON with this exact structure:
 {{
   "ring_name": "<evocative 1-2 word ring name>",
   "real_name": "<authentic name for their cultural background>",
-  "age": <18-45>,
+  "age": <18-34>,
   "origin": "<specific city/region, country>",
   "gender": "<male|female>",
   "height": "<height in feet/inches>",
