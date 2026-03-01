@@ -2,10 +2,9 @@ import json
 from dataclasses import asdict
 
 from app.models.fighter import (
-    Fighter, FightingStyle, PhysicalStats, CombatStats,
-    PsychologicalStats, SupernaturalStats, Record, Injury, Condition,
+    Fighter, Stats, Record, Injury, Condition,
 )
-from app.models.match import Match, MatchupAnalysis, MatchOutcome
+from app.models.match import Match, MatchupAnalysis, MatchOutcome, FightMoment
 from app.models.event import Event, EventMatch
 from app.models.world_state import WorldState, RivalryRecord
 
@@ -17,26 +16,13 @@ def test_fighter_roundtrip():
         real_name="John Smith",
         age=28,
         origin="Chicago, USA",
-        alignment="heel",
+        gender="male",
         height="6'2\"",
         weight="205 lbs",
         build="athletic",
         distinguishing_features="scar across left eye",
         ring_attire="black trunks with silver trim",
-        backstory="A former street fighter turned pro.",
-        personality_traits=["cunning", "ruthless"],
-        fears_quirks=["afraid of losing control"],
-        fighting_style=FightingStyle(
-            primary_style="boxing",
-            secondary_style="muay thai",
-            signature_move="Phantom Jab",
-            finishing_move="Shadow KO",
-            known_weaknesses=["weak ground game"],
-        ),
-        physical_stats=PhysicalStats(strength=75, speed=80, endurance=65, durability=70, recovery=60),
-        combat_stats=CombatStats(striking=85, grappling=45, defense=70, fight_iq=75, finishing_instinct=80),
-        psychological_stats=PsychologicalStats(aggression=70, composure=65, confidence=80, resilience=60, killer_instinct=75),
-        supernatural_stats=SupernaturalStats(),
+        stats=Stats(power=75, speed=80, technique=70, toughness=65, supernatural=0),
         record=Record(wins=5, losses=2, draws=0, kos=3, submissions=0),
         condition=Condition(health_status="healthy"),
         storyline_log=["Won debut fight by KO"],
@@ -52,8 +38,8 @@ def test_fighter_roundtrip():
 
     assert restored.id == fighter.id
     assert restored.ring_name == fighter.ring_name
-    assert restored.physical_stats.strength == 75
-    assert restored.combat_stats.striking == 85
+    assert restored.stats.power == 75
+    assert restored.stats.speed == 80
     assert restored.record.wins == 5
     assert restored.condition.health_status == "healthy"
     assert len(restored.storyline_log) == 1
@@ -62,11 +48,9 @@ def test_fighter_roundtrip():
 
 def test_fighter_total_core_stats():
     fighter = Fighter(
-        physical_stats=PhysicalStats(strength=60, speed=60, endurance=60, durability=60, recovery=60),
-        combat_stats=CombatStats(striking=60, grappling=60, defense=60, fight_iq=60, finishing_instinct=60),
-        psychological_stats=PsychologicalStats(aggression=60, composure=60, confidence=60, resilience=60, killer_instinct=60),
+        stats=Stats(power=60, speed=60, technique=60, toughness=60, supernatural=0),
     )
-    assert fighter.total_core_stats() == 900
+    assert fighter.total_core_stats() == 240
 
 
 def test_match_roundtrip():
@@ -81,8 +65,6 @@ def test_match_roundtrip():
         analysis=MatchupAnalysis(
             fighter1_win_prob=0.55,
             fighter2_win_prob=0.45,
-            fighter1_methods={"ko_tko": 0.4, "decision_unanimous": 0.6},
-            fighter2_methods={"submission": 0.5, "decision_split": 0.5},
             key_factors=["striking advantage", "ground game edge"],
         ),
         outcome=MatchOutcome(
@@ -93,7 +75,14 @@ def test_match_roundtrip():
             fighter1_performance="dominant",
             fighter2_performance="poor",
         ),
-        narrative="A thrilling fight...",
+        moments=[
+            FightMoment(
+                moment_number=1,
+                description="Fighter A lands right cross on Fighter B",
+                attacker_id="f_a",
+                action="right cross to the jaw",
+            ),
+        ],
     )
 
     data = asdict(match)
@@ -105,6 +94,8 @@ def test_match_roundtrip():
     assert restored.analysis.fighter1_win_prob == 0.55
     assert restored.outcome.winner_id == "f_a"
     assert restored.outcome.method == "ko_tko"
+    assert len(restored.moments) == 1
+    assert restored.moments[0].action == "right cross to the jaw"
 
 
 def test_event_roundtrip():
