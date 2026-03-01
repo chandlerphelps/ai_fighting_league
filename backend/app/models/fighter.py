@@ -72,6 +72,17 @@ class Condition:
 
 
 @dataclass
+class Move:
+    name: str = ""
+    description: str = ""
+    stat_affinity: str = ""
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Move":
+        return cls(**{k: v for k, v in d.items() if k in cls.__dataclass_fields__})
+
+
+@dataclass
 class Fighter:
     id: str = ""
     ring_name: str = ""
@@ -97,6 +108,7 @@ class Fighter:
     record: Record = field(default_factory=Record)
     condition: Condition = field(default_factory=Condition)
     storyline_log: list[str] = field(default_factory=list)
+    moves: list[Move] = field(default_factory=list)
     rivalries: list[str] = field(default_factory=list)
     last_fight_date: Optional[str] = None
     ranking: Optional[int] = None
@@ -134,6 +146,7 @@ class Fighter:
             record=Record.from_dict(d.get("record", {})),
             condition=Condition.from_dict(d.get("condition", {})),
             storyline_log=d.get("storyline_log", []),
+            moves=[Move.from_dict(m) for m in d.get("moves", [])],
             rivalries=d.get("rivalries", []),
             last_fight_date=d.get("last_fight_date"),
             ranking=d.get("ranking"),

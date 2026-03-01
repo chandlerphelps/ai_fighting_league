@@ -40,6 +40,12 @@ export interface CharsheetPrompt {
   full_prompt: string
 }
 
+export interface Move {
+  name: string
+  description: string
+  stat_affinity: string
+}
+
 export interface Fighter {
   id: string
   ring_name: string
@@ -65,6 +71,7 @@ export interface Fighter {
   record: Record
   condition: Condition
   storyline_log: string[]
+  moves?: Move[]
   rivalries: string[]
   last_fight_date: string | null
   ranking: number | null

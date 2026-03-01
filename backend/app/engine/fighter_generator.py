@@ -351,14 +351,14 @@ SKIMPINESS_LEVELS = {
         "barely_skin_pct": "75-85",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
         "nsfw_adjective": "Tease",
-        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast - teasing sensually.",
+        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast or running her hands along her body - teasing sensually.",
         "nsfw_description": "Teasing, playful energy. Anatomy on display with flirty self-touching.",
         "nsfw_nudity_level": "full",
     },
     4: {
         "sfw_label": "Daring",
-        "sfw_skin_pct": "70-85",
-        "sfw_hard_rules": "No nipples, no genitalia. Sideboob and cameltoe hints are OK at this level.",
+        "sfw_skin_pct": "60-75",
+        "sfw_hard_rules": "No nipples, no genitalia. Sideboob hints are OK at this level.",
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "99",
@@ -455,19 +455,18 @@ Return ONLY valid JSON:
         if nudity_level == "topless":
             additional = (
                 "ADDITIONAL: The character is topless but keeps bottoms on. "
+                "The bottoms (if they can be called that) must be ultra-sexy - tape, jewelry, insanely tiny triangle bottom gstring, etc"
                 "Still include accessories — boots/heels, gloves, jewelry, chokers, belts, etc. "
-                "The image_prompt_clothing_nsfw MUST include the bottom garment plus accessories."
+                "The image_prompt_clothing_nsfw MUST include the sexy bottom garment plus accessories."
             )
-            attire_hint = "topless plus bottom garment and each remaining accessory listed plainly"
-            clothing_hint = "bottom garment plus accessories"
+            attire_hint = "topless plus ultra-sexy bottom and each remaining accessory listed plainly"
+            clothing_hint = "sexy bottom garment plus accessories"
             image_prompt_rules = (
                 "## IMAGE PROMPT RULES — FOLLOW EXACTLY\n\n"
                 "image_prompt_clothing_nsfw rules:\n"
                 "- Keep it short\n"
                 "- Always start with the remaining iconic features\n"
-                "- This is Level 1 (topless only): include the bottom garment. Examples:\n"
-                '  - "thigh-high boots, choker, leather shorts"\n'
-                '  - "combat boots, micro skirt, arm wraps"\n'
+                "- This is Level 1 (topless only): include the sexy bottom garment."
                 "- The charsheet prompt automatically adds the topless framing"
             )
         else:
@@ -483,9 +482,7 @@ Return ONLY valid JSON:
                 "image_prompt_clothing_nsfw rules:\n"
                 "- Keep it short\n"
                 "- Always start with the remaining iconic features\n"
-                "- This is Levels 2-4 (fully nude): only accessories remain. Examples:\n"
-                '  - "thigh-high boots, choker"\n'
-                '  - "thigh-high boots, choker, completely topless and bottomless"\n'
+                "- This is Levels 2-4 (fully nude): only accessories remain."
                 "- The charsheet prompt automatically adds the nudity framing"
             )
 
