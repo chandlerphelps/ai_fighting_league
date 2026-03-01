@@ -721,7 +721,7 @@ Return ONLY valid JSON with this exact structure:
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
   "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
   "personality": "<max 10 words — their vibe and attitude, e.g. 'cold, calculating predator who enjoys breaking opponents slowly'>",
-  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers>",
+  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
   "stats": {{
@@ -869,7 +869,7 @@ def _charsheet_style(
                 "explicit uncensored NSFW, topless woman, bare breasts visible, "
             )
         else:
-            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
+            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, perfectly drawn bare pussy visible, "
         return nudity_prefix + base + ", " + CHARSHEET_LAYOUT
     return base + ", " + CHARSHEET_LAYOUT
 
