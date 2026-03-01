@@ -33,6 +33,18 @@ export async function loadAllFighters(): Promise<Fighter[]> {
   return fighters
 }
 
+export async function loadAllFighterFiles(): Promise<Fighter[]> {
+  const names = await fetchJson<string[]>('/data/fighters')
+  if (!names) return []
+
+  const fighters: Fighter[] = []
+  for (const name of names) {
+    const fighter = await fetchJson<Fighter>(`/data/fighters/${name}.json`)
+    if (fighter) fighters.push(fighter)
+  }
+  return fighters
+}
+
 export async function loadMatch(id: string): Promise<Match | null> {
   return fetchJson<Match>(`/data/matches/${id}.json`)
 }

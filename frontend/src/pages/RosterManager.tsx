@@ -4,8 +4,8 @@ import { colors, fonts, fontSizes, spacing, withAlpha } from '../design-system'
 import StatBar from '../components/StatBar'
 import FighterPortrait from '../components/FighterPortrait'
 import type { Fighter } from '../types/fighter'
+import { loadAllFighterFiles } from '../lib/data'
 import {
-  fetchAllFighters,
   updateFighter,
   deleteFighter,
   generateFighter,
@@ -47,7 +47,7 @@ export default function RosterManager() {
   const loadFighters = useCallback(async () => {
     try {
       setLoading(true)
-      const data = await fetchAllFighters()
+      const data = await loadAllFighterFiles()
       setFighters(data)
       setError(null)
     } catch (err) {
