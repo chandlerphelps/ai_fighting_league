@@ -5,6 +5,7 @@ import StatBar from '../components/StatBar'
 import FighterPortrait from '../components/FighterPortrait'
 import type { Fighter } from '../types/fighter'
 import { loadAllFighterFiles } from '../lib/data'
+import { fighterImagePath } from '../lib/images'
 import {
   updateFighter,
   deleteFighter,
@@ -13,7 +14,6 @@ import {
   regenerateOutfits,
   regenerateImages,
   pollUntilDone,
-  fighterImageUrl,
   type GenerateOptions,
   type TaskResponse,
 } from '../lib/api'
@@ -397,7 +397,7 @@ export default function RosterManager() {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                    <FighterImage fighterId={fighter.id} tier={imageTier} />
+                    <FighterImage fighterId={fighter.id} ringName={fighter.ring_name} tier={imageTier} />
                   </div>
                 </div>
               )}
@@ -428,10 +428,10 @@ export default function RosterManager() {
   )
 }
 
-function FighterImage({ fighterId, tier }: { fighterId: string; tier: string }) {
+function FighterImage({ fighterId, ringName, tier }: { fighterId: string; ringName: string; tier: string }) {
   const [failed, setFailed] = useState(false)
   const [key, setKey] = useState(0)
-  const url = fighterImageUrl(fighterId, tier)
+  const url = fighterImagePath(fighterId, ringName, tier)
 
   useEffect(() => {
     setFailed(false)

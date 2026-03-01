@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { colors, fontSizes, withAlpha } from '../design-system'
+import { fighterImagePath } from '../lib/images'
 
 interface FighterPortraitProps {
   fighterId: string
@@ -37,7 +38,7 @@ export default function FighterPortrait({ fighterId, name, size = 48 }: FighterP
 
   return (
     <img
-      src={`/fighters/${fighterId}.png`}
+      src={fighterImagePath(fighterId, name, 'sfw')}
       alt={name}
       onError={() => setFailed(true)}
       style={{

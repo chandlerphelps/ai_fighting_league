@@ -11,7 +11,15 @@ function serveDataPlugin(): Plugin {
       server.middlewares.use('/data', (req, res, next) => {
         const filePath = path.join(dataDir, req.url || '')
         if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-          res.setHeader('Content-Type', 'application/json')
+          const ext = path.extname(filePath).toLowerCase()
+          const mimeTypes: Record<string, string> = {
+            '.json': 'application/json',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.webp': 'image/webp',
+          }
+          res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream')
           fs.createReadStream(filePath).pipe(res)
         } else if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
           const files = fs.readdirSync(filePath)
