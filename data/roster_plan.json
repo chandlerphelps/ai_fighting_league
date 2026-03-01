@@ -1,21 +1,69 @@
 [
   {
-    "concept_hook": "Rio's samba seductress provokes foes into reckless attacks with teasing dances and whispers, then counters with joint-shattering precision, thrilled by their humiliated fury.",
+    "concept_hook": "Hypnotic Brazilian dancer who lures larger foes into trances with her siren song, then breaks them with gleeful, intimate grapples.",
     "ring_name": "Samba Siren",
     "gender": "female",
     "age": 26,
     "origin": "Rio de Janeiro, Brazil",
     "primary_archetype": "Siren",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": true,
+    "body_type": "voluptuous latina curves",
+    "power_tier": "contender",
+    "narrative_role": "flirtatious manipulator who weaponizes desire",
+    "rivalry_seeds": [
+      "Venom Kiss",
+      "Amazon Huntress"
+    ],
+    "media_archetype_inspiration": "Morrigan Aensland from Darkstalkers",
+    "skimpiness_weights": [
+      0,
+      10,
+      40,
+      50
+    ]
+  },
+  {
+    "concept_hook": "Romanian hexer who curses opponents with wracking pain, savoring their screams while tormented by her own cursed lineage.",
+    "ring_name": "Hex Vixen",
+    "gender": "female",
+    "age": 29,
+    "origin": "Transylvania, Romania",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Empress",
+    "has_supernatural": true,
+    "body_type": "pale gothic hourglass",
+    "power_tier": "gatekeeper",
+    "narrative_role": "brooding sorceress haunted by dark power",
+    "rivalry_seeds": [
+      "Jade Empress",
+      "Mutant Experiment"
+    ],
+    "media_archetype_inspiration": "Bayonetta from Bayonetta",
+    "skimpiness_weights": [
+      10,
+      20,
+      30,
+      40
+    ]
+  },
+  {
+    "concept_hook": "Thai poisoner who injects paralytics via kisses and needles, laughing hysterically as victims twitch in agony.",
+    "ring_name": "Venom Kiss",
+    "gender": "female",
+    "age": 24,
+    "origin": "Bangkok, Thailand",
+    "primary_archetype": "Viper",
     "secondary_archetype": "Prodigy",
     "has_supernatural": true,
-    "body_type": "curvaceous flexible latina with sun-kissed skin and hypnotic hips",
-    "power_tier": "contender",
-    "narrative_role": "Crowd-hypnotizing performer who turns fights into erotic spectacles",
+    "body_type": "lithe asian predator",
+    "power_tier": "prospect",
+    "narrative_role": "sly upstart who plays with her food",
     "rivalry_seeds": [
-      "Cobalt Viper",
-      "Neon Prodigy"
+      "Samba Siren",
+      "Silk Prodigy"
     ],
-    "media_archetype_inspiration": "Mileena's seductive dancer assassin from Mortal Kombat",
+    "media_archetype_inspiration": "Ivy Valentine from Soulcalibur",
     "skimpiness_weights": [
       5,
       15,
@@ -24,170 +72,122 @@
     ]
   },
   {
-    "concept_hook": "Seoul's taekwondo prodigy anticipates every move with genius-level foresight, dismantling foes clinically but shattering inwardly when seduced or mind-gamed.",
-    "ring_name": "Neon Prodigy",
+    "concept_hook": "Korean submission prodigy who methodically cranks joints until foes tap or snap, driven by cold perfectionism.",
+    "ring_name": "Silk Prodigy",
     "gender": "female",
-    "age": 19,
+    "age": 21,
     "origin": "Seoul, South Korea",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Huntress",
+    "secondary_archetype": "Doll",
     "has_supernatural": false,
-    "body_type": "petite wiry toned with sharp asian features and endless agility",
-    "power_tier": "champion",
-    "narrative_role": "Rising wunderkind prodigy defying veterans with pure skill",
+    "body_type": "petite toned gymnast",
+    "power_tier": "prospect",
+    "narrative_role": "ambitious technician hungry for validation",
     "rivalry_seeds": [
-      "Samba Siren",
-      "Scarlet Empress"
+      "Porcelain Doll",
+      "Venom Kiss"
     ],
-    "media_archetype_inspiration": "Yoruichi Shihouin speed prodigy from Bleach",
+    "media_archetype_inspiration": "Juri Han from Street Fighter",
     "skimpiness_weights": [
       25,
-      45,
-      20,
+      40,
+      25,
       10
     ]
   },
   {
-    "concept_hook": "Moscow's ballerina contortionist snaps bones like twigs in graceful spins, her doll-like poise cracking only when cornered and overwhelmed.",
-    "ring_name": "Crystal Doll",
+    "concept_hook": "British cyber-doll who dismembers with precise blades, her emotionless facade cracking with flashes of rage.",
+    "ring_name": "Porcelain Doll",
     "gender": "female",
-    "age": 22,
-    "origin": "Moscow, Russia",
+    "age": 23,
+    "origin": "London, UK",
     "primary_archetype": "Doll",
-    "secondary_archetype": "Viper",
-    "has_supernatural": false,
-    "body_type": "slender porcelain-fragile with icy blonde hair and deceptive flexibility",
-    "power_tier": "prospect",
-    "narrative_role": "Deceptively fragile underdog hiding lethal acrobatics",
-    "rivalry_seeds": [
-      "Phantom Huntress",
-      "Twilight Witch"
-    ],
-    "media_archetype_inspiration": "Suigintou killer doll from Rozen Maiden",
-    "skimpiness_weights": [
-      10,
-      30,
-      40,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Rome's gladiatorial queen crushes ribs with regal stomps and whips, her composure fracturing into vengeful rage when outmaneuvered by inferiors.",
-    "ring_name": "Scarlet Empress",
-    "gender": "female",
-    "age": 35,
-    "origin": "Rome, Italy",
-    "primary_archetype": "Empress",
     "secondary_archetype": "Siren",
-    "has_supernatural": true,
-    "body_type": "statuesque commanding curves with olive skin and fiery red hair",
-    "power_tier": "champion",
-    "narrative_role": "Dominant ruler enforcing hierarchy through brutal spectacle",
+    "has_supernatural": false,
+    "body_type": "flawless synthetic beauty",
+    "power_tier": "gatekeeper",
+    "narrative_role": "mechanical enigma awakening to fury",
     "rivalry_seeds": [
-      "Neon Prodigy",
-      "Cobalt Viper"
+      "Silk Prodigy",
+      "Mutant Experiment"
     ],
-    "media_archetype_inspiration": "Red Sonja warrior empress from Conan comics",
+    "media_archetype_inspiration": "2B from Nier: Automata",
     "skimpiness_weights": [
-      10,
+      20,
       30,
-      40,
+      30,
       20
     ]
   },
   {
-    "concept_hook": "Manchester's stealth tracker ambushes with clawing takedowns from shadows, her predatory calm turning to feral snarls when prey slips her grasp.",
-    "ring_name": "Phantom Huntress",
+    "concept_hook": "Brazilian tracker who spears vital organs with primal fury, howling in ecstasy over the hunt but weeping for the fallen.",
+    "ring_name": "Amazon Huntress",
     "gender": "female",
-    "age": 29,
-    "origin": "Manchester, England, UK",
+    "age": 27,
+    "origin": "Manaus, Brazil",
     "primary_archetype": "Huntress",
     "secondary_archetype": "Experiment",
     "has_supernatural": true,
-    "body_type": "lean athletic predator with pale skin and piercing green eyes",
-    "power_tier": "gatekeeper",
-    "narrative_role": "Silent enforcer punishing overconfident showoffs",
+    "body_type": "bronzed athletic warrior",
+    "power_tier": "contender",
+    "narrative_role": "feral guardian torn by bloodlust",
     "rivalry_seeds": [
-      "Crystal Doll",
-      "Neon Experiment"
+      "Samba Siren",
+      "Jade Empress"
     ],
-    "media_archetype_inspiration": "Valke huntress from Apex Legends",
+    "media_archetype_inspiration": "Aela the Huntress from Skyrim",
     "skimpiness_weights": [
-      20,
-      40,
+      10,
       25,
+      40,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Chinese chi empress who pulverizes bones with imperial strikes, her arrogance masking terror of vulnerability.",
+    "ring_name": "Jade Empress",
+    "gender": "female",
+    "age": 32,
+    "origin": "Beijing, China",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "regal statuesque figure",
+    "power_tier": "champion",
+    "narrative_role": "domineering champion defending her throne",
+    "rivalry_seeds": [
+      "Hex Vixen",
+      "Amazon Huntress"
+    ],
+    "media_archetype_inspiration": "Lady Shiva from DC Comics",
+    "skimpiness_weights": [
+      15,
+      40,
+      30,
       15
     ]
   },
   {
-    "concept_hook": "Mexico City's chemist injects paralytics mid-grapple before throttling victims slowly, her sadistic glee fading to paranoia under sustained assault.",
-    "ring_name": "Cobalt Viper",
+    "concept_hook": "LA gene-spliced freak who mutates limbs to rend flesh, thriving on the exquisite pain of her unstable changes.",
+    "ring_name": "Mutant Experiment",
     "gender": "female",
-    "age": 31,
-    "origin": "Mexico City, Mexico",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Witch",
+    "age": 25,
+    "origin": "Los Angeles, USA",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Viper",
     "has_supernatural": true,
-    "body_type": "sinuous curvaceous with bronzed latina skin and hypnotic gaze",
-    "power_tier": "contender",
-    "narrative_role": "Treacherous opportunist sowing distrust in the roster",
+    "body_type": "exotically enhanced curves",
+    "power_tier": "gatekeeper",
+    "narrative_role": "chaotic wildcard embracing her monstrosity",
     "rivalry_seeds": [
-      "Samba Siren",
-      "Scarlet Empress"
+      "Hex Vixen",
+      "Porcelain Doll"
     ],
-    "media_archetype_inspiration": "Taskmaster's poison femme fatale from G.I. Joe",
+    "media_archetype_inspiration": "Mystique from X-Men",
     "skimpiness_weights": [
       5,
-      15,
-      40,
-      40
-    ]
-  },
-  {
-    "concept_hook": "Bangkok's curse chanter hexes limbs to seize up before shredding with spectral claws, her mystical detachment giving way to desperate chants when grounded.",
-    "ring_name": "Twilight Witch",
-    "gender": "female",
-    "age": 33,
-    "origin": "Bangkok, Thailand",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Doll",
-    "has_supernatural": true,
-    "body_type": "ethereal graceful with exotic thai features and flowing dark hair",
-    "power_tier": "gatekeeper",
-    "narrative_role": "Mysterious harbinger weaving rivalries into curses",
-    "rivalry_seeds": [
-      "Crystal Doll",
-      "Neon Experiment"
-    ],
-    "media_archetype_inspiration": "Bayonetta's stylish witch from Bayonetta games",
-    "skimpiness_weights": [
-      10,
       20,
-      30,
-      40
-    ]
-  },
-  {
-    "concept_hook": "Toronto's gene-spliced hybrid surges with feral strength bursts to rend flesh, her clinical self-control eroding into pained roars when systems overload.",
-    "ring_name": "Neon Experiment",
-    "gender": "female",
-    "age": 24,
-    "origin": "Toronto, Canada",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": true,
-    "body_type": "perfectly sculpted athletic with enhanced glowing veins and mixed heritage allure",
-    "power_tier": "contender",
-    "narrative_role": "Unstable wildcard threatening roster stability",
-    "rivalry_seeds": [
-      "Phantom Huntress",
-      "Twilight Witch"
-    ],
-    "media_archetype_inspiration": "Nemesis hybrid experiment from Resident Evil",
-    "skimpiness_weights": [
-      0,
-      20,
-      40,
+      35,
       40
     ]
   }

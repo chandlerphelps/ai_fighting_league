@@ -173,7 +173,7 @@ def generate_charsheet_images(
 
     if triple_prompt:
         filename = f"{base}_triple.png"
-        jobs.append(("triple", triple_prompt, "16:9", output_dir / filename, filename))
+        jobs.append(("triple", triple_prompt, "4:3", output_dir / filename, filename))
 
     def _gen_and_save(job):
         label, prompt, aspect, save_path, filename = job

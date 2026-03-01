@@ -365,10 +365,10 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "95-99",
-        "barely_guidance": "Extreme — nipple tape and a tiny strip over the crotch would qualify. Only the absolute anatomical minimums are covered. Body chains, adhesive strips, micro pasties, or paint standing in for actual clothing.",
+        "barely_guidance": "Extreme — nipple tape and a tiny strip over the crotch would qualify. Only the absolute anatomical minimums are covered. No actual clothing allowed, no panties. Body chains, adhesive strips, micro pasties, or paint standing in for actual clothing.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
-        "nsfw_description": "Maximum explicit posing — spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
+        "nsfw_description": "Maximum explicit posing — Erotic toys like butt plugs or insertables encouraged. Pierced nipples or clit is allowed. Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
         "nsfw_nudity_level": "full",
     },
 }
@@ -848,12 +848,13 @@ def _extract_stats(data: dict, has_supernatural: bool, config: Config) -> Stats:
 
 
 CHARSHEET_LAYOUT = (
-    "character model sheet, character reference sheet turnaround, "
+    "character model sheet, character reference sheet, "
     "three full-body views of the exact same character side by side: "
-    "front-facing view on the left, three-quarter angle view in the center, "
+    "front-facing slightly angled view on the left, "
+    "personality pose in the center, "
     "rear view on the right, "
-    "consistent pose and outfit across all three views, "
-    "full body head to toe visible in each panel, standing tall at full height, "
+    "consistent outfit across all three views, "
+    "full body head to toe visible in each panel, "
     "plain flat color background, organized reference sheet layout"
 )
 
@@ -878,9 +879,9 @@ def _charsheet_style(
         elif skimpiness_level == 2:
             nudity_prefix = "explicit uncensored NSFW, topless woman, bare breasts visible, pussy visible, "
         elif skimpiness_level == 3:
-            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, playful teasing pose, hand near hip, flirty energy, "
+            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
         else:
-            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, legs spread, fingers spreading pussy, explicit posing, erotic emphasis, arched back, orgasmic"
+            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
         return nudity_prefix + base + ", " + CHARSHEET_LAYOUT
     return base + ", " + CHARSHEET_LAYOUT
 
@@ -890,39 +891,31 @@ def _charsheet_tail(
 ) -> str:
     tail_base = (
         get_art_style_tail(gender)
-        + ", character reference sheet turnaround, three consistent views"
+        + ", character reference sheet, three consistent views"
     )
     if tier == "nsfw":
         if gender.lower() == "male":
             return (
                 get_art_style_tail(gender) + ", "
                 "explicit full frontal male nudity, completely naked, muscular physique fully visible, "
-                "character reference sheet turnaround, three consistent views"
+                "character reference sheet, three consistent views"
             )
         if skimpiness_level == 1:
             return (
                 get_art_style_tail(gender) + ", "
                 "topless female nudity, bare breasts visible, "
-                "character reference sheet turnaround, three consistent views"
+                "character reference sheet, three consistent views"
             )
         if skimpiness_level == 2:
             return (
                 get_art_style_tail(gender) + ", "
                 "topless female nudity, bare breasts visible, perfectly drawn bare pussy visible, "
-                "character reference sheet turnaround, three consistent views"
-            )
-        if skimpiness_level == 3:
-            return (
-                get_art_style_tail(gender) + ", "
-                "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
-                "playful teasing pose, flirty self-touching, "
-                "character reference sheet turnaround, three consistent views"
+                "character reference sheet, three consistent views"
             )
         return (
             get_art_style_tail(gender) + ", "
             "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
-            "legs spread apart, explicit erotic posing, genitalia emphasis, "
-            "character reference sheet turnaround, three consistent views"
+            "character reference sheet, three consistent views"
         )
     return tail_base
 
@@ -966,49 +959,51 @@ def _build_charsheet_prompt(
                 if clothing
                 else "topless, bare breasts"
             )
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, elegant artistic pose, classical painting energy"
         elif skimpiness_level == 2:
             clothing_part = (
                 f"topless, bare breasts, pussy visible, {clothing}"
                 if clothing
                 else "topless, bare breasts, pussy visible"
             )
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, confident pin-up pose, hip cocked"
         elif skimpiness_level == 3:
             clothing_part = (
-                f"completely naked except {clothing}, playful teasing pose"
+                f"completely naked except {clothing}"
                 if clothing
-                else "completely naked, playful teasing pose"
+                else "completely naked"
             )
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, playful teasing pose, hand near hip, flirty self-touching"
         else:
             clothing_part = (
-                f"completely naked except {clothing}, legs spread, explicit posing"
+                f"completely naked except {clothing}"
                 if clothing
-                else "completely naked, legs spread, explicit posing"
+                else "completely naked"
             )
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, e.g.: legs spread, fingers spreading pussy, explicit posing, erotic emphasis, arched back, orgasmic, from behind spreading cheeks"
     else:
         clothing_part = clothing
+        center_pose = (
+            f"center personality pose: {body_parts}, {clothing_part}, dynamic signature pose showing character attitude"
+            if clothing_part
+            else f"center personality pose: {body_parts}, dynamic signature pose showing character attitude"
+        )
 
     front_view = (
-        f"front view: {body_parts}, {clothing_part}"
+        f"front slightly angled view standing tall: {body_parts}, {clothing_part}"
         if clothing_part
-        else f"front view: {body_parts}"
-    )
-    three_quarter_view = (
-        f"three-quarter angle view: {body_parts}, {clothing_part}"
-        if clothing_part
-        else f"three-quarter angle view: {body_parts}"
+        else f"front slightly angled view standing tall: {body_parts}"
     )
     back_view = (
-        f"rear view: {body_parts}, {clothing_part}"
+        f"rear view standing tall: {body_parts}, {clothing_part}"
         if clothing_part
-        else f"rear view: {body_parts}"
+        else f"rear view standing tall: {body_parts}"
     )
 
     tail = _charsheet_tail(gender, tier, skimpiness_level)
 
     full = ", ".join(
-        p
-        for p in [style, front_view, three_quarter_view, back_view, expression, tail]
-        if p
+        p for p in [style, front_view, center_pose, back_view, expression, tail] if p
     )
     return {
         "style": style,
@@ -1016,7 +1011,7 @@ def _build_charsheet_prompt(
         "body_parts": body_parts,
         "clothing": clothing_part,
         "front_view": front_view,
-        "three_quarter_view": three_quarter_view,
+        "center_pose": center_pose,
         "back_view": back_view,
         "expression": expression,
         "full_prompt": full,
