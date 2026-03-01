@@ -1,4 +1,5 @@
 import json
+import random
 import uuid
 
 from app.config import Config
@@ -476,7 +477,7 @@ ROSTER BALANCE CONSTRAINTS:
 - Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
-- Skimpiness: assign each fighter a skimpiness_level (1-4) based on personality. A Siren or Doll might be 3-4, a Prodigy or Huntress might be 1-2, an Empress might be 2-3. Vary across the roster — not everyone should be the same level.
+- Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. A Siren might weight heavily toward 3-4, a Prodigy toward 1-2, an Empress toward 2-3. The 4 weights must sum to 100.
 
 Return ONLY valid JSON — an array of {roster_size} objects with this structure:
 [
@@ -494,7 +495,7 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "narrative_role": "<what they bring to the story>",
     "rivalry_seeds": ["<ring_name of 1-2 other fighters in this plan>"],
     "media_archetype_inspiration": "<what popular media archetype this draws from>",
-    "skimpiness_level": <1-4>
+    "skimpiness_weights": [<level1_pct>, <level2_pct>, <level3_pct>, <level4_pct>]
   }}
 ]"""
 
@@ -522,6 +523,17 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     return result
 
 
+def _roll_skimpiness(weights: list[int] | None) -> int:
+    if not weights or len(weights) != 4:
+        weights = [15, 35, 35, 15]
+    total = sum(weights)
+    if total <= 0:
+        weights = [15, 35, 35, 15]
+        total = 100
+    normalized = [w / total for w in weights]
+    return random.choices([1, 2, 3, 4], weights=normalized, k=1)[0]
+
+
 def generate_fighter(
     config: Config,
     archetype: str = None,
@@ -539,10 +551,10 @@ def generate_fighter(
         )
         has_supernatural = roster_plan_entry.get("has_supernatural", False)
         archetype = roster_plan_entry.get("primary_archetype", archetype)
-        skimpiness_level = roster_plan_entry.get("skimpiness_level", 2)
+        skimpiness_level = _roll_skimpiness(roster_plan_entry.get("skimpiness_weights"))
     else:
         blueprint_text = ""
-        skimpiness_level = 2
+        skimpiness_level = _roll_skimpiness(None)
 
     supernatural_instruction = ""
     if has_supernatural:
