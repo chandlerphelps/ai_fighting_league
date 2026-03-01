@@ -705,8 +705,7 @@ function MoveImage({ fighterId, ringName, moveIndex, tier, version = 0 }: {
   const [failed, setFailed] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
   const [key, setKey] = useState(0)
-  const moveTier = tier === 'barely' ? 'sfw' : tier
-  const url = `${moveImagePath(fighterId, ringName, moveIndex, moveTier)}?v=${version}`
+  const url = `${moveImagePath(fighterId, ringName, moveIndex, tier)}?v=${version}`
 
   useEffect(() => {
     setFailed(false)
@@ -783,7 +782,6 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
   busy: boolean
 }) {
   const moves = fighter.moves || []
-  const moveTier = tier === 'barely' ? 'sfw' : tier
 
   if (moves.length === 0) {
     return (
@@ -808,7 +806,7 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
         gap: spacing.lg,
       }}>
         {moves.map((move, index) => {
-          const imgUrl = `${moveImagePath(fighter.id, fighter.ring_name, index, moveTier)}?v=${imageVersion}`
+          const imgUrl = `${moveImagePath(fighter.id, fighter.ring_name, index, tier)}?v=${imageVersion}`
           return (
             <div key={index}>
               <div style={{ position: 'relative' }}>
@@ -823,9 +821,9 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
                   onExpand={() => onExpand(
                     imgUrl,
                     `${fighter.ring_name} — ${move.name}`,
-                    () => onRedoMove(index, moveTier),
+                    () => onRedoMove(index, tier),
                   )}
-                  onRedo={busy ? undefined : () => onRedoMove(index, moveTier)}
+                  onRedo={busy ? undefined : () => onRedoMove(index, tier)}
                 />
               </div>
               <div style={{
