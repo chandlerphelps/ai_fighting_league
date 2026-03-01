@@ -395,11 +395,15 @@ def _build_tier_prompt(
     else:
         effective_skimpiness = skimpiness_level
 
-    char_context = f"""CHARACTER: {ring_name}
+    char_base = f"""CHARACTER: {ring_name}
 Iconic features (MUST be visible in every tier): {sig}
 Body: {body_parts}
-Expression: {expression}
-SKIMPINESS LEVEL: {effective_skimpiness} of 8"""
+Expression: {expression}"""
+
+    if tier == "nsfw":
+        char_context = char_base
+    else:
+        char_context = char_base + f"\nSKIMPINESS LEVEL: {effective_skimpiness} of 8"
 
     if tier == "sfw":
         return f"""{char_context}
