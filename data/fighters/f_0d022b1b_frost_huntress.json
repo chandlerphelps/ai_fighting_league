@@ -73,5 +73,25 @@
   "storyline_log": [],
   "rivalries": [],
   "last_fight_date": null,
-  "ranking": null
+  "ranking": null,
+  "moves": [
+    {
+      "name": "Frost Thread",
+      "description": "Springs backward off the balls of both feet while whipping both wrists forward, releasing twin wires that arc through the air in a horizontal X pattern at chest height.",
+      "image_snapshot": "Leaning backward at a 45-degree angle, weight on both balls of feet, both arms extended forward with wrists cocked back, wires streaming outward in an X shape. Motion blur on both wrists and wires.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Predator Spiral",
+      "description": "Leaps into a full front flip, tucking both knees to chest mid-rotation before extending into a horizontal axe-kick with the right leg while the left leg remains extended backward.",
+      "image_snapshot": "Mid-air, body upside-down and fully horizontal, right leg extended straight down at a 90-degree angle from torso, left leg extended straight backward, both arms spread wide. Motion blur on right leg.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Snap Freeze",
+      "description": "Drives the right fist straight forward while pivoting on the left foot, shifting weight aggressively forward and snapping the torso from a twisted stance to fully squared.",
+      "image_snapshot": "Deep lunge on left leg, right fist extended straight forward at shoulder height, left arm pulled back to hip, torso twisted 45 degrees. Speed lines on right fist.",
+      "stat_affinity": "technique"
+    }
+  ]
 }

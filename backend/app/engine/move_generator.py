@@ -40,18 +40,32 @@ CHARACTER:
 Design exactly 3 fighting moves for this character. Rules:
 - Each move must feel unique to THIS character's body, personality, and strongest stats
 - Moves are strikes, kicks, acrobatic attacks, or supernatural abilities — never holds or grapples
-- Visually specific: describe what the body does, the motion, what connects
 - Names: 2-4 words, evocative and memorable (fighting game style)
-- Descriptions: 1-2 sentences describing exactly what the move LOOKS like in action
 - stat_affinity: which stat the move leans on most (power, speed, technique, or supernatural)
 - Lean into the character's highest stats and defining traits
 - All three moves should feel different from each other in rhythm and visual impact
+
+DESCRIPTION: 1-2 sentences explaining how the move works — the full choreography from start to finish. No metaphors or poetry, just plain physical action.
+
+IMAGE_SNAPSHOT — THIS IS CRITICAL:
+- This is a SINGLE FROZEN MOMENT for an artist to draw. One frame, not a sequence.
+- Describe the exact body position: where each limb is, weight distribution, angle of torso, head position
+- End with which body parts have motion blur or speed lines (e.g. "motion blur on right leg and both fists")
+- The fighter is ALONE — no opponent in the image
+- BANNED: metaphors, similes, poetry, "like a ___", emotional descriptors, atmosphere words
+- BANNED: any reference to an opponent, target, or impact
+- BANNED: sequences or transitions — no "then", "before", "after", "lands in"
+- GOOD example: "Mid-air, body horizontal, right leg fully extended forward at head height, left leg tucked under, arms swept back behind torso. Motion blur on right leg."
+- GOOD example: "Deep lunge on left leg, right fist extended straight forward at shoulder height, left arm pulled back to hip, torso twisted 45 degrees. Speed lines on right fist."
+- BAD example: "Leaps forward off one foot, drives both fists downward. Lands in a low crouch." (this is a sequence, not a snapshot)
+- Keep it to 1-2 sentences — a single freeze-frame plus motion indicators.
 
 Return ONLY valid JSON — an array of exactly 3 objects:
 [
   {{
     "name": "<2-4 word move name>",
-    "description": "<1-2 sentences: what the move looks like in action>",
+    "description": "<1-2 sentences: how the move works, full choreography>",
+    "image_snapshot": "<1 sentence: single frozen moment, exact body position for an artist>",
     "stat_affinity": "<power|speed|technique|supernatural>"
   }}
 ]"""
@@ -65,6 +79,7 @@ Return ONLY valid JSON — an array of exactly 3 objects:
     result = call_openrouter_json(
         prompt,
         config,
+        model="minimax/minimax-m2.5",
         system_prompt=system_prompt,
         temperature=0.8,
         max_tokens=2048,
@@ -118,7 +133,7 @@ def build_move_image_prompt(
     expression = tier_prompt.get("expression", "")
 
     move_name = move.get("name", "")
-    move_desc = move.get("description", "")
+    move_snapshot = move.get("image_snapshot", move.get("description", ""))
 
     style = get_art_style(gender)
     tail = get_art_style_tail(gender)
@@ -140,7 +155,7 @@ def build_move_image_prompt(
         parts.append(clothing)
 
     parts.append(
-        f'performing "{move_name}": {move_desc}'
+        f'performing "{move_name}": {move_snapshot}'
     )
 
     if expression:

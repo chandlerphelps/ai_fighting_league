@@ -351,7 +351,7 @@ SKIMPINESS_LEVELS = {
         "barely_skin_pct": "75-85",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
         "nsfw_adjective": "Tease",
-        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast - teasing sensually.",
+        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast or running her hands along her body - teasing sensually.",
         "nsfw_description": "Teasing, playful energy. Anatomy on display with flirty self-touching.",
         "nsfw_nudity_level": "full",
     },

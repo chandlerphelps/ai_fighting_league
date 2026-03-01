@@ -1,6 +1,6 @@
 import argparse
 import json
-import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from app.config import load_config
@@ -57,40 +57,57 @@ def run(
         print("  Mode: generate moves only")
     print()
 
-    for i, fighter in enumerate(fighters):
+    def _gen_moves_for_fighter(fighter):
         name = fighter.get("ring_name", "?")
         fid = fighter.get("id", "?")
-        print(f"[{i + 1}/{len(fighters)}] {name} ({fid})")
-
+        lines = [f"{name} ({fid})"]
         try:
-            if not images_only:
-                print("  Generating moves...")
-                moves = generate_moves(fighter, config)
-                fighter["moves"] = moves
-                _save_fighter(fighter, fighters_dir)
-                for m in moves:
-                    print(
-                        f"    {m['name']} [{m['stat_affinity']}] — {m['description']}"
-                    )
+            moves = generate_moves(fighter, config)
+            fighter["moves"] = moves
+            _save_fighter(fighter, fighters_dir)
+            for m in moves:
+                lines.append(
+                    f"  {m['name']} [{m['stat_affinity']}] — {m['description']}"
+                )
+        except Exception as e:
+            lines.append(f"  ERROR: {e}")
+        return lines
 
-            if do_images or images_only:
-                current_moves = fighter.get("moves", [])
-                if not current_moves:
-                    print("  No moves to generate images for, skipping")
-                    continue
+    if not images_only:
+        print("=== Phase 1: Generating moves ===\n")
+        with ThreadPoolExecutor(max_workers=min(len(fighters), 8)) as pool:
+            futures = {
+                pool.submit(_gen_moves_for_fighter, f): i
+                for i, f in enumerate(fighters)
+            }
+            results = {}
+            for future in as_completed(futures):
+                idx = futures[future]
+                results[idx] = future.result()
 
+        for i in sorted(results):
+            print(f"[{i + 1}/{len(fighters)}] " + "\n".join(results[i]))
+
+    if do_images or images_only:
+        print("\n=== Phase 2: Generating images (sequential) ===\n")
+        for i, fighter in enumerate(fighters):
+            name = fighter.get("ring_name", "?")
+            fid = fighter.get("id", "?")
+            print(f"[{i + 1}/{len(fighters)}] {name} ({fid})")
+
+            current_moves = fighter.get("moves", [])
+            if not current_moves:
+                print("  No moves to generate images for, skipping")
+                continue
+
+            try:
                 print(f"  Generating move images ({len(current_moves)} moves)...")
                 saved = generate_move_images(
                     fighter, config, fighters_dir, tiers=tiers
                 )
                 print(f"  Generated {len(saved)} image(s)")
-
-        except Exception as e:
-            print(f"  ERROR: {e}")
-            continue
-
-        if i < len(fighters) - 1:
-            time.sleep(1)
+            except Exception as e:
+                print(f"  ERROR: {e}")
 
     print("\nDone!")
 

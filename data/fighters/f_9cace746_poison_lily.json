@@ -73,5 +73,25 @@
   "storyline_log": [],
   "rivalries": [],
   "last_fight_date": null,
-  "ranking": null
+  "ranking": null,
+  "moves": [
+    {
+      "name": "Viper Tail Snap",
+      "description": "Leaps into a sideways spiral, extending one leg in a wide horizontal arc while using momentum to whip the body around, trailing the green-streaked ponytail behind in a sharp snap.",
+      "image_snapshot": "Mid-air, body sideways in a tight spiral, right leg fully extended horizontal to the left, left leg bent at knee, both arms spread outward, head turned sharply right. Motion blur on right leg and ponytail.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Surgical Track",
+      "description": "Slides forward on one knee while slashing both forearms outward in simultaneous cross-cuts, the hidden needles in the wrist chains extending and glinting as the arms sweep wide.",
+      "image_snapshot": "Low sliding position on left knee, right foot planted angled behind, both arms extended outward at shoulder height with wrists rotated outward, needles fully extended from chain slots. Speed lines on both forearms.",
+      "stat_affinity": "technique"
+    },
+    {
+      "name": "Phantom Toxin",
+      "description": "Lands in a deep crouch with palms facing upward, greenish vapor swirling around the fingertips while the body trembles, the needle earrings and tongue piercing glowing faintly with toxic light.",
+      "image_snapshot": "Deep crouch on both feet, knees bent wide, palms open facing upward at hip level, head bowed with chin tucked, green vapor trailing from fingertips. Motion blur on swirling vapor around hands.",
+      "stat_affinity": "supernatural"
+    }
+  ]
 }

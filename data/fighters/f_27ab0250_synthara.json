@@ -73,5 +73,25 @@
   "storyline_log": [],
   "rivalries": [],
   "last_fight_date": null,
-  "ranking": null
+  "ranking": null,
+  "moves": [
+    {
+      "name": "Chrome Phantom",
+      "description": "Synthara unleashes a rapid succession of three precise slashes with her chrome-tipped nails, each strike targeting a different angle in a seamless flowing pattern that leaves afterimages of violet light.",
+      "image_snapshot": " torso twisted to the right, right arm fully extended forward at shoulder height with fingers splayed, chrome nails gleaming, left arm crossed against chest, weight balanced on both feet planted wide.",
+      "stat_affinity": "technique"
+    },
+    {
+      "name": "Violet Cascade",
+      "description": "Synthara performs a full backward somersault, her violet-streaked ponytail whipping forward as she extends into a horizontal orientation and delivers a devastating spinning heel kick at the apex of the flip.",
+      "image_snapshot": "Mid-air, body horizontal and inverted, right leg fully extended toward camera at chest height, left leg tucked tight against torso, both arms spread outward, ponytail streaming forward over her head.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "System Purge",
+      "description": "Synthara channels her nanobot interfaces, causing the iridescent seam lines along her neck, shoulders, and forearms to flare with violet-white light as she releases a concussive wave of raw data energy in a wide arc around her.",
+      "image_snapshot": "Standing with legs shoulder-width apart, both arms raised overhead in a wide V, palms facing outward, iridescent seam lines glowing brightly from neck to fingertips, torso leaning slightly back, head tilted upward.",
+      "stat_affinity": "supernatural"
+    }
+  ]
 }

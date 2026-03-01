@@ -73,5 +73,25 @@
   "storyline_log": [],
   "rivalries": [],
   "last_fight_date": null,
-  "ranking": null
+  "ranking": null,
+  "moves": [
+    {
+      "name": "Dragon's Whisper Strike",
+      "description": "A rapid, precise chain of three slashes delivered with her long lacquered nails, each strike targeting pressure points with surgical accuracy while her body flows through a seamless figure-eight pattern.",
+      "image_snapshot": "Standing with weight on left leg, right leg lifted and bent at 90 degrees, torso twisted sideways, right arm fully extended forward with claws raking horizontal, left arm tucked near chest, head turned profile.",
+      "stat_affinity": "technique"
+    },
+    {
+      "name": "Phoenix Ascent Kick",
+      "description": "An explosive vertical leap followed by a soaring backflip kick, her body rotating backward through the air while her extended leg whips in a crescent arc overhead, hairpin blazing with jade light.",
+      "image_snapshot": "Mid-air, body inverted and rotating, right leg fully extended upward past vertical, left leg tucked beneath, both arms spread wide in T-pose, back arched, hairpin trailing luminous jade afterimage.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Jade Dragon's Breath",
+      "description": "Channeling chi through her imperial tattoo, she thrusts both palms forward while jade-colored energy erupts from the dragon scales along her shoulder and neck, creating a concussive wave of supernatural force.",
+      "image_snapshot": "Wide stable stance, both arms thrust forward straight at shoulder height, palms outward, jade glow emanating from tattoo on neck and shoulder visible, head forward imposing, slight lean into the thrust.",
+      "stat_affinity": "supernatural"
+    }
+  ]
 }

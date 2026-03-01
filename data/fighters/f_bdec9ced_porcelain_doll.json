@@ -73,5 +73,25 @@
   "storyline_log": [],
   "rivalries": [],
   "last_fight_date": null,
-  "ranking": null
+  "ranking": null,
+  "moves": [
+    {
+      "name": "Crack the Spine",
+      "description": "She twists her torso backward while in mid-air, swinging both arms in an overhead scissoring motion to strike with the heels of both hands at the target's spine.",
+      "image_snapshot": "Supine mid-air, arms above head in V shape, legs dangling straight down, torso twisted 180 degrees backward, head hanging inverted. Motion blur on both hands.",
+      "stat_affinity": "technique"
+    },
+    {
+      "name": "Twirl and Bite",
+      "description": "She leaps forward while spinning her body horizontally, extending one leg to sweep at head height while her stiletto nails rake backward.",
+      "image_snapshot": "Mid-air spin, body perpendicular to ground, right leg extended horizontally past torso, both arms trailing behind, twin pigtails whipped outward. Speed lines on spinning body.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Doll's Split",
+      "description": "She drops into a near splits position while leaning far back, dragging her stiletto nails along the ground as she slides forward to rake the target's shins.",
+      "image_snapshot": "Wide straddle split, palms on ground between legs, torso tilted backward 60 degrees, head hanging, legs spread full. Motion blur on sliding hands.",
+      "stat_affinity": "technique"
+    }
+  ]
 }

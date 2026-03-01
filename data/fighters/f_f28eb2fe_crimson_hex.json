@@ -73,5 +73,25 @@
   "storyline_log": [],
   "rivalries": [],
   "last_fight_date": null,
-  "ranking": null
+  "ranking": null,
+  "moves": [
+    {
+      "name": "Crescent Scar",
+      "description": "She threads through the air in a tight spiral, trailing her cursed palm across an invisible target \u2014 her stiletto nails leaving shimmering red lines that hang briefly in the air before dissolving.",
+      "image_snapshot": "Tight spin on right leg, left leg tucked high against chest, right arm fully extended forward with palm facing down, fingers spread, left arm crossed over chest. Motion blur on right arm and torso rotation.",
+      "stat_affinity": "technique"
+    },
+    {
+      "name": "Phantom Weave",
+      "description": "She backflips while sweeping both arms in wide circles \u2014 her curse tattoos flare with spectral light as three translucent ghost-hands manifest and shoot forward from her palms.",
+      "image_snapshot": "Mid-backflip, body inverted and horizontal, both arms swept wide in circular arcs above head, palms facing forward, fingers spread wide. Speed lines on both arms, spectral glow on hands.",
+      "stat_affinity": "supernatural"
+    },
+    {
+      "name": "Ribbon Dance",
+      "description": "She drops into a swift split, then whips her body upward in one fluid motion \u2014 her ribbon choker detaches and lashes out like a living thing while her stiletto nails rake in a glittering arc.",
+      "image_snapshot": "Deep split on the ground, right leg extended forward, left leg back, torso twisted 90 degrees, both arms swept to the right in a cutting motion. Motion blur on both arms and torso.",
+      "stat_affinity": "speed"
+    }
+  ]
 }
