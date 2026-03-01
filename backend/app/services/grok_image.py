@@ -65,7 +65,9 @@ def generate_image(
             return [item["url"] for item in resp.json()["data"]]
         except (requests.RequestException, KeyError) as exc:
             last_exc = exc
-            print(f"    Image gen error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {exc}")
+            print(
+                f"    Image gen error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {exc}"
+            )
             if attempt < MAX_RETRIES:
                 time.sleep(2 ** (attempt + 1))
     raise last_exc
@@ -111,7 +113,9 @@ def edit_image(
             return [item["url"] for item in resp.json()["data"]]
         except (requests.RequestException, KeyError) as exc:
             last_exc = exc
-            print(f"    Image edit error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {exc}")
+            print(
+                f"    Image edit error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {exc}"
+            )
             if attempt < MAX_RETRIES:
                 time.sleep(2 ** (attempt + 1))
     raise last_exc
@@ -155,13 +159,6 @@ def generate_charsheet_images(
             return prompt_data.get("full_prompt", "")
         return ""
 
-    triple_data = (
-        getattr(fighter, "image_prompt_triple", None)
-        if hasattr(fighter, "image_prompt_triple")
-        else fighter.get("image_prompt_triple", {})
-    )
-    triple_prompt = triple_data.get("full_prompt", "") if isinstance(triple_data, dict) else ""
-
     jobs = []
     for tier in tiers:
         prompt = _get_prompt(tier)
@@ -169,17 +166,17 @@ def generate_charsheet_images(
             print(f"    No prompt for tier '{tier}', skipping")
             continue
         filename = f"{base}_{tier}.png"
-        jobs.append((tier, prompt, "3:2", output_dir / filename, filename))
-
-    if triple_prompt:
-        filename = f"{base}_triple.png"
-        jobs.append(("triple", triple_prompt, "4:3", output_dir / filename, filename))
+        jobs.append((tier, prompt, "1:1", output_dir / filename, filename))
 
     def _gen_and_save(job):
         label, prompt, aspect, save_path, filename = job
         print(f"    Generating {label} charsheet...")
         urls = generate_image(
-            prompt=prompt, config=config, aspect_ratio=aspect, resolution="2k", n=1,
+            prompt=prompt,
+            config=config,
+            aspect_ratio=aspect,
+            resolution="2k",
+            n=1,
         )
         download_image(urls[0], save_path)
         print(f"    Saved: {filename}")

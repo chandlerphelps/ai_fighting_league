@@ -40,18 +40,6 @@ export interface CharsheetPrompt {
   full_prompt: string
 }
 
-export interface ImagePromptTriple {
-  style: string
-  composition: string
-  pose: string
-  body_parts: string
-  left: string
-  center: string
-  right: string
-  expression: string
-  full_prompt: string
-}
-
 export interface Fighter {
   id: string
   ring_name: string
@@ -71,7 +59,6 @@ export interface Fighter {
   image_prompt: CharsheetPrompt
   image_prompt_sfw: CharsheetPrompt
   image_prompt_nsfw: CharsheetPrompt
-  image_prompt_triple: ImagePromptTriple
   stats: Stats
   record: Record
   condition: Condition

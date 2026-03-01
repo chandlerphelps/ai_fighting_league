@@ -1,194 +1,194 @@
 [
   {
-    "concept_hook": "Seductive Brazilian viper who paralyzes foes with toxin-laced kisses and clawing embraces.",
-    "ring_name": "Venom Kiss",
-    "gender": "female",
-    "age": 27,
-    "origin": "Rio de Janeiro, Brazil",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Siren",
-    "has_supernatural": false,
-    "body_type": "curvaceous Latina hourglass",
-    "power_tier": "contender",
-    "narrative_role": "calculating temptress who exploits lust and overconfidence",
-    "rivalry_seeds": [
-      "Loa Queen",
-      "Lorelei"
-    ],
-    "media_archetype_inspiration": "Poison Ivy from DC Comics",
-    "skimpiness_weights": [
-      0,
-      10,
-      40,
-      50
-    ]
-  },
-  {
-    "concept_hook": "Haitian voodoo witch who torments enemies by piercing spirit-bound dolls during combat.",
-    "ring_name": "Loa Queen",
-    "gender": "female",
-    "age": 29,
-    "origin": "Port-au-Prince, Haiti",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Doll",
-    "has_supernatural": true,
-    "body_type": "exotic full-figured with ritual markings",
-    "power_tier": "champion",
-    "narrative_role": "mysterious ritualist haunted by the spirits she summons",
-    "rivalry_seeds": [
-      "Venom Kiss",
-      "Jade Sovereign"
-    ],
-    "media_archetype_inspiration": "Marie Laveau as in American Horror Story: Coven",
-    "skimpiness_weights": [
-      10,
-      20,
-      30,
-      40
-    ]
-  },
-  {
-    "concept_hook": "British gymnast prodigy who evades and submits larger foes with flawless aerial technique.",
-    "ring_name": "Aerial Ace",
+    "concept_hook": "VR-honed prodigy who methodically disassembles larger foes with surgical submissions, reveling in their frustration.",
+    "ring_name": "Pixel Prodigy",
     "gender": "female",
     "age": 19,
-    "origin": "London, United Kingdom",
+    "origin": "Los Angeles, California, USA",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Huntress",
+    "secondary_archetype": "Experiment",
     "has_supernatural": false,
-    "body_type": "petite toned gymnast",
+    "body_type": "petite and wiry with surprising strength",
     "power_tier": "prospect",
-    "narrative_role": "eager underdog prodigy winning hearts and submissions",
+    "narrative_role": "innocent-looking genius upsetting veterans",
     "rivalry_seeds": [
-      "Fatal Couture",
-      "BioLynx"
+      "Synth Viper",
+      "Nano Muse"
     ],
-    "media_archetype_inspiration": "Kasumi from Dead or Alive",
+    "media_archetype_inspiration": "Hit-Girl from Kick-Ass meets esports prodigy",
     "skimpiness_weights": [
+      45,
+      30,
       20,
-      40,
-      25,
-      15
+      5
     ]
   },
   {
-    "concept_hook": "Italian fashion doll assassin striking with bladed heels and razor-edged accessories.",
-    "ring_name": "Fatal Couture",
-    "gender": "female",
-    "age": 25,
-    "origin": "Milan, Italy",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Viper",
-    "has_supernatural": false,
-    "body_type": "slender supermodel lithe",
-    "power_tier": "gatekeeper",
-    "narrative_role": "narcissistic diva demanding the runway spotlight",
-    "rivalry_seeds": [
-      "Lorelei",
-      "Aerial Ace"
-    ],
-    "media_archetype_inspiration": "Gazelle from Kingsman: The Golden Circle",
-    "skimpiness_weights": [
-      5,
-      15,
-      40,
-      40
-    ]
-  },
-  {
-    "concept_hook": "Australian outback huntress snaring prey with boomerangs, nets, and unerring tracking.",
-    "ring_name": "Outlaw Huntress",
+    "concept_hook": "Jungle-born trapper who savors the slow bleed of ensnared prey, but rages when outmaneuvered.",
+    "ring_name": "Amazon Huntress",
     "gender": "female",
     "age": 23,
-    "origin": "Alice Springs, Australia",
+    "origin": "Iquitos, Peru",
     "primary_archetype": "Huntress",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": true,
-    "body_type": "lean bronzed athletic",
-    "power_tier": "contender",
-    "narrative_role": "rugged survivor with a grudge against urban elites",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "lithe and bronzed with lethal grace",
+    "power_tier": "gatekeeper",
+    "narrative_role": "feral wildcard who hunts the elite",
     "rivalry_seeds": [
-      "Jade Sovereign",
-      "BioLynx"
+      "Porcelain Doll",
+      "Jade Empress"
     ],
-    "media_archetype_inspiration": "Imperator Furiosa from Mad Max: Fury Road",
+    "media_archetype_inspiration": "Talia al Ghul from Batman animated",
     "skimpiness_weights": [
-      5,
-      25,
+      10,
+      20,
       40,
       30
     ]
   },
   {
-    "concept_hook": "Chinese empress wielding psychic chi commands to debuff and dismantle wills.",
-    "ring_name": "Jade Sovereign",
+    "concept_hook": "Idol star whose hypnotic melodies induce stupor, striking with glee at dazed admirers who shatter her illusions.",
+    "ring_name": "Siren Serenade",
+    "gender": "female",
+    "age": 25,
+    "origin": "Tokyo, Japan",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Doll",
+    "has_supernatural": true,
+    "body_type": "voluptuous and alluring",
+    "power_tier": "contender",
+    "narrative_role": "flashy celebrity manipulator",
+    "rivalry_seeds": [
+      "Porcelain Doll",
+      "Silk Witch"
+    ],
+    "media_archetype_inspiration": "Black Canary siren from DC Comics",
+    "skimpiness_weights": [
+      5,
+      10,
+      35,
+      50
+    ]
+  },
+  {
+    "concept_hook": "Brujer\u00eda master who binds foes in cursing threads, draining their will while masking her own creeping doubts.",
+    "ring_name": "Silk Witch",
+    "gender": "female",
+    "age": 29,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Siren",
+    "has_supernatural": true,
+    "body_type": "curvaceous and enigmatic",
+    "power_tier": "gatekeeper",
+    "narrative_role": "brooding mystic with inner turmoil",
+    "rivalry_seeds": [
+      "Synth Viper",
+      "Siren Serenade"
+    ],
+    "media_archetype_inspiration": "Magica De Spell from DuckTales reimagined",
+    "skimpiness_weights": [
+      20,
+      30,
+      30,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Chemist enforcer who injects escalating toxins, coldly analyzing breakdowns but vulnerable to chaos.",
+    "ring_name": "Synth Viper",
+    "gender": "female",
+    "age": 27,
+    "origin": "Sydney, Australia",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": false,
+    "body_type": "slim and precise",
+    "power_tier": "contender",
+    "narrative_role": "ruthless lab-coated predator",
+    "rivalry_seeds": [
+      "Pixel Prodigy",
+      "Silk Witch"
+    ],
+    "media_archetype_inspiration": "Viper agent from Valorant",
+    "skimpiness_weights": [
+      20,
+      30,
+      30,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Animated porcelain beauty who twists limbs with invisible strings, emotionless until sparks of humanity emerge in pain.",
+    "ring_name": "Porcelain Doll",
+    "gender": "female",
+    "age": 24,
+    "origin": "Berlin, Germany",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Experiment",
+    "has_supernatural": true,
+    "body_type": "flawless porcelain-skinned hourglass",
+    "power_tier": "champion",
+    "narrative_role": "uncanny emotionless destroyer",
+    "rivalry_seeds": [
+      "Amazon Huntress",
+      "Siren Serenade"
+    ],
+    "media_archetype_inspiration": "Lili from Tekken meets haunted doll archetype",
+    "skimpiness_weights": [
+      0,
+      15,
+      35,
+      50
+    ]
+  },
+  {
+    "concept_hook": "Imperial heiress who projects aura of dominance, shattering wills before blades fly, haunted by fallen dynasty.",
+    "ring_name": "Jade Empress",
     "gender": "female",
     "age": 31,
     "origin": "Beijing, China",
     "primary_archetype": "Empress",
     "secondary_archetype": "Witch",
     "has_supernatural": true,
-    "body_type": "statuesque elegant Asian",
-    "power_tier": "champion",
-    "narrative_role": "imperious tactician concealing deep personal loss",
+    "body_type": "tall elegant curves",
+    "power_tier": "contender",
+    "narrative_role": "arrogant noble enforcer",
     "rivalry_seeds": [
-      "Outlaw Huntress",
-      "Loa Queen"
+      "Amazon Huntress",
+      "Nano Muse"
     ],
     "media_archetype_inspiration": "Azula from Avatar: The Last Airbender",
     "skimpiness_weights": [
-      15,
-      35,
-      30,
-      20
-    ]
-  },
-  {
-    "concept_hook": "French siren singer whose enchanted melodies induce trance before lethal lashes.",
-    "ring_name": "Lorelei",
-    "gender": "female",
-    "age": 26,
-    "origin": "Paris, France",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": true,
-    "body_type": "voluptuous alluring hourglass",
-    "power_tier": "gatekeeper",
-    "narrative_role": "sultry showwoman thriving on adoration and agony",
-    "rivalry_seeds": [
-      "Fatal Couture",
-      "Venom Kiss"
-    ],
-    "media_archetype_inspiration": "Diva Plavalaguna from The Fifth Element",
-    "skimpiness_weights": [
-      0,
-      5,
       25,
-      70
+      35,
+      25,
+      15
     ]
   },
   {
-    "concept_hook": "German lab-engineered feline who slashes and leaps with predatory hyper-agility.",
-    "ring_name": "BioLynx",
+    "concept_hook": "Nanotech-infused runaway who regenerates and adapts on the fly, addicted to the evolution rush but fears obsolescence.",
+    "ring_name": "Nano Muse",
     "gender": "female",
-    "age": 24,
-    "origin": "Berlin, Germany",
+    "age": 21,
+    "origin": "Seoul, South Korea",
     "primary_archetype": "Experiment",
     "secondary_archetype": "Huntress",
     "has_supernatural": true,
-    "body_type": "lithe catlike curves",
+    "body_type": "lean and mutable",
     "power_tier": "prospect",
-    "narrative_role": "tormented escapee grappling with her beastly instincts",
+    "narrative_role": "evolving chaotic wildcard",
     "rivalry_seeds": [
-      "Aerial Ace",
-      "Outlaw Huntress"
+      "Pixel Prodigy",
+      "Jade Empress"
     ],
-    "media_archetype_inspiration": "Black Cat from Marvel Comics",
+    "media_archetype_inspiration": "Alita from Alita: Battle Angel",
     "skimpiness_weights": [
-      10,
-      20,
-      30,
-      40
+      15,
+      25,
+      35,
+      25
     ]
   }
 ]
