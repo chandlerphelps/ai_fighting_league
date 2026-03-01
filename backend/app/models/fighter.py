@@ -83,6 +83,7 @@ class Fighter:
     weight: str = ""
     build: str = ""
     distinguishing_features: str = ""
+    signature_accessories: str = ""
     ring_attire: str = ""
     ring_attire_sfw: str = ""
     ring_attire_nsfw: str = ""
@@ -118,6 +119,7 @@ class Fighter:
             weight=d.get("weight", ""),
             build=d.get("build", ""),
             distinguishing_features=d.get("distinguishing_features", ""),
+            signature_accessories=d.get("signature_accessories", ""),
             ring_attire=d.get("ring_attire", ""),
             ring_attire_sfw=d.get("ring_attire_sfw", ""),
             ring_attire_nsfw=d.get("ring_attire_nsfw", ""),

@@ -372,67 +372,89 @@ SKIMPINESS_LEVELS = {
 }
 
 
-def _build_skimpiness_prompt(skimpiness_level: int) -> str:
+def _build_tier_prompt(tier: str, skimpiness_level: int, character_summary: dict) -> str:
     level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
-    return f"""SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels.
-All 3 tiers MUST feel like the exact same character with the exact same design aesthetic, same color palette, same materials, same personality — just more or less revealed.
+    sig = character_summary.get("signature_accessories", "")
+    ring_name = character_summary.get("ring_name", "Unknown")
+    body_parts = character_summary.get("image_prompt_body_parts", "")
+    expression = character_summary.get("image_prompt_expression", "")
 
-SKIMPINESS LEVEL: {skimpiness_level} of 4
+    char_context = f"""CHARACTER: {ring_name}
+Signature accessories (MUST appear in every tier): {sig}
+Body: {body_parts}
+Expression: {expression}
+SKIMPINESS LEVEL: {skimpiness_level} of 4"""
 
-TIER RULES:
+    if tier == "sfw":
+        return f"""{char_context}
 
-ring_attire_sfw (SFW):
+Generate the SFW outfit for this character.
+
+RULES:
   HARD RULES: {level['sfw_hard_rules']}
   SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
   {level['sfw_guidance']}
   Signature accessories + additional clothing pieces to hit the skin target.
 
-ring_attire (Barely SFW):
+You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
+
+EXAMPLE — Crimson Valkyrie (skimpiness 3)
+Signature: crimson thigh-high leather boots, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara
+ring_attire_sfw: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS high-collared zipped crimson leather jacket fully covering torso, PLUS full-coverage crimson leather combat pants, PLUS long reinforced tabard skirt, PLUS long flowing crimson cape
+image_prompt_clothing_sfw: high-collared zipped crimson leather jacket fully covering torso, full-coverage crimson leather combat pants, long reinforced tabard skirt, long flowing crimson cape
+
+Return ONLY valid JSON:
+{{
+  "ring_attire_sfw": "<full SFW outfit description including signature accessories>",
+  "image_prompt_clothing_sfw": "<SFW clothing description for image gen — just the clothing pieces, not accessories>"
+}}"""
+
+    elif tier == "barely":
+        return f"""{char_context}
+
+Generate the barely-SFW outfit for this character.
+
+RULES:
   HARD RULES: No nipples, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.
   SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
   {level['barely_guidance']}
   Signature accessories + minimal additional pieces to hit the skin target.
 
-ring_attire_nsfw (NSFW):
-  HARD RULES: Fully nude — topless AND bottomless. Only signature accessories remain.
-  TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
-  The LLM may choose how explicit within the "{level['nsfw_adjective']}" tone — whatever fits the character's personality.
-
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
-IMPORTANT:
-- image_prompt_clothing_nsfw must stay very short.
-- The image model will handle clarity and feminine anatomy automatically.
-- Do NOT force "swollen clit" or "puffy labia" on every character — let the concept decide.
-
-EXAMPLE — Crimson Valkyrie (monster archetype, skimpiness 3)
-Signature items (identical in all 3 tiers):
-crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara
-
-ring_attire_sfw:
-crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS high-collared zipped crimson leather jacket fully covering torso, PLUS full-coverage crimson leather combat pants, PLUS long reinforced tabard skirt, PLUS long flowing crimson cape
-
-ring_attire (barely SFW):
-crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS tiny crimson leather micro crop top, PLUS extreme high-cut crimson leather thong showing full cameltoe
-
-ring_attire_nsfw:
-only signature pieces: thigh-high boots, bracers, belt, choker, tiara. Completely topless and bottomless
-
-image_prompt_clothing_sfw: high-collared zipped crimson leather jacket fully covering torso, full-coverage crimson leather combat pants, long reinforced tabard skirt, long flowing crimson cape
+EXAMPLE — Crimson Valkyrie (skimpiness 3)
+Signature: crimson thigh-high leather boots, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara
+ring_attire: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS tiny crimson leather micro crop top, PLUS extreme high-cut crimson leather thong showing full cameltoe
 image_prompt_clothing: tiny crimson leather micro crop top, extreme high-cut crimson leather thong showing full cameltoe
+
+Return ONLY valid JSON:
+{{
+  "ring_attire": "<full barely-SFW outfit description including signature accessories>",
+  "image_prompt_clothing": "<barely-SFW clothing description for image gen — just the clothing pieces>"
+}}"""
+
+    else:
+        return f"""{char_context}
+
+Generate the NSFW outfit for this character.
+
+RULES:
+  HARD RULES: Fully nude — topless AND bottomless. Only signature accessories remain.
+  TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
+  The character should feel {level['nsfw_adjective'].lower()} — whatever fits their personality.
+
+{GUIDE_IMAGE_PROMPT_RULES}
+
+EXAMPLE — Crimson Valkyrie (skimpiness 3)
+Signature: crimson thigh-high leather boots, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara
+ring_attire_nsfw: only signature pieces: thigh-high boots, bracers, belt, choker, tiara. Completely topless and bottomless
 image_prompt_clothing_nsfw: thigh-high boots, bracers, belt, choker, tiara
 
-GOOD progression (SFW -> Barely -> NSFW):
-Crop top -> Bra -> Topless
-Yoga Pants -> Thong -> Bottomless
-Gown -> deep plunge gown w high thigh slits -> tattered gown ripped to expose breasts
-
-BAD progression:
-Crop top -> mesh crop top w pasties -> mesh crop top no pasties
-Yoga pants -> tighter yoga pants -> crotchless yoga pants
-Shorts -> thong -> thong pulled aside
-
-Avoid just making everything crotchless - remove bottoms entirely instead."""
+Return ONLY valid JSON:
+{{
+  "ring_attire_nsfw": "<NSFW outfit description — nude except signature accessories>",
+  "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — max 8 words, just the remaining accessories>"
+}}"""
 
 
 FULL_CHARACTER_GUIDE = (
@@ -440,7 +462,6 @@ FULL_CHARACTER_GUIDE = (
     + GUIDE_CREATION_WORKFLOW
     + GUIDE_VISUAL_DESIGN
     + GUIDE_COMMON_MISTAKES
-    + GUIDE_IMAGE_PROMPT_RULES
 )
 
 
@@ -534,6 +555,32 @@ def _roll_skimpiness(weights: list[int] | None) -> int:
     return random.choices([1, 2, 3, 4], weights=normalized, k=1)[0]
 
 
+def _generate_outfits(
+    config: Config,
+    character_summary: dict,
+    skimpiness_level: int,
+    tiers: list[str] | None = None,
+) -> dict:
+    if tiers is None:
+        tiers = ["sfw", "barely", "nsfw"]
+
+    system_prompt = (
+        "You are an outfit designer for a fighting league. "
+        "Design outfits that match the character's personality and the tier's rules. "
+        "Always respond with valid JSON only."
+    )
+
+    outfit_data = {}
+    for tier in tiers:
+        prompt = _build_tier_prompt(tier, skimpiness_level, character_summary)
+        result = call_openrouter_json(
+            prompt, config, system_prompt=system_prompt, temperature=0.5
+        )
+        outfit_data.update(result)
+
+    return outfit_data
+
+
 def generate_fighter(
     config: Config,
     archetype: str = None,
@@ -602,7 +649,11 @@ STAT CONSTRAINTS:
 - No fighter should be elite at everything — balance strengths with clear weaknesses
 - Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, etc.)
 
-{_build_skimpiness_prompt(skimpiness_level)}
+SIGNATURE ACCESSORIES:
+Design 3-6 signature accessories that define this character's visual identity. These items appear
+in EVERY version of the outfit (SFW through NSFW). They are the character's iconic pieces —
+boots, bracers, belts, chokers, tiaras, gauntlets, jewelry, etc. NOT full clothing items like
+jackets or pants. Think: what would remain if the character were stripped to their most iconic look?
 
 Return ONLY valid JSON with this exact structure:
 {{
@@ -615,14 +666,9 @@ Return ONLY valid JSON with this exact structure:
   "weight": "<weight in lbs>",
   "build": "<body type description>",
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
-  "ring_attire_sfw": "<SFW tier outfit description>",
-  "ring_attire": "<barely SFW tier outfit description>",
-  "ring_attire_nsfw": "<NSFW tier outfit description>",
-  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all 3 tiers>",
-  "image_prompt_expression": "<facial expression and attitude — shared across all 3 tiers>",
-  "image_prompt_clothing_sfw": "<SFW tier clothing description for image gen>",
-  "image_prompt_clothing": "<barely SFW tier clothing description for image gen>",
-  "image_prompt_clothing_nsfw": "<NSFW tier clothing description for image gen>",
+  "signature_accessories": "<comma-separated list of 3-6 iconic accessories that appear in every outfit tier>",
+  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers>",
+  "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "stats": {{
     "power": <15-95>,
     "speed": <15-95>,
@@ -645,10 +691,13 @@ Return ONLY valid JSON with this exact structure:
 
     body_parts = result.get("image_prompt_body_parts", "")
     expression = result.get("image_prompt_expression", "")
-    clothing_sfw = result.get("image_prompt_clothing_sfw", "")
-    clothing = result.get("image_prompt_clothing", "")
-    clothing_nsfw = result.get("image_prompt_clothing_nsfw", "")
     gender = result.get("gender", "female")
+
+    outfit_data = _generate_outfits(config, result, skimpiness_level)
+
+    clothing_sfw = outfit_data.get("image_prompt_clothing_sfw", "")
+    clothing = outfit_data.get("image_prompt_clothing", "")
+    clothing_nsfw = outfit_data.get("image_prompt_clothing_nsfw", "")
 
     return Fighter(
         id=fighter_id,
@@ -661,9 +710,10 @@ Return ONLY valid JSON with this exact structure:
         weight=result.get("weight", ""),
         build=result.get("build", ""),
         distinguishing_features=result.get("distinguishing_features", ""),
-        ring_attire=result.get("ring_attire", ""),
-        ring_attire_sfw=result.get("ring_attire_sfw", ""),
-        ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
+        signature_accessories=result.get("signature_accessories", ""),
+        ring_attire=outfit_data.get("ring_attire", ""),
+        ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
+        ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),
         skimpiness_level=skimpiness_level,
         image_prompt=_build_charsheet_prompt(
             body_parts, clothing, expression, tier="barely", gender=gender,
