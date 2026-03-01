@@ -53,7 +53,7 @@ def plan_roster_cmd():
     print("Review the plan, then run with --generate to create the fighters.")
 
 
-def generate_from_plan(generate_images: bool = False):
+def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = None):
     config = load_config()
     data_manager.ensure_data_dirs(config)
 
@@ -91,6 +91,7 @@ def generate_from_plan(generate_images: bool = False):
                 config,
                 existing_fighters=existing_fighters,
                 roster_plan_entry=entry,
+                tiers=tiers,
             )
             data_manager.save_fighter(fighter, config)
             fighter_ids.append(fighter.id)
@@ -141,10 +142,10 @@ def generate_from_plan(generate_images: bool = False):
     print(f"  World state saved to data/world_state.json")
 
 
-def generate_roster(generate_images: bool = False):
+def generate_roster(generate_images: bool = False, tiers: list[str] | None = None):
     plan_roster_cmd()
     print("\n" + "=" * 60 + "\n")
-    generate_from_plan(generate_images=generate_images)
+    generate_from_plan(generate_images=generate_images, tiers=tiers)
 
 
 if __name__ == "__main__":
@@ -152,11 +153,12 @@ if __name__ == "__main__":
     parser.add_argument("--plan", action="store_true", help="Phase 1: plan roster only (saves to data/roster_plan.json)")
     parser.add_argument("--generate", action="store_true", help="Phase 2: generate fighters from existing plan")
     parser.add_argument("--images", action="store_true", help="Generate character sheet images for each fighter via Grok API")
+    parser.add_argument("--tiers", nargs="+", choices=["sfw", "barely", "nsfw"], help="Which outfit tiers to generate (default: all three)")
     args = parser.parse_args()
 
     if args.plan:
         plan_roster_cmd()
     elif args.generate:
-        generate_from_plan(generate_images=args.images)
+        generate_from_plan(generate_images=args.images, tiers=args.tiers)
     else:
-        generate_roster(generate_images=args.images)
+        generate_roster(generate_images=args.images, tiers=args.tiers)

@@ -324,9 +324,9 @@ SKIMPINESS_LEVELS = {
         "barely_label": "Flirty",
         "barely_skin_pct": "45-55",
         "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
-        "nsfw_adjective": "Tasteful",
-        "nsfw_hard_rules": "Topless only — bare breasts visible, bottoms stay on. Elegant posing.",
-        "nsfw_description": "Artistic, elegant posing. Classical painting energy. Bare breasts but bottoms remain.",
+        "nsfw_adjective": "Scandalous",
+        "nsfw_hard_rules": "Topless — bare breasts fully visible. Bottoms stay on but must be ultra-sexy: thongs, micro-bikini bottoms, strappy lingerie, or sheer panties. Show off legs and hips.",
+        "nsfw_description": "Topless and unapologetic. Sultry, confident posing. Bottoms are barely-there and designed to tease — maximum skin, minimum fabric below the waist.",
         "nsfw_nudity_level": "topless",
     },
     2: {
@@ -646,6 +646,7 @@ def generate_fighter(
     has_supernatural: bool = False,
     existing_fighters: list[dict] = None,
     roster_plan_entry: dict = None,
+    tiers: list[str] | None = None,
 ) -> Fighter:
     if roster_plan_entry:
         blueprint_text = (
@@ -755,7 +756,7 @@ Return ONLY valid JSON with this exact structure:
     personality_pose = result.get("image_prompt_personality_pose", "")
     gender = result.get("gender", "female")
 
-    outfit_data = _generate_outfits(config, result, skimpiness_level)
+    outfit_data = _generate_outfits(config, result, skimpiness_level, tiers=tiers)
 
     clothing_sfw = outfit_data.get("image_prompt_clothing_sfw", "")
     clothing = outfit_data.get("image_prompt_clothing", "")
