@@ -76,22 +76,22 @@
   "ranking": null,
   "moves": [
     {
-      "name": "Crescent Scar",
-      "description": "She threads through the air in a tight spiral, trailing her cursed palm across an invisible target \u2014 her stiletto nails leaving shimmering red lines that hang briefly in the air before dissolving.",
-      "image_snapshot": "Tight spin on right leg, left leg tucked high against chest, right arm fully extended forward with palm facing down, fingers spread, left arm crossed over chest. Motion blur on right arm and torso rotation.",
+      "name": "Cursed Sigil Strike",
+      "description": "Crimson Hex drops into a low stance, extends her right arm fully forward with palm flat and curse tattoos facing outward, and channels a precise burst of hex energy through her fingertips in a short-range push. The move is a technical palm strike where the arcane tattoos on her hand glow and discharge on contact, requiring exact hand positioning and timing rather than raw force.",
+      "image_snapshot": "Low forward stance with left knee deeply bent and right leg extended back, right arm thrust straight forward at chest height with palm flat and fingers spread wide, curse tattoos on palm glowing crimson, left arm pulled tight to the ribs with fist clenched, torso leaning 30 degrees forward, head level with eyes fixed forward over the rim of wire-rimmed glasses. Speed lines radiating outward from the extended right palm.",
       "stat_affinity": "technique"
     },
     {
-      "name": "Phantom Weave",
-      "description": "She backflips while sweeping both arms in wide circles \u2014 her curse tattoos flare with spectral light as three translucent ghost-hands manifest and shoot forward from her palms.",
-      "image_snapshot": "Mid-backflip, body inverted and horizontal, both arms swept wide in circular arcs above head, palms facing forward, fingers spread wide. Speed lines on both arms, spectral glow on hands.",
-      "stat_affinity": "supernatural"
+      "name": "Ribbon Lash Flicker",
+      "description": "Crimson Hex spins 180 degrees on her left heel with maximum rotational speed, whipping her right arm out horizontally so the trailing edge of her black lace glove and the momentum of her crimson-nailed hand slash across in a fast backhand arc. The move covers a wide horizontal plane and relies entirely on rotational speed and reach rather than power.",
+      "image_snapshot": "Full upright stance mid-spin, body rotating clockwise, right arm fully extended horizontally at face height with fingers splayed and crimson nails forward, left arm swung behind the torso for counterbalance, left heel planted as pivot point, right foot lifted slightly off the ground, head turned sharply over the right shoulder in the direction of the spin, jet-black hair with crimson streak fanned outward. Motion blur on the right arm from elbow to fingertips and across the trailing hair.",
+      "stat_affinity": "speed"
     },
     {
-      "name": "Ribbon Dance",
-      "description": "She drops into a swift split, then whips her body upward in one fluid motion \u2014 her ribbon choker detaches and lashes out like a living thing while her stiletto nails rake in a glittering arc.",
-      "image_snapshot": "Deep split on the ground, right leg extended forward, left leg back, torso twisted 90 degrees, both arms swept to the right in a cutting motion. Motion blur on both arms and torso.",
-      "stat_affinity": "speed"
+      "name": "Backlash Specter Dive",
+      "description": "Crimson Hex leaps straight upward, and at the apex of her jump a translucent ghost-form of herself splits from her body and dives downward at a steep diagonal angle ahead of her while her physical body descends vertically behind it. The spectral duplicate is a projection of her haunting backlash spirits and strikes independently, creating two simultaneous threat vectors from a single jump.",
+      "image_snapshot": "Body at jump apex, physical form fully vertical in the air with both knees slightly bent and arms raised overhead with black lace gloves extended, translucent silver-crimson spectral duplicate splitting forward and downward from her chest at a 45-degree diagonal, the specter's arms reaching downward and its form partially overlapping her torso, ritual scars on her forearms and collarbone faintly luminous. Motion blur on the descending spectral form and a halo of speed lines at the split point between her body and the duplicate.",
+      "stat_affinity": "supernatural"
     }
   ]
 }

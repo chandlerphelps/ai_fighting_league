@@ -76,22 +76,22 @@
   "ranking": null,
   "moves": [
     {
-      "name": "Viper Tail Snap",
-      "description": "Leaps into a sideways spiral, extending one leg in a wide horizontal arc while using momentum to whip the body around, trailing the green-streaked ponytail behind in a sharp snap.",
-      "image_snapshot": "Mid-air, body sideways in a tight spiral, right leg fully extended horizontal to the left, left leg bent at knee, both arms spread outward, head turned sharply right. Motion blur on right leg and ponytail.",
-      "stat_affinity": "speed"
-    },
-    {
-      "name": "Surgical Track",
-      "description": "Slides forward on one knee while slashing both forearms outward in simultaneous cross-cuts, the hidden needles in the wrist chains extending and glinting as the arms sweep wide.",
-      "image_snapshot": "Low sliding position on left knee, right foot planted angled behind, both arms extended outward at shoulder height with wrists rotated outward, needles fully extended from chain slots. Speed lines on both forearms.",
+      "name": "Venom Flicker",
+      "description": "Poison Lily snaps her wrist outward in a sharp lateral whip, releasing a needle from her gold wrist chain that she flicks with her index finger at close range. The motion is a tight, precise two-inch snap of the wrist rather than a full arm swing, targeting exposed skin with pinpoint accuracy.",
+      "image_snapshot": "Standing upright with weight on the left foot, right arm extended fully to the side at shoulder height, wrist bent sharply downward, index finger pointed forward with a needle pinched between fingertip and thumb, left arm pulled tight across the chest, head turned to face the right arm's direction. Speed lines on the right wrist and fingertips.",
       "stat_affinity": "technique"
     },
     {
-      "name": "Phantom Toxin",
-      "description": "Lands in a deep crouch with palms facing upward, greenish vapor swirling around the fingertips while the body trembles, the needle earrings and tongue piercing glowing faintly with toxic light.",
-      "image_snapshot": "Deep crouch on both feet, knees bent wide, palms open facing upward at hip level, head bowed with chin tucked, green vapor trailing from fingertips. Motion blur on swirling vapor around hands.",
-      "stat_affinity": "supernatural"
+      "name": "Toxic Cartwheel",
+      "description": "She drops her left hand to the ground and launches into a one-handed cartwheel, keeping her right arm rigid and fully extended so the needle earring on her right ear traces a wide arc at face level as her body rotates through the air. Both legs sweep overhead in sequence during the rotation before she lands back on her feet.",
+      "image_snapshot": "Inverted mid-cartwheel, left hand planted flat on the ground, body fully vertical with legs split wide apart above \u2014 right leg straight up, left leg angled 45 degrees outward, right arm extended horizontally away from the body, green-streaked ponytail hanging straight down, head facing forward. Motion blur on both legs and the right arm.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Dilated Heel Drop",
+      "description": "She leaps straight up, tucks her knees to her chest at the apex, then drives her right heel downward in a vertical axe-kick while her left leg kicks out horizontally for counterbalance, descending at full speed with the heel aimed at the top of the strike zone. The drop is a straight vertical plunge from maximum jump height.",
+      "image_snapshot": "Airborne at the apex of descent, right leg fully extended straight downward with heel leading, left leg kicked out horizontally to the left at hip height, torso upright and slightly forward-leaning, both arms swept out to the sides at shoulder height for balance, ponytail blown upward, head tilted slightly down. Motion blur on the right leg from knee to heel.",
+      "stat_affinity": "speed"
     }
   ]
 }

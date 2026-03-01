@@ -873,7 +873,7 @@ def _charsheet_style(
                 "explicit uncensored NSFW, topless woman, bare breasts visible, "
             )
         else:
-            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, perfectly drawn bare pussy visible, "
+            nudity_prefix = "explicit uncensored NSFW, perfectly drawn bare pussy visible, full frontal female nudity, "
         return nudity_prefix + base + ", " + CHARSHEET_LAYOUT
     return base + ", " + CHARSHEET_LAYOUT
 
@@ -935,38 +935,28 @@ def _build_charsheet_prompt(
                 if clothing
                 else "completely naked"
             )
-        center_pose = (
-            f"center personality pose: {body_parts}, {clothing_part}, {pose_base}"
-        )
     else:
         clothing_part = clothing
-        center_pose = (
-            f"center personality pose: {body_parts}, {clothing_part}, {pose_base}"
-            if clothing_part
-            else f"center personality pose: {body_parts}, {pose_base}"
-        )
 
-    front_view = (
-        f"front slightly angled view standing tall: {body_parts}, {clothing_part}"
-        if clothing_part
-        else f"front slightly angled view standing tall: {body_parts}"
-    )
-    back_view = (
-        f"rear view standing tall: {body_parts}, {clothing_part}"
-        if clothing_part
-        else f"rear view standing tall: {body_parts}"
-    )
+    character_desc = body_parts
+    if clothing_part:
+        character_desc = f"{body_parts}, {clothing_part}"
+
+    front_view = "front slightly angled view standing tall"
+    center_pose = f"center personality pose: {pose_base}"
+    back_view = "rear view standing tall"
 
     tail = _charsheet_tail(gender, tier, skimpiness_level)
 
     full = ", ".join(
-        p for p in [style, front_view, center_pose, back_view, expression, tail] if p
+        p for p in [style, character_desc, front_view, center_pose, back_view, expression, tail] if p
     )
     return {
         "style": style,
         "layout": CHARSHEET_LAYOUT,
         "body_parts": body_parts,
         "clothing": clothing_part,
+        "character_desc": character_desc,
         "front_view": front_view,
         "center_pose": center_pose,
         "back_view": back_view,

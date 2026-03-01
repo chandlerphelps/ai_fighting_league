@@ -7,3 +7,9 @@ export function fighterImagePath(fighterId: string, ringName: string, tier: stri
   const base = slug ? `${fighterId}_${slug}` : fighterId
   return `/data/fighters/${base}_${tier}.png`
 }
+
+export function moveImagePath(fighterId: string, ringName: string, moveIndex: number, tier: string): string {
+  const slug = slugify(ringName)
+  const base = slug ? `${fighterId}_${slug}` : fighterId
+  return `/data/fighters/${base}_move${moveIndex + 1}_${tier}.png`
+}

@@ -34,7 +34,7 @@ export interface CharsheetPrompt {
   body_parts: string
   clothing: string
   front_view: string
-  three_quarter_view: string
+  center_pose: string
   back_view: string
   expression: string
   full_prompt: string
@@ -44,6 +44,7 @@ export interface Move {
   name: string
   description: string
   stat_affinity: string
+  image_snapshot?: string
 }
 
 export interface Fighter {

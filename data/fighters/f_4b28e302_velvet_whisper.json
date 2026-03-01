@@ -76,21 +76,21 @@
   "ranking": null,
   "moves": [
     {
-      "name": "Cobra Ascend",
-      "description": "A rapid spiral upward kick launched from a crouch, using her core strength to coil and extend her leg in a vertical helix pattern, reaching peak height before the downward arc begins.",
-      "image_snapshot": "Mid-air, body twisted 90 degrees counterclockwise, right leg extended straight upward past vertical, left leg bent at knee with thigh parallel to ground, arms spread wide in a T-pose, head tilted up to follow right leg.",
+      "name": "Serpent's Tongue Flicker",
+      "description": "Velvet Whisper drops into a low sideways stance, then explodes into a rapid three-hit combination: a sharp elbow jab to the midsection, a precise open-palm strike to the chin, and a spinning back-knuckle to the temple, all delivered in under a second using minimal body movement to maximize speed and conserve energy.",
+      "image_snapshot": "Low side stance with knees bent, weight on the left leg, right arm fully extended at chin height with fingers rigid in an open-palm strike, left elbow pulled back tight to the ribs, torso rotated 60 degrees left, raven hair swept forward over the right shoulder, gold serpent arm cuffs visible on both forearms. Motion blur on the right hand and forearm.",
       "stat_affinity": "speed"
     },
     {
-      "name": "Viper's Whisper",
-      "description": "A deceptive low leg sweep followed immediately by a sharp elbow strike, using her serpent tattoo as visual misdirection while she pivots on her planted foot to redirect momentum into the follow-up blow.",
-      "image_snapshot": "Low crouch on right leg, left leg extended along ground toward left, right elbow driving forward at shoulder height, left arm trailing back, torso leaned forward 30 degrees, head turned profile right.",
+      "name": "Crimson Heel Decree",
+      "description": "Velvet Whisper plants her left foot, raises her right knee to chest height, then drives a precise downward axe kick with the heel in a vertical arc, targeting the collarbone with the full calculated force of her hip rotation and body drop behind it.",
+      "image_snapshot": "Standing on the left leg with knee slightly bent, right leg raised vertically with the heel at its apex directly above the head, toes pointed upward, torso upright and square-facing, both arms extended outward at shoulder height for balance, lace garter visible on the raised right thigh, raven hair hanging straight down from the inverted momentum. Speed lines along the full length of the raised right leg.",
       "stat_affinity": "technique"
     },
     {
-      "name": "Serpent's Dominion",
-      "description": "A supernatural-infused spinning attack where she channels ethereal energy along her body, causing the serpent tattoo to glow as she completes a full 360-degree rotation with both arms extended, leaving a fading afterimage.",
-      "image_snapshot": "Upright spin complete, both arms fully extended horizontal, right arm pointing forward and left arm pointing back, legs shoulder-width apart, torso facing forward, head looking straight, faint\u7eff\u8272 glow visible along right hip and thigh tattoo.",
+      "name": "Hazel-Green Hex",
+      "description": "Velvet Whisper locks her mismatched gaze forward, tilts her head back slightly, then snaps it forward as both eyes emit a split-second dual-colored flash \u2014 one emerald, one hazel \u2014 that radiates outward in a narrow cone, delivering a disorienting supernatural concussive pulse that staggers opponents without physical contact.",
+      "image_snapshot": "Upright standing position, head tilted slightly forward with chin angled down, both eyes wide open and emitting two distinct beams of light \u2014 left eye radiating emerald green, right eye radiating deep amber \u2014 torso square to the viewer, both arms held slightly away from the body with fingers spread, gold filigree choker and ruby pendant illuminated by the upward eye-light, raven hair pushed back from the face by the forward energy release. Radial speed lines emanating outward from both eyes.",
       "stat_affinity": "supernatural"
     }
   ]

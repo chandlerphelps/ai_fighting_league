@@ -86,6 +86,17 @@ export async function regenerateImages(
   })
 }
 
+export async function regenerateMoveImage(
+  id: string,
+  moveIndex: number,
+  tier: string
+): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>(`/fighters/${id}/regenerate-move-image`, {
+    method: 'POST',
+    body: JSON.stringify({ move_index: moveIndex, tier }),
+  })
+}
+
 export async function pollTask(taskId: string): Promise<TaskResponse> {
   return apiFetch<TaskResponse>(`/tasks/${taskId}`)
 }

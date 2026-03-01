@@ -9,7 +9,8 @@ function serveDataPlugin(): Plugin {
     name: 'serve-data',
     configureServer(server) {
       server.middlewares.use('/data', (req, res, next) => {
-        const filePath = path.join(dataDir, req.url || '')
+        const urlPath = (req.url || '').split('?')[0]
+        const filePath = path.join(dataDir, urlPath)
         if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
           const ext = path.extname(filePath).toLowerCase()
           const mimeTypes: Record<string, string> = {
@@ -42,7 +43,7 @@ export default defineConfig({
     port: 8081,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:5001',
         changeOrigin: true,
       },
     },

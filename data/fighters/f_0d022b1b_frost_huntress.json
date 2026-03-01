@@ -76,22 +76,22 @@
   "ranking": null,
   "moves": [
     {
-      "name": "Frost Thread",
-      "description": "Springs backward off the balls of both feet while whipping both wrists forward, releasing twin wires that arc through the air in a horizontal X pattern at chest height.",
-      "image_snapshot": "Leaning backward at a 45-degree angle, weight on both balls of feet, both arms extended forward with wrists cocked back, wires streaming outward in an X shape. Motion blur on both wrists and wires.",
-      "stat_affinity": "speed"
-    },
-    {
-      "name": "Predator Spiral",
-      "description": "Leaps into a full front flip, tucking both knees to chest mid-rotation before extending into a horizontal axe-kick with the right leg while the left leg remains extended backward.",
-      "image_snapshot": "Mid-air, body upside-down and fully horizontal, right leg extended straight down at a 90-degree angle from torso, left leg extended straight backward, both arms spread wide. Motion blur on right leg.",
-      "stat_affinity": "speed"
-    },
-    {
-      "name": "Snap Freeze",
-      "description": "Drives the right fist straight forward while pivoting on the left foot, shifting weight aggressively forward and snapping the torso from a twisted stance to fully squared.",
-      "image_snapshot": "Deep lunge on left leg, right fist extended straight forward at shoulder height, left arm pulled back to hip, torso twisted 45 degrees. Speed lines on right fist.",
+      "name": "Wire Snare Lash",
+      "description": "She flicks her right wrist sharply outward, deploying a length of trap-wire from the wrist-mounted dispenser, then snaps the arm back in a tight horizontal arc to whip the wire across the opponent's face and chest at close range. The motion is compact and precise, originating entirely from the forearm and wrist with minimal telegraphing.",
+      "image_snapshot": "Standing upright with weight on the left foot, right arm fully extended to the side at shoulder height, wrist cocked downward, trap-wire visibly unspooled in a taut horizontal line extending from the dispenser on her wrist, left arm pulled close to her ribs, head turned sharply right with ice-blue eyes fixed forward. Speed lines and motion blur on the right forearm and wire.",
       "stat_affinity": "technique"
+    },
+    {
+      "name": "Frost Dash Strike",
+      "description": "She explodes forward from a low stance in a straight-line sprint, closing distance in under a second, then drives her steel-reinforced right glove forward in a single straight punch at throat height using all her forward momentum. The entire attack is one continuous burst of acceleration with no wind-up.",
+      "image_snapshot": "Body nearly parallel to the ground mid-lunge, right fist fully extended forward at throat height, left arm swept straight back behind her torso, right leg driving forward bent at the knee, left leg trailing extended behind, torso low and angled forward at roughly 30 degrees, black braid lifted and trailing behind her head. Motion blur on right fist and both legs.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Predator Heel Drop",
+      "description": "She leaps straight up, tucks both knees to her chest at the apex, then extends her right leg downward in a vertical axe-kick, driving the reinforced heel straight down with her full body weight behind it. The left leg remains bent and tucked during the drop to concentrate all force into the single descending heel.",
+      "image_snapshot": "Airborne at the apex of the drop, body vertical, right leg fully extended straight downward with heel pointed at the floor, left leg bent and tucked up near her torso, both arms spread outward at shoulder height for balance, head upright, braid hanging straight up above her from momentum. Motion blur on the right leg from hip to heel.",
+      "stat_affinity": "power"
     }
   ]
 }

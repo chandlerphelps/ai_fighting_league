@@ -39,6 +39,7 @@ CHARACTER:
 
 Design exactly 3 fighting moves for this character. Rules:
 - Each move must feel unique to THIS character's body, personality, and strongest stats
+- The moves must make sense physically - we will be generating images from them
 - Moves are strikes, kicks, acrobatic attacks, or supernatural abilities — never holds or grapples
 - Names: 2-4 words, evocative and memorable (fighting game style)
 - stat_affinity: which stat the move leans on most (power, speed, technique, or supernatural)
@@ -49,6 +50,7 @@ DESCRIPTION: 1-2 sentences explaining how the move works — the full choreograp
 
 IMAGE_SNAPSHOT — THIS IS CRITICAL:
 - This is a SINGLE FROZEN MOMENT for an artist to draw. One frame, not a sequence.
+- Think through how the entire move would work step by step then pick the coolest moment to capture
 - Describe the exact body position: where each limb is, weight distribution, angle of torso, head position
 - End with which body parts have motion blur or speed lines (e.g. "motion blur on right leg and both fists")
 - The fighter is ALONE — no opponent in the image
@@ -79,18 +81,16 @@ Return ONLY valid JSON — an array of exactly 3 objects:
     result = call_openrouter_json(
         prompt,
         config,
-        model="minimax/minimax-m2.5",
+        model="anthropic/claude-sonnet-4.6",
         system_prompt=system_prompt,
-        temperature=0.8,
+        temperature=0.6,
         max_tokens=2048,
     )
 
     if isinstance(result, dict) and "moves" in result:
         result = result["moves"]
     if not isinstance(result, list):
-        raise RuntimeError(
-            f"Expected a JSON array of moves, got: {type(result)}"
-        )
+        raise RuntimeError(f"Expected a JSON array of moves, got: {type(result)}")
 
     return result[:3]
 
@@ -120,9 +120,7 @@ def _nsfw_tail(gender: str, skimpiness_level: int) -> str:
     )
 
 
-def build_move_image_prompt(
-    fighter: dict, move: dict, tier: str
-) -> str:
+def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
     gender = fighter.get("gender", "female")
     skimpiness = fighter.get("skimpiness_level", 2)
 
@@ -154,12 +152,13 @@ def build_move_image_prompt(
     if clothing:
         parts.append(clothing)
 
-    parts.append(
-        f'performing "{move_name}": {move_snapshot}'
-    )
+    parts.append(f'performing "{move_name}": {move_snapshot}')
 
     if expression:
         parts.append(expression)
+
+    if clothing:
+        parts.append(clothing)
 
     parts.append(
         "motion blur on limbs, impact energy effects, "

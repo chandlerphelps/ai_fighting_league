@@ -18,6 +18,8 @@ from app.engine.fighter_generator import (
 from app.models.fighter import Fighter, Stats
 from app.services import data_manager
 from app.services.grok_image import generate_charsheet_images
+from app.engine.move_generator import build_move_image_prompt, _slugify as move_slugify
+from app.services.grok_image import edit_image, download_image
 
 app = Flask(__name__)
 CORS(app)
@@ -26,6 +28,40 @@ config = load_config()
 data_manager.ensure_data_dirs(config)
 
 tasks: dict[str, dict] = {}
+
+PROMPT_RELEVANT_FIELDS = {
+    "ring_attire", "ring_attire_sfw", "ring_attire_nsfw",
+    "skimpiness_level", "gender", "image_prompt_personality_pose",
+    "image_prompt", "image_prompt_sfw", "image_prompt_nsfw",
+}
+
+
+def _rebuild_prompts(fighter: dict):
+    body_parts = fighter.get("image_prompt", {}).get("body_parts", "")
+    expression = fighter.get("image_prompt", {}).get("expression", "")
+    personality_pose = fighter.get("image_prompt_personality_pose", "")
+    gender = fighter.get("gender", "female")
+    skimpiness = fighter.get("skimpiness_level", 2)
+
+    clothing_sfw = fighter.get("ring_attire_sfw", "") or fighter.get("image_prompt_sfw", {}).get("clothing", "")
+    clothing_barely = fighter.get("ring_attire", "") or fighter.get("image_prompt", {}).get("clothing", "")
+    clothing_nsfw = fighter.get("ring_attire_nsfw", "") or fighter.get("image_prompt_nsfw", {}).get("clothing", "")
+
+    fighter["image_prompt_sfw"] = _build_charsheet_prompt(
+        body_parts, clothing_sfw, expression,
+        personality_pose=personality_pose, tier="sfw",
+        gender=gender, skimpiness_level=skimpiness,
+    )
+    fighter["image_prompt"] = _build_charsheet_prompt(
+        body_parts, clothing_barely, expression,
+        personality_pose=personality_pose, tier="barely",
+        gender=gender, skimpiness_level=skimpiness,
+    )
+    fighter["image_prompt_nsfw"] = _build_charsheet_prompt(
+        body_parts, clothing_nsfw, expression,
+        personality_pose=personality_pose, tier="nsfw",
+        gender=gender, skimpiness_level=skimpiness,
+    )
 
 
 def _run_in_background(task_id: str, fn, *args, **kwargs):
@@ -87,6 +123,7 @@ def update_fighter(fighter_id: str):
     if not updates:
         return jsonify({"error": "No data provided"}), 400
 
+    needs_prompt_rebuild = False
     for key, value in updates.items():
         if key.startswith("_"):
             continue
@@ -96,8 +133,16 @@ def update_fighter(fighter_id: str):
             existing["record"] = {**existing.get("record", {}), **value}
         elif key == "condition" and isinstance(value, dict):
             existing["condition"] = {**existing.get("condition", {}), **value}
+        elif key in ("image_prompt", "image_prompt_sfw", "image_prompt_nsfw") and isinstance(value, dict):
+            existing[key] = {**existing.get(key, {}), **value}
+            needs_prompt_rebuild = True
         else:
             existing[key] = value
+            if key in PROMPT_RELEVANT_FIELDS:
+                needs_prompt_rebuild = True
+
+    if needs_prompt_rebuild:
+        _rebuild_prompts(existing)
 
     data_manager.save_fighter(existing, config)
     return jsonify(existing)
@@ -335,6 +380,58 @@ def regenerate_images(fighter_id: str):
     return jsonify({"task_id": task_id, "status": "running"}), 202
 
 
+@app.post("/api/fighters/<fighter_id>/regenerate-move-image")
+def regenerate_move_image(fighter_id: str):
+    existing = data_manager.load_fighter(fighter_id, config)
+    if not existing:
+        return jsonify({"error": "Fighter not found"}), 404
+
+    body = request.json or {}
+    move_index = body.get("move_index")
+    tier = body.get("tier", "sfw")
+
+    if move_index is None:
+        return jsonify({"error": "move_index is required"}), 400
+
+    moves = existing.get("moves", [])
+    if move_index < 0 or move_index >= len(moves):
+        return jsonify({"error": f"Invalid move_index: {move_index}"}), 400
+
+    if tier not in ("sfw", "barely", "nsfw"):
+        return jsonify({"error": f"Invalid tier: {tier}"}), 400
+
+    task_id = f"moveimg_{uuid.uuid4().hex[:8]}"
+
+    def do_regenerate():
+        ring_name = existing.get("ring_name", "")
+        slug = move_slugify(ring_name)
+        base = f"{fighter_id}_{slug}" if slug else fighter_id
+        fighters_dir = config.data_dir / "fighters"
+
+        charsheet_path = fighters_dir / f"{base}_{tier}.png"
+        if not charsheet_path.exists():
+            raise RuntimeError(f"No charsheet for tier '{tier}': {charsheet_path.name}")
+
+        move = moves[move_index]
+        prompt = build_move_image_prompt(existing, move, tier)
+        filename = f"{base}_move{move_index + 1}_{tier}.png"
+        save_path = fighters_dir / filename
+
+        urls = edit_image(
+            prompt=prompt,
+            image_paths=[charsheet_path],
+            config=config,
+            aspect_ratio="1:1",
+            resolution="2k",
+            n=1,
+        )
+        download_image(urls[0], save_path)
+        return {"filename": filename, "path": str(save_path)}
+
+    _run_in_background(task_id, do_regenerate)
+    return jsonify({"task_id": task_id, "status": "running"}), 202
+
+
 @app.get("/api/tasks/<task_id>")
 def get_task(task_id: str):
     task = tasks.get(task_id)
@@ -374,4 +471,4 @@ def get_fighter_image(fighter_id: str, tier: str):
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5001, debug=True)

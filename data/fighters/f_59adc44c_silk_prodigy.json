@@ -76,21 +76,21 @@
   "ranking": null,
   "moves": [
     {
-      "name": "Ribbon Cascade",
-      "description": "Leaps into a\u6a2a\u5411\u7a7a\u7ffb, extending both legs into a wide split at peak height while whipping both arms overhead, the silk ribbons streaming upward in a radial burst, then lands on the balls of both feet with fists chambered at the hips.",
-      "image_snapshot": "Mid-air horizontal, body in full side split, legs extended to either side at shoulder height, both arms flung vertically overhead, ribbons whipping upward in a radial arc, torso upright. Motion blur on extended legs and ribbon trails.",
-      "stat_affinity": "speed"
-    },
-    {
-      "name": "Silk Storm",
-      "description": "Unleashes a rapid five-hit combination: jab-cross-uppercut-hook-cross, each strike a precise snap with the white silk wraps, torso twisting sharply with each punch, shifting weight side to side in a tight stuttering advance.",
-      "image_snapshot": "Mid-combination, weight shifted onto bent right leg, left leg trailing at 45 degrees, right arm fully extended forward at shoulder height in a cross punch, left arm cocked at 90 degrees at the hip, torso twisted right. Speed lines on right fist and trailing left leg.",
+      "name": "Ribbon Cipher Strike",
+      "description": "She snaps her wrist outward in a tight horizontal arc, sending the silk ribbon from her hair bun whipping across at eye level before her extended index and middle fingers drive forward in a precise two-finger jab to the throat. The ribbon snap is a feint that draws the opponent's guard up while the finger strike targets the exposed lower opening.",
+      "image_snapshot": "Standing with weight fully on the left foot, right arm fully extended forward at throat height with index and middle fingers rigid and together, left arm pulled sharply back to the ribs with fist clenched, torso rotated 30 degrees to the right, head level and facing forward, one silk ribbon fully extended horizontal in the air beside the right arm. Speed lines on the right hand and ribbon.",
       "stat_affinity": "technique"
     },
     {
-      "name": "Phantom Weave",
-      "description": "Drops into an extreme low crouch, then explodes upward in a spiraling corkscrew kick, body rotating 540 degrees, right leg extended in a scything arc overhead while left leg stays tucked, both arms spread wide in an X frame.",
-      "image_snapshot": "Mid-spin at 270 degrees rotation, body angled 45 degrees off vertical, right leg fully extended horizontally above head level, left leg bent with knee to chest, both arms spread in an X shape, hair buns whipping in the rotation. Motion blur on spinning torso and right leg arc.",
+      "name": "Phantom Step Heel",
+      "description": "She bursts forward in a low explosive dash, dropping her center of gravity, then plants her left foot and drives her right heel straight up in a vertical axe kick at maximum upward extension. The speed of the approach compresses into a single upward heel drop delivered from directly beneath the opponent's chin.",
+      "image_snapshot": "Left foot flat on the ground bearing all body weight, right leg fully extended straight up overhead with heel at peak height, torso leaning slightly forward, both arms swept downward and back along the hips for counterbalance, chin tucked, circuit tattoos on wrists visible. Motion blur on the right leg from knee to heel.",
+      "stat_affinity": "speed"
+    },
+    {
+      "name": "Prodigy's Verdict",
+      "description": "She performs a standing back flip, and at the apex of the rotation when her body is fully inverted, she fires both legs outward in a split-kick before completing the flip and landing. The move delivers a simultaneous double-heel strike at the peak of the inversion.",
+      "image_snapshot": "Body fully inverted at the top of a back flip, both legs split wide apart horizontally at chest height, arms tucked tight against the torso with hands fisted, silk ribbons from both hair buns hanging straight downward due to gravity, silver ankle bands catching light, head facing downward, circuit tattoos on wrists visible. Motion blur on both feet and the trailing silk ribbons.",
       "stat_affinity": "technique"
     }
   ]
