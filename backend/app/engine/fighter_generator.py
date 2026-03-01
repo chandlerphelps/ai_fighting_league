@@ -322,7 +322,7 @@ The LLM decides the exact erotic level of the NSFW tier. Do not force visible cl
 
 image_prompt_clothing_nsfw rules:
 - Keep it short (max 8 words total)
-- Always start with the remaining signature accessories
+- Always start with the remaining iconic features
 - Then add whatever nudity level fits the character (examples):
   - "thigh-high boots, choker"
   - "thigh-high boots, choker, completely topless and bottomless"
@@ -374,13 +374,13 @@ SKIMPINESS_LEVELS = {
 
 def _build_tier_prompt(tier: str, skimpiness_level: int, character_summary: dict) -> str:
     level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
-    sig = character_summary.get("signature_accessories", "")
+    sig = character_summary.get("iconic_features", "")
     ring_name = character_summary.get("ring_name", "Unknown")
     body_parts = character_summary.get("image_prompt_body_parts", "")
     expression = character_summary.get("image_prompt_expression", "")
 
     char_context = f"""CHARACTER: {ring_name}
-Signature accessories (MUST appear in every tier): {sig}
+Iconic features (MUST be visible in every tier): {sig}
 Body: {body_parts}
 Expression: {expression}
 SKIMPINESS LEVEL: {skimpiness_level} of 4"""
@@ -394,13 +394,13 @@ RULES:
   HARD RULES: {level['sfw_hard_rules']}
   SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
   {level['sfw_guidance']}
-  Signature accessories + additional clothing pieces to hit the skin target.
+  Iconic features + additional clothing pieces to hit the skin target.
 
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 Return ONLY valid JSON:
 {{
-  "ring_attire_sfw": "<full SFW outfit description including signature accessories>",
+  "ring_attire_sfw": "<full SFW outfit description incorporating iconic features>",
   "image_prompt_clothing_sfw": "<SFW clothing description for image gen — just the clothing pieces, not accessories>"
 }}"""
 
@@ -413,13 +413,13 @@ RULES:
   HARD RULES: No nipples, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.
   SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
   {level['barely_guidance']}
-  Signature accessories + minimal additional pieces to hit the skin target.
+  Iconic features + minimal additional pieces to hit the skin target.
 
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 Return ONLY valid JSON:
 {{
-  "ring_attire": "<full barely-SFW outfit description including signature accessories>",
+  "ring_attire": "<full barely-SFW outfit description incorporating iconic features>",
   "image_prompt_clothing": "<barely-SFW clothing description for image gen — just the clothing pieces>"
 }}"""
 
@@ -429,7 +429,7 @@ Return ONLY valid JSON:
 Generate the NSFW outfit for this character.
 
 RULES:
-  HARD RULES: Fully nude — topless AND bottomless. Only signature accessories remain.
+  HARD RULES: Fully nude — topless AND bottomless. Only iconic features remain.
   TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
   The character should feel {level['nsfw_adjective'].lower()} — whatever fits their personality.
 
@@ -437,7 +437,7 @@ RULES:
 
 Return ONLY valid JSON:
 {{
-  "ring_attire_nsfw": "<NSFW outfit description — nude except signature accessories>",
+  "ring_attire_nsfw": "<NSFW outfit description — nude except iconic features>",
   "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — max 8 words, just the remaining accessories>"
 }}"""
 
@@ -634,11 +634,11 @@ STAT CONSTRAINTS:
 - No fighter should be elite at everything — balance strengths with clear weaknesses
 - Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, etc.)
 
-SIGNATURE ACCESSORIES:
-Design 3-6 signature accessories that define this character's visual identity. These items appear
-in EVERY version of the outfit (SFW through NSFW). They are the character's iconic pieces —
-boots, bracers, belts, chokers, tiaras, gauntlets, jewelry, etc. NOT full clothing items like
-jackets or pants. Think: what would remain if the character were stripped to their most iconic look?
+ICONIC FEATURES:
+List 3-6 visual details that make this character instantly recognizable — the things a fan would
+draw first. These persist across ALL outfit tiers. Can be anything visual: a scar, a hairstyle,
+a tattoo, a weapon, boots, a choker, body paint, a prosthetic limb, a piece of jewelry.
+NOT full clothing items like jackets or pants.
 
 Return ONLY valid JSON with this exact structure:
 {{
@@ -651,7 +651,7 @@ Return ONLY valid JSON with this exact structure:
   "weight": "<weight in lbs>",
   "build": "<body type description>",
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
-  "signature_accessories": "<comma-separated list of 3-6 iconic accessories that appear in every outfit tier>",
+  "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
   "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "stats": {{
@@ -695,7 +695,7 @@ Return ONLY valid JSON with this exact structure:
         weight=result.get("weight", ""),
         build=result.get("build", ""),
         distinguishing_features=result.get("distinguishing_features", ""),
-        signature_accessories=result.get("signature_accessories", ""),
+        iconic_features=result.get("iconic_features", ""),
         ring_attire=outfit_data.get("ring_attire", ""),
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
         ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),

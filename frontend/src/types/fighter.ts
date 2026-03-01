@@ -63,7 +63,7 @@ export interface Fighter {
   weight: string
   build: string
   distinguishing_features: string
-  signature_accessories?: string
+  iconic_features?: string
   ring_attire: string
   ring_attire_sfw: string
   ring_attire_nsfw: string
