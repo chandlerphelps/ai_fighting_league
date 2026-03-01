@@ -398,11 +398,6 @@ RULES:
 
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
-EXAMPLE — Crimson Valkyrie (skimpiness 3)
-Signature: crimson thigh-high leather boots, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara
-ring_attire_sfw: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS high-collared zipped crimson leather jacket fully covering torso, PLUS full-coverage crimson leather combat pants, PLUS long reinforced tabard skirt, PLUS long flowing crimson cape
-image_prompt_clothing_sfw: high-collared zipped crimson leather jacket fully covering torso, full-coverage crimson leather combat pants, long reinforced tabard skirt, long flowing crimson cape
-
 Return ONLY valid JSON:
 {{
   "ring_attire_sfw": "<full SFW outfit description including signature accessories>",
@@ -422,11 +417,6 @@ RULES:
 
 You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
-EXAMPLE — Crimson Valkyrie (skimpiness 3)
-Signature: crimson thigh-high leather boots, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara
-ring_attire: crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS tiny crimson leather micro crop top, PLUS extreme high-cut crimson leather thong showing full cameltoe
-image_prompt_clothing: tiny crimson leather micro crop top, extreme high-cut crimson leather thong showing full cameltoe
-
 Return ONLY valid JSON:
 {{
   "ring_attire": "<full barely-SFW outfit description including signature accessories>",
@@ -444,11 +434,6 @@ RULES:
   The character should feel {level['nsfw_adjective'].lower()} — whatever fits their personality.
 
 {GUIDE_IMAGE_PROMPT_RULES}
-
-EXAMPLE — Crimson Valkyrie (skimpiness 3)
-Signature: crimson thigh-high leather boots, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara
-ring_attire_nsfw: only signature pieces: thigh-high boots, bracers, belt, choker, tiara. Completely topless and bottomless
-image_prompt_clothing_nsfw: thigh-high boots, bracers, belt, choker, tiara
 
 Return ONLY valid JSON:
 {{
