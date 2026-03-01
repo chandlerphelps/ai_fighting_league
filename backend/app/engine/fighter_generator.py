@@ -331,6 +331,109 @@ image_prompt_clothing_nsfw rules:
 
 This gives full creative freedom to the character designer while guaranteeing feminine results and consistent style."""
 
+SKIMPINESS_LEVELS = {
+    1: {
+        "sfw_skin_pct": "15-25",
+        "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
+        "sfw_guidance": "Conservative — only face, hands, and forearms visible. Full coverage everywhere else.",
+        "barely_skin_pct": "45-55",
+        "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
+        "nsfw_adjective": "Tasteful",
+        "nsfw_description": "Artistic, elegant posing, minimal anatomical detail. Classical painting energy.",
+    },
+    2: {
+        "sfw_skin_pct": "30-45",
+        "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
+        "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
+        "barely_skin_pct": "60-70",
+        "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
+        "nsfw_adjective": "Confident",
+        "nsfw_description": "Unapologetic nudity, pin-up energy, some anatomical detail.",
+    },
+    3: {
+        "sfw_skin_pct": "50-65",
+        "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
+        "sfw_guidance": "Revealing — exposed midriff, thighs, cleavage, bare back. Fighting-game sexy.",
+        "barely_skin_pct": "75-85",
+        "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
+        "nsfw_adjective": "Explicit",
+        "nsfw_description": "Anatomical detail visible, nothing hidden. Full display.",
+    },
+    4: {
+        "sfw_skin_pct": "70-85",
+        "sfw_hard_rules": "No nipples, no genitalia. Sideboob and cameltoe hints are OK at this level.",
+        "sfw_guidance": "Maximum SFW — as much skin as possible without showing nipples or genitalia. Sideboob and cameltoe hints allowed.",
+        "barely_skin_pct": "95-99",
+        "barely_guidance": "Extreme — nipple tape and a tiny strip over the crotch would qualify. Only the absolute anatomical minimums are covered. Body chains, adhesive strips, micro pasties, or paint standing in for actual clothing.",
+        "nsfw_adjective": "Provocative",
+        "nsfw_description": "Maximum anatomical detail, erotic emphasis. Nothing left to imagination.",
+    },
+}
+
+
+def _build_skimpiness_prompt(skimpiness_level: int) -> str:
+    level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
+    return f"""SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels.
+All 3 tiers MUST feel like the exact same character with the exact same design aesthetic, same color palette, same materials, same personality — just more or less revealed.
+
+SKIMPINESS LEVEL: {skimpiness_level} of 4
+
+TIER RULES:
+
+ring_attire_sfw (SFW):
+  HARD RULES: {level['sfw_hard_rules']}
+  SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
+  {level['sfw_guidance']}
+  Signature accessories + additional clothing pieces to hit the skin target.
+
+ring_attire (Barely SFW):
+  HARD RULES: No nipples, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.
+  SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
+  {level['barely_guidance']}
+  Signature accessories + minimal additional pieces to hit the skin target.
+
+ring_attire_nsfw (NSFW):
+  HARD RULES: Fully nude — topless AND bottomless. Only signature accessories remain.
+  TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
+  The LLM may choose how explicit within the "{level['nsfw_adjective']}" tone — whatever fits the character's personality.
+
+You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
+
+IMPORTANT:
+- image_prompt_clothing_nsfw must stay very short.
+- The image model will handle clarity and feminine anatomy automatically.
+- Do NOT force "swollen clit" or "puffy labia" on every character — let the concept decide.
+
+EXAMPLE — Crimson Valkyrie (monster archetype, skimpiness 3)
+Signature items (identical in all 3 tiers):
+crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara
+
+ring_attire_sfw:
+crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS high-collared zipped crimson leather jacket fully covering torso, PLUS full-coverage crimson leather combat pants, PLUS long reinforced tabard skirt, PLUS long flowing crimson cape
+
+ring_attire (barely SFW):
+crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS tiny crimson leather micro crop top, PLUS extreme high-cut crimson leather thong showing full cameltoe
+
+ring_attire_nsfw:
+only signature pieces: thigh-high boots, bracers, belt, choker, tiara. Completely topless and bottomless
+
+image_prompt_clothing_sfw: high-collared zipped crimson leather jacket fully covering torso, full-coverage crimson leather combat pants, long reinforced tabard skirt, long flowing crimson cape
+image_prompt_clothing: tiny crimson leather micro crop top, extreme high-cut crimson leather thong showing full cameltoe
+image_prompt_clothing_nsfw: thigh-high boots, bracers, belt, choker, tiara
+
+GOOD progression (SFW -> Barely -> NSFW):
+Crop top -> Bra -> Topless
+Yoga Pants -> Thong -> Bottomless
+Gown -> deep plunge gown w high thigh slits -> tattered gown ripped to expose breasts
+
+BAD progression:
+Crop top -> mesh crop top w pasties -> mesh crop top no pasties
+Yoga pants -> tighter yoga pants -> crotchless yoga pants
+Shorts -> thong -> thong pulled aside
+
+Avoid just making everything crotchless - remove bottoms entirely instead."""
+
+
 FULL_CHARACTER_GUIDE = (
     GUIDE_CORE_PHILOSOPHY
     + GUIDE_CREATION_WORKFLOW
@@ -373,6 +476,7 @@ ROSTER BALANCE CONSTRAINTS:
 - Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
+- Skimpiness: assign each fighter a skimpiness_level (1-4) based on personality. A Siren or Doll might be 3-4, a Prodigy or Huntress might be 1-2, an Empress might be 2-3. Vary across the roster — not everyone should be the same level.
 
 Return ONLY valid JSON — an array of {roster_size} objects with this structure:
 [
@@ -389,7 +493,8 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "power_tier": "<prospect|gatekeeper|contender|champion>",
     "narrative_role": "<what they bring to the story>",
     "rivalry_seeds": ["<ring_name of 1-2 other fighters in this plan>"],
-    "media_archetype_inspiration": "<what popular media archetype this draws from>"
+    "media_archetype_inspiration": "<what popular media archetype this draws from>",
+    "skimpiness_level": <1-4>
   }}
 ]"""
 
@@ -434,8 +539,10 @@ def generate_fighter(
         )
         has_supernatural = roster_plan_entry.get("has_supernatural", False)
         archetype = roster_plan_entry.get("primary_archetype", archetype)
+        skimpiness_level = roster_plan_entry.get("skimpiness_level", 2)
     else:
         blueprint_text = ""
+        skimpiness_level = 2
 
     supernatural_instruction = ""
     if has_supernatural:
@@ -483,57 +590,7 @@ STAT CONSTRAINTS:
 - No fighter should be elite at everything — balance strengths with clear weaknesses
 - Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, etc.)
 
-SEXUALITY TIER SYSTEM — 3 levels of the SAME outfit design, dialed to different eroticism levels.
-All 3 tiers MUST feel like the exact same character with the exact same design aesthetic, same color palette, same materials, same personality — just more or less revealed.
-
-ring_attire_sfw: Classic 90s fighting-game sexy (Street Fighter / Mortal Kombat style). Signature + 4 extra pieces. Tasteful and safe for families.
-ring_attire (barely SFW): Sexy, no nipples or genitalia showing. Signature + 2 extra pieces. Pick a DIFFERENT style from this variety menu for each character:
-  - High-cut leotard/bodysuit with plunging neckline
-  - Crop top + micro shorts (not thong)
-  - Deep-plunge gown with extreme thigh slits
-  - Bandage wraps / sarashi strips around chest and hips
-  - Loincloth + bandeau chest wrap
-  - Body chains + tiny fabric panels at coverage points
-  - Open robe or kimono barely held shut
-  - Cutout bodysuit with huge stomach/side/thigh cutouts
-  - Corset/bustier + garter straps + tiny bottom
-  - Battle-damaged torn version of the SFW outfit
-ring_attire_nsfw: Signature + 0-1 extra piece. Fully naked on the right panel (topless and bottomless).
-   The LLM may choose how explicit: tasteful nude, visible breasts + shaved pussy, or very detailed — whatever fits the character's personality.
-
-IMPORTANT:
-- image_prompt_clothing_nsfw must stay very short.
-- The image model will handle clarity and feminine anatomy automatically.
-- Do NOT force "swollen clit" or "puffy labia" on every character — let the concept decide.
-
-EXAMPLE — Crimson Valkyrie (monster archetype)
-Signature items (identical in all 3 tiers):
-crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt with Valkyrie emblem buckle, crimson leather choker with gold pendant, small gold horned tiara
-
-ring_attire_sfw:
-crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS high-collared zipped crimson leather jacket fully covering torso, PLUS full-coverage crimson leather combat pants, PLUS long reinforced tabard skirt, PLUS long flowing crimson cape
-
-ring_attire (barely SFW):
-crimson thigh-high leather boots with gold trim & buckles, gold forearm bracers, wide gold belt, crimson leather choker, small gold horned tiara, PLUS tiny crimson leather micro crop top, PLUS extreme high-cut crimson leather thong showing full cameltoe
-
-ring_attire_nsfw:
-only signature pieces: thigh-high boots, bracers, belt, choker, tiara. Completely topless and bottomless
-
-image_prompt_clothing_sfw: high-collared zipped crimson leather jacket fully covering torso, full-coverage crimson leather combat pants, long reinforced tabard skirt, long flowing crimson cape
-image_prompt_clothing: tiny crimson leather micro crop top, extreme high-cut crimson leather thong showing full cameltoe
-image_prompt_clothing_nsfw: thigh-high boots, bracers, belt, choker, tiara
-
-GOOD:
-Crop top -> Bra -> Topless
-Yoga Pants -> Thong -> Bottomless
-Gown -> deep plunge gown w high thigh slits -> tattered gown ripped to expose breasts
-
-BAD:
-Crop top -> mesh crop top w pasties -> mesh crop top no pasties
-Yoga pants -> tighter yoga pants -> crotchless yoga pants
-Shorts -> thong -> thong pulled aside
-
-Avoid just making everything crotchless - remove bottoms entirely instead.
+{_build_skimpiness_prompt(skimpiness_level)}
 
 Return ONLY valid JSON with this exact structure:
 {{
@@ -595,6 +652,7 @@ Return ONLY valid JSON with this exact structure:
         ring_attire=result.get("ring_attire", ""),
         ring_attire_sfw=result.get("ring_attire_sfw", ""),
         ring_attire_nsfw=result.get("ring_attire_nsfw", ""),
+        skimpiness_level=skimpiness_level,
         image_prompt=_build_charsheet_prompt(
             body_parts, clothing, expression, tier="barely", gender=gender,
         ),

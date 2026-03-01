@@ -66,6 +66,7 @@ export interface Fighter {
   ring_attire: string
   ring_attire_sfw: string
   ring_attire_nsfw: string
+  skimpiness_level?: number
   image_prompt: CharsheetPrompt
   image_prompt_sfw: CharsheetPrompt
   image_prompt_nsfw: CharsheetPrompt

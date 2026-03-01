@@ -86,6 +86,7 @@ class Fighter:
     ring_attire: str = ""
     ring_attire_sfw: str = ""
     ring_attire_nsfw: str = ""
+    skimpiness_level: int = 2
     image_prompt: dict = field(default_factory=dict)
     image_prompt_sfw: dict = field(default_factory=dict)
     image_prompt_nsfw: dict = field(default_factory=dict)
@@ -120,6 +121,7 @@ class Fighter:
             ring_attire=d.get("ring_attire", ""),
             ring_attire_sfw=d.get("ring_attire_sfw", ""),
             ring_attire_nsfw=d.get("ring_attire_nsfw", ""),
+            skimpiness_level=d.get("skimpiness_level", 2),
             image_prompt=d.get("image_prompt", {}),
             image_prompt_sfw=d.get("image_prompt_sfw", {}),
             image_prompt_nsfw=d.get("image_prompt_nsfw", {}),
