@@ -1,21 +1,21 @@
 [
   {
-    "concept_hook": "Hypnotic Brazilian dancer who lures larger foes into trances with her siren song, then breaks them with gleeful, intimate grapples.",
-    "ring_name": "Samba Siren",
+    "concept_hook": "Seductive Brazilian viper who paralyzes foes with toxin-laced kisses and clawing embraces.",
+    "ring_name": "Venom Kiss",
     "gender": "female",
-    "age": 26,
+    "age": 27,
     "origin": "Rio de Janeiro, Brazil",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": true,
-    "body_type": "voluptuous latina curves",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Siren",
+    "has_supernatural": false,
+    "body_type": "curvaceous Latina hourglass",
     "power_tier": "contender",
-    "narrative_role": "flirtatious manipulator who weaponizes desire",
+    "narrative_role": "calculating temptress who exploits lust and overconfidence",
     "rivalry_seeds": [
-      "Venom Kiss",
-      "Amazon Huntress"
+      "Loa Queen",
+      "Lorelei"
     ],
-    "media_archetype_inspiration": "Morrigan Aensland from Darkstalkers",
+    "media_archetype_inspiration": "Poison Ivy from DC Comics",
     "skimpiness_weights": [
       0,
       10,
@@ -24,22 +24,22 @@
     ]
   },
   {
-    "concept_hook": "Romanian hexer who curses opponents with wracking pain, savoring their screams while tormented by her own cursed lineage.",
-    "ring_name": "Hex Vixen",
+    "concept_hook": "Haitian voodoo witch who torments enemies by piercing spirit-bound dolls during combat.",
+    "ring_name": "Loa Queen",
     "gender": "female",
     "age": 29,
-    "origin": "Transylvania, Romania",
+    "origin": "Port-au-Prince, Haiti",
     "primary_archetype": "Witch",
-    "secondary_archetype": "Empress",
+    "secondary_archetype": "Doll",
     "has_supernatural": true,
-    "body_type": "pale gothic hourglass",
-    "power_tier": "gatekeeper",
-    "narrative_role": "brooding sorceress haunted by dark power",
+    "body_type": "exotic full-figured with ritual markings",
+    "power_tier": "champion",
+    "narrative_role": "mysterious ritualist haunted by the spirits she summons",
     "rivalry_seeds": [
-      "Jade Empress",
-      "Mutant Experiment"
+      "Venom Kiss",
+      "Jade Sovereign"
     ],
-    "media_archetype_inspiration": "Bayonetta from Bayonetta",
+    "media_archetype_inspiration": "Marie Laveau as in American Horror Story: Coven",
     "skimpiness_weights": [
       10,
       20,
@@ -48,22 +48,46 @@
     ]
   },
   {
-    "concept_hook": "Thai poisoner who injects paralytics via kisses and needles, laughing hysterically as victims twitch in agony.",
-    "ring_name": "Venom Kiss",
+    "concept_hook": "British gymnast prodigy who evades and submits larger foes with flawless aerial technique.",
+    "ring_name": "Aerial Ace",
     "gender": "female",
-    "age": 24,
-    "origin": "Bangkok, Thailand",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": true,
-    "body_type": "lithe asian predator",
+    "age": 19,
+    "origin": "London, United Kingdom",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": false,
+    "body_type": "petite toned gymnast",
     "power_tier": "prospect",
-    "narrative_role": "sly upstart who plays with her food",
+    "narrative_role": "eager underdog prodigy winning hearts and submissions",
     "rivalry_seeds": [
-      "Samba Siren",
-      "Silk Prodigy"
+      "Fatal Couture",
+      "BioLynx"
     ],
-    "media_archetype_inspiration": "Ivy Valentine from Soulcalibur",
+    "media_archetype_inspiration": "Kasumi from Dead or Alive",
+    "skimpiness_weights": [
+      20,
+      40,
+      25,
+      15
+    ]
+  },
+  {
+    "concept_hook": "Italian fashion doll assassin striking with bladed heels and razor-edged accessories.",
+    "ring_name": "Fatal Couture",
+    "gender": "female",
+    "age": 25,
+    "origin": "Milan, Italy",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "slender supermodel lithe",
+    "power_tier": "gatekeeper",
+    "narrative_role": "narcissistic diva demanding the runway spotlight",
+    "rivalry_seeds": [
+      "Lorelei",
+      "Aerial Ace"
+    ],
+    "media_archetype_inspiration": "Gazelle from Kingsman: The Golden Circle",
     "skimpiness_weights": [
       5,
       15,
@@ -72,122 +96,98 @@
     ]
   },
   {
-    "concept_hook": "Korean submission prodigy who methodically cranks joints until foes tap or snap, driven by cold perfectionism.",
-    "ring_name": "Silk Prodigy",
+    "concept_hook": "Australian outback huntress snaring prey with boomerangs, nets, and unerring tracking.",
+    "ring_name": "Outlaw Huntress",
     "gender": "female",
-    "age": 21,
-    "origin": "Seoul, South Korea",
-    "primary_archetype": "Prodigy",
-    "secondary_archetype": "Doll",
-    "has_supernatural": false,
-    "body_type": "petite toned gymnast",
-    "power_tier": "prospect",
-    "narrative_role": "ambitious technician hungry for validation",
+    "age": 23,
+    "origin": "Alice Springs, Australia",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": true,
+    "body_type": "lean bronzed athletic",
+    "power_tier": "contender",
+    "narrative_role": "rugged survivor with a grudge against urban elites",
     "rivalry_seeds": [
-      "Porcelain Doll",
-      "Venom Kiss"
+      "Jade Sovereign",
+      "BioLynx"
     ],
-    "media_archetype_inspiration": "Juri Han from Street Fighter",
+    "media_archetype_inspiration": "Imperator Furiosa from Mad Max: Fury Road",
     "skimpiness_weights": [
+      5,
       25,
       40,
-      25,
-      10
+      30
     ]
   },
   {
-    "concept_hook": "British cyber-doll who dismembers with precise blades, her emotionless facade cracking with flashes of rage.",
-    "ring_name": "Porcelain Doll",
+    "concept_hook": "Chinese empress wielding psychic chi commands to debuff and dismantle wills.",
+    "ring_name": "Jade Sovereign",
     "gender": "female",
-    "age": 23,
-    "origin": "London, UK",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Siren",
-    "has_supernatural": false,
-    "body_type": "flawless synthetic beauty",
-    "power_tier": "gatekeeper",
-    "narrative_role": "mechanical enigma awakening to fury",
+    "age": 31,
+    "origin": "Beijing, China",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "statuesque elegant Asian",
+    "power_tier": "champion",
+    "narrative_role": "imperious tactician concealing deep personal loss",
     "rivalry_seeds": [
-      "Silk Prodigy",
-      "Mutant Experiment"
+      "Outlaw Huntress",
+      "Loa Queen"
     ],
-    "media_archetype_inspiration": "2B from Nier: Automata",
+    "media_archetype_inspiration": "Azula from Avatar: The Last Airbender",
     "skimpiness_weights": [
-      20,
-      30,
+      15,
+      35,
       30,
       20
     ]
   },
   {
-    "concept_hook": "Brazilian tracker who spears vital organs with primal fury, howling in ecstasy over the hunt but weeping for the fallen.",
-    "ring_name": "Amazon Huntress",
+    "concept_hook": "French siren singer whose enchanted melodies induce trance before lethal lashes.",
+    "ring_name": "Lorelei",
     "gender": "female",
-    "age": 27,
-    "origin": "Manaus, Brazil",
-    "primary_archetype": "Huntress",
+    "age": 26,
+    "origin": "Paris, France",
+    "primary_archetype": "Siren",
     "secondary_archetype": "Experiment",
     "has_supernatural": true,
-    "body_type": "bronzed athletic warrior",
-    "power_tier": "contender",
-    "narrative_role": "feral guardian torn by bloodlust",
+    "body_type": "voluptuous alluring hourglass",
+    "power_tier": "gatekeeper",
+    "narrative_role": "sultry showwoman thriving on adoration and agony",
     "rivalry_seeds": [
-      "Samba Siren",
-      "Jade Empress"
+      "Fatal Couture",
+      "Venom Kiss"
     ],
-    "media_archetype_inspiration": "Aela the Huntress from Skyrim",
+    "media_archetype_inspiration": "Diva Plavalaguna from The Fifth Element",
+    "skimpiness_weights": [
+      0,
+      5,
+      25,
+      70
+    ]
+  },
+  {
+    "concept_hook": "German lab-engineered feline who slashes and leaps with predatory hyper-agility.",
+    "ring_name": "BioLynx",
+    "gender": "female",
+    "age": 24,
+    "origin": "Berlin, Germany",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": true,
+    "body_type": "lithe catlike curves",
+    "power_tier": "prospect",
+    "narrative_role": "tormented escapee grappling with her beastly instincts",
+    "rivalry_seeds": [
+      "Aerial Ace",
+      "Outlaw Huntress"
+    ],
+    "media_archetype_inspiration": "Black Cat from Marvel Comics",
     "skimpiness_weights": [
       10,
-      25,
-      40,
-      25
-    ]
-  },
-  {
-    "concept_hook": "Chinese chi empress who pulverizes bones with imperial strikes, her arrogance masking terror of vulnerability.",
-    "ring_name": "Jade Empress",
-    "gender": "female",
-    "age": 32,
-    "origin": "Beijing, China",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Witch",
-    "has_supernatural": true,
-    "body_type": "regal statuesque figure",
-    "power_tier": "champion",
-    "narrative_role": "domineering champion defending her throne",
-    "rivalry_seeds": [
-      "Hex Vixen",
-      "Amazon Huntress"
-    ],
-    "media_archetype_inspiration": "Lady Shiva from DC Comics",
-    "skimpiness_weights": [
-      15,
-      40,
-      30,
-      15
-    ]
-  },
-  {
-    "concept_hook": "LA gene-spliced freak who mutates limbs to rend flesh, thriving on the exquisite pain of her unstable changes.",
-    "ring_name": "Mutant Experiment",
-    "gender": "female",
-    "age": 25,
-    "origin": "Los Angeles, USA",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Viper",
-    "has_supernatural": true,
-    "body_type": "exotically enhanced curves",
-    "power_tier": "gatekeeper",
-    "narrative_role": "chaotic wildcard embracing her monstrosity",
-    "rivalry_seeds": [
-      "Hex Vixen",
-      "Porcelain Doll"
-    ],
-    "media_archetype_inspiration": "Mystique from X-Men",
-    "skimpiness_weights": [
-      5,
       20,
-      35,
+      30,
       40
     ]
   }

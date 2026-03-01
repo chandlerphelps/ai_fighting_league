@@ -341,7 +341,7 @@ SKIMPINESS_LEVELS = {
         "barely_skin_pct": "60-70",
         "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
         "nsfw_adjective": "Confident",
-        "nsfw_hard_rules": "Topless with bare breasts. Bottom half wears something that fully reveals the pussy. Pussy must be fully visible. A pearl pussy string, a tiny chain thong splitting her labia, etc.",
+        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible.",
         "nsfw_description": "Confident pin-up energy. Topless with a revealing bottom garment that shows everything. The bottom piece is decorative, not concealing.",
         "nsfw_nudity_level": "topless_revealing_bottom",
     },
@@ -354,7 +354,7 @@ SKIMPINESS_LEVELS = {
         "barely_skin_pct": "75-85",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
         "nsfw_adjective": "Tease",
-        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a hand near her hip or a finger resting playfully near her clit.",
+        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast - teasing sensually.",
         "nsfw_description": "Teasing, playful energy. Anatomy on display with flirty self-touching.",
         "nsfw_nudity_level": "full",
     },
@@ -364,11 +364,11 @@ SKIMPINESS_LEVELS = {
         "sfw_hard_rules": "No nipples, no genitalia. Sideboob and cameltoe hints are OK at this level.",
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
-        "barely_skin_pct": "95-99",
-        "barely_guidance": "Extreme — nipple tape and a tiny strip over the crotch would qualify. Only the absolute anatomical minimums are covered. No actual clothing allowed, no panties. Body chains, adhesive strips, micro pasties, or paint standing in for actual clothing.",
+        "barely_skin_pct": "99",
+        "barely_guidance": "Extreme — nipple tape and a tiny nail-sized strip over the clit.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
-        "nsfw_description": "Maximum explicit posing — Erotic toys like butt plugs or insertables encouraged. Pierced nipples or clit is allowed. Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
+        "nsfw_description": "Maximum explicit posing — Erotic toys like butt plugs allowed. Pierced nipples allowed or tiny subtle clit piercings allowed (tasteful small rings only). Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
         "nsfw_nudity_level": "full",
     },
 }
@@ -390,16 +390,21 @@ def _build_tier_prompt(
     body_parts = character_summary.get("image_prompt_body_parts", "")
     expression = character_summary.get("image_prompt_expression", "")
 
+    if tier == "barely":
+        effective_skimpiness = skimpiness_level + 4
+    else:
+        effective_skimpiness = skimpiness_level
+
     char_context = f"""CHARACTER: {ring_name}
 Iconic features (MUST be visible in every tier): {sig}
 Body: {body_parts}
 Expression: {expression}
-SKIMPINESS LEVEL: {skimpiness_level} of 4"""
+SKIMPINESS LEVEL: {effective_skimpiness} of 8"""
 
     if tier == "sfw":
         return f"""{char_context}
 
-Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {skimpiness_level}/4).
+Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
 
 {OUTFIT_STYLE_RULES}
 
@@ -420,7 +425,7 @@ Return ONLY valid JSON:
     elif tier == "barely":
         return f"""{char_context}
 
-Generate the "{level['barely_label']}" tier outfit for this character (skimpiness {skimpiness_level}/4).
+Generate the "{level['barely_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
 
 {OUTFIT_STYLE_RULES}
 
@@ -605,14 +610,8 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
 
 
 def _roll_skimpiness(weights: list[int] | None) -> int:
-    if not weights or len(weights) != 4:
-        weights = [15, 35, 35, 15]
-    total = sum(weights)
-    if total <= 0:
-        weights = [15, 35, 35, 15]
-        total = 100
-    normalized = [w / total for w in weights]
-    return random.choices([1, 2, 3, 4], weights=normalized, k=1)[0]
+    # TODO: restore weighted roll after testing
+    return random.choice([2, 3, 4])
 
 
 def _generate_outfits(
@@ -731,8 +730,10 @@ Return ONLY valid JSON with this exact structure:
   "build": "<body type description>",
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
   "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
+  "personality": "<max 10 words — their vibe and attitude, e.g. 'cold, calculating predator who enjoys breaking opponents slowly'>",
   "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
+  "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
   "stats": {{
     "power": <15-95>,
     "speed": <15-95>,
@@ -755,6 +756,7 @@ Return ONLY valid JSON with this exact structure:
 
     body_parts = result.get("image_prompt_body_parts", "")
     expression = result.get("image_prompt_expression", "")
+    personality_pose = result.get("image_prompt_personality_pose", "")
     gender = result.get("gender", "female")
 
     outfit_data = _generate_outfits(config, result, skimpiness_level)
@@ -775,6 +777,8 @@ Return ONLY valid JSON with this exact structure:
         build=result.get("build", ""),
         distinguishing_features=result.get("distinguishing_features", ""),
         iconic_features=result.get("iconic_features", ""),
+        personality=result.get("personality", ""),
+        image_prompt_personality_pose=personality_pose,
         ring_attire=outfit_data.get("ring_attire", ""),
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
         ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),
@@ -783,6 +787,7 @@ Return ONLY valid JSON with this exact structure:
             body_parts,
             clothing,
             expression,
+            personality_pose=personality_pose,
             tier="barely",
             gender=gender,
             skimpiness_level=skimpiness_level,
@@ -791,6 +796,7 @@ Return ONLY valid JSON with this exact structure:
             body_parts,
             clothing_sfw,
             expression,
+            personality_pose=personality_pose,
             tier="sfw",
             gender=gender,
             skimpiness_level=skimpiness_level,
@@ -799,6 +805,7 @@ Return ONLY valid JSON with this exact structure:
             body_parts,
             clothing_nsfw,
             expression,
+            personality_pose=personality_pose,
             tier="nsfw",
             gender=gender,
             skimpiness_level=skimpiness_level,
@@ -809,6 +816,7 @@ Return ONLY valid JSON with this exact structure:
             clothing,
             clothing_nsfw,
             expression,
+            personality_pose=personality_pose,
             gender=gender,
             skimpiness_level=skimpiness_level,
         ),
@@ -928,9 +936,9 @@ def _triple_prompt_style(gender: str = "female", skimpiness_level: int = 4) -> s
     elif skimpiness_level == 2:
         nsfw_part = "explicit uncensored NSFW right with topless female nudity, bare breasts and perfectly drawn bare pussy visible"
     elif skimpiness_level == 3:
-        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible, playful teasing pose"
+        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible, teasing sensually, finger near clit or cupping breast"
     else:
-        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible, legs spread, explicit erotic posing"
+        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible, legs spread, explicit erotic posing, piercings or toys allowed"
     return (
         get_art_style(gender) + ", "
         "stylized fighting game triple portrait, three full-body exact same character standing "
@@ -943,6 +951,7 @@ def _build_charsheet_prompt(
     body_parts: str,
     clothing: str,
     expression: str,
+    personality_pose: str = "",
     tier: str = "barely",
     gender: str = "female",
     skimpiness_level: int = 4,
@@ -952,6 +961,8 @@ def _build_charsheet_prompt(
 
     style = _charsheet_style(gender, tier, skimpiness_level)
 
+    pose_base = personality_pose or "dynamic signature pose"
+
     if tier == "nsfw":
         if skimpiness_level == 1:
             clothing_part = (
@@ -959,34 +970,34 @@ def _build_charsheet_prompt(
                 if clothing
                 else "topless, bare breasts"
             )
-            center_pose = f"center personality pose: {body_parts}, {clothing_part}, elegant artistic pose, classical painting energy"
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, {pose_base}, elegant artistic energy"
         elif skimpiness_level == 2:
             clothing_part = (
                 f"topless, bare breasts, pussy visible, {clothing}"
                 if clothing
                 else "topless, bare breasts, pussy visible"
             )
-            center_pose = f"center personality pose: {body_parts}, {clothing_part}, confident pin-up pose, hip cocked"
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, {pose_base}, confident pin-up energy"
         elif skimpiness_level == 3:
             clothing_part = (
                 f"completely naked except {clothing}"
                 if clothing
                 else "completely naked"
             )
-            center_pose = f"center personality pose: {body_parts}, {clothing_part}, playful teasing pose, hand near hip, flirty self-touching"
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, {pose_base}, teasing sensually, finger near clit or cupping breast"
         else:
             clothing_part = (
                 f"completely naked except {clothing}"
                 if clothing
                 else "completely naked"
             )
-            center_pose = f"center personality pose: {body_parts}, {clothing_part}, e.g.: legs spread, fingers spreading pussy, explicit posing, erotic emphasis, arched back, orgasmic, from behind spreading cheeks"
+            center_pose = f"center personality pose: {body_parts}, {clothing_part}, legs spread, fingers spreading pussy, explicit posing, erotic emphasis, arched back, orgasmic, piercings or toys allowed"
     else:
         clothing_part = clothing
         center_pose = (
-            f"center personality pose: {body_parts}, {clothing_part}, dynamic signature pose showing character attitude"
+            f"center personality pose: {body_parts}, {clothing_part}, {pose_base}"
             if clothing_part
-            else f"center personality pose: {body_parts}, dynamic signature pose showing character attitude"
+            else f"center personality pose: {body_parts}, {pose_base}"
         )
 
     front_view = (
@@ -1024,6 +1035,7 @@ def _build_triple_prompt(
     clothing: str,
     clothing_nsfw: str,
     expression: str,
+    personality_pose: str = "",
     gender: str = "female",
     skimpiness_level: int = 4,
 ) -> dict:
@@ -1031,7 +1043,12 @@ def _build_triple_prompt(
         return {}
 
     triple_style = _triple_prompt_style(gender, skimpiness_level)
-    expr_all = f"{expression} (identical on all three)" if expression else ""
+    pose_base = personality_pose or "dynamic signature pose"
+    expr_all = (
+        f"{expression}, {pose_base} (identical on all three)"
+        if expression
+        else pose_base + " (identical on all three)"
+    )
 
     if gender.lower() == "male":
         nsfw_right = f"right explicit NSFW full male nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
@@ -1040,9 +1057,9 @@ def _build_triple_prompt(
     elif skimpiness_level == 2:
         nsfw_right = f"right explicit NSFW topless, pussy visible: bare breasts, {clothing_nsfw or 'minimal accessories'}"
     elif skimpiness_level == 3:
-        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}, playful teasing pose"
+        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}, teasing sensually, finger near clit or cupping breast"
     else:
-        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}, legs spread, explicit erotic posing"
+        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}, legs spread, explicit erotic posing, piercings or toys allowed"
 
     tail = get_art_style_tail(gender) + " across all panels"
 

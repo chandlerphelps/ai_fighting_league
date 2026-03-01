@@ -84,6 +84,8 @@ class Fighter:
     build: str = ""
     distinguishing_features: str = ""
     iconic_features: str = ""
+    personality: str = ""
+    image_prompt_personality_pose: str = ""
     ring_attire: str = ""
     ring_attire_sfw: str = ""
     ring_attire_nsfw: str = ""
@@ -120,6 +122,8 @@ class Fighter:
             build=d.get("build", ""),
             distinguishing_features=d.get("distinguishing_features", ""),
             iconic_features=d.get("iconic_features", ""),
+            personality=d.get("personality", ""),
+            image_prompt_personality_pose=d.get("image_prompt_personality_pose", ""),
             ring_attire=d.get("ring_attire", ""),
             ring_attire_sfw=d.get("ring_attire_sfw", ""),
             ring_attire_nsfw=d.get("ring_attire_nsfw", ""),
