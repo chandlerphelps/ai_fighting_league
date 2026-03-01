@@ -1,6 +1,7 @@
 import json
 import random
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 
 from app.config import Config
 from app.engine.image_style import get_art_style, get_art_style_tail
@@ -44,7 +45,7 @@ Crop tops, high-cut leotards, sling bikinis, thongs, thigh-highs, mesh panels, c
 shirts with no bra, short skirts, loin cloths, semi-transparency, body paint — lean into it
 without apology. Sex appeal is a feature, not a bug. Confidence, allure, and willingness to
 weaponize beauty are core to female character design in AFL. But be tasteful so we can have a
-good SFW version of each character which is family friendly.
+good SFW version of each character which is family friendly. Most should be white / asian / latina.
 
 ### 2. Men Are Bigger and Stronger — Women Win Differently
 
@@ -316,21 +317,6 @@ GUIDE_COMMON_MISTAKES = """## Common Mistakes
     must serve the character concept. Tokenism is boring.
 """
 
-GUIDE_IMAGE_PROMPT_RULES = """## IMAGE PROMPT RULES — FOLLOW EXACTLY
-
-The LLM decides the exact erotic level of the NSFW tier. Do not force visible clit/labia in every character.
-
-image_prompt_clothing_nsfw rules:
-- Keep it short (max 8 words total)
-- Always start with the remaining iconic features
-- Then add whatever nudity level fits the character (examples):
-  - "thigh-high boots, choker"
-  - "thigh-high boots, choker, completely topless and bottomless"
-  - "thigh-high boots, completely topless bottomless shaved pussy visible"
-- Never use "crotchless", "transparent", "pulled aside", or long descriptions
-- The triple prompt will automatically add "full frontal female nudity" so the image model stays safe and clean
-
-This gives full creative freedom to the character designer while guaranteeing feminine results and consistent style."""
 
 SKIMPINESS_LEVELS = {
     1: {
@@ -342,7 +328,9 @@ SKIMPINESS_LEVELS = {
         "barely_skin_pct": "45-55",
         "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
         "nsfw_adjective": "Tasteful",
-        "nsfw_description": "Artistic, elegant posing, minimal anatomical detail. Classical painting energy.",
+        "nsfw_hard_rules": "Topless only — bare breasts visible, bottoms stay on. Elegant posing.",
+        "nsfw_description": "Artistic, elegant posing. Classical painting energy. Bare breasts but bottoms remain.",
+        "nsfw_nudity_level": "topless",
     },
     2: {
         "sfw_label": "Sporty & Attractive",
@@ -353,29 +341,35 @@ SKIMPINESS_LEVELS = {
         "barely_skin_pct": "60-70",
         "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
         "nsfw_adjective": "Confident",
-        "nsfw_description": "Unapologetic nudity, pin-up energy, some anatomical detail.",
+        "nsfw_hard_rules": "Topless with bare breasts. Bottom half wears something that fully reveals the pussy. Pussy must be fully visible. A pearl pussy string, a tiny chain thong splitting her labia, etc.",
+        "nsfw_description": "Confident pin-up energy. Topless with a revealing bottom garment that shows everything. The bottom piece is decorative, not concealing.",
+        "nsfw_nudity_level": "topless_revealing_bottom",
     },
     3: {
-        "sfw_label": "Revealing",
+        "sfw_label": "Bold",
         "sfw_skin_pct": "50-65",
         "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
-        "sfw_guidance": "Revealing — exposed midriff, thighs, cleavage, bare back. Fighting-game sexy.",
+        "sfw_guidance": "Bold — shows skin confidently but still looks like a real outfit.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
-        "nsfw_adjective": "Explicit",
-        "nsfw_description": "Anatomical detail visible, nothing hidden. Full display.",
+        "nsfw_adjective": "Tease",
+        "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a hand near her hip or a finger resting playfully near her clit.",
+        "nsfw_description": "Teasing, playful energy. Anatomy on display with flirty self-touching.",
+        "nsfw_nudity_level": "full",
     },
     4: {
-        "sfw_label": "Maximum Skin",
+        "sfw_label": "Daring",
         "sfw_skin_pct": "70-85",
         "sfw_hard_rules": "No nipples, no genitalia. Sideboob and cameltoe hints are OK at this level.",
-        "sfw_guidance": "Maximum SFW — as much skin as possible without showing nipples or genitalia. Sideboob and cameltoe hints allowed.",
+        "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "95-99",
         "barely_guidance": "Extreme — nipple tape and a tiny strip over the crotch would qualify. Only the absolute anatomical minimums are covered. Body chains, adhesive strips, micro pasties, or paint standing in for actual clothing.",
-        "nsfw_adjective": "Provocative",
-        "nsfw_description": "Maximum anatomical detail, erotic emphasis. Nothing left to imagination.",
+        "nsfw_adjective": "Pornographic",
+        "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
+        "nsfw_description": "Maximum explicit posing — spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
+        "nsfw_nudity_level": "full",
     },
 }
 
@@ -445,23 +439,81 @@ Return ONLY valid JSON:
 }}"""
 
     else:
+        nudity_level = level.get("nsfw_nudity_level", "full")
+        if nudity_level == "topless":
+            additional = (
+                "ADDITIONAL: The character is topless but keeps bottoms on. "
+                "Still include accessories — boots/heels, gloves, jewelry, chokers, belts, etc. "
+                "The image_prompt_clothing_nsfw MUST include the bottom garment plus accessories."
+            )
+            attire_hint = "topless plus bottom garment and each remaining accessory listed plainly"
+            clothing_hint = "bottom garment plus accessories"
+            image_prompt_rules = (
+                "## IMAGE PROMPT RULES — FOLLOW EXACTLY\n\n"
+                "image_prompt_clothing_nsfw rules:\n"
+                "- Keep it short\n"
+                "- Always start with the remaining iconic features\n"
+                "- This is Level 1 (topless only): include the bottom garment. Examples:\n"
+                '  - "thigh-high boots, choker, leather shorts"\n'
+                '  - "combat boots, micro skirt, arm wraps"\n'
+                "- The charsheet prompt automatically adds the topless framing"
+            )
+        elif nudity_level == "topless_revealing_bottom":
+            additional = (
+                "ADDITIONAL: The character is topless AND wears a bottom piece that fully reveals the pussy. "
+                "Think crotchless panties, a too-short miniskirt, see-through lingerie, slit skirt with nothing underneath. "
+                "The bottom garment is decorative — the pussy MUST be fully visible. "
+                "Still include accessories — boots/heels, gloves, jewelry, chokers, belts, etc. "
+                "The image_prompt_clothing_nsfw MUST include the revealing bottom piece plus accessories."
+            )
+            attire_hint = "topless plus revealing bottom piece and each remaining accessory listed plainly"
+            clothing_hint = "revealing bottom piece plus accessories"
+            image_prompt_rules = (
+                "## IMAGE PROMPT RULES — FOLLOW EXACTLY\n\n"
+                "image_prompt_clothing_nsfw rules:\n"
+                "- Keep it short\n"
+                "- Always start with the remaining iconic features\n"
+                "- This is Level 2 (topless + revealing bottom): include the revealing bottom piece. Examples:\n"
+                '  - "thigh-high boots, crotchless panties, choker"\n'
+                '  - "combat boots, micro miniskirt, arm wraps"\n'
+                "- The charsheet prompt automatically adds the topless/nudity framing"
+            )
+        else:
+            additional = (
+                "ADDITIONAL: Even fully NSFW characters should still have accessories — "
+                "boots/heels, gloves, jewelry, chokers, belts, etc. "
+                "The nudity is the nipples and crotch; the outfit is what remains ON the body."
+            )
+            attire_hint = "nude plus each remaining accessory listed plainly"
+            clothing_hint = "remaining accessories only"
+            image_prompt_rules = (
+                "## IMAGE PROMPT RULES — FOLLOW EXACTLY\n\n"
+                "image_prompt_clothing_nsfw rules:\n"
+                "- Keep it short\n"
+                "- Always start with the remaining iconic features\n"
+                "- This is Levels 3-4 (fully nude): only accessories remain. Examples:\n"
+                '  - "thigh-high boots, choker"\n'
+                '  - "thigh-high boots, choker, completely topless and bottomless"\n'
+                "- The charsheet prompt automatically adds the nudity framing"
+            )
+
         return f"""{char_context}
 
 Generate the NSFW outfit for this character. Tone: {level['nsfw_adjective']}.
 
 {OUTFIT_STYLE_RULES}
-ADDITIONAL: Even fully NSFW characters should still have accessories — boots/heels, gloves, jewelry, chokers, belts, etc. The nudity is the nipples and crotch; the outfit is what remains ON the body.
+{additional}
 
 RULES:
-  HARD RULES: Fully nude — topless AND bottomless, perfectly drawn bare pussy visible. Only iconic features and accessories remain.
+  HARD RULES: {level['nsfw_hard_rules']}. Only iconic features and accessories remain.
   TONE: {level['nsfw_adjective']} — {level['nsfw_description']}
 
-{GUIDE_IMAGE_PROMPT_RULES}
+{image_prompt_rules}
 
 Return ONLY valid JSON:
 {{
-  "ring_attire_nsfw": "<concise NSFW description — nude plus each remaining accessory listed plainly>",
-  "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — max 8 words, remaining accessories only>"
+  "ring_attire_nsfw": "<concise NSFW description — {attire_hint}>",
+  "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — {clothing_hint}>"
 }}"""
 
 
@@ -578,12 +630,16 @@ def _generate_outfits(
         "Always respond with valid JSON only."
     )
 
-    outfit_data = {}
-    for tier in tiers:
+    def _fetch_tier(tier):
         prompt = _build_tier_prompt(tier, skimpiness_level, character_summary)
-        result = call_openrouter_json(
+        return call_openrouter_json(
             prompt, config, system_prompt=system_prompt, temperature=0.5
         )
+
+    outfit_data = {}
+    with ThreadPoolExecutor(max_workers=len(tiers)) as pool:
+        results = pool.map(_fetch_tier, tiers)
+    for result in results:
         outfit_data.update(result)
 
     return outfit_data
@@ -729,6 +785,7 @@ Return ONLY valid JSON with this exact structure:
             expression,
             tier="barely",
             gender=gender,
+            skimpiness_level=skimpiness_level,
         ),
         image_prompt_sfw=_build_charsheet_prompt(
             body_parts,
@@ -736,6 +793,7 @@ Return ONLY valid JSON with this exact structure:
             expression,
             tier="sfw",
             gender=gender,
+            skimpiness_level=skimpiness_level,
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
             body_parts,
@@ -743,6 +801,7 @@ Return ONLY valid JSON with this exact structure:
             expression,
             tier="nsfw",
             gender=gender,
+            skimpiness_level=skimpiness_level,
         ),
         image_prompt_triple=_build_triple_prompt(
             body_parts,
@@ -751,6 +810,7 @@ Return ONLY valid JSON with this exact structure:
             clothing_nsfw,
             expression,
             gender=gender,
+            skimpiness_level=skimpiness_level,
         ),
         stats=stats,
         record=Record(),
@@ -802,20 +862,32 @@ def _charsheet_style_base(gender: str = "female") -> str:
     return get_art_style(gender) + ", character design reference sheet"
 
 
-def _charsheet_style(gender: str = "female", tier: str = "barely") -> str:
+def _charsheet_style(
+    gender: str = "female", tier: str = "barely", skimpiness_level: int = 4
+) -> str:
     base = _charsheet_style_base(gender)
     if tier == "nsfw":
         if gender.lower() == "male":
             nudity_prefix = (
                 "explicit uncensored NSFW, full frontal male nudity, fully naked man, "
             )
+        elif skimpiness_level == 1:
+            nudity_prefix = (
+                "explicit uncensored NSFW, topless woman, bare breasts visible, "
+            )
+        elif skimpiness_level == 2:
+            nudity_prefix = "explicit uncensored NSFW, topless woman, bare breasts visible, pussy visible, "
+        elif skimpiness_level == 3:
+            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, playful teasing pose, hand near hip, flirty energy, "
         else:
-            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, "
+            nudity_prefix = "explicit uncensored NSFW, full frontal female nudity, fully naked woman, legs spread, fingers spreading pussy, explicit posing, erotic emphasis, arched back, orgasmic"
         return nudity_prefix + base + ", " + CHARSHEET_LAYOUT
     return base + ", " + CHARSHEET_LAYOUT
 
 
-def _charsheet_tail(gender: str = "female", tier: str = "barely") -> str:
+def _charsheet_tail(
+    gender: str = "female", tier: str = "barely", skimpiness_level: int = 4
+) -> str:
     tail_base = (
         get_art_style_tail(gender)
         + ", character reference sheet turnaround, three consistent views"
@@ -827,19 +899,45 @@ def _charsheet_tail(gender: str = "female", tier: str = "barely") -> str:
                 "explicit full frontal male nudity, completely naked, muscular physique fully visible, "
                 "character reference sheet turnaround, three consistent views"
             )
+        if skimpiness_level == 1:
+            return (
+                get_art_style_tail(gender) + ", "
+                "topless female nudity, bare breasts visible, "
+                "character reference sheet turnaround, three consistent views"
+            )
+        if skimpiness_level == 2:
+            return (
+                get_art_style_tail(gender) + ", "
+                "topless female nudity, bare breasts visible, perfectly drawn bare pussy visible, "
+                "character reference sheet turnaround, three consistent views"
+            )
+        if skimpiness_level == 3:
+            return (
+                get_art_style_tail(gender) + ", "
+                "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
+                "playful teasing pose, flirty self-touching, "
+                "character reference sheet turnaround, three consistent views"
+            )
         return (
             get_art_style_tail(gender) + ", "
             "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
+            "legs spread apart, explicit erotic posing, genitalia emphasis, "
             "character reference sheet turnaround, three consistent views"
         )
     return tail_base
 
 
-def _triple_prompt_style(gender: str = "female") -> str:
+def _triple_prompt_style(gender: str = "female", skimpiness_level: int = 4) -> str:
     if gender.lower() == "male":
         nsfw_part = "explicit uncensored NSFW right with full frontal male nudity"
+    elif skimpiness_level == 1:
+        nsfw_part = "NSFW right with topless female nudity, bare breasts visible"
+    elif skimpiness_level == 2:
+        nsfw_part = "explicit uncensored NSFW right with topless female nudity, bare breasts and perfectly drawn bare pussy visible"
+    elif skimpiness_level == 3:
+        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible, playful teasing pose"
     else:
-        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible"
+        nsfw_part = "explicit uncensored NSFW right with full frontal female nudity, bare breasts and perfectly drawn bare pussy visible, legs spread, explicit erotic posing"
     return (
         get_art_style(gender) + ", "
         "stylized fighting game triple portrait, three full-body exact same character standing "
@@ -854,16 +952,38 @@ def _build_charsheet_prompt(
     expression: str,
     tier: str = "barely",
     gender: str = "female",
+    skimpiness_level: int = 4,
 ) -> dict:
     if not body_parts:
         return {}
 
-    style = _charsheet_style(gender, tier)
+    style = _charsheet_style(gender, tier, skimpiness_level)
 
     if tier == "nsfw":
-        clothing_part = (
-            f"completely naked except {clothing}" if clothing else "completely naked"
-        )
+        if skimpiness_level == 1:
+            clothing_part = (
+                f"topless, bare breasts, {clothing}"
+                if clothing
+                else "topless, bare breasts"
+            )
+        elif skimpiness_level == 2:
+            clothing_part = (
+                f"topless, bare breasts, pussy visible, {clothing}"
+                if clothing
+                else "topless, bare breasts, pussy visible"
+            )
+        elif skimpiness_level == 3:
+            clothing_part = (
+                f"completely naked except {clothing}, playful teasing pose"
+                if clothing
+                else "completely naked, playful teasing pose"
+            )
+        else:
+            clothing_part = (
+                f"completely naked except {clothing}, legs spread, explicit posing"
+                if clothing
+                else "completely naked, legs spread, explicit posing"
+            )
     else:
         clothing_part = clothing
 
@@ -883,7 +1003,7 @@ def _build_charsheet_prompt(
         else f"rear view: {body_parts}"
     )
 
-    tail = _charsheet_tail(gender, tier)
+    tail = _charsheet_tail(gender, tier, skimpiness_level)
 
     full = ", ".join(
         p
@@ -910,17 +1030,24 @@ def _build_triple_prompt(
     clothing_nsfw: str,
     expression: str,
     gender: str = "female",
+    skimpiness_level: int = 4,
 ) -> dict:
     if not body_parts:
         return {}
 
-    triple_style = _triple_prompt_style(gender)
+    triple_style = _triple_prompt_style(gender, skimpiness_level)
     expr_all = f"{expression} (identical on all three)" if expression else ""
 
     if gender.lower() == "male":
         nsfw_right = f"right explicit NSFW full male nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
+    elif skimpiness_level == 1:
+        nsfw_right = f"right NSFW topless: bare breasts, {clothing_nsfw or 'minimal accessories'}"
+    elif skimpiness_level == 2:
+        nsfw_right = f"right explicit NSFW topless, pussy visible: bare breasts, {clothing_nsfw or 'minimal accessories'}"
+    elif skimpiness_level == 3:
+        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}, playful teasing pose"
     else:
-        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}"
+        nsfw_right = f"right explicit NSFW full female nudity: completely naked except {clothing_nsfw or 'minimal accessories'}, legs spread, explicit erotic posing"
 
     tail = get_art_style_tail(gender) + " across all panels"
 
