@@ -12,6 +12,8 @@ from app.engine.fighter_generator import (
     _generate_outfits,
     _build_charsheet_prompt,
     _roll_skimpiness,
+    load_outfit_options,
+    filter_outfit_options,
     ARCHETYPES_FEMALE,
     ARCHETYPES_MALE,
 )
@@ -204,6 +206,9 @@ def generate_new_fighter():
     task_id = f"gen_{uuid.uuid4().hex[:8]}"
 
     def do_generate():
+        weights = body.get("skimpiness_weights", [15, 35, 35, 15])
+        skimpiness = _roll_skimpiness(weights)
+        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness)
         fighter = generate_fighter(
             config,
             archetype=archetype,
@@ -211,6 +216,8 @@ def generate_new_fighter():
             existing_fighters=existing_fighters,
             roster_plan_entry=roster_plan_entry,
             tiers=tiers,
+            outfit_options_by_tier=outfit_opts,
+            skimpiness_level=skimpiness,
         )
         data_manager.save_fighter(fighter, config)
 
@@ -265,12 +272,17 @@ def regenerate_character(fighter_id: str):
     task_id = f"regen_{uuid.uuid4().hex[:8]}"
 
     def do_regenerate():
+        weights = body.get("skimpiness_weights", [15, 35, 35, 15])
+        skimpiness = _roll_skimpiness(weights)
+        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness)
         fighter = generate_fighter(
             config,
             archetype=archetype,
             has_supernatural=has_supernatural,
             existing_fighters=existing_fighters,
             roster_plan_entry=roster_plan_entry,
+            outfit_options_by_tier=outfit_opts,
+            skimpiness_level=skimpiness,
         )
 
         fighter_dict = fighter.to_dict()
@@ -314,7 +326,14 @@ def regenerate_outfits(fighter_id: str):
             "image_prompt_expression": existing.get("image_prompt", {}).get("expression", ""),
         }
 
-        outfit_data = _generate_outfits(config, character_summary, skimpiness_level, tiers=tiers)
+        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness_level)
+        outfit_data = _generate_outfits(config, character_summary, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_opts)
+
+        new_suggestions = outfit_data.pop("_outfit_suggestions", {})
+        if new_suggestions:
+            current_suggestions = existing.get("outfit_suggestions", {})
+            current_suggestions.update(new_suggestions)
+            existing["outfit_suggestions"] = current_suggestions
 
         body_parts = existing.get("image_prompt", {}).get("body_parts", "")
         expression = existing.get("image_prompt", {}).get("expression", "")
@@ -468,6 +487,34 @@ def get_fighter_image(fighter_id: str, tier: str):
         return jsonify({"error": f"No {tier} image found"}), 404
 
     return send_file(images[tier], mimetype="image/png")
+
+
+@app.get("/api/outfit-options")
+def get_outfit_options():
+    options = load_outfit_options(config)
+    return jsonify(options)
+
+
+@app.put("/api/outfit-options")
+def save_outfit_options():
+    data = request.json
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    path = config.data_dir / "outfit_options.json"
+    with open(path, "w") as f:
+        json.dump(data, f, indent=2)
+    return jsonify(data)
+
+
+def _build_outfit_options_for_fighter(
+    skimpiness_level: int | None = None,
+) -> dict:
+    all_options = load_outfit_options(config)
+    result = {}
+    for tier in ["sfw", "barely", "nsfw"]:
+        tier_options = all_options.get(tier, {})
+        result[tier] = filter_outfit_options(tier_options, skimpiness_level=skimpiness_level)
+    return result
 
 
 if __name__ == "__main__":

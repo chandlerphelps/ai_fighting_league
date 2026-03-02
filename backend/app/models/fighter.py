@@ -109,6 +109,7 @@ class Fighter:
     condition: Condition = field(default_factory=Condition)
     storyline_log: list[str] = field(default_factory=list)
     moves: list[Move] = field(default_factory=list)
+    outfit_suggestions: dict = field(default_factory=dict)
     rivalries: list[str] = field(default_factory=list)
     last_fight_date: Optional[str] = None
     ranking: Optional[int] = None
@@ -147,6 +148,7 @@ class Fighter:
             condition=Condition.from_dict(d.get("condition", {})),
             storyline_log=d.get("storyline_log", []),
             moves=[Move.from_dict(m) for m in d.get("moves", [])],
+            outfit_suggestions=d.get("outfit_suggestions", {}),
             rivalries=d.get("rivalries", []),
             last_fight_date=d.get("last_fight_date"),
             ranking=d.get("ranking"),

@@ -14,8 +14,12 @@ import {
   regenerateImages,
   regenerateMoveImage,
   pollUntilDone,
+  fetchOutfitOptions,
+  saveOutfitOptions,
   type GenerateOptions,
   type TaskResponse,
+  type OutfitOptions,
+  type OutfitItem,
 } from '../lib/api'
 
 type ActiveTask = {
@@ -51,6 +55,7 @@ export default function RosterManager() {
     onRedo?: () => void
   } | null>(null)
   const [imageVersion, setImageVersion] = useState(0)
+  const [showOutfitOptions, setShowOutfitOptions] = useState(false)
 
   useEffect(() => {
     const handleClick = () => setRegenMenuId(null)
@@ -207,13 +212,21 @@ export default function RosterManager() {
         }}>
           Roster Gallery
         </h1>
-        <button
-          onClick={() => setShowGenerate(!showGenerate)}
-          disabled={globalTaskActive}
-          style={btnStyle(colors.accent)}
-        >
-          + Generate Fighter
-        </button>
+        <div style={{ display: 'flex', gap: spacing.sm }}>
+          <button
+            onClick={() => setShowOutfitOptions(!showOutfitOptions)}
+            style={btnStyle(showOutfitOptions ? colors.accentBright : colors.textMuted)}
+          >
+            Outfit Options
+          </button>
+          <button
+            onClick={() => setShowGenerate(!showGenerate)}
+            disabled={globalTaskActive}
+            style={btnStyle(colors.accent)}
+          >
+            + Generate Fighter
+          </button>
+        </div>
       </div>
 
       <div style={{
@@ -306,6 +319,8 @@ export default function RosterManager() {
           ))}
         </div>
       )}
+
+      {showOutfitOptions && <OutfitOptionsPanel onClose={() => setShowOutfitOptions(false)} />}
 
       {showGenerate && <GeneratePanel onGenerate={handleGenerate} onCancel={() => setShowGenerate(false)} />}
 
@@ -866,6 +881,238 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
             </div>
           )
         })}
+      </div>
+    </div>
+  )
+}
+
+type OutfitTier = 'sfw' | 'barely' | 'nsfw'
+type OutfitCategory = 'tops' | 'bottoms' | 'one_pieces'
+
+function OutfitOptionsPanel({ onClose }: { onClose: () => void }) {
+  const [options, setOptions] = useState<OutfitOptions | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [activeTier, setActiveTier] = useState<OutfitTier>('sfw')
+  const [addInputs, setAddInputs] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    fetchOutfitOptions().then(data => {
+      setOptions(data)
+      setLoading(false)
+    }).catch(() => setLoading(false))
+  }, [])
+
+  const handleSave = async () => {
+    if (!options) return
+    setSaving(true)
+    try {
+      await saveOutfitOptions(options)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const removeItem = (tier: OutfitTier, category: OutfitCategory, index: number) => {
+    if (!options) return
+    const updated = { ...options }
+    updated[tier] = { ...updated[tier] }
+    updated[tier][category] = [...updated[tier][category]]
+    updated[tier][category].splice(index, 1)
+    setOptions(updated)
+  }
+
+  const addItem = (tier: OutfitTier, category: OutfitCategory) => {
+    const nameKey = `${tier}_${category}`
+    const levelKey = `${tier}_${category}_level`
+    const name = (addInputs[nameKey] || '').trim()
+    const level = (addInputs[levelKey] || '2').trim()
+    if (!name || !options) return
+    const newItem: OutfitItem = { name, skimpiness_level: level }
+    const updated = { ...options }
+    updated[tier] = { ...updated[tier] }
+    updated[tier][category] = [...updated[tier][category], newItem]
+    setOptions(updated)
+    setAddInputs(prev => ({ ...prev, [nameKey]: '', [levelKey]: '' }))
+  }
+
+  if (loading) {
+    return (
+      <div style={{
+        backgroundColor: colors.surface,
+        border: `1px solid ${colors.border}`,
+        borderRadius: '6px',
+        padding: spacing.lg,
+        marginBottom: spacing.lg,
+        textAlign: 'center',
+        color: colors.textMuted,
+        fontFamily: fonts.body,
+      }}>
+        Loading outfit options...
+      </div>
+    )
+  }
+
+  if (!options) return null
+
+  const tierData = options[activeTier]
+  const categories: { key: OutfitCategory; label: string }[] = [
+    { key: 'tops', label: 'Tops' },
+    { key: 'bottoms', label: 'Bottoms' },
+    { key: 'one_pieces', label: 'One-Pieces' },
+  ]
+
+  return (
+    <div style={{
+      backgroundColor: colors.surface,
+      border: `1px solid ${colors.border}`,
+      borderRadius: '6px',
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: spacing.md,
+      }}>
+        <h2 style={{
+          fontSize: fontSizes.lg,
+          fontFamily: fonts.heading,
+          color: colors.accent,
+          margin: 0,
+        }}>
+          Outfit Options
+        </h2>
+        <div style={{ display: 'flex', gap: spacing.sm }}>
+          <button onClick={handleSave} disabled={saving} style={btnStyle(colors.win)}>
+            {saving ? 'Saving...' : 'Save'}
+          </button>
+          <button onClick={onClose} style={btnStyle(colors.textMuted)}>Close</button>
+        </div>
+      </div>
+
+      <div style={{
+        display: 'flex',
+        gap: spacing.sm,
+        marginBottom: spacing.md,
+      }}>
+        {(['sfw', 'barely', 'nsfw'] as OutfitTier[]).map(tier => (
+          <button
+            key={tier}
+            onClick={() => setActiveTier(tier)}
+            style={{
+              padding: `${spacing.xs} ${spacing.lg}`,
+              backgroundColor: activeTier === tier ? withAlpha(colors.accent, 0.25) : 'transparent',
+              border: `2px solid ${activeTier === tier ? colors.accent : withAlpha(colors.textDim, 0.3)}`,
+              borderRadius: '4px',
+              color: activeTier === tier ? colors.accent : colors.textMuted,
+              fontFamily: fonts.body,
+              fontSize: fontSizes.md,
+              fontWeight: activeTier === tier ? 'bold' : 'normal',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+            }}
+          >
+            {tier}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
+        {categories.map(({ key, label }) => {
+          return (
+            <div key={key}>
+              <div style={{
+                fontSize: fontSizes.xs,
+                fontFamily: fonts.body,
+                color: colors.accent,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                marginBottom: spacing.xs,
+                fontWeight: 'bold',
+              }}>
+                {label} ({tierData[key].length})
+              </div>
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: spacing.xs,
+                marginBottom: spacing.xs,
+              }}>
+                {tierData[key].map((item: OutfitItem, i: number) => (
+                  <span
+                    key={i}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: spacing.xs,
+                      padding: `2px ${spacing.sm}`,
+                      backgroundColor: withAlpha(colors.surfaceLight, 0.8),
+                      border: `1px solid ${colors.border}`,
+                      borderRadius: '3px',
+                      color: colors.text,
+                      fontFamily: fonts.body,
+                      fontSize: fontSizes.xs,
+                    }}
+                  >
+                    {item.name}
+                    <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
+                      L{item.skimpiness_level}
+                    </span>
+                    <button
+                      onClick={() => removeItem(activeTier, key, i)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: colors.loss,
+                        cursor: 'pointer',
+                        padding: 0,
+                        fontFamily: fonts.body,
+                        fontSize: fontSizes.xs,
+                        lineHeight: 1,
+                      }}
+                    >
+                      x
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: spacing.xs, alignItems: 'center' }}>
+                <input
+                  value={addInputs[`${activeTier}_${key}`] || ''}
+                  onChange={e => setAddInputs(prev => ({ ...prev, [`${activeTier}_${key}`]: e.target.value }))}
+                  onKeyDown={e => { if (e.key === 'Enter') addItem(activeTier, key) }}
+                  placeholder={`Add ${label.toLowerCase()}...`}
+                  style={{ ...inputStyle, flex: 1 }}
+                />
+                <input
+                  value={addInputs[`${activeTier}_${key}_level`] || ''}
+                  onChange={e => setAddInputs(prev => ({ ...prev, [`${activeTier}_${key}_level`]: e.target.value }))}
+                  onKeyDown={e => { if (e.key === 'Enter') addItem(activeTier, key) }}
+                  placeholder="Lvl"
+                  style={{ ...inputStyle, width: '50px', flex: 'none', textAlign: 'center' }}
+                />
+                <button
+                  onClick={() => addItem(activeTier, key)}
+                  style={btnStyleSmall(colors.accent)}
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div style={{
+        marginTop: spacing.md,
+        fontSize: fontSizes.xs,
+        fontFamily: fonts.body,
+        color: colors.textDim,
+      }}>
+        These are example attire pieces offered to the AI when generating outfits. Items chosen 2+ times across the roster are auto-removed. 50% of remaining items are randomly dropped each generation for variety.
       </div>
     </div>
   )

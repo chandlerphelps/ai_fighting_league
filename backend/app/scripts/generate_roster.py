@@ -5,7 +5,7 @@ import time
 from datetime import date
 
 from app.config import load_config
-from app.engine.fighter_generator import generate_fighter, plan_roster
+from app.engine.fighter_generator import generate_fighter, plan_roster, load_outfit_options, filter_outfit_options, _roll_skimpiness
 from app.models.world_state import WorldState
 from app.services import data_manager
 from app.services.grok_image import generate_charsheet_images
@@ -68,6 +68,8 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
 
     print(f"Generating {len(roster_plan)} fighters from plan...")
 
+    all_outfit_options = load_outfit_options(config)
+
     existing_on_disk = data_manager.load_all_fighters(config)
     existing_fighters = [
         {
@@ -86,12 +88,22 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
 
     for i, entry in enumerate(roster_plan):
         print(f"[{i + 1}/{len(roster_plan)}] Generating {entry.get('ring_name', '?')}...")
+
+        skimpiness_level = _roll_skimpiness(entry.get("skimpiness_weights"))
+
+        outfit_options_by_tier = {}
+        for tier in ["sfw", "barely", "nsfw"]:
+            tier_options = all_outfit_options.get(tier, {})
+            outfit_options_by_tier[tier] = filter_outfit_options(tier_options, skimpiness_level=skimpiness_level)
+
         try:
             fighter = generate_fighter(
                 config,
                 existing_fighters=existing_fighters,
                 roster_plan_entry=entry,
                 tiers=tiers,
+                outfit_options_by_tier=outfit_options_by_tier,
+                skimpiness_level=skimpiness_level,
             )
             data_manager.save_fighter(fighter, config)
             fighter_ids.append(fighter.id)

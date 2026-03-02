@@ -2,11 +2,85 @@ import json
 import random
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 from app.config import Config
 from app.engine.image_style import get_art_style, get_art_style_tail
 from app.models.fighter import Fighter, Stats, Record, Condition
 from app.services.openrouter import call_openrouter_json
+
+
+DEFAULT_OUTFIT_OPTIONS = {
+    "sfw": {
+        "tops": ["sports bra", "tank top", "halter top", "crop top", "bustier", "bandeau top", "fitted combat vest", "structured corset armor"],
+        "bottoms": ["combat shorts", "leggings", "mini-skirt with bike shorts", "cargo pants", "high-waisted tactical pants", "short battle skirt", "micro shorts"],
+        "one_pieces": ["high-cut leotard", "combat romper", "armored leotard with shorts", "tactical jumpsuit", "fitted mini-dress"],
+    },
+    "barely": {
+        "tops": ["micro bikini top", "sheer bralette", "tape crosses", "strappy harness top", "cut-out sports bra", "underboob sling harness", "nano adhesive nipple pasties"],
+        "bottoms": ["micro thong", "g-string", "cut-out shorts", "high-leg cut bottoms", "nano string bottom", "micro adhesive strip covering slit"],
+        "one_pieces": ["cut-out bodysuit", "strappy harness bodysuit", "sling-shot micro suit", "extreme cut monokini", "fishnet body stocking"],
+    },
+    "nsfw": {
+        "tops": ["body chains framing bare breasts", "chest harness framing bare breasts", "shoulder armor only", "suspenders framing bare breasts", "nipple chain harness", "collar with body chains"],
+        "bottoms": ["micro thong", "g-string", "thigh-high boots", "garter belt with thigh-highs", "thigh harness straps", "crotchless thigh straps framing bare pussy"],
+        "one_pieces": ["chain web full body harness", "leather strap open harness", "combat harness with open crotch and bare breasts", "open-chest bodysuit with bare breasts and thong bottom"],
+    },
+}
+
+
+def load_outfit_options(config: Config) -> dict:
+    path = Path(config.data_dir) / "outfit_options.json"
+    if path.exists():
+        with open(path) as f:
+            return json.load(f)
+    with open(path, "w") as f:
+        json.dump(DEFAULT_OUTFIT_OPTIONS, f, indent=2)
+    return dict(DEFAULT_OUTFIT_OPTIONS)
+
+
+def _parse_outfit_item(item) -> tuple[str, str]:
+    if isinstance(item, dict):
+        return item.get("name", ""), str(item.get("skimpiness_level", ""))
+    return str(item), ""
+
+
+def _skimpiness_matches(item_level_str: str, fighter_level: int | None) -> bool:
+    if not item_level_str or fighter_level is None:
+        return True
+    item_level_str = item_level_str.strip()
+    if "-" in item_level_str:
+        parts = item_level_str.split("-")
+        try:
+            return int(parts[0]) <= fighter_level <= int(parts[1])
+        except (ValueError, IndexError):
+            return True
+    try:
+        return int(item_level_str) == fighter_level
+    except ValueError:
+        return True
+
+
+def filter_outfit_options(
+    options_for_tier: dict,
+    skimpiness_level: int | None = None,
+) -> dict:
+    result = {}
+    for key in ["tops", "bottoms", "one_pieces"]:
+        full_list = list(options_for_tier.get(key, []))
+        if skimpiness_level is not None:
+            full_list = [
+                item for item in full_list
+                if _skimpiness_matches(_parse_outfit_item(item)[1], skimpiness_level)
+            ]
+        if not full_list:
+            full_list = list(options_for_tier.get(key, []))
+        keep_count = max(1, len(full_list) // 2)
+        sampled = random.sample(full_list, keep_count)
+        random.shuffle(sampled)
+        result[key] = [_parse_outfit_item(item)[0] for item in sampled]
+
+    return result
 
 
 ARCHETYPES_FEMALE = [
@@ -379,7 +453,8 @@ OUTFIT_STYLE_RULES = """STYLE RULES (apply to ALL tiers):
 
 
 def _build_tier_prompt(
-    tier: str, skimpiness_level: int, character_summary: dict
+    tier: str, skimpiness_level: int, character_summary: dict,
+    outfit_options: dict | None = None,
 ) -> str:
     level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
     sig = character_summary.get("iconic_features", "")
@@ -402,13 +477,28 @@ Expression: {expression}"""
     else:
         char_context = char_base + f"\nSKIMPINESS LEVEL: {effective_skimpiness} of 8"
 
+    outfit_examples_text = ""
+    if outfit_options:
+        tops = outfit_options.get("tops", [])
+        bottoms = outfit_options.get("bottoms", [])
+        one_pieces = outfit_options.get("one_pieces", [])
+        lines = []
+        if tops:
+            lines.append(f"Example tops to consider: {', '.join(tops)}")
+        if bottoms:
+            lines.append(f"Example bottoms to consider: {', '.join(bottoms)}")
+        if one_pieces:
+            lines.append(f"Example one-pieces to consider (use instead of top+bottom): {', '.join(one_pieces)}")
+        if lines:
+            outfit_examples_text = "\n" + "\n".join(lines) + "\n"
+
     if tier == "sfw":
         return f"""{char_context}
 
 Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
 
 {OUTFIT_STYLE_RULES}
-
+{outfit_examples_text}
 RULES:
   HARD RULES: {level['sfw_hard_rules']}
   SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
@@ -432,7 +522,7 @@ Return ONLY valid JSON:
 Generate the "{level['barely_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
 
 {OUTFIT_STYLE_RULES}
-
+{outfit_examples_text}
 RULES:
   HARD RULES: No nipples, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.
   SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
@@ -491,6 +581,7 @@ Return ONLY valid JSON:
 Generate the NSFW outfit for this character. Tone: {level['nsfw_adjective']}.
 
 {OUTFIT_STYLE_RULES}
+{outfit_examples_text}
 {additional}
 
 RULES:
@@ -505,8 +596,7 @@ Return ONLY valid JSON:
 {{
   "ring_attire_nsfw": "<concise NSFW description — {attire_hint}>",
   "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — {clothing_hint}>",
-  "image_prompt_pose_nsfw": "<concise NSFW pose matching the {level['nsfw_adjective']} tone — 5-15 words>"
-}}"""
+  "image_prompt_pose_nsfw": "<concise NSFW pose matching the {level['nsfw_adjective']} tone — 5-15 words>"}}"""
 
 
 FULL_CHARACTER_GUIDE = (
@@ -612,6 +702,7 @@ def _generate_outfits(
     character_summary: dict,
     skimpiness_level: int,
     tiers: list[str] | None = None,
+    outfit_options_by_tier: dict | None = None,
 ) -> dict:
     if tiers is None:
         tiers = ["sfw", "barely", "nsfw"]
@@ -623,17 +714,24 @@ def _generate_outfits(
     )
 
     def _fetch_tier(tier):
-        prompt = _build_tier_prompt(tier, skimpiness_level, character_summary)
-        return call_openrouter_json(
+        tier_opts = (outfit_options_by_tier or {}).get(tier)
+        prompt = _build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options=tier_opts)
+        result = call_openrouter_json(
             prompt, config, system_prompt=system_prompt, temperature=0.5
         )
+        return tier, result
 
     outfit_data = {}
+    outfit_suggestions = {}
     with ThreadPoolExecutor(max_workers=len(tiers)) as pool:
         results = pool.map(_fetch_tier, tiers)
-    for result in results:
+    for tier, result in results:
+        tier_opts = (outfit_options_by_tier or {}).get(tier)
+        if tier_opts:
+            outfit_suggestions[tier] = tier_opts
         outfit_data.update(result)
 
+    outfit_data["_outfit_suggestions"] = outfit_suggestions
     return outfit_data
 
 
@@ -644,6 +742,8 @@ def generate_fighter(
     existing_fighters: list[dict] = None,
     roster_plan_entry: dict = None,
     tiers: list[str] | None = None,
+    outfit_options_by_tier: dict | None = None,
+    skimpiness_level: int | None = None,
 ) -> Fighter:
     if roster_plan_entry:
         blueprint_text = (
@@ -655,10 +755,12 @@ def generate_fighter(
         )
         has_supernatural = roster_plan_entry.get("has_supernatural", False)
         archetype = roster_plan_entry.get("primary_archetype", archetype)
-        skimpiness_level = _roll_skimpiness(roster_plan_entry.get("skimpiness_weights"))
+        if skimpiness_level is None:
+            skimpiness_level = _roll_skimpiness(roster_plan_entry.get("skimpiness_weights"))
     else:
         blueprint_text = ""
-        skimpiness_level = _roll_skimpiness(None)
+        if skimpiness_level is None:
+            skimpiness_level = _roll_skimpiness(None)
 
     supernatural_instruction = ""
     if has_supernatural:
@@ -753,7 +855,9 @@ Return ONLY valid JSON with this exact structure:
     personality_pose = result.get("image_prompt_personality_pose", "")
     gender = result.get("gender", "female")
 
-    outfit_data = _generate_outfits(config, result, skimpiness_level, tiers=tiers)
+    outfit_data = _generate_outfits(config, result, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_options_by_tier)
+
+    outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})
 
     clothing_sfw = outfit_data.get("image_prompt_clothing_sfw", "")
     clothing = outfit_data.get("image_prompt_clothing", "")
@@ -812,6 +916,7 @@ Return ONLY valid JSON with this exact structure:
         record=Record(),
         condition=Condition(),
         storyline_log=[],
+        outfit_suggestions=outfit_suggestions,
         rivalries=[],
         last_fight_date=None,
         ranking=None,

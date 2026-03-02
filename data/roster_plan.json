@@ -1,193 +1,193 @@
 [
   {
-    "concept_hook": "Captivating Brazilian siren who hypnotizes foes with sultry dances before lovingly strangling them into submission, thrilled by their betrayed gasps yet pained by her isolation.",
-    "ring_name": "Velvet Whisper",
+    "concept_hook": "Burlesque temptress who disarms foes with hypnotic hip sways and precision strikes before they can swing.",
+    "ring_name": "Silk Siren",
     "gender": "female",
-    "age": 25,
-    "origin": "Rio de Janeiro, Brazil",
+    "age": 28,
+    "origin": "Las Vegas, Nevada, USA",
     "primary_archetype": "Siren",
-    "secondary_archetype": "Empress",
-    "has_supernatural": true,
-    "body_type": "curvy hourglass latina",
+    "secondary_archetype": "Doll",
+    "has_supernatural": false,
+    "body_type": "voluptuous hourglass",
     "power_tier": "contender",
-    "narrative_role": "tantalizing temptress who ignites rivalries with her charm",
+    "narrative_role": "charismatic heel who manipulates crowds and rivals alike",
     "rivalry_seeds": [
-      "Silk Prodigy",
-      "Jade Empress"
+      "Eclipse Witch",
+      "Nova Prodigy"
     ],
-    "media_archetype_inspiration": "Ivy Valentine from Soul Calibur",
+    "media_archetype_inspiration": "Catwoman from Batman",
     "skimpiness_weights": [
       0,
       10,
-      45,
-      45
+      40,
+      50
     ]
   },
   {
-    "concept_hook": "Elegant Japanese witch who weaves debilitating curses causing spectral wounds, reveling in enemies' torment while haunted by the ghosts of her backlash spells.",
-    "ring_name": "Crimson Hex",
+    "concept_hook": "Shrine maiden who weaves binding curses that sap strength, relishing the slow crumble of mighty warriors.",
+    "ring_name": "Eclipse Witch",
     "gender": "female",
-    "age": 29,
+    "age": 32,
     "origin": "Kyoto, Japan",
     "primary_archetype": "Witch",
-    "secondary_archetype": "Siren",
+    "secondary_archetype": "Empress",
     "has_supernatural": true,
-    "body_type": "slender graceful asian",
-    "power_tier": "gatekeeper",
-    "narrative_role": "brooding sorceress clashing with tech and tradition",
+    "body_type": "slender mystique",
+    "power_tier": "champion",
+    "narrative_role": "enigmatic veteran haunted by the lives she's withered",
     "rivalry_seeds": [
-      "Synthara",
-      "Frost Huntress"
+      "Silk Siren",
+      "Jungle Huntress"
     ],
     "media_archetype_inspiration": "Bayonetta",
     "skimpiness_weights": [
       10,
-      25,
-      40,
+      30,
+      35,
       25
     ]
   },
   {
-    "concept_hook": "Sly Mexican viper wielding lab-refined neurotoxins in concealed needles, who delights in foes' twitching demise but flinches at echoes of her poisoned family.",
-    "ring_name": "Poison Lily",
+    "concept_hook": "Street assassin who kisses with lipstick laced in paralytics, striking vital points while foes convulse.",
+    "ring_name": "Venom Kiss",
     "gender": "female",
-    "age": 27,
-    "origin": "Mexico City, Mexico",
+    "age": 25,
+    "origin": "Rio de Janeiro, Brazil",
     "primary_archetype": "Viper",
-    "secondary_archetype": "Prodigy",
+    "secondary_archetype": "Huntress",
     "has_supernatural": false,
-    "body_type": "toned agile latina",
+    "body_type": "lithe and toned",
     "power_tier": "gatekeeper",
-    "narrative_role": "ruthless saboteur targeting the glamorous",
+    "narrative_role": "ruthless opportunist seeking redemption through dominance",
     "rivalry_seeds": [
       "Porcelain Doll",
-      "Velvet Whisper"
+      "Iron Sovereign"
     ],
     "media_archetype_inspiration": "Black Widow from Marvel",
     "skimpiness_weights": [
       5,
       25,
-      35,
-      35
+      45,
+      25
     ]
   },
   {
-    "concept_hook": "Precocious Korean prodigy whose anticipatory counters exploit every flaw, dismantling foes with surgical precision while masking her fear of failure with smug taunts.",
-    "ring_name": "Silk Prodigy",
+    "concept_hook": "Teenage savant of seven martial styles, dismantling giants with flawless technique and quiet fury.",
+    "ring_name": "Nova Prodigy",
     "gender": "female",
     "age": 19,
-    "origin": "Seoul, South Korea",
+    "origin": "Moscow, Russia",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "petite athletic asian",
-    "power_tier": "prospect",
-    "narrative_role": "arrogant upstart challenging veterans",
-    "rivalry_seeds": [
-      "Velvet Whisper",
-      "Poison Lily"
-    ],
-    "media_archetype_inspiration": "Chun-Li from Street Fighter",
-    "skimpiness_weights": [
-      30,
-      40,
-      20,
-      10
-    ]
-  },
-  {
-    "concept_hook": "Flexible LA doll who contorts through defenses to snap joints and spines, giggling maniacally at pain inflicted or received to bury her traumatic past.",
-    "ring_name": "Porcelain Doll",
-    "gender": "female",
-    "age": 22,
-    "origin": "Los Angeles, USA",
-    "primary_archetype": "Doll",
     "secondary_archetype": "Experiment",
     "has_supernatural": false,
-    "body_type": "supple flexible bombshell",
+    "body_type": "petite athletic",
     "power_tier": "prospect",
-    "narrative_role": "unsettling wildcard with hidden depths",
+    "narrative_role": "innocent phenom burdened by prodigious violence",
     "rivalry_seeds": [
-      "Poison Lily",
-      "Crimson Hex"
+      "Silk Siren",
+      "Neon Hybrid"
     ],
-    "media_archetype_inspiration": "Kasumi from Dead or Alive",
+    "media_archetype_inspiration": "Hit-Girl from Kick-Ass",
     "skimpiness_weights": [
-      5,
-      25,
+      40,
       35,
-      35
+      20,
+      5
     ]
   },
   {
-    "concept_hook": "Unyielding Russian huntress who lays inescapable traps and rains arrows, thriving on the hunt's adrenaline but withdrawing into silence after close calls.",
-    "ring_name": "Frost Huntress",
+    "concept_hook": "Fragile-looking android puppet programmed for lethal acrobatics, cracking smiles as she shatters bones.",
+    "ring_name": "Porcelain Doll",
     "gender": "female",
-    "age": 31,
-    "origin": "Novosibirsk, Russia",
+    "age": 24,
+    "origin": "Tokyo, Japan",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": true,
+    "body_type": "delicate curvaceous",
+    "power_tier": "contender",
+    "narrative_role": "tragic artificial girl yearning for real pain and emotion",
+    "rivalry_seeds": [
+      "Venom Kiss",
+      "Neon Hybrid"
+    ],
+    "media_archetype_inspiration": "Alita from Battle Angel Alita",
+    "skimpiness_weights": [
+      15,
+      25,
+      35,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Tribal tracker who impales prey with thrown spears, howling in ecstasy at the hunt's bloody climax.",
+    "ring_name": "Jungle Huntress",
+    "gender": "female",
+    "age": 30,
+    "origin": "Amazon Rainforest, Brazil",
     "primary_archetype": "Huntress",
     "secondary_archetype": "Viper",
     "has_supernatural": false,
-    "body_type": "lean toned caucasian",
+    "body_type": "muscular yet feminine",
     "power_tier": "gatekeeper",
-    "narrative_role": "stoic enforcer preying on the arcane",
+    "narrative_role": "feral protector driven mad by cage-bound savagery",
     "rivalry_seeds": [
-      "Crimson Hex",
-      "Synthara"
+      "Eclipse Witch",
+      "Iron Sovereign"
     ],
-    "media_archetype_inspiration": "Katniss Everdeen from Hunger Games",
+    "media_archetype_inspiration": "Tarzan Jane meets Mortal Kombat Mileena",
     "skimpiness_weights": [
-      25,
-      40,
       20,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Commanding Chinese empress who manifests illusory minions to swarm and crush, fighting with haughty disdain but a vulnerable need for unchallenged loyalty.",
-    "ring_name": "Jade Empress",
-    "gender": "female",
-    "age": 32,
-    "origin": "Beijing, China",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Witch",
-    "has_supernatural": true,
-    "body_type": "statuesque curvaceous asian",
-    "power_tier": "contender",
-    "narrative_role": "haughty overlord demanding submission",
-    "rivalry_seeds": [
-      "Velvet Whisper",
-      "Synthara"
-    ],
-    "media_archetype_inspiration": "Mulan from Disney's Mulan",
-    "skimpiness_weights": [
-      15,
-      35,
+      30,
       30,
       20
     ]
   },
   {
-    "concept_hook": "Adaptive British experiment whose nanobots morph limbs and heal wounds instantly, coldly optimizing kills while grappling with dehumanizing upgrades.",
-    "ring_name": "Synthara",
+    "concept_hook": "Descendant of fallen royalty who commands illusory armies, her regal poise hiding vengeful rage.",
+    "ring_name": "Iron Sovereign",
     "gender": "female",
-    "age": 23,
-    "origin": "London, UK",
-    "primary_archetype": "Experiment",
+    "age": 34,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Empress",
     "secondary_archetype": "Siren",
-    "has_supernatural": false,
-    "body_type": "perfectly sculpted athletic",
+    "has_supernatural": true,
+    "body_type": "statuesque bombshell",
     "power_tier": "champion",
-    "narrative_role": "inevitable juggernaut testing all limits",
+    "narrative_role": "arrogant overlord with a secret fear of obsolescence",
     "rivalry_seeds": [
-      "Jade Empress",
-      "Crimson Hex"
+      "Venom Kiss",
+      "Jungle Huntress"
     ],
-    "media_archetype_inspiration": "Major Kusanagi from Ghost in the Shell",
+    "media_archetype_inspiration": "Empress from Final Fantasy",
     "skimpiness_weights": [
       10,
+      40,
       30,
-      30,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Gene-spliced lab escapee with adaptive mutations, reveling in the agony of reshaping her victims.",
+    "ring_name": "Neon Hybrid",
+    "gender": "female",
+    "age": 22,
+    "origin": "Shanghai, China",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "exotically enhanced curves",
+    "power_tier": "prospect",
+    "narrative_role": "chaotic wildcard embracing her monstrous heritage",
+    "rivalry_seeds": [
+      "Nova Prodigy",
+      "Porcelain Doll"
+    ],
+    "media_archetype_inspiration": "Poison Ivy from DC Comics",
+    "skimpiness_weights": [
+      15,
+      20,
+      35,
       30
     ]
   }

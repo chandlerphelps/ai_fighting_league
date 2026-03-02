@@ -1,0 +1,156 @@
+{
+  "id": "f_8e96fcd8",
+  "ring_name": "Eclipse Witch",
+  "real_name": "Aya Shirakawa",
+  "age": 32,
+  "origin": "Kyoto, Japan",
+  "gender": "female",
+  "height": "5'8\"",
+  "weight": "122",
+  "build": "slender mystique with graceful curves and toned limbs",
+  "distinguishing_features": "intricate black ink binding seal tattoos on forearms that subtly shift, heterochromia with one midnight-black eye and one deep crimson eye, faint scar like a crescent moon on her left collarbone",
+  "iconic_features": "long waist-length black hair with crimson ombr\u00e9 tips, obsidian prayer bead choker, red-inked palm sigils, silver crescent moon hairpins, crimson-lacquered nails, geisha-pale foundation with sharp eyeliner",
+  "personality": "imperious sorceress haunted by cursed addictions",
+  "image_prompt_personality_pose": "hands in mudra gesture summoning shadows, chin raised dominantly, hips subtly swayed",
+  "ring_attire": "black lace bralette with crimson straps, high-slit black velvet skirt, elbow-length black fingerless lace gloves, black stiletto ankle boots with silver buckles, silver crescent moon arm cuffs, crimson thigh garter with moon charm, obsidian waist chain",
+  "ring_attire_sfw": "rune-etched high-neck black combat shirt with elbow sleeves, black split hakama pants, knee-high combat boots, obi belt with moon clasp and seal pouches, obsidian prayer bead choker, silver crescent moon hairpins",
+  "ring_attire_nsfw": "topless, crimson micro g-string with silver chain accents, black thigh-high stiletto boots, fingerless black lace arm gloves, silver crescent waist chain, spiked obsidian hip belt",
+  "skimpiness_level": 1,
+  "image_prompt": {
+    "style": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, professional perfect shading, strictly female character, feminine curves and anatomy, beautiful face with attractive features, character design reference sheet, character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout",
+    "layout": "character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout",
+    "body_parts": "slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone",
+    "clothing": "black lace bralette with crimson straps, high-slit black velvet skirt, elbow-length black fingerless lace gloves, black stiletto ankle boots with silver buckles, silver crescent moon arm cuffs, crimson thigh garter with moon charm, obsidian waist chain",
+    "character_desc": "slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone, black lace bralette with crimson straps, high-slit black velvet skirt, elbow-length black fingerless lace gloves, black stiletto ankle boots with silver buckles, silver crescent moon arm cuffs, crimson thigh garter with moon charm, obsidian waist chain",
+    "front_view": "front slightly angled view standing tall",
+    "center_pose": "center personality pose: Serene smirk, hip cocked, finger tracing thigh seductively",
+    "back_view": "rear view standing tall",
+    "expression": "serene imperial smirk with piercing, appraising gaze",
+    "full_prompt": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, professional perfect shading, strictly female character, feminine curves and anatomy, beautiful face with attractive features, character design reference sheet, character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout, slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone, black lace bralette with crimson straps, high-slit black velvet skirt, elbow-length black fingerless lace gloves, black stiletto ankle boots with silver buckles, silver crescent moon arm cuffs, crimson thigh garter with moon charm, obsidian waist chain, front slightly angled view standing tall, center personality pose: Serene smirk, hip cocked, finger tracing thigh seductively, rear view standing tall, serene imperial smirk with piercing, appraising gaze, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, character reference sheet, three consistent views"
+  },
+  "image_prompt_sfw": {
+    "style": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, professional perfect shading, strictly female character, feminine curves and anatomy, beautiful face with attractive features, character design reference sheet, character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout",
+    "layout": "character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout",
+    "body_parts": "slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone",
+    "clothing": "high-neck black combat shirt elbow sleeves, black split hakama pants, knee-high combat boots, obi belt moon clasp seal pouches, obsidian prayer bead choker, silver crescent moon hairpins",
+    "character_desc": "slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone, high-neck black combat shirt elbow sleeves, black split hakama pants, knee-high combat boots, obi belt moon clasp seal pouches, obsidian prayer bead choker, silver crescent moon hairpins",
+    "front_view": "front slightly angled view standing tall",
+    "center_pose": "center personality pose: Poised stance, palms forward showing sigils, serene smirk",
+    "back_view": "rear view standing tall",
+    "expression": "serene imperial smirk with piercing, appraising gaze",
+    "full_prompt": "Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, professional perfect shading, strictly female character, feminine curves and anatomy, beautiful face with attractive features, character design reference sheet, character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout, slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone, high-neck black combat shirt elbow sleeves, black split hakama pants, knee-high combat boots, obi belt moon clasp seal pouches, obsidian prayer bead choker, silver crescent moon hairpins, front slightly angled view standing tall, center personality pose: Poised stance, palms forward showing sigils, serene smirk, rear view standing tall, serene imperial smirk with piercing, appraising gaze, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, character reference sheet, three consistent views"
+  },
+  "image_prompt_nsfw": {
+    "style": "explicit uncensored NSFW, topless woman, bare breasts visible, Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, professional perfect shading, strictly female character, feminine curves and anatomy, beautiful face with attractive features, character design reference sheet, character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout",
+    "layout": "character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout",
+    "body_parts": "slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone",
+    "clothing": "topless, bare breasts, long waist-length black hair with crimson ombr\u00e9 tips, obsidian prayer bead choker, red-inked palm sigils, silver crescent moon hairpins, crimson-lacquered nails, geisha-pale foundation with sharp eyeliner, crimson micro g-string with silver chain accents, black thigh-high stiletto boots, fingerless black lace arm gloves, silver crescent waist chain, spiked obsidian hip belt",
+    "character_desc": "slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone, topless, bare breasts, long waist-length black hair with crimson ombr\u00e9 tips, obsidian prayer bead choker, red-inked palm sigils, silver crescent moon hairpins, crimson-lacquered nails, geisha-pale foundation with sharp eyeliner, crimson micro g-string with silver chain accents, black thigh-high stiletto boots, fingerless black lace arm gloves, silver crescent waist chain, spiked obsidian hip belt",
+    "front_view": "front slightly angled view standing tall",
+    "center_pose": "center personality pose: Hands on hips, chest thrust out, serene imperial smirk, piercing gaze.",
+    "back_view": "rear view standing tall",
+    "expression": "serene imperial smirk with piercing, appraising gaze",
+    "full_prompt": "explicit uncensored NSFW, topless woman, bare breasts visible, Arcane TV series art style, hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze, highly detailed anatomy, professional perfect shading, strictly female character, feminine curves and anatomy, beautiful face with attractive features, character design reference sheet, character model sheet, character reference sheet, three full-body views of the exact same character side by side: front-facing slightly angled view on the left, personality pose in the center, rear view on the right, consistent outfit across all three views, full body head to toe visible in each panel, plain flat color background, organized reference sheet layout, slender 5'8\" frame with subtle hourglass curves, fair skin, long straight black hair to waist with crimson tips, elegant sharp-featured face with high cheekbones and full lips, heterochromia black and crimson eyes, black binding seal tattoos on forearms, crescent scar on collarbone, topless, bare breasts, long waist-length black hair with crimson ombr\u00e9 tips, obsidian prayer bead choker, red-inked palm sigils, silver crescent moon hairpins, crimson-lacquered nails, geisha-pale foundation with sharp eyeliner, crimson micro g-string with silver chain accents, black thigh-high stiletto boots, fingerless black lace arm gloves, silver crescent waist chain, spiked obsidian hip belt, front slightly angled view standing tall, center personality pose: Hands on hips, chest thrust out, serene imperial smirk, piercing gaze., rear view standing tall, serene imperial smirk with piercing, appraising gaze, Arcane TV series art style, hand-painted textures, extremely detailed, moody color grading, dramatic volumetric lighting, beautiful face, feminine, topless female nudity, bare breasts visible, character reference sheet, three consistent views"
+  },
+  "stats": {
+    "power": 28,
+    "speed": 62,
+    "technique": 88,
+    "toughness": 52,
+    "supernatural": 42
+  },
+  "record": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "kos": 0,
+    "submissions": 0
+  },
+  "condition": {
+    "health_status": "healthy",
+    "injuries": [],
+    "recovery_days_remaining": 0,
+    "morale": "neutral",
+    "momentum": "neutral"
+  },
+  "storyline_log": [],
+  "moves": [],
+  "outfit_choices": {
+    "sfw": {
+      "type": "top_bottom",
+      "top": "rune-etched high-neck black combat shirt with elbow sleeves",
+      "bottom": "black split hakama pants"
+    },
+    "barely": {
+      "type": "top_bottom",
+      "top": "black lace bralette with crimson straps",
+      "bottom": "high-slit black velvet skirt"
+    },
+    "nsfw": {
+      "type": "top_bottom",
+      "bottom": "crimson micro g-string with silver chain accents"
+    }
+  },
+  "outfit_suggestions": {
+    "sfw": {
+      "tops": [
+        "rune-etched compression vest",
+        "compression long-sleeve top",
+        "high-neck tactical combat shirt",
+        "utility bandolier rig",
+        "chemical-resistant fitted shirt",
+        "fitted combat vest",
+        "light exoskeleton frame top"
+      ],
+      "bottoms": [
+        "magnetic seal combat trousers",
+        "cargo pants",
+        "utility thigh rig pants",
+        "split hakama pants"
+      ],
+      "one_pieces": [
+        "quantum weave combat suit",
+        "tactical jumpsuit",
+        "tech shell combat suit",
+        "monastic discipline bodysuit"
+      ]
+    },
+    "barely": {
+      "tops": [
+        "sheer bralette",
+        "crop top",
+        "micro bikini top",
+        "partially unzipped tactical top",
+        "bustier"
+      ],
+      "bottoms": [
+        "high-slit skirt with liner",
+        "micro shorts",
+        "micro thong"
+      ],
+      "one_pieces": [
+        "sheer catsuit with reinforced seams"
+      ]
+    },
+    "nsfw": {
+      "tops": [
+        "open front combat harness",
+        "blade accent open chest harness",
+        "chest harness framing bare breasts",
+        "open tactical vest with bare breasts",
+        "suspenders framing bare breasts"
+      ],
+      "bottoms": [
+        "sheer lace panties",
+        "satin string bikini bottom",
+        "strappy lingerie thong"
+      ],
+      "one_pieces": [
+        "topless catsuit with built-in thong"
+      ]
+    }
+  },
+  "rivalries": [],
+  "last_fight_date": null,
+  "ranking": null
+}

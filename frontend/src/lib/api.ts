@@ -114,6 +114,34 @@ export async function pollUntilDone(taskId: string, onPoll?: () => void): Promis
   throw new Error('Task timed out')
 }
 
+export interface OutfitItem {
+  name: string
+  skimpiness_level: string
+}
+
+export interface OutfitTierOptions {
+  tops: OutfitItem[]
+  bottoms: OutfitItem[]
+  one_pieces: OutfitItem[]
+}
+
+export interface OutfitOptions {
+  sfw: OutfitTierOptions
+  barely: OutfitTierOptions
+  nsfw: OutfitTierOptions
+}
+
+export async function fetchOutfitOptions(): Promise<OutfitOptions> {
+  return apiFetch<OutfitOptions>('/outfit-options')
+}
+
+export async function saveOutfitOptions(options: OutfitOptions): Promise<OutfitOptions> {
+  return apiFetch<OutfitOptions>('/outfit-options', {
+    method: 'PUT',
+    body: JSON.stringify(options),
+  })
+}
+
 export async function fetchArchetypes(): Promise<{ female: string[]; male: string[] }> {
   return apiFetch('/archetypes')
 }
