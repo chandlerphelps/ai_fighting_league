@@ -1,3 +1,8 @@
+import random
+
+from app.engine.fighter_config import ARCHETYPE_SUBTYPES
+
+
 GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
 
 Everything below flows from these four principles. If a new character violates any of
@@ -305,7 +310,28 @@ SYSTEM_PROMPT_CHARACTER_DESIGNER = (
 )
 
 
+def _shuffled_archetype_names() -> str:
+    names = [k.replace("The ", "") for k in ARCHETYPE_SUBTYPES]
+    random.shuffle(names)
+    return ", ".join(names)
+
+
+def _shuffled_subtype_lines() -> str:
+    items = list(ARCHETYPE_SUBTYPES.items())
+    random.shuffle(items)
+    lines = []
+    for arch, subs in items:
+        short = arch.replace("The ", "")
+        sub_names = [s["name"] for s in subs]
+        random.shuffle(sub_names)
+        lines.append(f"- {short}: {', '.join(sub_names)}")
+    return "\n".join(lines)
+
+
 def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "") -> str:
+    archetype_list = _shuffled_archetype_names()
+    subtype_block = _shuffled_subtype_lines()
+
     return f"""{GUIDE_CORE_PHILOSOPHY}
 
 {GUIDE_COMMON_MISTAKES}
@@ -319,7 +345,7 @@ ROSTER BALANCE CONSTRAINTS:
 - Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs
 - Supernatural: at least 2 fighters should have NO supernatural abilities
 - Geography: at least 4 different countries/regions represented
-- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph
+- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: {archetype_list}
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
 - Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean slightly toward the skimpier side — most fighters should center around levels 2-3. A Siren might weight heavily toward 3-4, a Prodigy toward 2-3, an Empress toward 2-3. The 4 weights must sum to 100.
@@ -332,11 +358,10 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "gender": "<male|female>",
     "age": <18-34>,
     "origin": "<specific city/region, country>",
-    "primary_archetype": "<from the female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph>",
+    "primary_archetype": "<from the female archetypes: {archetype_list}>",
     "secondary_archetype": "<from the same gender-appropriate archetype list>",
     "subtype": "<REQUIRED — pick from the SUBTYPES list below for the chosen primary_archetype>",
     "has_supernatural": <true|false>,
-    "body_type": "<brief body type description>",
     "power_tier": "<prospect|gatekeeper|contender|champion>",
     "narrative_role": "<what they bring to the story>",
     "rivalry_seeds": ["<ring_name of 1-2 other fighters in this plan>"],
@@ -346,17 +371,7 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
 ]
 
 SUBTYPES (REQUIRED — every fighter must have a subtype matching their primary archetype):
-- Siren: Chanteuse, Femme Fatale, Temptress, Enchantress, Muse
-- Witch: Hexcaster, Oracle, Necromancer, Alchemist, Coven Mother
-- Viper: Poisoner, Schemer, Blackmailer, Saboteur, Infiltrator
-- Prodigy: Wunderkind, Savant, Phenom, Virtuoso, Ingenue
-- Doll: Porcelain, Marionette, Ragdoll, China Doll, Wind-Up
-- Huntress: Stalker, Apex, Trapper, Bloodhound, Falconer
-- Empress: Sovereign, Warlord, Matriarch, Tyrant, Regent
-- Experiment: Cyborg, Chimera, Prototype, Splice, Ghost in the Machine
-- Demon: Succubus, Hellion, Infernal, Corrupted, Abyssal
-- Assassin: Shadow, Blade, Phantom, Silencer, Venom
-- Nymph: Dryad, Naiad, Pixie, Sylph, Fae Queen"""
+{subtype_block}"""
 
 
 def build_generate_fighter_prompt(

@@ -1,141 +1,172 @@
 [
   {
-    "concept_hook": "Weaves haunting Celtic chants that unravel foes' deepest traumas, savoring their breakdowns while haunted by her own silenced family songs.",
-    "ring_name": "Celtic Siren",
+    "concept_hook": "Hypnotizes opponents with sultry songs that sap their will to fight, then strikes with precision daggers while they falter.",
+    "ring_name": "Siren Vox",
     "gender": "female",
-    "age": 25,
-    "origin": "Dublin, Ireland",
+    "age": 26,
+    "origin": "Miami, Florida, USA",
     "primary_archetype": "Siren",
-    "secondary_archetype": "Witch",
+    "secondary_archetype": "Nymph",
+    "subtype": "Chanteuse",
     "has_supernatural": true,
-    "body_type": "hypnotic hourglass figure",
-    "power_tier": "contender",
-    "narrative_role": "psychological predator exposing inner demons",
+    "body_type": "voluptuous hourglass with long wavy hair",
+    "power_tier": "prospect",
+    "narrative_role": "charismatic upstart who weaponizes beauty and voice to unsettle veterans",
     "rivalry_seeds": [
-      "Liberty Huntress",
-      "Rune Witch"
+      "Prodigy Pulse",
+      "Porcelain Kiss"
     ],
-    "media_archetype_inspiration": "Morrigan goddess from Irish mythology",
+    "media_archetype_inspiration": "Ivy Valentine from Soul Calibur",
     "skimpiness_weights": [
       5,
       15,
-      40,
-      40
-    ]
-  },
-  {
-    "concept_hook": "Deploys urban traps and crossbows to ensnare prey, loving the hunt's thrill but seething at betrayals that left her scarred.",
-    "ring_name": "Liberty Huntress",
-    "gender": "female",
-    "age": 29,
-    "origin": "New York, USA",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": false,
-    "body_type": "toned athletic build",
-    "power_tier": "gatekeeper",
-    "narrative_role": "gritty realist challenging supernatural foes",
-    "rivalry_seeds": [
-      "Celtic Siren",
-      "Monsoon Viper"
-    ],
-    "media_archetype_inspiration": "Artemis from DC Comics Wonder Woman",
-    "skimpiness_weights": [
-      15,
-      35,
-      35,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Exudes monsoon-activated venom from bio-engineered pores, craving the lethal rush yet dreading her body's uncontrollable mutations.",
-    "ring_name": "Monsoon Viper",
-    "gender": "female",
-    "age": 21,
-    "origin": "Mumbai, India",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": true,
-    "body_type": "lithe serpentine curves",
-    "power_tier": "prospect",
-    "narrative_role": "volatile wildcard disrupting hierarchies",
-    "rivalry_seeds": [
-      "Liberty Huntress",
-      "Aurora Prodigy"
-    ],
-    "media_archetype_inspiration": "Poison Ivy from Batman",
-    "skimpiness_weights": [
-      10,
-      20,
-      40,
-      30
-    ]
-  },
-  {
-    "concept_hook": "Instantly adapts and counters any technique with flawless precision, obsessed with perfection but tormented by her own rare errors.",
-    "ring_name": "Aurora Prodigy",
-    "gender": "female",
-    "age": 27,
-    "origin": "Reykjavik, Iceland",
-    "primary_archetype": "Prodigy",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "sleek muscular frame",
-    "power_tier": "contender",
-    "narrative_role": "technical gatekeeper testing all challengers",
-    "rivalry_seeds": [
-      "Monsoon Viper",
-      "Lotus Doll"
-    ],
-    "media_archetype_inspiration": "Ryu as prodigy from Street Fighter",
-    "skimpiness_weights": [
-      20,
-      40,
-      25,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Commands illusory shadow puppets via silken threads to drain vitality, playing gleefully until their destruction mirrors her isolation.",
-    "ring_name": "Lotus Doll",
-    "gender": "female",
-    "age": 23,
-    "origin": "Hanoi, Vietnam",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Empress",
-    "has_supernatural": true,
-    "body_type": "delicate yet deadly curves",
-    "power_tier": "prospect",
-    "narrative_role": "eerie showwoman turning bouts into theater",
-    "rivalry_seeds": [
-      "Aurora Prodigy",
-      "Jade Empress"
-    ],
-    "media_archetype_inspiration": "Puppeteer from Ghost in the Shell",
-    "skimpiness_weights": [
-      5,
-      20,
-      40,
+      45,
       35
     ]
   },
   {
-    "concept_hook": "Dominates with imperious taunts and crushing holds that demand submission, thriving on adoration but fragile without it.",
-    "ring_name": "Jade Empress",
+    "concept_hook": "Curses foes with hexes that amplify their pain and fears, reveling in their breakdowns but haunted by her own inflicted losses.",
+    "ring_name": "Hex Queen",
     "gender": "female",
-    "age": 31,
-    "origin": "Kuala Lumpur, Malaysia",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Siren",
-    "has_supernatural": false,
-    "body_type": "regal voluptuous form",
-    "power_tier": "gatekeeper",
-    "narrative_role": "haughty aristocrat exacting bloody tribute",
+    "age": 29,
+    "origin": "Kyoto, Japan",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Oracle",
+    "subtype": "Hexcaster",
+    "has_supernatural": true,
+    "body_type": "slender elegant with piercing eyes",
+    "power_tier": "contender",
+    "narrative_role": "cunning antagonist whose magic exposes emotional fractures in the roster",
     "rivalry_seeds": [
-      "Lotus Doll",
-      "Plasma Helix"
+      "Empress Aria",
+      "Vipera Noctis"
     ],
-    "media_archetype_inspiration": "Empress from Dune",
+    "media_archetype_inspiration": "Bayonetta from Bayonetta series",
+    "skimpiness_weights": [
+      10,
+      30,
+      40,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Deploys custom neurotoxins via lipstick kisses and darts, savoring the slow agony but despising fighters who resist her chemistry.",
+    "ring_name": "Vipera Noctis",
+    "gender": "female",
+    "age": 28,
+    "origin": "Medell\u00edn, Colombia",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Schemer",
+    "subtype": "Poisoner",
+    "has_supernatural": false,
+    "body_type": "lithe curvaceous with glossy lips",
+    "power_tier": "gatekeeper",
+    "narrative_role": "scheming opportunist who poisons roster alliances from within",
+    "rivalry_seeds": [
+      "Silk Shadow",
+      "Hex Queen"
+    ],
+    "media_archetype_inspiration": "Poison Ivy from Batman series",
+    "skimpiness_weights": [
+      5,
+      20,
+      50,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Outmaneuvers larger foes with flawless technical striking and grapples, frustrated by dirty tricks that deny her clean victories.",
+    "ring_name": "Prodigy Pulse",
+    "gender": "female",
+    "age": 21,
+    "origin": "Seoul, South Korea",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Virtuoso",
+    "subtype": "Wunderkind",
+    "has_supernatural": false,
+    "body_type": "petite toned with sharp features",
+    "power_tier": "prospect",
+    "narrative_role": "pure skill prodigy challenging the supernatural status quo",
+    "rivalry_seeds": [
+      "Siren Vox",
+      "Jungle Shade"
+    ],
+    "media_archetype_inspiration": "Juri from Street Fighter",
+    "skimpiness_weights": [
+      15,
+      40,
+      35,
+      10
+    ]
+  },
+  {
+    "concept_hook": "Absorbs blows like fragile porcelain only to shatter foes with hidden spring-loaded limbs, masking her rage behind doll-like smiles.",
+    "ring_name": "Porcelain Kiss",
+    "gender": "female",
+    "age": 24,
+    "origin": "Moscow, Russia",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Marionette",
+    "subtype": "Porcelain",
+    "has_supernatural": true,
+    "body_type": "delicate pale with flawless skin",
+    "power_tier": "gatekeeper",
+    "narrative_role": "deceptive wildcard who flips from victim to punisher",
+    "rivalry_seeds": [
+      "Siren Vox",
+      "Silk Shadow"
+    ],
+    "media_archetype_inspiration": "Mileena from Mortal Kombat",
+    "skimpiness_weights": [
+      20,
+      35,
+      30,
+      15
+    ]
+  },
+  {
+    "concept_hook": "Tracks prey through shadows with bolas and traps, thriving on the hunt's thrill but crumbling when outmaneuvered in open fights.",
+    "ring_name": "Jungle Shade",
+    "gender": "female",
+    "age": 27,
+    "origin": "Manaus, Brazil",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Stalker",
+    "subtype": "Stalker",
+    "has_supernatural": false,
+    "body_type": "lean athletic with sun-kissed skin",
+    "power_tier": "gatekeeper",
+    "narrative_role": "primal force disrupting urban fighters' comforts",
+    "rivalry_seeds": [
+      "Prodigy Pulse",
+      "Empress Aria"
+    ],
+    "media_archetype_inspiration": "Lara Croft from Tomb Raider",
+    "skimpiness_weights": [
+      10,
+      35,
+      40,
+      15
+    ]
+  },
+  {
+    "concept_hook": "Commands illusory armies and psychic dominance to break wills, burdened by the isolation of her unchallenged reign.",
+    "ring_name": "Empress Aria",
+    "gender": "female",
+    "age": 32,
+    "origin": "Rome, Italy",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Tyrant",
+    "subtype": "Sovereign",
+    "has_supernatural": true,
+    "body_type": "regal curvaceous with commanding presence",
+    "power_tier": "champion",
+    "narrative_role": "haughty title defender uniting rivals against her throne",
+    "rivalry_seeds": [
+      "Hex Queen",
+      "Jungle Shade"
+    ],
+    "media_archetype_inspiration": "Akame from Akame ga Kill",
     "skimpiness_weights": [
       10,
       40,
@@ -144,51 +175,28 @@
     ]
   },
   {
-    "concept_hook": "Injects serums warping foe's time sense for devastating combos, innovating boldly but reeling from her experiments' backlash.",
-    "ring_name": "Plasma Helix",
+    "concept_hook": "Melts into shadows for undetectable throat strikes, addicted to the kill's intimacy but paralyzed by exposure to light-based foes.",
+    "ring_name": "Silk Shadow",
     "gender": "female",
-    "age": 22,
-    "origin": "Helsinki, Finland",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Prodigy",
+    "age": 23,
+    "origin": "Hong Kong, China",
+    "primary_archetype": "Assassin",
+    "secondary_archetype": "Phantom",
+    "subtype": "Shadow",
     "has_supernatural": true,
-    "body_type": "cybernetically enhanced physique",
-    "power_tier": "prospect",
-    "narrative_role": "mad scientist pushing mortal boundaries",
+    "body_type": "slim agile with enigmatic allure",
+    "power_tier": "contender",
+    "narrative_role": "elusive killer forcing paranoid preparations across the league",
     "rivalry_seeds": [
-      "Jade Empress",
-      "Rune Witch"
+      "Vipera Noctis",
+      "Porcelain Kiss"
     ],
-    "media_archetype_inspiration": "Winter Soldier from Marvel",
+    "media_archetype_inspiration": "Akali from League of Legends",
     "skimpiness_weights": [
       15,
       30,
-      30,
-      25
-    ]
-  },
-  {
-    "concept_hook": "Activates glowing runes to warp flesh and bone, delighting in carnage but hesitating against those evoking her vanished clan.",
-    "ring_name": "Rune Witch",
-    "gender": "female",
-    "age": 33,
-    "origin": "Edinburgh, Scotland",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Doll",
-    "has_supernatural": true,
-    "body_type": "ethereal rune-tattooed allure",
-    "power_tier": "gatekeeper",
-    "narrative_role": "vengeful sorceress reviving old blood feuds",
-    "rivalry_seeds": [
-      "Plasma Helix",
-      "Celtic Siren"
-    ],
-    "media_archetype_inspiration": "Bayonetta from Bayonetta series",
-    "skimpiness_weights": [
-      5,
-      25,
       40,
-      30
+      15
     ]
   }
 ]
