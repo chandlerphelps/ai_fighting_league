@@ -12,16 +12,26 @@ Quick reference for finding code.
 
 ## Engine (`app/engine/`)
 
-- `fight_simulator.py` - Fight pipeline: calculate_probabilities (AI), determine_outcome (random roll), generate_moments (AI choreography), run_fight (orchestrator)
-- `fighter_generator.py` - AI fighter creation with character design guide, archetype system (8F/8M), tiered image prompts (SFW/barely/NSFW/triple), stat validation
-  - plan_roster() - AI roster planning
-  - generate_fighter() - full fighter generation from plan entry
-  - _build_charsheet_prompt() / _build_triple_prompt() - image prompt assembly
-- `post_fight.py` - apply_fight_results: updates records, stats, injuries, storylines, rivalries
+- `fight_simulator.py` - Fight pipeline: calculate_probabilities, determine_outcome, generate_moments, run_fight (orchestrator). Prompts imported from `prompts/fight_prompts.py`
+- `fighter_generator.py` - Orchestration: plan_roster(), generate_fighter(), _generate_outfits(). Imports config from `fighter_config.py`, prompts from `prompts/`
+- `fighter_config.py` - All config data: body traits, archetypes, outfit options, skimpiness levels, weight tables, body trait utility functions
+- `post_fight.py` - apply_fight_results: updates records, stats, injuries, storylines, rivalries. Prompt imported from `prompts/post_fight_prompts.py`
 - `rankings.py` - calculate_rankings: sort by win%, total wins, recent form
 - `matchmaker.py` - generate_fight_card: score pairings by rank proximity, rivalry, idle time
 - `day_ticker.py` - advance_day: injury recovery, run events, schedule new events
 - `image_style.py` - Arcane art style constants and gender-aware accessors (get_art_style, get_art_style_tail)
+- `move_generator.py` - generate_moves (AI), generate_move_images (Grok). Prompts imported from `prompts/`
+
+## Prompts (`app/prompts/`)
+
+All LLM prompt text and image prompt assembly in one package. Each file has system prompt constants + builder functions with explicit parameters.
+
+- `fighter_prompts.py` - Character design guide (GUIDE_CORE_PHILOSOPHY etc), build_plan_roster_prompt(), build_generate_fighter_prompt()
+- `outfit_prompts.py` - build_tier_prompt() for SFW/barely/NSFW outfit generation, OUTFIT_STYLE_RULES
+- `fight_prompts.py` - build_probability_prompt(), build_moments_prompt() for fight simulation
+- `move_prompts.py` - build_move_generation_prompt() for fighting move design
+- `post_fight_prompts.py` - build_storyline_prompt() for post-fight narratives
+- `image_builders.py` - _build_charsheet_prompt() (charsheet image), build_move_image_prompt() (move action image), NSFW prefix/tail helpers
 
 ## Models (`app/models/`)
 

@@ -3,6 +3,12 @@ import uuid
 
 from app.config import Config
 from app.models.match import MatchupAnalysis, MatchOutcome, Match, FightMoment
+from app.prompts.fight_prompts import (
+    SYSTEM_PROMPT_FIGHT_ANALYST,
+    SYSTEM_PROMPT_FIGHT_CHOREOGRAPHER,
+    build_probability_prompt,
+    build_moments_prompt,
+)
 from app.services import data_manager
 
 
@@ -92,33 +98,22 @@ RIVALRY CONTEXT: These fighters have fought {rivalry_context.get('fights', 0)} t
 {f1_name} has won {rivalry_context.get('fighter1_wins', 0)} and {f2_name} has won {rivalry_context.get('fighter2_wins', 0)}.
 This is a known rivalry — factor in the psychological weight of their history."""
 
-    prompt = f"""Analyze this fighting matchup and return a JSON probability assessment. All fights end in KO.
+    f1_condition = f"{fighter1.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter1.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter1.get('condition', {}).get('momentum', 'neutral')}"
+    f2_condition = f"{fighter2.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter2.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter2.get('condition', {}).get('momentum', 'neutral')}"
 
-FIGHTER 1: {f1_name}
-- Stats: {fighter1.get('stats', {})}
-- Record: {fighter1.get('record', {})}
-- Condition: {fighter1.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter1.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter1.get('condition', {}).get('momentum', 'neutral')}
+    prompt = build_probability_prompt(
+        f1_name=f1_name,
+        f1_stats=fighter1.get('stats', {}),
+        f1_record=fighter1.get('record', {}),
+        f1_condition=f1_condition,
+        f2_name=f2_name,
+        f2_stats=fighter2.get('stats', {}),
+        f2_record=fighter2.get('record', {}),
+        f2_condition=f2_condition,
+        rivalry_text=rivalry_text,
+    )
 
-FIGHTER 2: {f2_name}
-- Stats: {fighter2.get('stats', {})}
-- Record: {fighter2.get('record', {})}
-- Condition: {fighter2.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter2.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter2.get('condition', {}).get('momentum', 'neutral')}
-{rivalry_text}
-
-Stats are: power (striking force), speed (quickness/reflexes), technique (skill/fight IQ/defense), toughness (durability/endurance/recovery), supernatural (optional supernatural ability, 0 = none).
-
-Return ONLY valid JSON with this exact structure:
-{{
-  "fighter1_win_prob": <float between 0.05 and 0.95>,
-  "fighter2_win_prob": <float between 0.05 and 0.95, must sum to ~1.0 with fighter1_win_prob>,
-  "key_factors": ["<factor 1>", "<factor 2>", "<factor 3>"]
-}}
-
-Supernatural abilities should be factored as a modest edge, not a dominator."""
-
-    system_prompt = "You are a fight analyst. Analyze matchups objectively based on fighter stats, styles, and conditions. Always respond with valid JSON only."
-
-    result = call_openrouter_json(prompt, config, system_prompt=system_prompt)
+    result = call_openrouter_json(prompt, config, system_prompt=SYSTEM_PROMPT_FIGHT_ANALYST)
 
     f1_prob = max(0.05, min(0.95, float(result.get("fighter1_win_prob", 0.5))))
     f2_prob = 1.0 - f1_prob
@@ -148,40 +143,26 @@ def generate_moments(
     loser_name = f2_name if outcome.winner_id == f1_id else f1_name
     target = outcome.round_ended
 
-    prompt = f"""Generate exactly {target} key moments for this fight. Every fight ends in KO.
-
-FIGHTER 1: {f1_name} (ID: {f1_id})
-- Build: {fighter1.get('build', '')}, {fighter1.get('height', '')}, {fighter1.get('weight', '')}
-- Stats: Power {fighter1.get('stats', {}).get('power', 50)}, Speed {fighter1.get('stats', {}).get('speed', 50)}, Technique {fighter1.get('stats', {}).get('technique', 50)}
-
-FIGHTER 2: {f2_name} (ID: {f2_id})
-- Build: {fighter2.get('build', '')}, {fighter2.get('height', '')}, {fighter2.get('weight', '')}
-- Stats: Power {fighter2.get('stats', {}).get('power', 50)}, Speed {fighter2.get('stats', {}).get('speed', 50)}, Technique {fighter2.get('stats', {}).get('technique', 50)}
-
-PREDETERMINED OUTCOME: {winner_name} knocks out {loser_name}
-
-Return ONLY valid JSON with this structure:
-{{
-  "moments": [
-    {{
-      "moment_number": 1,
-      "attacker_id": "<fighter ID of who lands the strike>",
-      "action": "<short action phrase: e.g. 'spinning back kick to the ribs', 'right cross to the jaw', 'devastating uppercut'>"
-    }}
-  ]
-}}
-
-Rules:
-- Each moment is one fighter landing a clean strike on the other
-- The action should be a specific striking move (punch, kick, elbow, knee)
-- Build momentum toward the KO — the last moment MUST be the knockout blow from {winner_name}
-- Keep actions simple and visual — one clear strike per moment
-- Both fighters should land hits, but {winner_name} should land more/harder ones"""
-
-    system_prompt = "You are a fight choreographer. Return concise JSON fight moments. Each moment is one specific strike or grappling action."
+    prompt = build_moments_prompt(
+        target=target,
+        f1_name=f1_name,
+        f1_id=f1_id,
+        f1_build=fighter1.get('build', ''),
+        f1_height=fighter1.get('height', ''),
+        f1_weight=fighter1.get('weight', ''),
+        f1_stats=fighter1.get('stats', {}),
+        f2_name=f2_name,
+        f2_id=f2_id,
+        f2_build=fighter2.get('build', ''),
+        f2_height=fighter2.get('height', ''),
+        f2_weight=fighter2.get('weight', ''),
+        f2_stats=fighter2.get('stats', {}),
+        winner_name=winner_name,
+        loser_name=loser_name,
+    )
 
     result = call_openrouter_json(
-        prompt, config, model=config.narrative_model, system_prompt=system_prompt
+        prompt, config, model=config.narrative_model, system_prompt=SYSTEM_PROMPT_FIGHT_CHOREOGRAPHER
     )
     raw_moments = result.get("moments", [])
 

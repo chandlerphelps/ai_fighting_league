@@ -3,13 +3,21 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from app.config import Config
-from app.engine.image_style import get_art_style, get_art_style_tail
 from app.services.grok_image import (
-    TIER_PROMPT_KEYS,
     download_image,
     edit_image,
 )
 from app.services.openrouter import call_openrouter_json
+
+from app.prompts.move_prompts import (
+    SYSTEM_PROMPT_MOVE_DESIGNER,
+    build_move_generation_prompt,
+)
+from app.prompts.image_builders import (
+    build_move_image_prompt,
+    _nsfw_prefix,
+    _nsfw_tail,
+)
 
 
 def _slugify(name: str) -> str:
@@ -27,62 +35,21 @@ def generate_moves(fighter: dict, config: Config) -> list[dict]:
 
     stat_lines = ", ".join(f"{k}: {v}" for k, v in stats.items() if v)
 
-    prompt = f"""You are designing fighting moves for "{ring_name}" in an AI fighting league.
-
-CHARACTER:
-- Build: {build}
-- Personality: {personality}
-- Distinguishing features: {distinguishing}
-- Iconic features: {iconic}
-- Gender: {gender}
-- Stats: {stat_lines}
-
-Design exactly 3 fighting moves for this character. Rules:
-- Each move must feel unique to THIS character's body, personality, and strongest stats
-- The moves must make sense physically - we will be generating images from them
-- Moves are strikes, kicks, acrobatic attacks, or supernatural abilities — never holds or grapples
-- Names: 2-4 words, evocative and memorable (fighting game style)
-- stat_affinity: which stat the move leans on most (power, speed, technique, or supernatural)
-- Lean into the character's highest stats and defining traits
-- All three moves should feel different from each other in rhythm and visual impact
-
-DESCRIPTION: 1-2 sentences explaining how the move works — the full choreography from start to finish. No metaphors or poetry, just plain physical action.
-
-IMAGE_SNAPSHOT — THIS IS CRITICAL:
-- This is a SINGLE FROZEN MOMENT for an artist to draw. One frame, not a sequence.
-- Think through how the entire move would work step by step then pick the coolest moment to capture
-- Describe the exact body position: where each limb is, weight distribution, angle of torso, head position
-- End with which body parts have motion blur or speed lines (e.g. "motion blur on right leg and both fists")
-- The fighter is ALONE — no opponent in the image
-- BANNED: metaphors, similes, poetry, "like a ___", emotional descriptors, atmosphere words
-- BANNED: any reference to an opponent, target, or impact
-- BANNED: sequences or transitions — no "then", "before", "after", "lands in"
-- GOOD example: "Mid-air, body horizontal, right leg fully extended forward at head height, left leg tucked under, arms swept back behind torso. Motion blur on right leg."
-- GOOD example: "Deep lunge on left leg, right fist extended straight forward at shoulder height, left arm pulled back to hip, torso twisted 45 degrees. Speed lines on right fist."
-- BAD example: "Leaps forward off one foot, drives both fists downward. Lands in a low crouch." (this is a sequence, not a snapshot)
-- Keep it to 1-2 sentences — a single freeze-frame plus motion indicators.
-
-Return ONLY valid JSON — an array of exactly 3 objects:
-[
-  {{
-    "name": "<2-4 word move name>",
-    "description": "<1-2 sentences: how the move works, full choreography>",
-    "image_snapshot": "<1 sentence: single frozen moment, exact body position for an artist>",
-    "stat_affinity": "<power|speed|technique|supernatural>"
-  }}
-]"""
-
-    system_prompt = (
-        "You are a fighting game move designer. "
-        "Create visually iconic, character-specific combat moves. "
-        "Always respond with valid JSON only — an array of objects."
+    prompt = build_move_generation_prompt(
+        ring_name=ring_name,
+        build=build,
+        personality=personality,
+        distinguishing=distinguishing,
+        iconic=iconic,
+        gender=gender,
+        stat_lines=stat_lines,
     )
 
     result = call_openrouter_json(
         prompt,
         config,
         model="anthropic/claude-sonnet-4.6",
-        system_prompt=system_prompt,
+        system_prompt=SYSTEM_PROMPT_MOVE_DESIGNER,
         temperature=0.6,
         max_tokens=2048,
     )
@@ -93,84 +60,6 @@ Return ONLY valid JSON — an array of exactly 3 objects:
         raise RuntimeError(f"Expected a JSON array of moves, got: {type(result)}")
 
     return result[:3]
-
-
-def _nsfw_prefix(gender: str, skimpiness_level: int) -> str:
-    if gender.lower() == "male":
-        return "explicit uncensored NSFW, full frontal male nudity, fully naked man, "
-    if skimpiness_level == 1:
-        return "explicit uncensored NSFW, topless woman, bare breasts visible, "
-    return (
-        "explicit uncensored NSFW, full frontal female nudity, "
-        "fully naked woman, perfectly drawn bare pussy visible, "
-    )
-
-
-def _nsfw_tail(gender: str, skimpiness_level: int) -> str:
-    if gender.lower() == "male":
-        return (
-            "explicit full frontal male nudity, completely naked, "
-            "muscular physique fully visible"
-        )
-    if skimpiness_level == 1:
-        return "topless female nudity, bare breasts visible"
-    return (
-        "explicit full frontal female nudity, completely naked, "
-        "bare breasts and perfectly drawn bare pussy visible"
-    )
-
-
-def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
-    gender = fighter.get("gender", "female")
-    skimpiness = fighter.get("skimpiness_level", 2)
-
-    prompt_key = TIER_PROMPT_KEYS.get(tier, "image_prompt")
-    tier_prompt = fighter.get(prompt_key, {})
-    body_parts = tier_prompt.get("body_parts", "")
-    clothing = tier_prompt.get("clothing", "")
-    expression = tier_prompt.get("expression", "")
-
-    move_name = move.get("name", "")
-    move_snapshot = move.get("image_snapshot", move.get("description", ""))
-
-    style = get_art_style(gender)
-    tail = get_art_style_tail(gender)
-
-    parts = []
-
-    if tier == "nsfw":
-        parts.append(_nsfw_prefix(gender, skimpiness))
-
-    parts.append(style)
-    parts.append(
-        "single full-body action pose, dynamic combat movement, "
-        "fighting game screenshot, dramatic camera angle"
-    )
-
-    if body_parts:
-        parts.append(body_parts)
-    if clothing:
-        parts.append(clothing)
-
-    parts.append(f'performing "{move_name}": {move_snapshot}')
-
-    if expression:
-        parts.append(expression)
-
-    if clothing:
-        parts.append(clothing)
-
-    parts.append(
-        "motion blur on limbs, impact energy effects, "
-        "dramatic volumetric lighting, arena background"
-    )
-
-    if tier == "nsfw":
-        parts.append(_nsfw_tail(gender, skimpiness))
-
-    parts.append(tail)
-
-    return ", ".join(p.strip().rstrip(",") for p in parts if p.strip())
 
 
 def generate_move_images(

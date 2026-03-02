@@ -8,19 +8,26 @@ Comprehensive documentation of backend code.
 2. [app/run_day.py](#apprun_day)
 3. [app/engine/fight_simulator.py](#appenginefight_simulator)
 4. [app/engine/fighter_generator.py](#appenginefighter_generator)
-5. [app/engine/post_fight.py](#appenginepost_fight)
-6. [app/engine/rankings.py](#appenginerankings)
-7. [app/engine/matchmaker.py](#appenginematchmaker)
-8. [app/engine/day_ticker.py](#appengineday_ticker)
-9. [app/engine/image_style.py](#appengineimage_style)
-10. [app/models/fighter.py](#appmodelsfighter)
-11. [app/models/match.py](#appmodelsmatch)
-12. [app/models/event.py](#appmodelsevent)
-13. [app/models/world_state.py](#appmodelsworld_state)
-14. [app/services/data_manager.py](#appservicesdata_manager)
-15. [app/services/openrouter.py](#appservicesopenrouter)
-16. [app/services/grok_image.py](#appservicesgrok_image)
-17. [app/scripts/generate_roster.py](#appscriptsgenerate_roster)
+5. [app/engine/fighter_config.py](#appenginefighter_config)
+6. [app/engine/post_fight.py](#appenginepost_fight)
+7. [app/engine/rankings.py](#appenginerankings)
+8. [app/engine/matchmaker.py](#appenginematchmaker)
+9. [app/engine/day_ticker.py](#appengineday_ticker)
+10. [app/engine/image_style.py](#appengineimage_style)
+11. [app/prompts/fighter_prompts.py](#apppromptsfighter_prompts)
+12. [app/prompts/outfit_prompts.py](#apppromptsoutfit_prompts)
+13. [app/prompts/fight_prompts.py](#apppromptsfight_prompts)
+14. [app/prompts/move_prompts.py](#apppromptsmove_prompts)
+15. [app/prompts/post_fight_prompts.py](#apppromptspost_fight_prompts)
+16. [app/prompts/image_builders.py](#apppromptsimage_builders)
+17. [app/models/fighter.py](#appmodelsfighter)
+18. [app/models/match.py](#appmodelsmatch)
+19. [app/models/event.py](#appmodelsevent)
+20. [app/models/world_state.py](#appmodelsworld_state)
+21. [app/services/data_manager.py](#appservicesdata_manager)
+22. [app/services/openrouter.py](#appservicesopenrouter)
+23. [app/services/grok_image.py](#appservicesgrok_image)
+24. [app/scripts/generate_roster.py](#appscriptsgenerate_roster)
 
 ---
 
@@ -46,16 +53,16 @@ Artefacts
 
 ## app/engine/fight_simulator.py
 File: app/engine/fight_simulator.py
-File Length: 260 lines
-Purpose: Core fight pipeline: AI probability analysis, random outcome determination, AI moment generation, and full fight orchestration.
+File Length: ~260 lines
+Purpose: Core fight pipeline: AI probability analysis, random outcome determination, AI moment generation, and full fight orchestration. Prompts imported from `app/prompts/fight_prompts.py`.
 
 Artefacts
 - _calc_moment_count(winner_prob) - maps lopsidedness to 3-6 moments
 - _assess_performance(winner_prob) - returns ("dominant","poor") or ("competitive","competitive")
 - determine_outcome(fighter1, fighter2, analysis, config) - rolls winner via analysis.fighter1_win_prob, assigns method ko_tko, injuries, performance labels
 - _roll_injuries(config, base_chance) - probabilistic injury generation (minor/moderate/severe with recovery ranges)
-- calculate_probabilities(fighter1, fighter2, config, rivalry_context) - calls OpenRouter for win probability JSON with key_factors
-- generate_moments(fighter1, fighter2, analysis, outcome, config) - calls OpenRouter for choreographed strike-by-strike moments building to KO
+- calculate_probabilities(fighter1, fighter2, config, rivalry_context) - uses build_probability_prompt(), calls OpenRouter for win probability JSON
+- generate_moments(fighter1, fighter2, analysis, outcome, config) - uses build_moments_prompt(), calls OpenRouter for choreographed strike-by-strike moments
 - run_fight(fighter1_id, fighter2_id, event_id, match_date, config) - loads fighters, runs full pipeline (probabilities -> outcome -> moments), returns Match
 - _get_rivalry_context(fighter1_id, fighter2_id, config) - looks up rivalry record from world_state
 
@@ -63,29 +70,112 @@ Artefacts
 
 ## app/engine/fighter_generator.py
 File: app/engine/fighter_generator.py
-File Length: 812 lines
-Purpose: AI-driven fighter creation with extensive character design guide, archetype system, tiered image prompt generation, and stat validation.
+File Length: ~270 lines
+Purpose: Orchestration for AI fighter creation. Config data lives in `fighter_config.py`, prompts in `app/prompts/`. Re-exports symbols for backward compatibility.
 
 Artefacts
-- ARCHETYPES_FEMALE - 8 female archetypes (Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment)
-- ARCHETYPES_MALE - 8 male archetypes (Brute, Veteran, Monster, Technician, Wildcard, Mystic, Prodigy, Experiment)
-- GUIDE_CORE_PHILOSOPHY - design principles: attractiveness, gender power dynamics, violence-driven character depth, popular media archetypes
-- GUIDE_VISUAL_DESIGN - strip test, silhouette rule, sex appeal guidelines, distinguishing features
-- GUIDE_CREATION_WORKFLOW - archetype blending, identity/origin, physical design, concept hook
-- GUIDE_COMMON_MISTAKES - 12 anti-patterns to avoid in character design
-- GUIDE_IMAGE_PROMPT_RULES - NSFW tier image prompt formatting rules
-- FULL_CHARACTER_GUIDE - concatenation of all guide sections
-- plan_roster(config, roster_size, existing_fighters) - calls OpenRouter to generate interconnected roster plan as JSON array
-- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry) - calls OpenRouter to create full Fighter from plan entry or archetype
+- plan_roster(config, roster_size, existing_fighters) - builds existing roster text, calls build_plan_roster_prompt(), calls OpenRouter
+- _generate_outfits(config, character_summary, skimpiness_level, tiers, outfit_options_by_tier) - parallel tier outfit generation using build_tier_prompt()
+- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ...) - full fighter generation pipeline
 - _extract_stats(data, has_supernatural, config) - clamps stat values to config bounds
+- _normalize_core_stats(stats, config) - scales core stats to target range if out of bounds
+
+---
+
+## app/engine/fighter_config.py
+File: app/engine/fighter_config.py
+File Length: ~480 lines
+Purpose: All configuration data for fighter generation: body traits, archetypes, outfit options, skimpiness levels, weight derivation tables, and body trait utility functions.
+
+Artefacts
+- DEFAULT_OUTFIT_OPTIONS - tier-keyed dict of outfit item lists (sfw/barely/nsfw)
+- load_outfit_options(config) - load from data dir JSON or create default
+- filter_outfit_options(options_for_tier, skimpiness_level) - sample 3 items per category matching skimpiness
+- ARCHETYPES_FEMALE / ARCHETYPES_MALE - archetype name lists
+- BODY_TRAIT_OPTIONS - category->options for body trait rolling
+- MAKEUP_DESCRIPTIONS - makeup level descriptions
+- ARCHETYPE_HEIGHT_RANGES - height range tuples per archetype
+- ARCHETYPE_BODY_WEIGHTS - weighted probability tables per archetype per body trait
+- BODY_FAT_MULTIPLIERS / BREAST_WEIGHT_LBS / BUTT_WEIGHT_LBS / WAIST_MULTIPLIERS - weight derivation tables
+- _weighted_choice(category, archetype) - roll a body trait with archetype-weighted probabilities
+- _format_height(inches) - convert inches to feet'inches" string
+- _derive_weight(height_inches, traits) - calculate weight from height + body traits
+- _roll_body_traits(archetype) - roll all body traits for an archetype
+- _build_body_directive(traits) - format body traits as LLM directive string
+- _build_body_shape_line(traits) - "X breasts, Y butt" for image prompts
+- _build_nsfw_anatomy_line(traits) - detailed anatomy line for NSFW image prompts
+- SKIMPINESS_LEVELS - 4-level dict of tier-specific outfit rules (sfw/barely/nsfw labels, hard rules, guidance)
+- _roll_skimpiness(weights) - weighted random choice of skimpiness level 1-4
+
+---
+
+## app/prompts/fighter_prompts.py
+File: app/prompts/fighter_prompts.py
+Purpose: Character design guide constants and fighter creation prompt builders.
+
+Artefacts
+- GUIDE_CORE_PHILOSOPHY / GUIDE_VISUAL_DESIGN / GUIDE_CREATION_WORKFLOW / GUIDE_COMMON_MISTAKES / FULL_CHARACTER_GUIDE - design philosophy text
+- SYSTEM_PROMPT_ROSTER_PLANNER / SYSTEM_PROMPT_CHARACTER_DESIGNER - system prompts
+- build_plan_roster_prompt(roster_size, existing_roster_text) - returns roster planning user prompt
+- build_generate_fighter_prompt(archetype_text, existing_roster_text, blueprint_text, body_directive, supernatural_instruction, min_total_stats, max_total_stats) - returns fighter generation user prompt
+
+---
+
+## app/prompts/outfit_prompts.py
+File: app/prompts/outfit_prompts.py
+Purpose: Tier-based outfit prompt builder for SFW/barely/NSFW tiers.
+
+Artefacts
+- OUTFIT_STYLE_RULES - universal style rules applied to all tiers
+- SYSTEM_PROMPT_OUTFIT_DESIGNER - system prompt
+- build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options) - returns outfit generation prompt for any tier
+
+---
+
+## app/prompts/fight_prompts.py
+File: app/prompts/fight_prompts.py
+Purpose: Fight analysis and moment choreography prompt builders.
+
+Artefacts
+- SYSTEM_PROMPT_FIGHT_ANALYST / SYSTEM_PROMPT_FIGHT_CHOREOGRAPHER - system prompts
+- build_probability_prompt(f1_name, f1_stats, ..., rivalry_text) - returns matchup analysis prompt
+- build_moments_prompt(target, f1_name, f1_id, ..., winner_name, loser_name) - returns fight moments prompt
+
+---
+
+## app/prompts/move_prompts.py
+File: app/prompts/move_prompts.py
+Purpose: Fighting move generation prompt builder.
+
+Artefacts
+- SYSTEM_PROMPT_MOVE_DESIGNER - system prompt
+- build_move_generation_prompt(ring_name, build, personality, distinguishing, iconic, gender, stat_lines) - returns move design prompt
+
+---
+
+## app/prompts/post_fight_prompts.py
+File: app/prompts/post_fight_prompts.py
+Purpose: Post-fight storyline prompt builder.
+
+Artefacts
+- SYSTEM_PROMPT_STORYLINE - system prompt
+- build_storyline_prompt(fighter_name, result_text, opponent_name, method, round_ended, wins, losses, draws) - returns storyline entry prompt
+
+---
+
+## app/prompts/image_builders.py
+File: app/prompts/image_builders.py
+Purpose: Image prompt assembly for charsheet images (Grok API) and move action images. Not LLM prompts.
+
+Artefacts
 - CHARSHEET_LAYOUT - character reference sheet turnaround prompt template
 - _charsheet_style_base(gender) - art style + reference sheet prefix
-- _charsheet_style(gender, tier) - adds NSFW nudity prefix when needed
-- _charsheet_tail(gender, tier) - art style tail with tier-specific nudity descriptors
-- _triple_prompt_style(gender) - three-panel SFW/barely/NSFW layout prompt
-- _build_charsheet_prompt(body_parts, clothing, expression, tier, gender) - assembles full charsheet image prompt dict with front/3Q/rear views
-- _build_triple_prompt(body_parts, clothing_sfw, clothing, clothing_nsfw, expression, gender) - assembles three-panel comparison prompt dict
-- _normalize_core_stats(stats, config) - scales core stats to target range if out of bounds
+- _charsheet_style(gender, tier, skimpiness_level) - adds NSFW nudity prefix when needed
+- _charsheet_tail(gender, tier, skimpiness_level) - art style tail with tier-specific nudity descriptors
+- _build_charsheet_prompt(body_parts, clothing, expression, ...) - assembles full charsheet image prompt dict
+- _nsfw_prefix(gender, skimpiness_level) - NSFW prefix for move images
+- _nsfw_tail(gender, skimpiness_level) - NSFW tail for move images
+- build_move_image_prompt(fighter, move, tier) - assembles move action image prompt string
 
 ---
 

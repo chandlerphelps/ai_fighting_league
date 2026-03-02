@@ -3,6 +3,7 @@ import random
 from app.config import Config
 from app.models.fighter import Fighter, Injury, Condition
 from app.models.match import Match
+from app.prompts.post_fight_prompts import SYSTEM_PROMPT_STORYLINE, build_storyline_prompt
 from app.services import data_manager
 from app.services.openrouter import call_openrouter
 
@@ -161,15 +162,19 @@ def _generate_storyline_entry(
     result_text = "won" if is_winner else ("drew with" if outcome.is_draw else "lost to")
     method = outcome.method.replace("_", " ")
 
-    prompt = f"""Write 2-3 sentences about what this fight meant for {fighter.ring_name} narratively.
-
-{fighter.ring_name} {result_text} {opponent.ring_name} by {method} in round {outcome.round_ended}.
-Current record: {fighter.record.wins}-{fighter.record.losses}-{fighter.record.draws}
-
-Capture the emotional/narrative significance — confidence building, humbling loss, rivalry intensifying, etc. Be concise and dramatic."""
+    prompt = build_storyline_prompt(
+        fighter_name=fighter.ring_name,
+        result_text=result_text,
+        opponent_name=opponent.ring_name,
+        method=method,
+        round_ended=outcome.round_ended,
+        wins=fighter.record.wins,
+        losses=fighter.record.losses,
+        draws=fighter.record.draws,
+    )
 
     return call_openrouter(
-        prompt, config, system_prompt="Write concise, dramatic fight storyline entries.", max_tokens=200
+        prompt, config, system_prompt=SYSTEM_PROMPT_STORYLINE, max_tokens=200
     )
 
 
