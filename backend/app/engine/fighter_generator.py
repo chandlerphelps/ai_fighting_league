@@ -168,10 +168,6 @@ def generate_fighter(
             f"\n\nSUBTYPE: {subtype_info['name']} — {subtype_info['description']}"
         )
 
-    secondary_archetype = ""
-    if roster_plan_entry:
-        secondary_archetype = roster_plan_entry.get("secondary_archetype", "")
-
     body_traits = _roll_body_traits(archetype, subtype=subtype_info)
     body_directive = _build_body_directive(body_traits)
 
@@ -233,7 +229,6 @@ def generate_fighter(
 
     result["body_type_details"] = body_traits
     result["primary_archetype"] = archetype or ""
-    result["secondary_archetype"] = secondary_archetype
     result["subtype"] = subtype_info["name"] if subtype_info else ""
 
     outfit_data = _generate_outfits(
@@ -262,7 +257,6 @@ def generate_fighter(
         origin=result.get("origin", "Unknown"),
         gender=gender,
         primary_archetype=archetype or "",
-        secondary_archetype=secondary_archetype,
         subtype=subtype_info["name"] if subtype_info else "",
         height=body_traits["height"],
         weight=body_traits["weight"],

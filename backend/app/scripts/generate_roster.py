@@ -22,7 +22,6 @@ def plan_roster_cmd():
             "gender": f.get("gender", ""),
             "origin": f.get("origin"),
             "primary_archetype": f.get("primary_archetype", ""),
-            "secondary_archetype": f.get("secondary_archetype", ""),
             "subtype": f.get("subtype", ""),
             "build": f.get("build", ""),
             "personality": f.get("personality", ""),

@@ -32,7 +32,6 @@ def build_tier_prompt(
     body_parts = character_summary.get("image_prompt_body_parts", "")
     expression = character_summary.get("image_prompt_expression", "")
     primary_archetype = character_summary.get("primary_archetype", "")
-    secondary_archetype = character_summary.get("secondary_archetype", "")
     subtype = character_summary.get("subtype", "")
     personality = character_summary.get("personality", "")
 
@@ -43,12 +42,10 @@ def build_tier_prompt(
 
     archetype_line = ""
     if primary_archetype:
-        parts = [primary_archetype]
+        archetype_str = primary_archetype
         if subtype:
-            parts[0] += f" ({subtype})"
-        if secondary_archetype:
-            parts.append(f"secondary: {secondary_archetype}")
-        archetype_line = f"\nArchetype: {', '.join(parts)}"
+            archetype_str += f" ({subtype})"
+        archetype_line = f"\nArchetype: {archetype_str}"
 
     personality_line = ""
     if personality:

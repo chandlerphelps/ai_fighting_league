@@ -165,9 +165,10 @@ that seem to move, veins that darken, eyes that catch light strangely).
 
 GUIDE_CREATION_WORKFLOW = """## The Creation Workflow
 
-### Archetype Blend
+### Archetype + Subtype
 
-Archetypes are gender-specific. Pick 2 from the appropriate list:
+Each fighter gets ONE primary archetype and ONE subtype within that archetype.
+The subtype specializes the archetype — it's where the character's unique angle lives.
 
 Female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph
 - Siren: weaponized beauty, seduction, charm
@@ -192,12 +193,9 @@ Male archetypes: Brute, Veteran, Monster, Technician, Wildcard, Mystic, Prodigy,
 - Prodigy: young phenom, natural talent
 - Experiment: enhanced, modified, science project
 
-Identify which is primary (dominant personality/approach) and which is secondary
-(adds texture and complication).
-
-The blend should create internal tension. A Viper-Empress has ruthless cunning wrapped
-in regal authority. A Siren-Huntress weaponizes beauty but fights with predatory
-aggression underneath. The tension within the blend is where personality lives.
+The archetype defines the broad identity. The subtype sharpens it into something specific.
+A "Siren (Femme Fatale)" is deadly allure. A "Siren (Muse)" is ethereal obsession.
+Same archetype, completely different characters. The subtype is where personality lives.
 
 ### Identity & Origin
 
@@ -359,7 +357,6 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "age": <18-34>,
     "origin": "<specific city/region, country>",
     "primary_archetype": "<from the female archetypes: {archetype_list}>",
-    "secondary_archetype": "<from the same gender-appropriate archetype list>",
     "subtype": "<REQUIRED — pick from the SUBTYPES list below for the chosen primary_archetype>",
     "has_supernatural": <true|false>,
     "power_tier": "<prospect|gatekeeper|contender|champion>",

@@ -91,7 +91,6 @@ class Fighter:
     origin: str = ""
     gender: str = ""
     primary_archetype: str = ""
-    secondary_archetype: str = ""
     subtype: str = ""
     height: str = ""
     weight: str = ""
@@ -135,7 +134,6 @@ class Fighter:
             origin=d.get("origin", ""),
             gender=d.get("gender", ""),
             primary_archetype=d.get("primary_archetype", ""),
-            secondary_archetype=d.get("secondary_archetype", ""),
             subtype=d.get("subtype", ""),
             height=d.get("height", ""),
             weight=d.get("weight", ""),

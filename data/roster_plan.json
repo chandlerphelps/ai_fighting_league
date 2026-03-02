@@ -1,45 +1,45 @@
 [
   {
-    "concept_hook": "Methodical tracker who breaks prey with psychological pursuits and traps, her stoic facade cracking into savage glee at the kill.",
-    "ring_name": "Luna Stalker",
+    "concept_hook": "A hypnotic performer who entrances opponents with seductive dances and voice, turning their aggression against them before a precise takedown.",
+    "ring_name": "Silk Siren",
     "gender": "female",
-    "age": 27,
-    "origin": "Madrid, Spain",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Assassin",
-    "subtype": "Stalker",
-    "has_supernatural": false,
+    "age": 26,
+    "origin": "Los Angeles, USA",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Empress",
+    "subtype": "Femme Fatale",
+    "has_supernatural": true,
     "power_tier": "contender",
-    "narrative_role": "the arena's unyielding predator",
+    "narrative_role": "charismatic fan favorite who weaponizes allure to steal shows",
     "rivalry_seeds": [
-      "Sly Schemer",
-      "Neo Cyborg"
+      "Venom Vixen",
+      "Jade Empress"
     ],
-    "media_archetype_inspiration": "Aloy from Horizon Zero Dawn",
+    "media_archetype_inspiration": "Bayonetta",
     "skimpiness_weights": [
-      15,
-      35,
-      30,
-      20
+      0,
+      10,
+      45,
+      45
     ]
   },
   {
-    "concept_hook": "Whimsical wind dancer who flays skin with razor gusts, her playful taunts turning to petulant fury when battered.",
-    "ring_name": "Zephyr Nymph",
+    "concept_hook": "A cunning injector who delivers paralytic kisses and toxin-laced needles, savoring the panic as foes convulse helplessly.",
+    "ring_name": "Venom Vixen",
     "gender": "female",
-    "age": 21,
-    "origin": "Santorini, Greece",
-    "primary_archetype": "Nymph",
-    "secondary_archetype": "Siren",
-    "subtype": "Sylph",
+    "age": 24,
+    "origin": "Rio de Janeiro, Brazil",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Assassin",
+    "subtype": "Poisoner",
     "has_supernatural": true,
     "power_tier": "gatekeeper",
-    "narrative_role": "the capricious aerial trickster",
+    "narrative_role": "dirty tricks opportunist derailing bigger names",
     "rivalry_seeds": [
-      "Blaze Succubus",
-      "Porcelain Doll"
+      "Silk Siren",
+      "Elixir Witch"
     ],
-    "media_archetype_inspiration": "Janna from League of Legends",
+    "media_archetype_inspiration": "Poison Ivy",
     "skimpiness_weights": [
       5,
       25,
@@ -48,147 +48,147 @@
     ]
   },
   {
-    "concept_hook": "Seductive firebrand who incinerates resolve with draining touches, her ecstatic moans souring to wrathful snarls when resisted.",
-    "ring_name": "Blaze Succubus",
-    "gender": "female",
-    "age": 31,
-    "origin": "Miami, USA",
-    "primary_archetype": "Demon",
-    "secondary_archetype": "Empress",
-    "subtype": "Succubus",
-    "has_supernatural": true,
-    "power_tier": "champion",
-    "narrative_role": "the arena's corrupting queen",
-    "rivalry_seeds": [
-      "Zephyr Nymph",
-      "Vesper Hex"
-    ],
-    "media_archetype_inspiration": "Morrigan Aensland from Darkstalkers",
-    "skimpiness_weights": [
-      0,
-      10,
-      30,
-      60
-    ]
-  },
-  {
-    "concept_hook": "Eerily serene marionette who garrotes with invisible wires, her doll-like smile unwavering even as porcelain cracks.",
-    "ring_name": "Porcelain Doll",
-    "gender": "female",
-    "age": 23,
-    "origin": "Paris, France",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Prodigy",
-    "subtype": "Porcelain",
-    "has_supernatural": false,
-    "power_tier": "prospect",
-    "narrative_role": "the deceptively fragile killer",
-    "rivalry_seeds": [
-      "Fatal Blade",
-      "Sly Schemer"
-    ],
-    "media_archetype_inspiration": "Gogo Yubari from Kill Bill",
-    "skimpiness_weights": [
-      20,
-      40,
-      25,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Emotionless augment who shorts out nerves with EMP bursts, her systems stuttering coldly when jammed.",
-    "ring_name": "Neo Cyborg",
-    "gender": "female",
-    "age": 26,
-    "origin": "Seoul, South Korea",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Prodigy",
-    "subtype": "Cyborg",
-    "has_supernatural": false,
-    "power_tier": "gatekeeper",
-    "narrative_role": "the unstoppable tech horror",
-    "rivalry_seeds": [
-      "Luna Stalker",
-      "Vesper Hex"
-    ],
-    "media_archetype_inspiration": "Major Kusanagi from Ghost in the Shell",
-    "skimpiness_weights": [
-      15,
-      40,
-      30,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Wily whisperer who engineers falls with feints and traps, her smug grin twisting to venomous spite when hoisted by her petard.",
-    "ring_name": "Sly Schemer",
-    "gender": "female",
-    "age": 27,
-    "origin": "Bogot\u00e1, Colombia",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Empress",
-    "subtype": "Schemer",
-    "has_supernatural": false,
-    "power_tier": "prospect",
-    "narrative_role": "the manipulative puppet master",
-    "rivalry_seeds": [
-      "Luna Stalker",
-      "Porcelain Doll"
-    ],
-    "media_archetype_inspiration": "Atomic Blonde from Atomic Blonde",
-    "skimpiness_weights": [
-      10,
-      30,
-      40,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Graceful sword savant who vivisects with phasing blades, her composure shattering into berserk slashes when wounded.",
-    "ring_name": "Fatal Blade",
+    "concept_hook": "A patient predator with uncanny tracking instincts who sets ambushes and wears down targets with relentless, chilling pursuit.",
+    "ring_name": "Ice Stalker",
     "gender": "female",
     "age": 29,
     "origin": "Moscow, Russia",
-    "primary_archetype": "Assassin",
-    "secondary_archetype": "Huntress",
-    "subtype": "Blade",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Prodigy",
+    "subtype": "Stalker",
     "has_supernatural": true,
     "power_tier": "contender",
-    "narrative_role": "the elegant executioner",
+    "narrative_role": "unforgiving hunter enforcing brutal rivalries",
     "rivalry_seeds": [
-      "Neo Cyborg",
-      "Blaze Succubus"
+      "Shadow Mirage",
+      "Tech Savant"
     ],
-    "media_archetype_inspiration": "Akali from League of Legends",
+    "media_archetype_inspiration": "Predator",
     "skimpiness_weights": [
       15,
-      35,
-      35,
+      40,
+      30,
       15
     ]
   },
   {
-    "concept_hook": "Cackling curser who warps flesh with hexes, her triumphant jeers falling silent in pained vulnerability to purity.",
-    "ring_name": "Vesper Hex",
+    "concept_hook": "A pattern-obsessed gamer who reads fights like code, countering with surgical precision and adaptive combos without mercy.",
+    "ring_name": "Tech Savant",
     "gender": "female",
-    "age": 32,
-    "origin": "Sydney, Australia",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Demon",
-    "subtype": "Hexcaster",
-    "has_supernatural": true,
-    "power_tier": "gatekeeper",
-    "narrative_role": "the vengeful fate-twister",
+    "age": 19,
+    "origin": "Tokyo, Japan",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Experiment",
+    "subtype": "Savant",
+    "has_supernatural": false,
+    "power_tier": "prospect",
+    "narrative_role": "precocious upset specialist challenging the old guard",
     "rivalry_seeds": [
-      "Neo Cyborg",
-      "Blaze Succubus"
+      "Ice Stalker",
+      "Jade Empress"
     ],
-    "media_archetype_inspiration": "Scarlet Witch from Marvel",
+    "media_archetype_inspiration": "Mai Shiranui",
+    "skimpiness_weights": [
+      20,
+      50,
+      25,
+      5
+    ]
+  },
+  {
+    "concept_hook": "A vanishing artist trained in ancient shadow arts, who ghosts through defenses to sever tendons and nerves in silent retribution.",
+    "ring_name": "Shadow Mirage",
+    "gender": "female",
+    "age": 27,
+    "origin": "Seoul, South Korea",
+    "primary_archetype": "Assassin",
+    "secondary_archetype": "Viper",
+    "subtype": "Shadow",
+    "has_supernatural": false,
+    "power_tier": "gatekeeper",
+    "narrative_role": "elusive enigma vanishing title contenders",
+    "rivalry_seeds": [
+      "Ice Stalker",
+      "Porcelain Doll"
+    ],
+    "media_archetype_inspiration": "Black Widow",
     "skimpiness_weights": [
       10,
       30,
       40,
       20
+    ]
+  },
+  {
+    "concept_hook": "An eerily lifelike puppet animated by vengeful spirits, who lashes with razor wires and crushes bones in jerky, unfeeling spasms.",
+    "ring_name": "Porcelain Doll",
+    "gender": "female",
+    "age": 21,
+    "origin": "Paris, France",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Witch",
+    "subtype": "Porcelain",
+    "has_supernatural": true,
+    "power_tier": "prospect",
+    "narrative_role": "haunting gimmick sparking morbid fascination",
+    "rivalry_seeds": [
+      "Shadow Mirage",
+      "Elixir Witch"
+    ],
+    "media_archetype_inspiration": "Rozen Maiden",
+    "skimpiness_weights": [
+      5,
+      20,
+      35,
+      40
+    ]
+  },
+  {
+    "concept_hook": "A networked overlord hacking augments and deploying micro-drones to dismantle foes' bodies and wills from afar.",
+    "ring_name": "Jade Empress",
+    "gender": "female",
+    "age": 32,
+    "origin": "Shanghai, China",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Siren",
+    "subtype": "Sovereign",
+    "has_supernatural": true,
+    "power_tier": "champion",
+    "narrative_role": "imperious titleholder demanding submission",
+    "rivalry_seeds": [
+      "Silk Siren",
+      "Tech Savant"
+    ],
+    "media_archetype_inspiration": "Motoko Kusanagi",
+    "skimpiness_weights": [
+      10,
+      40,
+      35,
+      15
+    ]
+  },
+  {
+    "concept_hook": "A gleeful brewer hurling corrosive elixirs and gas clouds, thrilled by the screams as flesh bubbles and bones weaken.",
+    "ring_name": "Elixir Witch",
+    "gender": "female",
+    "age": 25,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Nymph",
+    "subtype": "Alchemist",
+    "has_supernatural": true,
+    "power_tier": "gatekeeper",
+    "narrative_role": "explosive chaos agent igniting feuds",
+    "rivalry_seeds": [
+      "Venom Vixen",
+      "Porcelain Doll"
+    ],
+    "media_archetype_inspiration": "Jinx",
+    "skimpiness_weights": [
+      5,
+      15,
+      45,
+      35
     ]
   }
 ]
