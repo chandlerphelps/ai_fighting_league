@@ -56,6 +56,16 @@ def filter_outfit_options(
     return result
 
 
+TECH_LEVELS = [
+    "Fantasy Medieval",
+    "Ancient / Mythological",
+    "1800s Industrial",
+    "Contemporary / Modern",
+    "Near-Future",
+    "Sci-Fi / Far Future",
+]
+
+
 ARCHETYPE_DESCRIPTIONS = {
     "The Siren": "weaponized beauty, seduction, charm",
     "The Witch": "mysticism, dark arts, supernatural",

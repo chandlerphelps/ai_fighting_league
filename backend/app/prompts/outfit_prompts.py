@@ -27,6 +27,7 @@ def build_tier_prompt(
     skimpiness_level: int,
     character_summary: dict,
     outfit_options: dict | None = None,
+    tech_level: str = "",
 ) -> str:
     level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
     sig = character_summary.get("iconic_features", "")
@@ -65,7 +66,11 @@ def build_tier_prompt(
     if personality:
         personality_line = f"\nPersonality: {personality}"
 
-    char_base = f"""CHARACTER: {ring_name}{archetype_line}{personality_line}
+    tech_line = ""
+    if tech_level:
+        tech_line = f"\nTechnology Era: {tech_level} — design the outfit using materials, construction, and aesthetics from this era"
+
+    char_base = f"""CHARACTER: {ring_name}{archetype_line}{personality_line}{tech_line}
 Iconic features (MUST be visible in every tier): {sig}
 Body: {body_parts}
 Expression: {expression}"""

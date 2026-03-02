@@ -339,12 +339,16 @@ def regenerate_outfits(fighter_id: str):
             "distinguishing_features": existing.get("distinguishing_features", ""),
             "iconic_features": existing.get("iconic_features", ""),
             "personality": existing.get("personality", ""),
+            "primary_archetype": existing.get("primary_archetype", ""),
+            "subtype": existing.get("subtype", ""),
             "image_prompt_body_parts": existing.get("image_prompt", {}).get("body_parts", ""),
             "image_prompt_expression": existing.get("image_prompt", {}).get("expression", ""),
+            "body_type_details": existing.get("body_type_details", {}),
         }
 
+        tech_level = existing.get("tech_level", "")
         outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness_level)
-        outfit_data = _generate_outfits(config, character_summary, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_opts)
+        outfit_data = _generate_outfits(config, character_summary, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_opts, tech_level=tech_level)
 
         new_suggestions = outfit_data.pop("_outfit_suggestions", {})
         if new_suggestions:

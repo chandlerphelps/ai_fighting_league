@@ -12,6 +12,7 @@ from app.engine.fighter_config import (
     ARCHETYPES_FEMALE,
     ARCHETYPES_MALE,
     SKIMPINESS_LEVELS,
+    TECH_LEVELS,
     _roll_skimpiness,
     _roll_body_traits,
     _roll_subtype,
@@ -101,6 +102,7 @@ def _generate_outfits(
     skimpiness_level: int,
     tiers: list[str] | None = None,
     outfit_options_by_tier: dict | None = None,
+    tech_level: str = "",
 ) -> dict:
     if tiers is None:
         tiers = ["sfw", "barely", "nsfw"]
@@ -108,7 +110,8 @@ def _generate_outfits(
     def _fetch_tier(tier):
         tier_opts = (outfit_options_by_tier or {}).get(tier)
         prompt = _build_tier_prompt(
-            tier, skimpiness_level, character_summary, outfit_options=tier_opts
+            tier, skimpiness_level, character_summary, outfit_options=tier_opts,
+            tech_level=tech_level,
         )
         result = call_openrouter_json(
             prompt, config, system_prompt=SYSTEM_PROMPT_OUTFIT_DESIGNER, temperature=0.5
@@ -233,12 +236,15 @@ def generate_fighter(
     result["primary_archetype"] = archetype or ""
     result["subtype"] = subtype_info["name"] if subtype_info else ""
 
+    tech_level = random.choice(TECH_LEVELS)
+
     outfit_data = _generate_outfits(
         config,
         result,
         skimpiness_level,
         tiers=tiers,
         outfit_options_by_tier=outfit_options_by_tier,
+        tech_level=tech_level,
     )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})
@@ -273,6 +279,7 @@ def generate_fighter(
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
         ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),
         skimpiness_level=skimpiness_level,
+        tech_level=tech_level,
         image_prompt_body_ref=build_body_reference_prompt(
             body_parts,
             expression,

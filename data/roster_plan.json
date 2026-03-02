@@ -1,20 +1,20 @@
 [
   {
-    "concept_hook": "A teenage prodigy hacker who fights with agile martial arts and deploys drone swarms and holographic distractions,Viewing combat as the ultimate video game.",
-    "ring_name": "Zero Day",
+    "concept_hook": "A cybernetic virtuoso who uploads her consciousness into interchangeable bodies, treating her physical form as disposable hardware.",
+    "ring_name": "Quantum Doll",
     "gender": "female",
-    "age": 17,
-    "origin": "Seoul, South Korea",
-    "primary_archetype": "Prodigy",
-    "subtype": "Wunderkind",
+    "age": 24,
+    "origin": "Taipei, Taiwan",
+    "primary_archetype": "Doll",
+    "subtype": "Marionette",
     "has_supernatural": false,
-    "power_tier": "prospect",
-    "narrative_role": "The young prodigy who sees violence as a game, until the stakes become real",
+    "power_tier": "contender",
+    "narrative_role": "The dissociated philosopher who questions what makes her human; her rivalry with Tech Savant explores whether calculation or emotion wins",
     "rivalry_seeds": [
       "Tech Savant",
-      "Neon Nightmare"
+      "Zero Day"
     ],
-    "media_archetype_inspiration": "Ready Player One's Artemis / Live Die Repeat's Rita",
+    "media_archetype_inspiration": "Motoko Kusanagi from Ghost in the Shell meets Black Widow's precision",
     "skimpiness_weights": [
       15,
       35,
@@ -23,21 +23,21 @@
     ]
   },
   {
-    "concept_hook": "A former French Foreign Legion commander turned mercenary who uses tactical superiority, heavy weapons, and psychological warfare to dominate larger male opponents.",
-    "ring_name": "Iron Monarch",
+    "concept_hook": "A faith-fueled exorcist who believes her body is a holy vessel, using sacred combat to drive out the demonic from AFL's supernatural fighters.",
+    "ring_name": "Penitent Blade",
     "gender": "female",
-    "age": 32,
-    "origin": "Marseille, France",
-    "primary_archetype": "Empress",
-    "subtype": "Warlord",
-    "has_supernatural": false,
+    "age": 28,
+    "origin": "Lisbon, Portugal",
+    "primary_archetype": "Experiment",
+    "subtype": "Chimera",
+    "has_supernatural": true,
     "power_tier": "contender",
-    "narrative_role": "The battlefield veteran who treats the ring like a war zone, commanding respect through competence",
+    "narrative_role": "The believer whose certainty masks self-doubt; her rivalry with Phlogiston represents science vs. faith, while Iron Monarch sees her as a potential tool",
     "rivalry_seeds": [
-      "Silk Siren",
-      "Ice Stalker"
+      "Phlogiston",
+      "Iron Monarch"
     ],
-    "media_archetype_inspiration": "Wonder Woman's General / The Bride in Kill Bill",
+    "media_archetype_inspiration": "Exorcist nun meets tactical priest from Constantine",
     "skimpiness_weights": [
       20,
       40,
@@ -46,21 +46,67 @@
     ]
   },
   {
-    "concept_hook": "A Colombian assassin who uses toxins, nerve strikes, and seduction to eliminate targets, finding genuine pleasure in the hunt but torturing herself over lost humanity.",
-    "ring_name": "Flor Nocturna",
+    "concept_hook": "A seductive demon who feeds on male hubris, making opponents overestimate their chances before crushing them psychologically.",
+    "ring_name": "Temptress Prime",
     "gender": "female",
-    "age": 26,
-    "origin": "Cartagena, Colombia",
-    "primary_archetype": "Assassin",
-    "subtype": "Venom",
+    "age": "ageless",
+    "origin": "Las Vegas, USA",
+    "primary_archetype": "Demon",
+    "subtype": "Succubus",
+    "has_supernatural": true,
+    "power_tier": "champion",
+    "narrative_role": "The predator who makes men destroy themselves; her rivalry with Silk Siren asks which seduction is more dangerous\u2014genuine or supernatural",
+    "rivalry_seeds": [
+      "Silk Siren",
+      "Ice Stalker"
+    ],
+    "media_archetype_inspiration": "Lara Croft's confidence meets classic succubus mythology with modern polish",
+    "skimpiness_weights": [
+      5,
+      15,
+      40,
+      40
+    ]
+  },
+  {
+    "concept_hook": "A battle-hardened mercenary who uses traps, bait, and patience to exhaust and humiliate opponents before delivering the killing strike.",
+    "ring_name": "Widow's Web",
+    "gender": "female",
+    "age": 31,
+    "origin": "Bangkok, Thailand",
+    "primary_archetype": "Huntress",
+    "subtype": "Trapper",
     "has_supernatural": false,
-    "power_tier": "contender",
-    "narrative_role": "The assassin who questions her profession but can't escape the adrenaline of the kill",
+    "power_tier": "gatekeeper",
+    "narrative_role": "The patient predator who views every fight as a hunt; her rivalry with Venom Vixen questions whether poison or patience wins",
     "rivalry_seeds": [
       "Venom Vixen",
-      "Iron Monarch"
+      "Flor Nocturna"
     ],
-    "media_archetype_inspiration": "Atomic Blonde's Lorraine / Poison Ivy from Batman",
+    "media_archetype_inspiration": "Black Widow meets wilderness survivalist from The Revenant",
+    "skimpiness_weights": [
+      15,
+      40,
+      35,
+      10
+    ]
+  },
+  {
+    "concept_hook": "A genetic experiment who can shapeshift her body, making her form unpredictable and her attacks impossible to anticipate.",
+    "ring_name": "Chimera Protocol",
+    "gender": "female",
+    "age": 22,
+    "origin": "San Diego, USA",
+    "primary_archetype": "Experiment",
+    "subtype": "Splice",
+    "has_supernatural": false,
+    "power_tier": "prospect",
+    "narrative_role": "The unstable experiment desperate to prove her worth; her rivalry with Phlogiston explores whether self-destruction leads to transcendence",
+    "rivalry_seeds": [
+      "Phlogiston",
+      "Quantum Doll"
+    ],
+    "media_archetype_inspiration": "X-23 meets shapeshifter from The Thing",
     "skimpiness_weights": [
       10,
       30,
@@ -69,67 +115,44 @@
     ]
   },
   {
-    "concept_hook": "A German alchemist who crafts potions and chemical weapons, fighting with explosive vials and corrosive brews while struggling with addiction to her own creations.",
-    "ring_name": "Phlogiston",
+    "concept_hook": "A cold, calculating socialite who uses wealth and influence as weapons, crushing rivals through economic warfare before fights even begin.",
+    "ring_name": "Corporate Crown",
     "gender": "female",
-    "age": 28,
-    "origin": "Munich, Germany",
-    "primary_archetype": "Witch",
-    "subtype": "Alchemist",
+    "age": 32,
+    "origin": "London, United Kingdom",
+    "primary_archetype": "Empress",
+    "subtype": "Sovereign",
     "has_supernatural": false,
-    "power_tier": "gatekeeper",
-    "narrative_role": "The brilliant chemist destroying herself slowly while perfecting her craft",
+    "power_tier": "contender",
+    "narrative_role": "The oligarch who buys victories; her rivalry with Iron Monarch explores which empress truly rules\u2014the born or the made",
     "rivalry_seeds": [
-      "Tech Savant",
-      "Zero Day"
+      "Iron Monarch",
+      "Tech Savant"
     ],
-    "media_archetype_inspiration": "Fullmetal Alchemist's Izumi / Breaking Bad's Walter White (female)",
+    "media_archetype_inspiration": "Miranda Priestly meets Bond villainess sophistication",
     "skimpiness_weights": [
       20,
-      35,
-      30,
-      15
+      45,
+      25,
+      10
     ]
   },
   {
-    "concept_hook": "A Greek museum exhibit brought to life through ancient magic, fighting with ethereal weapons and nature manipulation while mourning a civilization lost to time.",
-    "ring_name": "Eidolon",
+    "concept_hook": "A young prodigy from the favelas who uses capoeira-inspired movement and sonic technology to disorient opponents with rhythm and sound.",
+    "ring_name": "Samba Strike",
     "gender": "female",
-    "age": 2500,
-    "origin": "Athens, Greece",
-    "primary_archetype": "Nymph",
-    "subtype": "Dryad",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "The ancient spirit adapting to modern combat, carrying centuries of melancholy",
-    "rivalry_seeds": [
-      "Ice Stalker",
-      "Silk Siren"
-    ],
-    "media_archetype_inspiration": "Persona 5's Ann / Ghost of Tsushima's spirit",
-    "skimpiness_weights": [
-      15,
-      35,
-      35,
-      15
-    ]
-  },
-  {
-    "concept_hook": "A cybernetically enhanced Australian test subject who escaped a government program, fighting with military-grade augmentations while questioning her own humanity.",
-    "ring_name": "Neon Nightmare",
-    "gender": "female",
-    "age": 24,
-    "origin": "Sydney, Australia",
-    "primary_archetype": "Experiment",
-    "subtype": "Cyborg",
+    "age": 19,
+    "origin": "Salvador, Brazil",
+    "primary_archetype": "Prodigy",
+    "subtype": "Virtuoso",
     "has_supernatural": false,
-    "power_tier": "contender",
-    "narrative_role": "The weapon who became more than her programming, fighting to prove she's more than a machine",
+    "power_tier": "prospect",
+    "narrative_role": "The rising star who dances through danger; her rivalry with Venom Vixen explores which Brazilian fighter owns the night",
     "rivalry_seeds": [
-      "Tech Savant",
+      "Venom Vixen",
       "Zero Day"
     ],
-    "media_archetype_inspiration": "Terminator's Sarah Connor / Ghost in the Shell's Major",
+    "media_archetype_inspiration": "Luisa from Encanto meets musical fighter from Scott Pilgrim",
     "skimpiness_weights": [
       10,
       25,
@@ -138,49 +161,26 @@
     ]
   },
   {
-    "concept_hook": "A possessed Victorian porcelain doll animated by a child's malicious spirit, fighting with eerie precision and laughing at pain while seeking the affection she was denied in life.",
-    "ring_name": "Chinasmith",
+    "concept_hook": "A plant-controlling dryad who uses botanical biotechnology to grow weapons and toxins from her own body, blurring the line between woman and weapon.",
+    "ring_name": "Verdant Veil",
     "gender": "female",
-    "age": 150,
-    "origin": "London, United Kingdom",
-    "primary_archetype": "Doll",
-    "subtype": "Porcelain",
+    "age": 26,
+    "origin": "Guadalajara, Mexico",
+    "primary_archetype": "Nymph",
+    "subtype": "Dryad",
     "has_supernatural": true,
     "power_tier": "gatekeeper",
-    "narrative_role": "The disturbed spirit in a beautiful container, terrifyingly cheerful about violence",
+    "narrative_role": "The eco-terrorist who believes nature will judge humanity; her rivalry with Flor Nocturna questions which predator owns the jungle",
     "rivalry_seeds": [
       "Flor Nocturna",
-      "Phlogiston"
+      "Ice Stalker"
     ],
-    "media_archetype_inspiration": "Annabelle / Puppet Master's tommy",
+    "media_archetype_inspiration": "Poison Ivy meets tribal nature goddess from Avatar",
     "skimpiness_weights": [
-      30,
+      15,
       35,
-      25,
-      10
-    ]
-  },
-  {
-    "concept_hook": "A Mexican exorcist wielding holy power and blessed weapons, fighting demons while secretly questioning her faith and enjoying the violence she justifies as holy work.",
-    "ring_name": "Cruzada",
-    "gender": "female",
-    "age": 29,
-    "origin": "Guadalajara, Mexico",
-    "primary_archetype": "Demon",
-    "subtype": "Infernal",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "The holy warrior with a dark secret \u2014 she loves smiting evil, perhaps too much",
-    "rivalry_seeds": [
-      "Eidolon",
-      "Chinasmith"
-    ],
-    "media_archetype_inspiration": "Constantine's Angela / The Exorcist's Regan",
-    "skimpiness_weights": [
-      25,
-      40,
-      25,
-      10
+      35,
+      15
     ]
   }
 ]
