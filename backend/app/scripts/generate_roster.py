@@ -53,7 +53,7 @@ def plan_roster_cmd():
     print("Review the plan, then run with --generate to create the fighters.")
 
 
-def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = None):
+def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = None, count: int | None = None):
     config = load_config()
     data_manager.ensure_data_dirs(config)
 
@@ -65,6 +65,9 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
 
     with open(plan_path) as f:
         roster_plan = json.load(f)
+
+    if count is not None:
+        roster_plan = roster_plan[:count]
 
     print(f"Generating {len(roster_plan)} fighters from plan...")
 
@@ -154,10 +157,10 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
     print(f"  World state saved to data/world_state.json")
 
 
-def generate_roster(generate_images: bool = False, tiers: list[str] | None = None):
+def generate_roster(generate_images: bool = False, tiers: list[str] | None = None, count: int | None = None):
     plan_roster_cmd()
     print("\n" + "=" * 60 + "\n")
-    generate_from_plan(generate_images=generate_images, tiers=tiers)
+    generate_from_plan(generate_images=generate_images, tiers=tiers, count=count)
 
 
 if __name__ == "__main__":
@@ -166,11 +169,12 @@ if __name__ == "__main__":
     parser.add_argument("--generate", action="store_true", help="Phase 2: generate fighters from existing plan")
     parser.add_argument("--images", action="store_true", help="Generate character sheet images for each fighter via Grok API")
     parser.add_argument("--tiers", nargs="+", choices=["sfw", "barely", "nsfw"], help="Which outfit tiers to generate (default: all three)")
+    parser.add_argument("-n", "--count", type=int, help="Number of fighters to generate from the plan")
     args = parser.parse_args()
 
     if args.plan:
         plan_roster_cmd()
     elif args.generate:
-        generate_from_plan(generate_images=args.images, tiers=args.tiers)
+        generate_from_plan(generate_images=args.images, tiers=args.tiers, count=args.count)
     else:
-        generate_roster(generate_images=args.images, tiers=args.tiers)
+        generate_roster(generate_images=args.images, tiers=args.tiers, count=args.count)

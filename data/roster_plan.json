@@ -1,93 +1,93 @@
 [
   {
-    "concept_hook": "Burlesque temptress who disarms foes with hypnotic hip sways and precision strikes before they can swing.",
-    "ring_name": "Silk Siren",
+    "concept_hook": "Bewitching J-pop idol whose hypnotic siren songs daze foes into euphoric stupor before she delivers precise, leg-scissoring takedowns, reveling in their helpless infatuation turning to terror.",
+    "ring_name": "Siren's Kiss",
     "gender": "female",
-    "age": 28,
-    "origin": "Las Vegas, Nevada, USA",
+    "age": 25,
+    "origin": "Tokyo, Japan",
     "primary_archetype": "Siren",
-    "secondary_archetype": "Doll",
-    "has_supernatural": false,
-    "body_type": "voluptuous hourglass",
+    "secondary_archetype": "Viper",
+    "has_supernatural": true,
+    "body_type": "slender hourglass with porcelain skin and endless legs",
     "power_tier": "contender",
-    "narrative_role": "charismatic heel who manipulates crowds and rivals alike",
+    "narrative_role": "charismatic crowd darling who seduces fans and foes alike but quietly despises the emptiness of her victories",
     "rivalry_seeds": [
-      "Eclipse Witch",
-      "Nova Prodigy"
+      "Venom Viper",
+      "Iron Empress"
     ],
-    "media_archetype_inspiration": "Catwoman from Batman",
+    "media_archetype_inspiration": "Morrigan Aensland from Darkstalkers",
     "skimpiness_weights": [
       0,
       10,
-      40,
-      50
+      30,
+      60
     ]
   },
   {
-    "concept_hook": "Shrine maiden who weaves binding curses that sap strength, relishing the slow crumble of mighty warriors.",
-    "ring_name": "Eclipse Witch",
+    "concept_hook": "Elegant curse-weaver who debilitates brutes with withering hexes, savoring their crumbling pride as she pirouettes through the pain they inflict in retaliation.",
+    "ring_name": "Hex Queen",
     "gender": "female",
-    "age": 32,
-    "origin": "Kyoto, Japan",
+    "age": 29,
+    "origin": "Paris, France",
     "primary_archetype": "Witch",
     "secondary_archetype": "Empress",
     "has_supernatural": true,
-    "body_type": "slender mystique",
+    "body_type": "tall voluptuous with pale skin and raven locks",
     "power_tier": "champion",
-    "narrative_role": "enigmatic veteran haunted by the lives she's withered",
+    "narrative_role": "haughty tactician whose intellectual sadism masks a fear of true vulnerability",
     "rivalry_seeds": [
-      "Silk Siren",
-      "Jungle Huntress"
+      "Luna Huntress",
+      "Porcelain Puppet"
     ],
-    "media_archetype_inspiration": "Bayonetta",
+    "media_archetype_inspiration": "Bayonetta from Bayonetta series",
     "skimpiness_weights": [
       10,
+      20,
       30,
-      35,
-      25
+      40
     ]
   },
   {
-    "concept_hook": "Street assassin who kisses with lipstick laced in paralytics, striking vital points while foes convulse.",
-    "ring_name": "Venom Kiss",
+    "concept_hook": "Playful chemist who injects paralytic venoms via claw strikes and grapples, laughing maniacally at frozen agony but haunted by overdose fatalities.",
+    "ring_name": "Venom Viper",
     "gender": "female",
-    "age": 25,
+    "age": 23,
     "origin": "Rio de Janeiro, Brazil",
     "primary_archetype": "Viper",
-    "secondary_archetype": "Huntress",
+    "secondary_archetype": "Siren",
     "has_supernatural": false,
-    "body_type": "lithe and toned",
+    "body_type": "curvy athletic latina with golden tan and hypnotic hips",
     "power_tier": "gatekeeper",
-    "narrative_role": "ruthless opportunist seeking redemption through dominance",
+    "narrative_role": "chaotic thrill-seeker whose joy in control clashes with remorse for permanent victims",
     "rivalry_seeds": [
-      "Porcelain Doll",
-      "Iron Sovereign"
+      "Siren's Kiss",
+      "Volt Vixen"
     ],
-    "media_archetype_inspiration": "Black Widow from Marvel",
+    "media_archetype_inspiration": "Poison from Street Fighter",
     "skimpiness_weights": [
       5,
-      25,
-      45,
-      25
+      15,
+      40,
+      40
     ]
   },
   {
-    "concept_hook": "Teenage savant of seven martial styles, dismantling giants with flawless technique and quiet fury.",
-    "ring_name": "Nova Prodigy",
+    "concept_hook": "Acrobatic prodigy who flips past powerhouses for joint locks and chokes, fueling rage from every bruising slam she endures.",
+    "ring_name": "Flip Phantom",
     "gender": "female",
     "age": 19,
-    "origin": "Moscow, Russia",
+    "origin": "Los Angeles, USA",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Experiment",
+    "secondary_archetype": "Doll",
     "has_supernatural": false,
-    "body_type": "petite athletic",
+    "body_type": "petite flexible with perky curves and boundless energy",
     "power_tier": "prospect",
-    "narrative_role": "innocent phenom burdened by prodigious violence",
+    "narrative_role": "fiery upstart whose technical brilliance hides frustration at being underestimated",
     "rivalry_seeds": [
-      "Silk Siren",
-      "Neon Hybrid"
+      "Iron Empress",
+      "Volt Vixen"
     ],
-    "media_archetype_inspiration": "Hit-Girl from Kick-Ass",
+    "media_archetype_inspiration": "Hitomi from Dead or Alive",
     "skimpiness_weights": [
       40,
       35,
@@ -96,99 +96,99 @@
     ]
   },
   {
-    "concept_hook": "Fragile-looking android puppet programmed for lethal acrobatics, cracking smiles as she shatters bones.",
-    "ring_name": "Porcelain Doll",
-    "gender": "female",
-    "age": 24,
-    "origin": "Tokyo, Japan",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Prodigy",
-    "has_supernatural": true,
-    "body_type": "delicate curvaceous",
-    "power_tier": "contender",
-    "narrative_role": "tragic artificial girl yearning for real pain and emotion",
-    "rivalry_seeds": [
-      "Venom Kiss",
-      "Neon Hybrid"
-    ],
-    "media_archetype_inspiration": "Alita from Battle Angel Alita",
-    "skimpiness_weights": [
-      15,
-      25,
-      35,
-      25
-    ]
-  },
-  {
-    "concept_hook": "Tribal tracker who impales prey with thrown spears, howling in ecstasy at the hunt's bloody climax.",
-    "ring_name": "Jungle Huntress",
-    "gender": "female",
-    "age": 30,
-    "origin": "Amazon Rainforest, Brazil",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Viper",
-    "has_supernatural": false,
-    "body_type": "muscular yet feminine",
-    "power_tier": "gatekeeper",
-    "narrative_role": "feral protector driven mad by cage-bound savagery",
-    "rivalry_seeds": [
-      "Eclipse Witch",
-      "Iron Sovereign"
-    ],
-    "media_archetype_inspiration": "Tarzan Jane meets Mortal Kombat Mileena",
-    "skimpiness_weights": [
-      20,
-      30,
-      30,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Descendant of fallen royalty who commands illusory armies, her regal poise hiding vengeful rage.",
-    "ring_name": "Iron Sovereign",
-    "gender": "female",
-    "age": 34,
-    "origin": "Mexico City, Mexico",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Siren",
-    "has_supernatural": true,
-    "body_type": "statuesque bombshell",
-    "power_tier": "champion",
-    "narrative_role": "arrogant overlord with a secret fear of obsolescence",
-    "rivalry_seeds": [
-      "Venom Kiss",
-      "Jungle Huntress"
-    ],
-    "media_archetype_inspiration": "Empress from Final Fantasy",
-    "skimpiness_weights": [
-      10,
-      40,
-      30,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Gene-spliced lab escapee with adaptive mutations, reveling in the agony of reshaping her victims.",
-    "ring_name": "Neon Hybrid",
+    "concept_hook": "Fragile marionette who ensnares enemies with ethereal strings to puppet their bodies into self-destruction, shattering emotionally when her own strings snap.",
+    "ring_name": "Porcelain Puppet",
     "gender": "female",
     "age": 22,
     "origin": "Shanghai, China",
-    "primary_archetype": "Experiment",
+    "primary_archetype": "Doll",
     "secondary_archetype": "Witch",
     "has_supernatural": true,
-    "body_type": "exotically enhanced curves",
-    "power_tier": "prospect",
-    "narrative_role": "chaotic wildcard embracing her monstrous heritage",
+    "body_type": "delicate busty with flawless china-doll features",
+    "power_tier": "contender",
+    "narrative_role": "detached orchestrator craving connection amid the isolation of domination",
     "rivalry_seeds": [
-      "Nova Prodigy",
-      "Porcelain Doll"
+      "Hex Queen",
+      "Flip Phantom"
     ],
-    "media_archetype_inspiration": "Poison Ivy from DC Comics",
+    "media_archetype_inspiration": "Shinku from Rozen Maiden",
+    "skimpiness_weights": [
+      0,
+      5,
+      45,
+      50
+    ]
+  },
+  {
+    "concept_hook": "Relentless tracker who deploys snares and blitzes to exhaust prey over time, entering bloodlust trance from wounds but snapping back with cold calculation.",
+    "ring_name": "Luna Huntress",
+    "gender": "female",
+    "age": 27,
+    "origin": "Mexico City, Mexico",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": false,
+    "body_type": "lean toned latina with feral grace and tribal scars",
+    "power_tier": "gatekeeper",
+    "narrative_role": "primal survivor whose hunt addiction wars with a code against needless cruelty",
+    "rivalry_seeds": [
+      "Hex Queen",
+      "Iron Empress"
+    ],
+    "media_archetype_inspiration": "Huntress (Helena Bertinelli) from DC Comics",
     "skimpiness_weights": [
       15,
-      20,
       35,
-      30
+      30,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Regal commander summoning phantom legions to overwhelm while she carves with jeweled blade, stoically enduring pain as duty's price.",
+    "ring_name": "Iron Empress",
+    "gender": "female",
+    "age": 32,
+    "origin": "Moscow, Russia",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": true,
+    "body_type": "statuesque powerful with commanding curves",
+    "power_tier": "champion",
+    "narrative_role": "noble enforcer whose honor compels mercy kills amid vengeful outbursts",
+    "rivalry_seeds": [
+      "Siren's Kiss",
+      "Flip Phantom"
+    ],
+    "media_archetype_inspiration": "Hilde from Soulcalibur",
+    "skimpiness_weights": [
+      25,
+      45,
+      20,
+      10
+    ]
+  },
+  {
+    "concept_hook": "Cybernetic escapee who overloads nerves with EMP bursts and hacks implants, numb to her own shocks yet tormented by erased memories.",
+    "ring_name": "Volt Vixen",
+    "gender": "female",
+    "age": 26,
+    "origin": "Sydney, Australia",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "enhanced sleek with luminous circuits and killer figure",
+    "power_tier": "gatekeeper",
+    "narrative_role": "rogue inventor questioning her humanity after each electrified breakdown",
+    "rivalry_seeds": [
+      "Venom Viper",
+      "Flip Phantom"
+    ],
+    "media_archetype_inspiration": "Major Motoko Kusanagi from Ghost in the Shell",
+    "skimpiness_weights": [
+      10,
+      30,
+      40,
+      20
     ]
   }
 ]

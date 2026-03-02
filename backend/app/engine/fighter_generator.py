@@ -75,7 +75,7 @@ def filter_outfit_options(
             ]
         if not full_list:
             full_list = list(options_for_tier.get(key, []))
-        keep_count = max(1, len(full_list) // 2)
+        keep_count = min(3, len(full_list))
         sampled = random.sample(full_list, keep_count)
         random.shuffle(sampled)
         result[key] = [_parse_outfit_item(item)[0] for item in sampled]
