@@ -3,99 +3,12 @@ import random
 from pathlib import Path
 
 
-DEFAULT_OUTFIT_OPTIONS = {
-    "sfw": {
-        "tops": [
-            "sports bra",
-            "tank top",
-            "halter top",
-            "crop top",
-            "bustier",
-            "bandeau top",
-            "fitted combat vest",
-            "structured corset armor",
-        ],
-        "bottoms": [
-            "combat shorts",
-            "leggings",
-            "mini-skirt with bike shorts",
-            "cargo pants",
-            "high-waisted tactical pants",
-            "short battle skirt",
-            "micro shorts",
-        ],
-        "one_pieces": [
-            "high-cut leotard",
-            "combat romper",
-            "armored leotard with shorts",
-            "tactical jumpsuit",
-            "fitted mini-dress",
-        ],
-    },
-    "barely": {
-        "tops": [
-            "micro bikini top",
-            "tape crosses",
-            "nano adhesive nipple pasties",
-            "tiny triangle bralette",
-            "low-cut wrap top",
-            "sideboob slit crop top",
-            "deep plunge halter",
-            "underboob sling harness",
-        ],
-        "bottoms": [
-            "micro thong",
-            "g-string",
-            "cut-out shorts",
-            "high-leg cut bottoms",
-            "nano string bottom",
-            "micro adhesive strip covering slit",
-        ],
-        "one_pieces": [
-            "cut-out bodysuit",
-            "strappy harness bodysuit",
-            "sling-shot micro suit",
-            "extreme cut monokini",
-            "fishnet body stocking",
-        ],
-    },
-    "nsfw": {
-        "tops": [
-            "body chains framing bare breasts",
-            "chest harness framing bare breasts",
-            "shoulder armor only",
-            "suspenders framing bare breasts",
-            "nipple chain harness",
-            "collar with body chains",
-            "strappy harness top with bare breasts",
-            "cut-out sports bra with bare nipples",
-        ],
-        "bottoms": [
-            "micro thong",
-            "g-string",
-            "thigh-high boots",
-            "garter belt with thigh-highs",
-            "thigh harness straps",
-            "crotchless thigh straps framing bare pussy",
-        ],
-        "one_pieces": [
-            "chain web full body harness",
-            "leather strap open harness",
-            "combat harness with open crotch and bare breasts",
-            "open-chest bodysuit with bare breasts and thong bottom",
-        ],
-    },
-}
-
-
 def load_outfit_options(config) -> dict:
     path = Path(config.data_dir) / "outfit_options.json"
     if path.exists():
         with open(path) as f:
             return json.load(f)
-    with open(path, "w") as f:
-        json.dump(DEFAULT_OUTFIT_OPTIONS, f, indent=2)
-    return dict(DEFAULT_OUTFIT_OPTIONS)
+    return {}
 
 
 def _parse_outfit_item(item) -> tuple[str, str]:
@@ -591,7 +504,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
         "barely_label": "Risqué",
         "barely_skin_pct": "60-70",
-        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
+        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible (but seen through transparent fabric is okay). Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
         "nsfw_adjective": "Confident",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible.",
@@ -605,7 +518,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Bold — shows skin confidently but still looks like a real outfit.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
-        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
+        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible (but seen through transparent fabric is okay). Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only. Areola peeking out from tiny pasties is encouraged.",
         "nsfw_adjective": "Tease",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast or running her hands along her body - teasing sensually.",
@@ -619,7 +532,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "99",
-        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
+        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible (but seen through transparent fabric is okay). Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Extreme — micro pasties with areola peeking out and a tiny nail-sized strip over the clit. Areola exposure is expected at this level.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",

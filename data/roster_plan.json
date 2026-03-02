@@ -1,117 +1,91 @@
 [
   {
-    "concept_hook": "Lithe Thai huntress who lays razor-wire traps and shadow-strikes, relishing the panic of ensnared prey but haunted by her own close calls.",
-    "ring_name": "Shadow Lotus",
+    "concept_hook": "Amsterdam DJ who blasts disorienting sonic tech from her jewelry while seducing foes into fatal mistakes.",
+    "ring_name": "Sonic Vixen",
     "gender": "female",
     "age": 24,
-    "origin": "Bangkok, Thailand",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Prodigy",
+    "origin": "Amsterdam, Netherlands",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Experiment",
     "has_supernatural": false,
-    "body_type": "lithe and flexible with endless legs",
+    "body_type": "curvaceous dancer's build",
     "power_tier": "prospect",
-    "narrative_role": "stealthy trapper punishing reckless aggression",
+    "narrative_role": "seductive disruptor who turns fights into intoxicating spectacles",
     "rivalry_seeds": [
-      "Crimson Fang",
-      "Velvet Doll"
+      "Porcelain Doll",
+      "Apex Prodigy"
     ],
-    "media_archetype_inspiration": "Widowmaker from Overwatch",
+    "media_archetype_inspiration": "Black Canary from DC Comics",
     "skimpiness_weights": [
       5,
-      25,
-      45,
-      25
-    ]
-  },
-  {
-    "concept_hook": "Norwegian exosuit empress who dominates with servo-enhanced slams, proud of her conquests yet tormented by the frailty beneath her armor.",
-    "ring_name": "Valkyrie Forge",
-    "gender": "female",
-    "age": 28,
-    "origin": "Oslo, Norway",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "tall and powerfully curvaceous",
-    "power_tier": "contender",
-    "narrative_role": "imperious commander reshaping midcard hierarchies",
-    "rivalry_seeds": [
-      "Neon Phantom",
-      "Tempest Witch"
-    ],
-    "media_archetype_inspiration": "Sif from Marvel's Thor",
-    "skimpiness_weights": [
       15,
-      40,
-      30,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Canadian cyber-experiment who overloads nerves with hacks, exhilarated by the power but paranoid of her creators reclaiming control.",
-    "ring_name": "Neon Phantom",
-    "gender": "female",
-    "age": 25,
-    "origin": "Toronto, Canada",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Doll",
-    "has_supernatural": true,
-    "body_type": "sleek and cybernetically sculpted",
-    "power_tier": "contender",
-    "narrative_role": "rogue disruptor glitching the meta",
-    "rivalry_seeds": [
-      "Valkyrie Forge",
-      "Phantom Prodigy"
-    ],
-    "media_archetype_inspiration": "Motoko Kusanagi from Ghost in the Shell",
-    "skimpiness_weights": [
-      10,
-      30,
-      40,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Colombian viper who delivers neurotoxin scratches and bites, savoring foes' spasms as payback for her street-hardened losses.",
-    "ring_name": "Crimson Fang",
-    "gender": "female",
-    "age": 27,
-    "origin": "Bogot\u00e1, Colombia",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Siren",
-    "has_supernatural": false,
-    "body_type": "voluptuous hourglass latina",
-    "power_tier": "gatekeeper",
-    "narrative_role": "sneaky saboteur thriving on dirty wins",
-    "rivalry_seeds": [
-      "Shadow Lotus",
-      "Tidal Siren"
-    ],
-    "media_archetype_inspiration": "C. Viper from Street Fighter",
-    "skimpiness_weights": [
-      0,
-      20,
       40,
       40
     ]
   },
   {
-    "concept_hook": "Polish prodigy who anticipates every feint for bone-crunching counters, coldly efficient but inwardly raging at her unchallenged perfection.",
-    "ring_name": "Phantom Prodigy",
+    "concept_hook": "Kyiv mystic who summons debilitating shadow curses, feeding on the panic of the afflicted.",
+    "ring_name": "Eclipse Witch",
+    "gender": "female",
+    "age": 28,
+    "origin": "Kyiv, Ukraine",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Viper",
+    "has_supernatural": true,
+    "body_type": "elegant pale hourglass",
+    "power_tier": "gatekeeper",
+    "narrative_role": "brooding curse-weaver haunted by her own dark gifts",
+    "rivalry_seeds": [
+      "Iron Empress"
+    ],
+    "media_archetype_inspiration": "Scarlet Witch from Marvel",
+    "skimpiness_weights": [
+      15,
+      30,
+      35,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Lima assassin who fires paralytic toxin darts from concealed gauntlets, stalking prey with cold precision.",
+    "ring_name": "Jade Viper",
+    "gender": "female",
+    "age": 26,
+    "origin": "Lima, Peru",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": false,
+    "body_type": "toned latina curves",
+    "power_tier": "gatekeeper",
+    "narrative_role": "ruthless opportunist thriving on the thrill of the hunt",
+    "rivalry_seeds": [
+      "Silver Huntress"
+    ],
+    "media_archetype_inspiration": "Black Widow from Marvel",
+    "skimpiness_weights": [
+      10,
+      25,
+      40,
+      25
+    ]
+  },
+  {
+    "concept_hook": "Jakarta grappling genius who decodes opponents' patterns instantly, submitting them with surgical holds.",
+    "ring_name": "Apex Prodigy",
     "gender": "female",
     "age": 22,
-    "origin": "Warsaw, Poland",
+    "origin": "Jakarta, Indonesia",
     "primary_archetype": "Prodigy",
-    "secondary_archetype": "Experiment",
+    "secondary_archetype": "Doll",
     "has_supernatural": false,
-    "body_type": "petite and deceptively wiry",
+    "body_type": "petite agile frame",
     "power_tier": "prospect",
-    "narrative_role": "technical gatekeeper testing raw power",
+    "narrative_role": "cocky prodigy pushing veterans to their limits",
     "rivalry_seeds": [
-      "Neon Phantom",
-      "Tempest Witch"
+      "Nano Helix",
+      "Sonic Vixen"
     ],
-    "media_archetype_inspiration": "Kasumi from Dead or Alive",
+    "media_archetype_inspiration": "Kitana from Mortal Kombat",
     "skimpiness_weights": [
       20,
       40,
@@ -120,75 +94,99 @@
     ]
   },
   {
-    "concept_hook": "Dutch hyper-flexible doll who lashes spectral strings to puppet-crush bodies, delighted by helplessness yet pitying her broken playthings.",
-    "ring_name": "Velvet Doll",
+    "concept_hook": "Vienna contortionist who warps her body into joint-crushing locks, maintaining a doll-like serene smile.",
+    "ring_name": "Porcelain Doll",
     "gender": "female",
-    "age": 26,
-    "origin": "Amsterdam, Netherlands",
+    "age": 27,
+    "origin": "Vienna, Austria",
     "primary_archetype": "Doll",
-    "secondary_archetype": "Witch",
-    "has_supernatural": true,
-    "body_type": "porcelain-smooth with exaggerated curves",
-    "power_tier": "gatekeeper",
-    "narrative_role": "eerie manipulator inverting strength dynamics",
+    "secondary_archetype": "Siren",
+    "has_supernatural": false,
+    "body_type": "slender flexible beauty",
+    "power_tier": "contender",
+    "narrative_role": "unsettling perfectionist who breaks foes gracefully",
     "rivalry_seeds": [
-      "Shadow Lotus",
-      "Phantom Prodigy"
+      "Sonic Vixen",
+      "Silver Huntress"
     ],
-    "media_archetype_inspiration": "Bayonetta",
+    "media_archetype_inspiration": "Squigly from Skullgirls",
     "skimpiness_weights": [
-      5,
-      15,
+      10,
+      30,
       35,
-      45
+      25
     ]
   },
   {
-    "concept_hook": "South African siren whose hypnotic hip sways drain stamina before strangling clinches, addicted to adoration but despising her reliance on charm.",
-    "ring_name": "Tidal Siren",
+    "concept_hook": "Cape Town tracker who deploys razor-wire snares and boomerang blades, embodying patient vengeance.",
+    "ring_name": "Silver Huntress",
     "gender": "female",
     "age": 29,
     "origin": "Cape Town, South Africa",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Empress",
-    "has_supernatural": true,
-    "body_type": "bronze-skinned voluptuous seductress",
-    "power_tier": "gatekeeper",
-    "narrative_role": "psyche-shattering temptress eroding egos",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Experiment",
+    "has_supernatural": false,
+    "body_type": "lean athletic curves",
+    "power_tier": "contender",
+    "narrative_role": "stoic survivor forging alliances through shared grudges",
     "rivalry_seeds": [
-      "Crimson Fang",
-      "Velvet Doll"
+      "Jade Viper",
+      "Porcelain Doll"
     ],
-    "media_archetype_inspiration": "Ahri from League of Legends",
+    "media_archetype_inspiration": "Lara Croft from Tomb Raider",
     "skimpiness_weights": [
-      0,
-      10,
-      40,
-      50
+      15,
+      35,
+      35,
+      15
     ]
   },
   {
-    "concept_hook": "Indonesian witch summoning flaying gales and festering hexes, euphoric in destruction but occasionally sparing the repentant.",
-    "ring_name": "Tempest Witch",
+    "concept_hook": "Istanbul sovereign who projects aura of dread to weaken wills before unleashing imperial strikes.",
+    "ring_name": "Iron Empress",
     "gender": "female",
-    "age": 30,
-    "origin": "Jakarta, Indonesia",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Viper",
+    "age": 32,
+    "origin": "Istanbul, Turkey",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Witch",
     "has_supernatural": true,
-    "body_type": "elegant and ethereally toned",
+    "body_type": "statuesque commanding figure",
     "power_tier": "champion",
-    "narrative_role": "stormbringer headliner elevating stakes",
+    "narrative_role": "arrogant overlord drawing challengers into her web of dominance",
     "rivalry_seeds": [
-      "Valkyrie Forge",
-      "Phantom Prodigy"
+      "Eclipse Witch",
+      "Nano Helix"
     ],
-    "media_archetype_inspiration": "Scarlet Witch from Marvel",
+    "media_archetype_inspiration": "Bayonetta from Bayonetta",
     "skimpiness_weights": [
       10,
       30,
+      40,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Mumbai lab creation whose nanobots swarm to adapt counters, reveling in evolutionary chaos.",
+    "ring_name": "Nano Helix",
+    "gender": "female",
+    "age": 25,
+    "origin": "Mumbai, India",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Viper",
+    "has_supernatural": false,
+    "body_type": "lithe biotech-enhanced silhouette",
+    "power_tier": "gatekeeper",
+    "narrative_role": "unstable innovator disrupting the status quo",
+    "rivalry_seeds": [
+      "Apex Prodigy",
+      "Iron Empress"
+    ],
+    "media_archetype_inspiration": "Alita from Alita: Battle Angel",
+    "skimpiness_weights": [
+      20,
       30,
-      30
+      30,
+      20
     ]
   }
 ]
