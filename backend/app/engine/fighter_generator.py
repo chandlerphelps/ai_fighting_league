@@ -12,19 +12,82 @@ from app.services.openrouter import call_openrouter_json
 
 DEFAULT_OUTFIT_OPTIONS = {
     "sfw": {
-        "tops": ["sports bra", "tank top", "halter top", "crop top", "bustier", "bandeau top", "fitted combat vest", "structured corset armor"],
-        "bottoms": ["combat shorts", "leggings", "mini-skirt with bike shorts", "cargo pants", "high-waisted tactical pants", "short battle skirt", "micro shorts"],
-        "one_pieces": ["high-cut leotard", "combat romper", "armored leotard with shorts", "tactical jumpsuit", "fitted mini-dress"],
+        "tops": [
+            "sports bra",
+            "tank top",
+            "halter top",
+            "crop top",
+            "bustier",
+            "bandeau top",
+            "fitted combat vest",
+            "structured corset armor",
+        ],
+        "bottoms": [
+            "combat shorts",
+            "leggings",
+            "mini-skirt with bike shorts",
+            "cargo pants",
+            "high-waisted tactical pants",
+            "short battle skirt",
+            "micro shorts",
+        ],
+        "one_pieces": [
+            "high-cut leotard",
+            "combat romper",
+            "armored leotard with shorts",
+            "tactical jumpsuit",
+            "fitted mini-dress",
+        ],
     },
     "barely": {
-        "tops": ["micro bikini top", "sheer bralette", "tape crosses", "strappy harness top", "cut-out sports bra", "underboob sling harness", "nano adhesive nipple pasties"],
-        "bottoms": ["micro thong", "g-string", "cut-out shorts", "high-leg cut bottoms", "nano string bottom", "micro adhesive strip covering slit"],
-        "one_pieces": ["cut-out bodysuit", "strappy harness bodysuit", "sling-shot micro suit", "extreme cut monokini", "fishnet body stocking"],
+        "tops": [
+            "micro bikini top",
+            "sheer bralette",
+            "tape crosses",
+            "strappy harness top",
+            "cut-out sports bra",
+            "underboob sling harness",
+            "nano adhesive nipple pasties",
+        ],
+        "bottoms": [
+            "micro thong",
+            "g-string",
+            "cut-out shorts",
+            "high-leg cut bottoms",
+            "nano string bottom",
+            "micro adhesive strip covering slit",
+        ],
+        "one_pieces": [
+            "cut-out bodysuit",
+            "strappy harness bodysuit",
+            "sling-shot micro suit",
+            "extreme cut monokini",
+            "fishnet body stocking",
+        ],
     },
     "nsfw": {
-        "tops": ["body chains framing bare breasts", "chest harness framing bare breasts", "shoulder armor only", "suspenders framing bare breasts", "nipple chain harness", "collar with body chains"],
-        "bottoms": ["micro thong", "g-string", "thigh-high boots", "garter belt with thigh-highs", "thigh harness straps", "crotchless thigh straps framing bare pussy"],
-        "one_pieces": ["chain web full body harness", "leather strap open harness", "combat harness with open crotch and bare breasts", "open-chest bodysuit with bare breasts and thong bottom"],
+        "tops": [
+            "body chains framing bare breasts",
+            "chest harness framing bare breasts",
+            "shoulder armor only",
+            "suspenders framing bare breasts",
+            "nipple chain harness",
+            "collar with body chains",
+        ],
+        "bottoms": [
+            "micro thong",
+            "g-string",
+            "thigh-high boots",
+            "garter belt with thigh-highs",
+            "thigh harness straps",
+            "crotchless thigh straps framing bare pussy",
+        ],
+        "one_pieces": [
+            "chain web full body harness",
+            "leather strap open harness",
+            "combat harness with open crotch and bare breasts",
+            "open-chest bodysuit with bare breasts and thong bottom",
+        ],
     },
 }
 
@@ -70,7 +133,8 @@ def filter_outfit_options(
         full_list = list(options_for_tier.get(key, []))
         if skimpiness_level is not None:
             full_list = [
-                item for item in full_list
+                item
+                for item in full_list
                 if _skimpiness_matches(_parse_outfit_item(item)[1], skimpiness_level)
             ]
         if not full_list:
@@ -439,7 +503,7 @@ SKIMPINESS_LEVELS = {
         "barely_guidance": "Extreme — nipple tape and a tiny nail-sized strip over the clit.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
-        "nsfw_description": "Maximum explicit posing — Erotic toys like butt plugs allowed. Pierced nipples allowed or tiny subtle clit piercings allowed (tasteful small rings only). Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
+        "nsfw_description": "Maximum explicit posing. Pierced nipples allowed or tiny subtle clit piercings allowed (tasteful small rings only). Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
         "nsfw_nudity_level": "full",
     },
 }
@@ -453,7 +517,9 @@ OUTFIT_STYLE_RULES = """STYLE RULES (apply to ALL tiers):
 
 
 def _build_tier_prompt(
-    tier: str, skimpiness_level: int, character_summary: dict,
+    tier: str,
+    skimpiness_level: int,
+    character_summary: dict,
     outfit_options: dict | None = None,
 ) -> str:
     level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
@@ -488,7 +554,9 @@ Expression: {expression}"""
         if bottoms:
             lines.append(f"Example bottoms to consider: {', '.join(bottoms)}")
         if one_pieces:
-            lines.append(f"Example one-pieces to consider (use instead of top+bottom): {', '.join(one_pieces)}")
+            lines.append(
+                f"Example one-pieces to consider (use instead of top+bottom): {', '.join(one_pieces)}"
+            )
         if lines:
             outfit_examples_text = "\n" + "\n".join(lines) + "\n"
 
@@ -715,7 +783,9 @@ def _generate_outfits(
 
     def _fetch_tier(tier):
         tier_opts = (outfit_options_by_tier or {}).get(tier)
-        prompt = _build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options=tier_opts)
+        prompt = _build_tier_prompt(
+            tier, skimpiness_level, character_summary, outfit_options=tier_opts
+        )
         result = call_openrouter_json(
             prompt, config, system_prompt=system_prompt, temperature=0.5
         )
@@ -756,7 +826,9 @@ def generate_fighter(
         has_supernatural = roster_plan_entry.get("has_supernatural", False)
         archetype = roster_plan_entry.get("primary_archetype", archetype)
         if skimpiness_level is None:
-            skimpiness_level = _roll_skimpiness(roster_plan_entry.get("skimpiness_weights"))
+            skimpiness_level = _roll_skimpiness(
+                roster_plan_entry.get("skimpiness_weights")
+            )
     else:
         blueprint_text = ""
         if skimpiness_level is None:
@@ -855,7 +927,13 @@ Return ONLY valid JSON with this exact structure:
     personality_pose = result.get("image_prompt_personality_pose", "")
     gender = result.get("gender", "female")
 
-    outfit_data = _generate_outfits(config, result, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_options_by_tier)
+    outfit_data = _generate_outfits(
+        config,
+        result,
+        skimpiness_level,
+        tiers=tiers,
+        outfit_options_by_tier=outfit_options_by_tier,
+    )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})
 
@@ -1054,7 +1132,17 @@ def _build_charsheet_prompt(
     tail = _charsheet_tail(gender, tier, skimpiness_level)
 
     full = ", ".join(
-        p for p in [style, character_desc, front_view, center_pose, back_view, expression, tail] if p
+        p
+        for p in [
+            style,
+            character_desc,
+            front_view,
+            center_pose,
+            back_view,
+            expression,
+            tail,
+        ]
+        if p
     )
     return {
         "style": style,
