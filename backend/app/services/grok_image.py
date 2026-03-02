@@ -151,8 +151,7 @@ def generate_charsheet_images(
     slug = _slugify(ring_name)
     base = f"{fighter_id}_{slug}" if slug else fighter_id
 
-    def _get_prompt(tier):
-        key = TIER_PROMPT_KEYS[tier]
+    def _get_prompt(key):
         prompt_data = (
             getattr(fighter, key, None)
             if hasattr(fighter, key)
@@ -162,44 +161,47 @@ def generate_charsheet_images(
             return prompt_data.get("full_prompt", "")
         return ""
 
+    body_ref_prompt = _get_prompt("image_prompt_body_ref")
+
     tier_prompts = {}
     for tier in tiers:
-        prompt = _get_prompt(tier)
+        key = TIER_PROMPT_KEYS[tier]
+        prompt = _get_prompt(key)
         if not prompt:
             print(f"    No prompt for tier '{tier}', skipping")
             continue
         tier_prompts[tier] = prompt
 
     saved = {}
-    barely_path = None
+    body_ref_path = None
 
-    if "barely" in tier_prompts:
-        barely_filename = f"{base}_barely.png"
-        barely_save_path = output_dir / barely_filename
-        print(f"    Generating barely charsheet (reference)...")
+    if body_ref_prompt:
+        body_ref_filename = f"{base}_body_ref.png"
+        body_ref_save_path = output_dir / body_ref_filename
+        print(f"    Generating body reference image...")
         urls = generate_image(
-            prompt=tier_prompts["barely"],
+            prompt=body_ref_prompt,
             config=config,
             aspect_ratio="1:1",
             resolution="2k",
             n=1,
         )
-        download_image(urls[0], barely_save_path)
-        print(f"    Saved: {barely_filename}")
-        saved["barely"] = barely_save_path
-        barely_path = barely_save_path
+        download_image(urls[0], body_ref_save_path)
+        print(f"    Saved: {body_ref_filename}")
+        saved["body_ref"] = body_ref_save_path
+        body_ref_path = body_ref_save_path
+    else:
+        print("    No body reference prompt found, generating tiers without reference")
 
-    remaining = {t: p for t, p in tier_prompts.items() if t != "barely"}
-
-    if remaining:
+    if tier_prompts:
         def _gen_and_save(tier, prompt):
             filename = f"{base}_{tier}.png"
             save_path = output_dir / filename
             print(f"    Generating {tier} charsheet...")
-            if barely_path:
+            if body_ref_path:
                 urls = edit_image(
                     prompt=prompt,
-                    image_paths=[barely_path],
+                    image_paths=[body_ref_path],
                     config=config,
                     aspect_ratio="1:1",
                     resolution="2k",
@@ -217,10 +219,10 @@ def generate_charsheet_images(
             print(f"    Saved: {filename}")
             return tier, save_path
 
-        with ThreadPoolExecutor(max_workers=len(remaining)) as pool:
+        with ThreadPoolExecutor(max_workers=len(tier_prompts)) as pool:
             futures = {
                 pool.submit(_gen_and_save, tier, prompt): tier
-                for tier, prompt in remaining.items()
+                for tier, prompt in tier_prompts.items()
             }
             for future in as_completed(futures):
                 label, save_path = future.result()

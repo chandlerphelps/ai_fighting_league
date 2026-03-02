@@ -44,6 +44,7 @@ from app.prompts.image_builders import (
     _charsheet_style,
     _charsheet_tail,
     _build_charsheet_prompt,
+    build_body_reference_prompt,
 )
 
 
@@ -271,6 +272,13 @@ def generate_fighter(
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
         ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),
         skimpiness_level=skimpiness_level,
+        image_prompt_body_ref=build_body_reference_prompt(
+            body_parts,
+            expression,
+            gender=gender,
+            body_type_details=body_traits,
+            origin=origin,
+        ),
         image_prompt=_build_charsheet_prompt(
             body_parts,
             clothing,

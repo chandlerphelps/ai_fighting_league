@@ -168,6 +168,86 @@ def _nsfw_tail(gender: str, skimpiness_level: int) -> str:
     )
 
 
+BODY_REF_LAYOUT = (
+    "anatomy study page, 2x2 grid layout, parchment background, "
+    "four distinct panels showing the same character"
+)
+
+
+def build_body_reference_prompt(
+    body_parts: str,
+    expression: str,
+    gender: str = "female",
+    body_type_details: dict | None = None,
+    origin: str = "",
+) -> dict:
+    if not body_parts:
+        return {}
+
+    style = get_art_style(gender)
+
+    body_shape = ""
+    anatomy = ""
+    if body_type_details:
+        body_shape = _build_body_shape_line(body_type_details)
+        anatomy = _build_nsfw_anatomy_line(body_type_details)
+        body_parts = f"{body_parts}, {body_shape}"
+
+    subject = body_parts
+    if origin:
+        subject = f"{subject}, from {origin}"
+
+    if gender.lower() == "male":
+        chest_panel = (
+            "collarbone to hips, bare chest, abs, pecs, front view"
+        )
+        butt_panel = (
+            "bent forward, butt popped, rear view, muscular glutes"
+        )
+        intimate_panel = (
+            "navel to mid-thigh, legs apart, front view, fully nude"
+        )
+        nudity_prefix = (
+            "explicit uncensored NSFW, full frontal male nudity, "
+            "fully naked man, "
+        )
+    else:
+        chest_panel = (
+            "collarbone to hips, bare breasts, abs, front view"
+        )
+        butt_panel = (
+            "bent forward, butt popped, rear view, explicit detail, "
+            "hands spreading"
+        )
+        intimate_panel = (
+            "navel to mid-thigh, legs spread, detailed, front view"
+        )
+        nudity_prefix = (
+            "explicit uncensored NSFW, full frontal female nudity, "
+            "fully naked woman, perfectly drawn bare pussy visible, "
+        )
+
+    sections = [
+        f"[STYLE] {nudity_prefix}{style}, anatomy study page, 2x2 grid, parchment background",
+        f"[LAYOUT] face top-left, chest and torso top-right, butt bottom-left, intimate bottom-right",
+        f"[SUBJECT] completely naked, {subject}",
+        f"[TOP-LEFT: FACE] {expression}, three-quarter angle, head and shoulders",
+        f"[TOP-RIGHT: CHEST AND TORSO] {chest_panel}",
+        f"[BOTTOM-LEFT: BUTT] {butt_panel}",
+        f"[BOTTOM-RIGHT: INTIMATE] {intimate_panel}",
+        f"[ANATOMY] {anatomy}" if anatomy else "",
+        f"[QUALITY] anatomical precision, figure drawing quality, {get_art_style_tail(gender)}",
+    ]
+    full = "\n".join(s for s in sections if s)
+
+    return {
+        "body_parts": body_parts,
+        "expression": expression,
+        "anatomy": anatomy,
+        "full_prompt": full,
+    }
+
+
 def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
     gender = fighter.get("gender", "female")
     skimpiness = fighter.get("skimpiness_level", 2)
