@@ -1,4 +1,5 @@
 import base64
+import random
 import re
 import time
 import requests
@@ -7,7 +8,7 @@ from pathlib import Path
 
 from app.config import Config
 
-MAX_RETRIES = 2
+MAX_RETRIES = 5
 
 
 def _slugify(name: str) -> str:
@@ -69,7 +70,8 @@ def generate_image(
                 f"    Image gen error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {exc}"
             )
             if attempt < MAX_RETRIES:
-                time.sleep(2 ** (attempt + 1))
+                delay = min(2 ** (attempt + 1), 30) + random.uniform(0, 2)
+                time.sleep(delay)
     raise last_exc
 
 
@@ -117,12 +119,13 @@ def edit_image(
                 f"    Image edit error (attempt {attempt + 1}/{1 + MAX_RETRIES}): {exc}"
             )
             if attempt < MAX_RETRIES:
-                time.sleep(2 ** (attempt + 1))
+                delay = min(2 ** (attempt + 1), 30) + random.uniform(0, 2)
+                time.sleep(delay)
     raise last_exc
 
 
 def download_image(url: str, save_path: Path) -> Path:
-    resp = requests.get(url, timeout=60)
+    resp = requests.get(url, timeout=120)
     resp.raise_for_status()
     save_path.parent.mkdir(parents=True, exist_ok=True)
     with open(save_path, "wb") as f:
@@ -159,34 +162,68 @@ def generate_charsheet_images(
             return prompt_data.get("full_prompt", "")
         return ""
 
-    jobs = []
+    tier_prompts = {}
     for tier in tiers:
         prompt = _get_prompt(tier)
         if not prompt:
             print(f"    No prompt for tier '{tier}', skipping")
             continue
-        filename = f"{base}_{tier}.png"
-        jobs.append((tier, prompt, "1:1", output_dir / filename, filename))
+        tier_prompts[tier] = prompt
 
-    def _gen_and_save(job):
-        label, prompt, aspect, save_path, filename = job
-        print(f"    Generating {label} charsheet...")
+    saved = {}
+    barely_path = None
+
+    if "barely" in tier_prompts:
+        barely_filename = f"{base}_barely.png"
+        barely_save_path = output_dir / barely_filename
+        print(f"    Generating barely charsheet (reference)...")
         urls = generate_image(
-            prompt=prompt,
+            prompt=tier_prompts["barely"],
             config=config,
-            aspect_ratio=aspect,
+            aspect_ratio="1:1",
             resolution="2k",
             n=1,
         )
-        download_image(urls[0], save_path)
-        print(f"    Saved: {filename}")
-        return label, save_path
+        download_image(urls[0], barely_save_path)
+        print(f"    Saved: {barely_filename}")
+        saved["barely"] = barely_save_path
+        barely_path = barely_save_path
 
-    saved = {}
-    with ThreadPoolExecutor(max_workers=len(jobs)) as pool:
-        futures = {pool.submit(_gen_and_save, job): job for job in jobs}
-        for future in as_completed(futures):
-            label, save_path = future.result()
-            saved[label] = save_path
+    remaining = {t: p for t, p in tier_prompts.items() if t != "barely"}
+
+    if remaining:
+        def _gen_and_save(tier, prompt):
+            filename = f"{base}_{tier}.png"
+            save_path = output_dir / filename
+            print(f"    Generating {tier} charsheet...")
+            if barely_path:
+                urls = edit_image(
+                    prompt=prompt,
+                    image_paths=[barely_path],
+                    config=config,
+                    aspect_ratio="1:1",
+                    resolution="2k",
+                    n=1,
+                )
+            else:
+                urls = generate_image(
+                    prompt=prompt,
+                    config=config,
+                    aspect_ratio="1:1",
+                    resolution="2k",
+                    n=1,
+                )
+            download_image(urls[0], save_path)
+            print(f"    Saved: {filename}")
+            return tier, save_path
+
+        with ThreadPoolExecutor(max_workers=len(remaining)) as pool:
+            futures = {
+                pool.submit(_gen_and_save, tier, prompt): tier
+                for tier, prompt in remaining.items()
+            }
+            for future in as_completed(futures):
+                label, save_path = future.result()
+                saved[label] = save_path
 
     return saved

@@ -1,163 +1,137 @@
 [
   {
-    "concept_hook": "Amsterdam DJ who blasts disorienting sonic tech from her jewelry while seducing foes into fatal mistakes.",
-    "ring_name": "Sonic Vixen",
+    "concept_hook": "Cuban siren whose enchanting voice debuffs foes' aggression, letting her agile strikes slip through defenses undefended.",
+    "ring_name": "Tidal Siren",
     "gender": "female",
     "age": 24,
-    "origin": "Amsterdam, Netherlands",
+    "origin": "Havana, Cuba",
     "primary_archetype": "Siren",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": false,
-    "body_type": "curvaceous dancer's build",
-    "power_tier": "prospect",
-    "narrative_role": "seductive disruptor who turns fights into intoxicating spectacles",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": true,
+    "body_type": "curvaceous latina with sun-kissed skin",
+    "power_tier": "contender",
+    "narrative_role": "charismatic temptress who exposes rivals' insecurities through psychological seduction",
     "rivalry_seeds": [
-      "Porcelain Doll",
-      "Apex Prodigy"
+      "Echo Doll",
+      "Solar Empress"
     ],
-    "media_archetype_inspiration": "Black Canary from DC Comics",
+    "media_archetype_inspiration": "seductive sirens from Hades video game",
     "skimpiness_weights": [
-      5,
-      15,
-      40,
-      40
+      0,
+      10,
+      45,
+      45
     ]
   },
   {
-    "concept_hook": "Kyiv mystic who summons debilitating shadow curses, feeding on the panic of the afflicted.",
-    "ring_name": "Eclipse Witch",
+    "concept_hook": "Russian ice witch who revels in freezing opponents solid, savoring their panicked thrashing before shattering them.",
+    "ring_name": "Frost Witch",
     "gender": "female",
     "age": 28,
-    "origin": "Kyiv, Ukraine",
+    "origin": "Moscow, Russia",
     "primary_archetype": "Witch",
     "secondary_archetype": "Viper",
     "has_supernatural": true,
-    "body_type": "elegant pale hourglass",
-    "power_tier": "gatekeeper",
-    "narrative_role": "brooding curse-weaver haunted by her own dark gifts",
+    "body_type": "lithe pale beauty with platinum hair",
+    "power_tier": "contender",
+    "narrative_role": "ruthless tactician haunted by the thrill of her own destructive impulses",
     "rivalry_seeds": [
-      "Iron Empress"
+      "Solar Empress",
+      "Helix Experiment"
     ],
-    "media_archetype_inspiration": "Scarlet Witch from Marvel",
+    "media_archetype_inspiration": "Yennefer from The Witcher series",
     "skimpiness_weights": [
-      15,
+      10,
       30,
-      35,
+      40,
       20
     ]
   },
   {
-    "concept_hook": "Lima assassin who fires paralytic toxin darts from concealed gauntlets, stalking prey with cold precision.",
-    "ring_name": "Jade Viper",
+    "concept_hook": "Singaporean chemist who kisses with toxin-laced lips, giggling as stronger foes convulse from her untraceable nerve agents.",
+    "ring_name": "Synth Viper",
     "gender": "female",
-    "age": 26,
-    "origin": "Lima, Peru",
+    "age": 22,
+    "origin": "Singapore, Singapore",
     "primary_archetype": "Viper",
-    "secondary_archetype": "Huntress",
+    "secondary_archetype": "Experiment",
     "has_supernatural": false,
-    "body_type": "toned latina curves",
-    "power_tier": "gatekeeper",
-    "narrative_role": "ruthless opportunist thriving on the thrill of the hunt",
+    "body_type": "petite sleek asian with mischievous eyes",
+    "power_tier": "prospect",
+    "narrative_role": "sly underdog who turns brawn against itself via science",
     "rivalry_seeds": [
-      "Silver Huntress"
+      "Star Huntress"
     ],
-    "media_archetype_inspiration": "Black Widow from Marvel",
+    "media_archetype_inspiration": "Poison Ivy from DC Comics but tech-focused",
     "skimpiness_weights": [
-      10,
-      25,
-      40,
-      25
+      5,
+      20,
+      45,
+      30
     ]
   },
   {
-    "concept_hook": "Jakarta grappling genius who decodes opponents' patterns instantly, submitting them with surgical holds.",
-    "ring_name": "Apex Prodigy",
+    "concept_hook": "Hungarian gymnast prodigy who flips through strikes unscathed, her quiet fury building with every bruise she endures.",
+    "ring_name": "Aerial Prodigy",
     "gender": "female",
-    "age": 22,
-    "origin": "Jakarta, Indonesia",
+    "age": 20,
+    "origin": "Budapest, Hungary",
     "primary_archetype": "Prodigy",
     "secondary_archetype": "Doll",
     "has_supernatural": false,
-    "body_type": "petite agile frame",
+    "body_type": "slim flexible gymnast physique",
     "power_tier": "prospect",
-    "narrative_role": "cocky prodigy pushing veterans to their limits",
+    "narrative_role": "pure talent rising star challenging the unnatural",
     "rivalry_seeds": [
-      "Nano Helix",
-      "Sonic Vixen"
+      "Helix Experiment"
     ],
-    "media_archetype_inspiration": "Kitana from Mortal Kombat",
+    "media_archetype_inspiration": "flexible fighters like Juri from Street Fighter",
     "skimpiness_weights": [
-      20,
-      40,
+      15,
+      45,
       30,
       10
     ]
   },
   {
-    "concept_hook": "Vienna contortionist who warps her body into joint-crushing locks, maintaining a doll-like serene smile.",
-    "ring_name": "Porcelain Doll",
+    "concept_hook": "Greek puppeteer whose enchanted strings yank foes into self-inflicted wounds, her detached smile hiding survivor's guilt.",
+    "ring_name": "Echo Doll",
     "gender": "female",
-    "age": 27,
-    "origin": "Vienna, Austria",
+    "age": 25,
+    "origin": "Athens, Greece",
     "primary_archetype": "Doll",
     "secondary_archetype": "Siren",
-    "has_supernatural": false,
-    "body_type": "slender flexible beauty",
-    "power_tier": "contender",
-    "narrative_role": "unsettling perfectionist who breaks foes gracefully",
-    "rivalry_seeds": [
-      "Sonic Vixen",
-      "Silver Huntress"
-    ],
-    "media_archetype_inspiration": "Squigly from Skullgirls",
-    "skimpiness_weights": [
-      10,
-      30,
-      35,
-      25
-    ]
-  },
-  {
-    "concept_hook": "Cape Town tracker who deploys razor-wire snares and boomerang blades, embodying patient vengeance.",
-    "ring_name": "Silver Huntress",
-    "gender": "female",
-    "age": 29,
-    "origin": "Cape Town, South Africa",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": false,
-    "body_type": "lean athletic curves",
-    "power_tier": "contender",
-    "narrative_role": "stoic survivor forging alliances through shared grudges",
-    "rivalry_seeds": [
-      "Jade Viper",
-      "Porcelain Doll"
-    ],
-    "media_archetype_inspiration": "Lara Croft from Tomb Raider",
-    "skimpiness_weights": [
-      15,
-      35,
-      35,
-      15
-    ]
-  },
-  {
-    "concept_hook": "Istanbul sovereign who projects aura of dread to weaken wills before unleashing imperial strikes.",
-    "ring_name": "Iron Empress",
-    "gender": "female",
-    "age": 32,
-    "origin": "Istanbul, Turkey",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Witch",
     "has_supernatural": true,
-    "body_type": "statuesque commanding figure",
-    "power_tier": "champion",
-    "narrative_role": "arrogant overlord drawing challengers into her web of dominance",
+    "body_type": "delicate olive-skinned mediterranean beauty",
+    "power_tier": "gatekeeper",
+    "narrative_role": "manipulative midcard heel who controls the pace",
     "rivalry_seeds": [
-      "Eclipse Witch",
-      "Nano Helix"
+      "Tidal Siren"
     ],
-    "media_archetype_inspiration": "Bayonetta from Bayonetta",
+    "media_archetype_inspiration": "Marionette fighters from Soul Calibur",
+    "skimpiness_weights": [
+      5,
+      15,
+      45,
+      35
+    ]
+  },
+  {
+    "concept_hook": "Spanish tracker who sets razor traps and exploits wounds with precise javelins, hardening her resolve each time she's bloodied.",
+    "ring_name": "Star Huntress",
+    "gender": "female",
+    "age": 27,
+    "origin": "Madrid, Spain",
+    "primary_archetype": "Huntress",
+    "secondary_archetype": "Empress",
+    "has_supernatural": true,
+    "body_type": "athletic toned latina with fierce gaze",
+    "power_tier": "gatekeeper",
+    "narrative_role": "relentless pursuer forcing fights into endurance tests",
+    "rivalry_seeds": [
+      "Synth Viper"
+    ],
+    "media_archetype_inspiration": "Artemis-inspired huntresses from God of War",
     "skimpiness_weights": [
       10,
       30,
@@ -166,27 +140,51 @@
     ]
   },
   {
-    "concept_hook": "Mumbai lab creation whose nanobots swarm to adapt counters, reveling in evolutionary chaos.",
-    "ring_name": "Nano Helix",
+    "concept_hook": "Brazilian solar sovereign who blasts with plasma gauntlets, her arrogance cracking only when outmaneuvered by lesser foes.",
+    "ring_name": "Solar Empress",
     "gender": "female",
-    "age": 25,
-    "origin": "Mumbai, India",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Viper",
-    "has_supernatural": false,
-    "body_type": "lithe biotech-enhanced silhouette",
-    "power_tier": "gatekeeper",
-    "narrative_role": "unstable innovator disrupting the status quo",
+    "age": 30,
+    "origin": "Porto Alegre, Brazil",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "voluptuous bronzed latina warrior",
+    "power_tier": "champion",
+    "narrative_role": "dominant champion whose hubris invites upsets",
     "rivalry_seeds": [
-      "Apex Prodigy",
-      "Iron Empress"
+      "Tidal Siren",
+      "Frost Witch"
     ],
-    "media_archetype_inspiration": "Alita from Alita: Battle Angel",
+    "media_archetype_inspiration": "Sun empresses like from Final Fantasy",
+    "skimpiness_weights": [
+      10,
+      40,
+      35,
+      15
+    ]
+  },
+  {
+    "concept_hook": "Irish gene-spliced speedster whose nanite boosts let her dismantle giants, masking her fear of losing control with cocky grins.",
+    "ring_name": "Helix Experiment",
+    "gender": "female",
+    "age": 23,
+    "origin": "Dublin, Ireland",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": false,
+    "body_type": "lean freckled athletic build",
+    "power_tier": "contender",
+    "narrative_role": "volatile wildcard bridging science and savagery",
+    "rivalry_seeds": [
+      "Aerial Prodigy",
+      "Frost Witch"
+    ],
+    "media_archetype_inspiration": "cyborg experiments like Revy from Black Lagoon enhanced",
     "skimpiness_weights": [
       20,
-      30,
-      30,
-      20
+      40,
+      25,
+      15
     ]
   }
 ]
