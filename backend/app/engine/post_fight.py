@@ -35,6 +35,9 @@ def apply_fight_results(match: Match, config: Config) -> dict:
     changes["fighter1"]["injuries"] = [i.type for i in f1.condition.injuries] if f1.condition.injuries else ["none"]
     changes["fighter2"]["injuries"] = [i.type for i in f2.condition.injuries] if f2.condition.injuries else ["none"]
 
+    _apply_supernatural_debt(f1, match.combat_log, config)
+    _apply_supernatural_debt(f2, match.combat_log, config)
+
     f1.last_fight_date = match.date
     f2.last_fight_date = match.date
 
@@ -84,7 +87,7 @@ def _update_records(f1: Fighter, f2: Fighter, outcome):
     winner.record.wins += 1
     loser.record.losses += 1
 
-    if outcome.method == "ko_tko":
+    if outcome.method in ("ko", "tko", "ko_tko"):
         winner.record.kos += 1
     elif outcome.method == "submission":
         winner.record.submissions += 1
@@ -107,7 +110,7 @@ def _apply_stat_adjustments(fighter: Fighter, outcome, is_fighter1: bool) -> dic
         else:
             _adjust_stat(fighter.stats, "technique", 1, changes)
 
-        if outcome.method == "ko_tko":
+        if outcome.method in ("ko", "tko", "ko_tko"):
             _adjust_stat(fighter.stats, "power", 1, changes)
         elif outcome.method == "submission":
             _adjust_stat(fighter.stats, "technique", 1, changes)
@@ -117,7 +120,7 @@ def _apply_stat_adjustments(fighter: Fighter, outcome, is_fighter1: bool) -> dic
         else:
             _adjust_stat(fighter.stats, "technique", -1, changes)
 
-        if outcome.method == "ko_tko":
+        if outcome.method in ("ko", "tko", "ko_tko"):
             _adjust_stat(fighter.stats, "toughness", 1, changes)
         elif outcome.method == "submission":
             _adjust_stat(fighter.stats, "technique", 1, changes)
@@ -153,6 +156,32 @@ def _apply_injuries(fighter: Fighter, injuries: list[dict]):
         fighter.condition.health_status = "injured"
         fighter.condition.recovery_days_remaining = max_recovery
         fighter.condition.morale = "low"
+
+
+def _apply_supernatural_debt(fighter: Fighter, combat_log: list[dict], config: Config):
+    debt = 0.0
+    for round_summary in combat_log:
+        if round_summary.get("fighter1_id") == fighter.id:
+            mana_end = round_summary.get("fighter1_mana_end", 0)
+        elif round_summary.get("fighter2_id") == fighter.id:
+            mana_end = round_summary.get("fighter2_mana_end", 0)
+        else:
+            continue
+        debt = max(debt, mana_end * 0.1)
+
+    if debt <= 0:
+        return
+
+    extra_recovery = int(debt / 10)
+    if extra_recovery > 0:
+        current_recovery = fighter.condition.recovery_days_remaining
+        fighter.condition.recovery_days_remaining = max(current_recovery, extra_recovery)
+        if fighter.condition.health_status != "injured" and extra_recovery >= 3:
+            fighter.condition.health_status = "injured"
+            fighter.condition.morale = "low"
+
+    if debt > 30 and fighter.stats.supernatural > 15:
+        fighter.stats.supernatural = max(15, fighter.stats.supernatural - 1)
 
 
 def _generate_storyline_entry(

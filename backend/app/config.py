@@ -32,6 +32,15 @@ class Config:
     rematch_cooldown_days: int = 14
     max_idle_days: int = 14
 
+    ticks_per_round: int = 30
+    base_stamina_recovery_pct: float = 0.30
+    stamina_recovery_decay: float = 0.03
+    tko_base_threshold: float = 60.0
+    tko_toughness_factor: float = 0.5
+    tko_late_round_drop: float = 5.0
+    tko_late_round_start: int = 10
+    max_combat_rounds: int = 30
+
     data_dir: Path = field(
         default_factory=lambda: Path(__file__).resolve().parent.parent.parent / "data"
     )

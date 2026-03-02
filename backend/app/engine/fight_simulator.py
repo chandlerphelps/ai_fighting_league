@@ -1,68 +1,85 @@
+import hashlib
 import random
 import uuid
 
 from app.config import Config
 from app.models.match import MatchupAnalysis, MatchOutcome, Match, FightMoment
-from app.prompts.fight_prompts import (
-    SYSTEM_PROMPT_FIGHT_ANALYST,
-    SYSTEM_PROMPT_FIGHT_CHOREOGRAPHER,
-    build_probability_prompt,
-    build_moments_prompt,
-)
+from app.engine.combat.simulator import simulate_combat
+from app.engine.combat.models import CombatResult, TickResult
+from app.engine.combat.moves import MoveDefinition, UNIVERSAL_MOVES
 from app.services import data_manager
 
 
-def _calc_moment_count(winner_prob: float) -> int:
-    lopsidedness = abs(winner_prob - 0.5) * 2
-    return 3 + round(3 * (1 - lopsidedness))
+def _make_seed(fighter1_id: str, fighter2_id: str, match_date: str) -> int:
+    raw = f"{fighter1_id}:{fighter2_id}:{match_date}"
+    return int(hashlib.sha256(raw.encode()).hexdigest()[:8], 16)
 
 
-def _assess_performance(winner_prob: float) -> tuple[str, str]:
-    if winner_prob >= 0.70:
-        return "dominant", "poor"
-    if winner_prob <= 0.30:
-        return "dominant", "poor"
-    return "competitive", "competitive"
+def _assess_performance(fighter_id: str, combat_result: CombatResult) -> str:
+    is_winner = combat_result.winner_id == fighter_id
+    total_ticks = len(combat_result.tick_log)
 
-
-def determine_outcome(
-    fighter1: dict, fighter2: dict, analysis: MatchupAnalysis, config: Config
-) -> MatchOutcome:
-    f1_id = fighter1["id"]
-    f2_id = fighter2["id"]
-
-    if random.random() < analysis.fighter1_win_prob:
-        winner_id, loser_id = f1_id, f2_id
-        prob = analysis.fighter1_win_prob
+    if is_winner:
+        if combat_result.final_round <= 2:
+            return "dominant"
+        if total_ticks < 60:
+            return "dominant"
+        return "competitive"
     else:
-        winner_id, loser_id = f2_id, f1_id
-        prob = analysis.fighter2_win_prob
+        if combat_result.final_round <= 2:
+            return "poor"
+        if total_ticks < 60:
+            return "poor"
+        return "competitive"
 
-    winner_perf, loser_perf = _assess_performance(prob)
-    moment_count = _calc_moment_count(prob)
 
-    return MatchOutcome(
-        winner_id=winner_id,
-        loser_id=loser_id,
-        method="ko_tko",
-        round_ended=moment_count,
-        fighter1_performance=winner_perf if winner_id == f1_id else loser_perf,
-        fighter2_performance=winner_perf if winner_id == f2_id else loser_perf,
-        fighter1_injuries=_roll_injuries(config, 0.10 if winner_id == f1_id else 0.40),
-        fighter2_injuries=_roll_injuries(config, 0.10 if winner_id == f2_id else 0.40),
-        is_draw=False,
+def _derive_injuries(
+    fighter_id: str, combat_result: CombatResult, config: Config
+) -> list[dict]:
+    is_winner = combat_result.winner_id == fighter_id
+
+    final_state = (
+        combat_result.fighter1_final_state
+        if combat_result.tick_log and combat_result.tick_log[0].attacker_id == fighter_id
+        or (len(combat_result.tick_log) > 1 and combat_result.tick_log[1].attacker_id == fighter_id)
+        else combat_result.fighter2_final_state
     )
 
+    for rs in combat_result.round_summaries:
+        if rs.fighter1_id == fighter_id:
+            final_state = {
+                "hp": rs.fighter1_hp_end,
+                "stamina": rs.fighter1_stamina_end,
+            }
+        elif rs.fighter2_id == fighter_id:
+            final_state = {
+                "hp": rs.fighter2_hp_end,
+                "stamina": rs.fighter2_stamina_end,
+            }
 
-def _roll_injuries(config: Config, base_chance: float) -> list[dict]:
+    accumulated = final_state.get("accumulated_damage", 0)
+
+    if is_winner:
+        base_chance = 0.10
+    else:
+        base_chance = 0.40
+
+    if accumulated > 80:
+        base_chance += 0.20
+    elif accumulated > 50:
+        base_chance += 0.10
+
     if random.random() > base_chance:
         return []
 
     severity_roll = random.random()
-    if severity_roll < 0.60:
+    if accumulated > 80:
+        severity_roll += 0.15
+
+    if severity_roll < 0.50:
         severity = "minor"
         recovery_range = config.minor_recovery
-    elif severity_roll < 0.85:
+    elif severity_roll < 0.80:
         severity = "moderate"
         recovery_range = config.moderate_recovery
     else:
@@ -70,125 +87,105 @@ def _roll_injuries(config: Config, base_chance: float) -> list[dict]:
         recovery_range = config.severe_recovery
 
     recovery_days = random.randint(recovery_range[0], recovery_range[1])
-    injury_type = random.choice(
-        ["concussion", "facial laceration", "broken nose", "orbital fracture"]
+
+    method = combat_result.method
+    if method in ("ko", "tko") and not is_winner:
+        injury_type = random.choice(["concussion", "orbital fracture", "broken nose"])
+    else:
+        injury_type = random.choice(["facial laceration", "broken nose", "hand fracture", "bruised ribs"])
+
+    return [{
+        "type": injury_type,
+        "severity": severity,
+        "recovery_days_remaining": recovery_days,
+    }]
+
+
+def _tick_to_moment(
+    tick: TickResult,
+    moment_number: int,
+    fighter1_name: str,
+    fighter2_name: str,
+    fighter1_id: str,
+    fighter2_id: str,
+) -> FightMoment:
+    if tick.attacker_id == fighter1_id:
+        attacker_name = fighter1_name
+        defender_name = fighter2_name
+    else:
+        attacker_name = fighter2_name
+        defender_name = fighter1_name
+
+    move_def = UNIVERSAL_MOVES.get(tick.move_used)
+    move_display = move_def.name if move_def else tick.move_used
+
+    result = tick.result
+    if result == "hit":
+        description = f"{attacker_name} lands {move_display} on {defender_name}"
+        if tick.damage_dealt > 20:
+            description += " — devastating impact!"
+    elif result == "blocked":
+        description = f"{defender_name} blocks {attacker_name}'s {move_display}"
+    elif result == "dodged":
+        description = f"{defender_name} dodges {attacker_name}'s {move_display}"
+    elif result == "counter":
+        description = f"{defender_name} counters {attacker_name}'s {move_display}"
+    else:
+        description = f"{attacker_name} attempts {move_display}"
+
+    if tick.finish:
+        finish_display = tick.finish.upper().replace("_", " ")
+        description += f" — {finish_display}!"
+
+    att_state = tick.attacker_state_after
+    def_state = tick.defender_state_after
+
+    return FightMoment(
+        moment_number=moment_number,
+        description=description,
+        attacker_id=tick.attacker_id,
+        defender_id=tick.defender_id,
+        action=tick.move_used,
+        defender_action=tick.defender_move,
+        result=tick.result,
+        damage_dealt=tick.damage_dealt,
+        tick_number=tick.global_tick,
+        round_number=tick.round_number,
+        attacker_hp=att_state.get("hp", 0),
+        attacker_stamina=att_state.get("stamina", 0),
+        attacker_mana=att_state.get("mana", 0),
+        defender_hp=def_state.get("hp", 0),
+        defender_stamina=def_state.get("stamina", 0),
+        defender_mana=def_state.get("mana", 0),
+        attacker_emotions=att_state.get("emotions", {}),
+        defender_emotions=def_state.get("emotions", {}),
     )
 
-    return [
-        {
-            "type": injury_type,
-            "severity": severity,
-            "recovery_days_remaining": recovery_days,
-        }
-    ]
 
+def _filter_significant_moments(tick_log: list[TickResult], max_moments: int = 50) -> list[TickResult]:
+    significant = []
+    for tick in tick_log:
+        if tick.finish:
+            significant.append(tick)
+        elif tick.result == "hit" and tick.damage_dealt > 8:
+            significant.append(tick)
+        elif tick.result == "counter":
+            significant.append(tick)
+        elif tick.result == "hit" and tick.damage_dealt > 0:
+            significant.append(tick)
 
-def calculate_probabilities(
-    fighter1: dict, fighter2: dict, config: Config, rivalry_context: dict = None
-) -> MatchupAnalysis:
-    from app.services.openrouter import call_openrouter_json
+    if len(significant) > max_moments:
+        finishers = [t for t in significant if t.finish]
+        big_hits = [t for t in significant if not t.finish and t.damage_dealt > 15]
+        medium_hits = [t for t in significant if not t.finish and 8 < t.damage_dealt <= 15]
+        counters = [t for t in significant if t.result == "counter" and not t.finish]
+        rest = [t for t in significant if t not in finishers + big_hits + medium_hits + counters]
 
-    f1_name = fighter1.get("ring_name", "Fighter 1")
-    f2_name = fighter2.get("ring_name", "Fighter 2")
+        combined = finishers + big_hits + counters + medium_hits + rest
+        significant = combined[:max_moments]
+        significant.sort(key=lambda t: t.global_tick)
 
-    rivalry_text = ""
-    if rivalry_context:
-        rivalry_text = f"""
-RIVALRY CONTEXT: These fighters have fought {rivalry_context.get('fights', 0)} times before.
-{f1_name} has won {rivalry_context.get('fighter1_wins', 0)} and {f2_name} has won {rivalry_context.get('fighter2_wins', 0)}.
-This is a known rivalry — factor in the psychological weight of their history."""
-
-    f1_condition = f"{fighter1.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter1.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter1.get('condition', {}).get('momentum', 'neutral')}"
-    f2_condition = f"{fighter2.get('condition', {}).get('health_status', 'healthy')}, Morale: {fighter2.get('condition', {}).get('morale', 'neutral')}, Momentum: {fighter2.get('condition', {}).get('momentum', 'neutral')}"
-
-    prompt = build_probability_prompt(
-        f1_name=f1_name,
-        f1_stats=fighter1.get('stats', {}),
-        f1_record=fighter1.get('record', {}),
-        f1_condition=f1_condition,
-        f2_name=f2_name,
-        f2_stats=fighter2.get('stats', {}),
-        f2_record=fighter2.get('record', {}),
-        f2_condition=f2_condition,
-        rivalry_text=rivalry_text,
-    )
-
-    result = call_openrouter_json(prompt, config, system_prompt=SYSTEM_PROMPT_FIGHT_ANALYST)
-
-    f1_prob = max(0.05, min(0.95, float(result.get("fighter1_win_prob", 0.5))))
-    f2_prob = 1.0 - f1_prob
-
-    return MatchupAnalysis(
-        fighter1_win_prob=round(f1_prob, 3),
-        fighter2_win_prob=round(f2_prob, 3),
-        key_factors=result.get("key_factors", []),
-    )
-
-
-def generate_moments(
-    fighter1: dict,
-    fighter2: dict,
-    analysis: MatchupAnalysis,
-    outcome: MatchOutcome,
-    config: Config,
-) -> list[FightMoment]:
-    from app.services.openrouter import call_openrouter_json
-
-    f1_id = fighter1["id"]
-    f2_id = fighter2["id"]
-    f1_name = fighter1.get("ring_name", "Fighter 1")
-    f2_name = fighter2.get("ring_name", "Fighter 2")
-
-    winner_name = f1_name if outcome.winner_id == f1_id else f2_name
-    loser_name = f2_name if outcome.winner_id == f1_id else f1_name
-    target = outcome.round_ended
-
-    prompt = build_moments_prompt(
-        target=target,
-        f1_name=f1_name,
-        f1_id=f1_id,
-        f1_build=fighter1.get('build', ''),
-        f1_height=fighter1.get('height', ''),
-        f1_weight=fighter1.get('weight', ''),
-        f1_stats=fighter1.get('stats', {}),
-        f2_name=f2_name,
-        f2_id=f2_id,
-        f2_build=fighter2.get('build', ''),
-        f2_height=fighter2.get('height', ''),
-        f2_weight=fighter2.get('weight', ''),
-        f2_stats=fighter2.get('stats', {}),
-        winner_name=winner_name,
-        loser_name=loser_name,
-    )
-
-    result = call_openrouter_json(
-        prompt, config, model=config.narrative_model, system_prompt=SYSTEM_PROMPT_FIGHT_CHOREOGRAPHER
-    )
-    raw_moments = result.get("moments", [])
-
-    moments = []
-    for m in raw_moments:
-        attacker_id = m.get("attacker_id", "")
-        if attacker_id == f1_id:
-            attacker_name = f1_name
-            defender_name = f2_name
-        else:
-            attacker_name = f2_name
-            defender_name = f1_name
-
-        action = m.get("action", "")
-        description = f"{attacker_name} lands {action} on {defender_name}"
-
-        moments.append(
-            FightMoment(
-                moment_number=m.get("moment_number", 0),
-                description=description,
-                attacker_id=attacker_id,
-                action=action,
-            )
-        )
-
-    return moments
+    return significant
 
 
 def run_fight(
@@ -203,11 +200,39 @@ def run_fight(
     fighter1_snapshot = dict(fighter1)
     fighter2_snapshot = dict(fighter2)
 
-    rivalry_context = _get_rivalry_context(fighter1_id, fighter2_id, config)
+    seed = _make_seed(fighter1_id, fighter2_id, match_date)
 
-    analysis = calculate_probabilities(fighter1, fighter2, config, rivalry_context)
-    outcome = determine_outcome(fighter1, fighter2, analysis, config)
-    moments = generate_moments(fighter1, fighter2, analysis, outcome, config)
+    combat_result = simulate_combat(
+        fighter1_data=fighter1,
+        fighter2_data=fighter2,
+        seed=seed,
+    )
+
+    f1_name = fighter1.get("ring_name", "")
+    f2_name = fighter2.get("ring_name", "")
+
+    significant_ticks = _filter_significant_moments(combat_result.tick_log)
+    moments = [
+        _tick_to_moment(tick, i + 1, f1_name, f2_name, fighter1_id, fighter2_id)
+        for i, tick in enumerate(significant_ticks)
+    ]
+
+    f1_injuries = _derive_injuries(fighter1_id, combat_result, config)
+    f2_injuries = _derive_injuries(fighter2_id, combat_result, config)
+
+    outcome = MatchOutcome(
+        winner_id=combat_result.winner_id,
+        loser_id=combat_result.loser_id,
+        method=combat_result.method,
+        round_ended=combat_result.final_round,
+        fighter1_performance=_assess_performance(fighter1_id, combat_result),
+        fighter2_performance=_assess_performance(fighter2_id, combat_result),
+        fighter1_injuries=f1_injuries,
+        fighter2_injuries=f2_injuries,
+        is_draw=False,
+    )
+
+    combat_log = [rs.to_dict() for rs in combat_result.round_summaries]
 
     match_id = f"m_{uuid.uuid4().hex[:8]}"
 
@@ -216,14 +241,16 @@ def run_fight(
         event_id=event_id,
         date=match_date,
         fighter1_id=fighter1_id,
-        fighter1_name=fighter1.get("ring_name", ""),
+        fighter1_name=f1_name,
         fighter2_id=fighter2_id,
-        fighter2_name=fighter2.get("ring_name", ""),
-        analysis=analysis,
+        fighter2_name=f2_name,
+        analysis=None,
         outcome=outcome,
         moments=moments,
         fighter1_snapshot=fighter1_snapshot,
         fighter2_snapshot=fighter2_snapshot,
+        combat_log=combat_log,
+        combat_seed=seed,
     )
 
 

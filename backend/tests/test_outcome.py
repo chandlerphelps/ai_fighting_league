@@ -1,75 +1,48 @@
 from collections import Counter
 
-from app.config import Config
-from app.models.match import MatchupAnalysis
-from app.engine.fight_simulator import determine_outcome
+from app.engine.combat.simulator import simulate_combat
 
 
-def _make_fighter(fighter_id: str) -> dict:
+def _make_fighter(fighter_id: str, power=50, speed=50, technique=50, toughness=50) -> dict:
     return {
         "id": fighter_id,
         "ring_name": f"Fighter {fighter_id}",
+        "stats": {
+            "power": power,
+            "speed": speed,
+            "technique": technique,
+            "toughness": toughness,
+            "supernatural": 0,
+        },
         "record": {"wins": 3, "losses": 2, "draws": 0},
         "condition": {"health_status": "healthy"},
     }
 
 
 def test_outcome_distribution():
-    config = Config()
-    analysis = MatchupAnalysis(
-        fighter1_win_prob=0.6,
-        fighter2_win_prob=0.4,
-        key_factors=["striking edge", "ground game"],
-    )
-
-    f1 = _make_fighter("f_1")
-    f2 = _make_fighter("f_2")
+    f1 = _make_fighter("f_1", power=65, speed=60, technique=55, toughness=55)
+    f2 = _make_fighter("f_2", power=45, speed=50, technique=50, toughness=50)
 
     winners = Counter()
-    injury_count = 0
-    iterations = 1000
+    iterations = 100
 
-    for _ in range(iterations):
-        outcome = determine_outcome(f1, f2, analysis, config)
-
-        if outcome.is_draw:
-            winners["draw"] += 1
-        else:
-            winners[outcome.winner_id] += 1
-
-        assert outcome.method == "ko_tko"
-
-        if outcome.fighter1_injuries or outcome.fighter2_injuries:
-            injury_count += 1
+    for seed in range(iterations):
+        result = simulate_combat(f1, f2, seed=seed)
+        winners[result.winner_id] += 1
 
     f1_win_rate = winners.get("f_1", 0) / iterations
-    assert 0.45 < f1_win_rate < 0.75, f"Fighter 1 win rate {f1_win_rate} outside expected range"
-
-    draw_rate = winners.get("draw", 0) / iterations
-    assert draw_rate == 0, f"Draw rate {draw_rate} should be 0 (all fights end in KO)"
-
-    injury_rate = injury_count / iterations
-    assert 0.05 < injury_rate < 0.60, f"Injury rate {injury_rate} outside expected range"
+    assert 0.40 < f1_win_rate < 0.90, f"Fighter 1 win rate {f1_win_rate} outside expected range"
 
 
 def test_outcome_always_valid():
-    config = Config()
-    analysis = MatchupAnalysis(
-        fighter1_win_prob=0.8,
-        fighter2_win_prob=0.2,
-    )
+    f1 = _make_fighter("f_1", power=70, speed=60, technique=65, toughness=55)
+    f2 = _make_fighter("f_2", power=40, speed=50, technique=45, toughness=50)
 
-    f1 = _make_fighter("f_1")
-    f2 = _make_fighter("f_2")
-
-    for _ in range(200):
-        outcome = determine_outcome(f1, f2, analysis, config)
-        assert outcome.round_ended >= 3
-        assert outcome.round_ended <= 6
-        assert outcome.method == "ko_tko"
-        assert outcome.is_draw is False
-        assert outcome.fighter1_performance in ["dominant", "competitive", "poor"]
-        assert outcome.fighter2_performance in ["dominant", "competitive", "poor"]
-        assert outcome.winner_id in ["f_1", "f_2"]
-        assert outcome.loser_id in ["f_1", "f_2"]
-        assert outcome.winner_id != outcome.loser_id
+    for seed in range(50):
+        result = simulate_combat(f1, f2, seed=seed)
+        assert result.final_round >= 1
+        assert result.method in ("ko", "tko", "submission")
+        assert result.winner_id in ("f_1", "f_2")
+        assert result.loser_id in ("f_1", "f_2")
+        assert result.winner_id != result.loser_id
+        assert len(result.tick_log) > 0

@@ -7,7 +7,21 @@ class FightMoment:
     moment_number: int = 0
     description: str = ""
     attacker_id: str = ""
+    defender_id: str = ""
     action: str = ""
+    defender_action: str = ""
+    result: str = ""
+    damage_dealt: float = 0.0
+    tick_number: int = 0
+    round_number: int = 1
+    attacker_hp: float = 100.0
+    attacker_stamina: float = 100.0
+    attacker_mana: float = 0.0
+    defender_hp: float = 100.0
+    defender_stamina: float = 100.0
+    defender_mana: float = 0.0
+    attacker_emotions: dict = field(default_factory=dict)
+    defender_emotions: dict = field(default_factory=dict)
     image_prompt: str = ""
     image_path: str = ""
 
@@ -62,6 +76,8 @@ class Match:
     fighter1_snapshot: dict = field(default_factory=dict)
     fighter2_snapshot: dict = field(default_factory=dict)
     post_fight_updates: dict = field(default_factory=dict)
+    combat_log: list[dict] = field(default_factory=list)
+    combat_seed: int = 0
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -90,4 +106,6 @@ class Match:
             fighter1_snapshot=d.get("fighter1_snapshot", {}),
             fighter2_snapshot=d.get("fighter2_snapshot", {}),
             post_fight_updates=d.get("post_fight_updates", {}),
+            combat_log=d.get("combat_log", []),
+            combat_seed=d.get("combat_seed", 0),
         )
