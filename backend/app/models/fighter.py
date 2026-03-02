@@ -90,6 +90,9 @@ class Fighter:
     age: int = 25
     origin: str = ""
     gender: str = ""
+    primary_archetype: str = ""
+    secondary_archetype: str = ""
+    subtype: str = ""
     height: str = ""
     weight: str = ""
     build: str = ""
@@ -130,6 +133,9 @@ class Fighter:
             age=d.get("age", 25),
             origin=d.get("origin", ""),
             gender=d.get("gender", ""),
+            primary_archetype=d.get("primary_archetype", ""),
+            secondary_archetype=d.get("secondary_archetype", ""),
+            subtype=d.get("subtype", ""),
             height=d.get("height", ""),
             weight=d.get("weight", ""),
             build=d.get("build", ""),

@@ -21,6 +21,11 @@ def plan_roster_cmd():
             "ring_name": f.get("ring_name"),
             "gender": f.get("gender", ""),
             "origin": f.get("origin"),
+            "primary_archetype": f.get("primary_archetype", ""),
+            "secondary_archetype": f.get("secondary_archetype", ""),
+            "subtype": f.get("subtype", ""),
+            "build": f.get("build", ""),
+            "personality": f.get("personality", ""),
         }
         for f in existing_on_disk
     ] or None
@@ -80,7 +85,10 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
             "gender": f.get("gender", ""),
             "height": f.get("height", ""),
             "origin": f.get("origin"),
+            "primary_archetype": f.get("primary_archetype", ""),
+            "subtype": f.get("subtype", ""),
             "build": f.get("build", ""),
+            "personality": f.get("personality", ""),
             "distinguishing_features": f.get("distinguishing_features", ""),
             "ring_attire": f.get("ring_attire", ""),
         }
@@ -115,7 +123,10 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
                 "gender": fighter.gender,
                 "height": fighter.height,
                 "origin": fighter.origin,
+                "primary_archetype": fighter.primary_archetype,
+                "subtype": fighter.subtype,
                 "build": fighter.build,
+                "personality": fighter.personality,
                 "distinguishing_features": fighter.distinguishing_features,
                 "ring_attire": fighter.ring_attire,
             })

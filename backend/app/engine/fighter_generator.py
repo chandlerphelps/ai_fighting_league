@@ -14,6 +14,8 @@ from app.engine.fighter_config import (
     SKIMPINESS_LEVELS,
     _roll_skimpiness,
     _roll_body_traits,
+    _roll_subtype,
+    _find_subtype,
     _build_body_directive,
     _build_body_shape_line,
     _build_nsfw_anatomy_line,
@@ -52,11 +54,20 @@ def plan_roster(
     if existing_fighters:
         roster_lines = []
         for ef in existing_fighters:
-            line = (
-                f"- {ef.get('ring_name', '?')} ({ef.get('gender', '?')})"
-                f" — from {ef.get('origin', '?')}"
-            )
-            roster_lines.append(line)
+            parts = [f"- {ef.get('ring_name', '?')} ({ef.get('gender', '?')})"]
+            parts.append(f"from {ef.get('origin', '?')}")
+            if ef.get("primary_archetype"):
+                arch_str = ef["primary_archetype"]
+                if ef.get("subtype"):
+                    arch_str += f"/{ef['subtype']}"
+                parts.append(arch_str)
+            build = ef.get("build", "")
+            if build:
+                parts.append(build[:60])
+            personality = ef.get("personality", "")
+            if personality:
+                parts.append(personality[:40])
+            roster_lines.append(" — ".join(parts))
         existing_roster_text = (
             "\n\nEXISTING ROSTER (design around these — no duplicates):\n"
             + "\n".join(roster_lines)
@@ -145,7 +156,22 @@ def generate_fighter(
         if skimpiness_level is None:
             skimpiness_level = _roll_skimpiness(None)
 
-    body_traits = _roll_body_traits(archetype)
+    subtype_info = None
+    if roster_plan_entry and roster_plan_entry.get("subtype"):
+        subtype_info = _find_subtype(archetype, roster_plan_entry["subtype"])
+    if subtype_info is None:
+        subtype_info = _roll_subtype(archetype)
+
+    if subtype_info:
+        blueprint_text += (
+            f"\n\nSUBTYPE: {subtype_info['name']} — {subtype_info['description']}"
+        )
+
+    secondary_archetype = ""
+    if roster_plan_entry:
+        secondary_archetype = roster_plan_entry.get("secondary_archetype", "")
+
+    body_traits = _roll_body_traits(archetype, subtype=subtype_info)
     body_directive = _build_body_directive(body_traits)
 
     supernatural_instruction = ""
@@ -231,6 +257,9 @@ def generate_fighter(
         age=result.get("age", 25),
         origin=result.get("origin", "Unknown"),
         gender=gender,
+        primary_archetype=archetype or "",
+        secondary_archetype=secondary_archetype,
+        subtype=subtype_info["name"] if subtype_info else "",
         height=body_traits["height"],
         weight=body_traits["weight"],
         build=result.get("build", ""),

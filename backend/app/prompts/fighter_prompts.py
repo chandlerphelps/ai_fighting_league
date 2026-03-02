@@ -164,7 +164,7 @@ GUIDE_CREATION_WORKFLOW = """## The Creation Workflow
 
 Archetypes are gender-specific. Pick 2 from the appropriate list:
 
-Female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
+Female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph
 - Siren: weaponized beauty, seduction, charm
 - Witch: mysticism, dark arts, supernatural
 - Viper: poison, subterfuge, dirty tricks
@@ -173,6 +173,9 @@ Female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experi
 - Huntress: predatory, relentless, speed-based
 - Empress: dominance through authority and manipulation
 - Experiment: cybernetics, body modification, science
+- Demon: infernal power, dark seduction, hellfire
+- Assassin: lethal precision, stealth, silent killing
+- Nymph: nature magic, fae trickery, ethereal allure
 
 Male archetypes: Brute, Veteran, Monster, Technician, Wildcard, Mystic, Prodigy, Experiment
 - Brute: raw physical power, intimidation
@@ -240,7 +243,7 @@ GUIDE_COMMON_MISTAKES = """## Common Mistakes
    No zombies, no body horror, no monstrous designs. Women in AFL do not compete with men
    on physicality. No female character should be designed around being physically imposing
    relative to the male roster. Rethink around the female archetypes: Siren, Witch, Viper,
-   Prodigy, Doll, Huntress, Empress, or Experiment.
+   Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, or Nymph.
 
 3. Making every character clearly good or clearly evil. The roster should be
    overwhelmingly grey. Characters who hurt people and feel complicated about it. Characters
@@ -316,7 +319,7 @@ ROSTER BALANCE CONSTRAINTS:
 - Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs
 - Supernatural: at least 2 fighters should have NO supernatural abilities
 - Geography: at least 4 different countries/regions represented
-- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
+- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
 - Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean slightly toward the skimpier side — most fighters should center around levels 2-3. A Siren might weight heavily toward 3-4, a Prodigy toward 2-3, an Empress toward 2-3. The 4 weights must sum to 100.
@@ -329,8 +332,9 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "gender": "<male|female>",
     "age": <18-34>,
     "origin": "<specific city/region, country>",
-    "primary_archetype": "<from the female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment>",
+    "primary_archetype": "<from the female archetypes: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph>",
     "secondary_archetype": "<from the same gender-appropriate archetype list>",
+    "subtype": "<REQUIRED — pick from the SUBTYPES list below for the chosen primary_archetype>",
     "has_supernatural": <true|false>,
     "body_type": "<brief body type description>",
     "power_tier": "<prospect|gatekeeper|contender|champion>",
@@ -339,7 +343,20 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "media_archetype_inspiration": "<what popular media archetype this draws from>",
     "skimpiness_weights": [<level1_pct>, <level2_pct>, <level3_pct>, <level4_pct>]
   }}
-]"""
+]
+
+SUBTYPES (REQUIRED — every fighter must have a subtype matching their primary archetype):
+- Siren: Chanteuse, Femme Fatale, Temptress, Enchantress, Muse
+- Witch: Hexcaster, Oracle, Necromancer, Alchemist, Coven Mother
+- Viper: Poisoner, Schemer, Blackmailer, Saboteur, Infiltrator
+- Prodigy: Wunderkind, Savant, Phenom, Virtuoso, Ingenue
+- Doll: Porcelain, Marionette, Ragdoll, China Doll, Wind-Up
+- Huntress: Stalker, Apex, Trapper, Bloodhound, Falconer
+- Empress: Sovereign, Warlord, Matriarch, Tyrant, Regent
+- Experiment: Cyborg, Chimera, Prototype, Splice, Ghost in the Machine
+- Demon: Succubus, Hellion, Infernal, Corrupted, Abyssal
+- Assassin: Shadow, Blade, Phantom, Silencer, Venom
+- Nymph: Dryad, Naiad, Pixie, Sylph, Fae Queen"""
 
 
 def build_generate_fighter_prompt(
@@ -366,7 +383,7 @@ STAT CONSTRAINTS:
 - 1 supernatural stat, rated 0-50 (0 if no supernatural abilities)
 - The 4 core stats MUST total between {min_total_stats} and {max_total_stats}
 - No fighter should be elite at everything — balance strengths with clear weaknesses
-- Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, etc.)
+- Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, Demon has high power/supernatural, Assassin has high speed/technique, Nymph has high supernatural/speed, etc.)
 
 ICONIC FEATURES:
 List 3-6 visual details that make this character instantly recognizable — the things a fan would
