@@ -169,6 +169,414 @@ ARCHETYPES_MALE = [
     "The Experiment",
 ]
 
+BODY_TRAIT_OPTIONS = {
+    "waist": ["narrow", "medium", "wide"],
+    "abs_tone": [
+        "soft with no definition",
+        "slight definition",
+        "toned and defined",
+        "ripped and shredded",
+    ],
+    "body_fat_pct": ["lean 12-16%", "athletic 17-20%", "fit 21-24%", "soft 25-30%"],
+    "butt_size": ["small tight", "medium round", "large full", "very large prominent"],
+    "face_shape": [
+        "sharp angular",
+        "soft round",
+        "heart-shaped",
+        "oval",
+        "diamond",
+    ],
+    "lip_type": ["full pouty", "bow-shaped", "wide", "plump"],
+    "nose_type": [
+        "button",
+        "upturned",
+        "straight",
+        "small delicate",
+        "petite",
+    ],
+    "eye_shape": [
+        "almond",
+        "round",
+        "hooded",
+        "doe",
+        "cat-like",
+    ],
+    "brow_shape": ["strong thick", "arched", "straight", "delicate thin"],
+    "makeup_level": ["bare-faced", "light", "moderate", "heavy", "dramatic"],
+    "breast_size": ["small perky", "medium", "large", "very large"],
+    "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
+    "vulva_type": [
+        "tucked (small labia minora, mostly hidden)",
+        "puffy mound (prominent mons, plump outer labia)",
+        "compact petite (small, tight, everything close together)",
+        "visible labia (labia minora peeking past outer lips)",
+    ],
+}
+
+MAKEUP_DESCRIPTIONS = {
+    "bare-faced": "natural beauty, minimal or zero makeup",
+    "light": "subtle enhancement, lip tint, light mascara",
+    "moderate": "polished look, foundation, defined eyes, lipstick",
+    "heavy": "full glam, smoky eyes, contoured, bold lip",
+    "dramatic": "theatrical, extreme eye makeup, painted, avant-garde",
+}
+
+ARCHETYPE_HEIGHT_RANGES = {
+    "The Siren": (62, 69),
+    "The Witch": (60, 67),
+    "The Viper": (62, 68),
+    "The Prodigy": (59, 65),
+    "The Doll": (59, 64),
+    "The Huntress": (65, 71),
+    "The Empress": (65, 70),
+    "The Experiment": (60, 69),
+}
+
+ARCHETYPE_BODY_WEIGHTS = {
+    "The Siren": {
+        "breast_size": {"small perky": 5, "medium": 20, "large": 50, "very large": 25},
+        "body_fat_pct": {
+            "lean 12-16%": 5,
+            "athletic 17-20%": 25,
+            "fit 21-24%": 50,
+            "soft 25-30%": 20,
+        },
+        "makeup_level": {
+            "bare-faced": 2,
+            "light": 10,
+            "moderate": 30,
+            "heavy": 56,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 20,
+            "slight definition": 45,
+            "toned and defined": 30,
+            "ripped and shredded": 5,
+        },
+        "butt_size": {
+            "small tight": 5,
+            "medium round": 25,
+            "large full": 45,
+            "very large prominent": 25,
+        },
+        "waist": {"narrow": 40, "medium": 45, "wide": 15},
+    },
+    "The Witch": {
+        "breast_size": {"small perky": 20, "medium": 35, "large": 30, "very large": 15},
+        "body_fat_pct": {
+            "lean 12-16%": 15,
+            "athletic 17-20%": 25,
+            "fit 21-24%": 35,
+            "soft 25-30%": 25,
+        },
+        "makeup_level": {
+            "bare-faced": 5,
+            "light": 15,
+            "moderate": 30,
+            "heavy": 48,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 30,
+            "slight definition": 40,
+            "toned and defined": 25,
+            "ripped and shredded": 5,
+        },
+        "butt_size": {
+            "small tight": 15,
+            "medium round": 35,
+            "large full": 35,
+            "very large prominent": 15,
+        },
+        "waist": {"narrow": 35, "medium": 45, "wide": 20},
+    },
+    "The Viper": {
+        "breast_size": {"small perky": 25, "medium": 40, "large": 25, "very large": 10},
+        "body_fat_pct": {
+            "lean 12-16%": 30,
+            "athletic 17-20%": 40,
+            "fit 21-24%": 25,
+            "soft 25-30%": 5,
+        },
+        "makeup_level": {
+            "bare-faced": 10,
+            "light": 27,
+            "moderate": 36,
+            "heavy": 25,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 5,
+            "slight definition": 25,
+            "toned and defined": 50,
+            "ripped and shredded": 20,
+        },
+        "butt_size": {
+            "small tight": 20,
+            "medium round": 40,
+            "large full": 30,
+            "very large prominent": 10,
+        },
+        "waist": {"narrow": 50, "medium": 40, "wide": 10},
+    },
+    "The Prodigy": {
+        "breast_size": {"small perky": 35, "medium": 40, "large": 20, "very large": 5},
+        "body_fat_pct": {
+            "lean 12-16%": 40,
+            "athletic 17-20%": 40,
+            "fit 21-24%": 15,
+            "soft 25-30%": 5,
+        },
+        "makeup_level": {
+            "bare-faced": 40,
+            "light": 35,
+            "moderate": 20,
+            "heavy": 5,
+            "dramatic": 0,
+        },
+        "abs_tone": {
+            "soft with no definition": 5,
+            "slight definition": 15,
+            "toned and defined": 55,
+            "ripped and shredded": 25,
+        },
+        "butt_size": {
+            "small tight": 30,
+            "medium round": 40,
+            "large full": 25,
+            "very large prominent": 5,
+        },
+        "waist": {"narrow": 45, "medium": 45, "wide": 10},
+    },
+    "The Doll": {
+        "breast_size": {"small perky": 30, "medium": 35, "large": 25, "very large": 10},
+        "body_fat_pct": {
+            "lean 12-16%": 15,
+            "athletic 17-20%": 25,
+            "fit 21-24%": 40,
+            "soft 25-30%": 20,
+        },
+        "makeup_level": {
+            "bare-faced": 10,
+            "light": 28,
+            "moderate": 38,
+            "heavy": 22,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 25,
+            "slight definition": 40,
+            "toned and defined": 30,
+            "ripped and shredded": 5,
+        },
+        "butt_size": {
+            "small tight": 15,
+            "medium round": 35,
+            "large full": 35,
+            "very large prominent": 15,
+        },
+        "waist": {"narrow": 45, "medium": 40, "wide": 15},
+    },
+    "The Huntress": {
+        "breast_size": {"small perky": 20, "medium": 40, "large": 30, "very large": 10},
+        "body_fat_pct": {
+            "lean 12-16%": 35,
+            "athletic 17-20%": 45,
+            "fit 21-24%": 15,
+            "soft 25-30%": 5,
+        },
+        "makeup_level": {
+            "bare-faced": 35,
+            "light": 35,
+            "moderate": 20,
+            "heavy": 8,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 5,
+            "slight definition": 15,
+            "toned and defined": 50,
+            "ripped and shredded": 30,
+        },
+        "butt_size": {
+            "small tight": 15,
+            "medium round": 35,
+            "large full": 35,
+            "very large prominent": 15,
+        },
+        "waist": {"narrow": 35, "medium": 50, "wide": 15},
+    },
+    "The Empress": {
+        "breast_size": {"small perky": 5, "medium": 25, "large": 45, "very large": 25},
+        "body_fat_pct": {
+            "lean 12-16%": 5,
+            "athletic 17-20%": 20,
+            "fit 21-24%": 45,
+            "soft 25-30%": 30,
+        },
+        "makeup_level": {
+            "bare-faced": 2,
+            "light": 10,
+            "moderate": 38,
+            "heavy": 48,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 25,
+            "slight definition": 40,
+            "toned and defined": 30,
+            "ripped and shredded": 5,
+        },
+        "butt_size": {
+            "small tight": 5,
+            "medium round": 25,
+            "large full": 45,
+            "very large prominent": 25,
+        },
+        "waist": {"narrow": 25, "medium": 45, "wide": 30},
+    },
+    "The Experiment": {
+        "breast_size": {"small perky": 20, "medium": 30, "large": 30, "very large": 20},
+        "body_fat_pct": {
+            "lean 12-16%": 25,
+            "athletic 17-20%": 35,
+            "fit 21-24%": 25,
+            "soft 25-30%": 15,
+        },
+        "makeup_level": {
+            "bare-faced": 22,
+            "light": 25,
+            "moderate": 28,
+            "heavy": 21,
+            "dramatic": 2,
+        },
+        "abs_tone": {
+            "soft with no definition": 10,
+            "slight definition": 25,
+            "toned and defined": 40,
+            "ripped and shredded": 25,
+        },
+        "butt_size": {
+            "small tight": 20,
+            "medium round": 30,
+            "large full": 30,
+            "very large prominent": 20,
+        },
+        "waist": {"narrow": 30, "medium": 45, "wide": 25},
+    },
+}
+
+WEIGHT_MODIFIERS = {
+    "body_fat_pct": {
+        "lean 12-16%": -8,
+        "athletic 17-20%": -3,
+        "fit 21-24%": 2,
+        "soft 25-30%": 10,
+    },
+    "breast_size": {"small perky": -3, "medium": 0, "large": 4, "very large": 8},
+    "butt_size": {
+        "small tight": -3,
+        "medium round": 0,
+        "large full": 4,
+        "very large prominent": 8,
+    },
+    "waist": {"narrow": -3, "medium": 0, "wide": 4},
+}
+
+
+def _weighted_choice(category: str, archetype: str | None) -> str:
+    options = BODY_TRAIT_OPTIONS[category]
+    weights_dict = {}
+    if archetype and archetype in ARCHETYPE_BODY_WEIGHTS:
+        weights_dict = ARCHETYPE_BODY_WEIGHTS[archetype].get(category, {})
+    if weights_dict:
+        weights = [weights_dict.get(opt, 1) for opt in options]
+    else:
+        weights = [1] * len(options)
+    return random.choices(options, weights=weights, k=1)[0]
+
+
+def _format_height(inches: int) -> str:
+    feet = inches // 12
+    remaining = inches % 12
+    return f"{feet}'{remaining}\""
+
+
+def _derive_weight(height_inches: int, traits: dict) -> int:
+    base = (height_inches - 60) * 3.5 + 100
+    for category, mod_map in WEIGHT_MODIFIERS.items():
+        trait_val = traits.get(category, "")
+        base += mod_map.get(trait_val, 0)
+    base += random.randint(-3, 3)
+    return round(base)
+
+
+def _roll_body_traits(archetype: str | None) -> dict:
+    arch = (
+        f"The {archetype}"
+        if archetype and not archetype.startswith("The ")
+        else archetype
+    )
+
+    height_range = ARCHETYPE_HEIGHT_RANGES.get(arch, (59, 71))
+    height_inches = random.randint(height_range[0], height_range[1])
+
+    traits = {
+        "height_inches": height_inches,
+        "waist": _weighted_choice("waist", arch),
+        "abs_tone": _weighted_choice("abs_tone", arch),
+        "body_fat_pct": _weighted_choice("body_fat_pct", arch),
+        "butt_size": _weighted_choice("butt_size", arch),
+        "face_shape": _weighted_choice("face_shape", arch),
+        "lip_type": _weighted_choice("lip_type", arch),
+        "nose_type": _weighted_choice("nose_type", arch),
+        "eye_shape": _weighted_choice("eye_shape", arch),
+        "brow_shape": _weighted_choice("brow_shape", arch),
+        "makeup_level": _weighted_choice("makeup_level", arch),
+        "breast_size": _weighted_choice("breast_size", arch),
+        "nipple_size": _weighted_choice("nipple_size", arch),
+        "vulva_type": _weighted_choice("vulva_type", arch),
+    }
+
+    weight_lbs = _derive_weight(height_inches, traits)
+    traits["height"] = _format_height(height_inches)
+    traits["weight"] = f"{weight_lbs} lbs"
+
+    return traits
+
+
+def _build_body_directive(traits: dict) -> str:
+    makeup_desc = MAKEUP_DESCRIPTIONS.get(
+        traits["makeup_level"], traits["makeup_level"]
+    )
+    return (
+        "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):\n"
+        f"- Height: {traits['height']}\n"
+        f"- Weight: {traits['weight']}\n"
+        f"- Waist: {traits['waist']}\n"
+        f"- Abs/core: {traits['abs_tone']}\n"
+        f"- Body fat: {traits['body_fat_pct']}\n"
+        f"- Butt: {traits['butt_size']}\n"
+        f"- Face: {traits['face_shape']}, {traits['lip_type']} lips, "
+        f"{traits['nose_type']} nose, {traits['eye_shape']} eyes, "
+        f"{traits['brow_shape']} brows\n"
+        f"- Makeup: {traits['makeup_level']} — {makeup_desc}\n"
+        "\nThe height and weight are EXACT — use these values directly.\n"
+        "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
+        "IMPORTANT: Interpret ALL facial and body traits through an attractive lens. "
+        "Every combination should result in a beautiful, appealing character."
+    )
+
+
+def _build_nsfw_anatomy_line(traits: dict) -> str:
+    return (
+        f"Anatomy details: {traits['breast_size']} breasts, "
+        f"{traits['nipple_size']} nipples, "
+        f"{traits['vulva_type']}"
+    )
+
+
 GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
 
 Everything below flows from these four principles. If a new character violates any of
@@ -538,6 +946,11 @@ Iconic features (MUST be visible in every tier): {sig}
 Body: {body_parts}
 Expression: {expression}"""
 
+    body_details = character_summary.get("body_type_details", {})
+    if tier in ("barely", "nsfw") and body_details:
+        anatomy_line = _build_nsfw_anatomy_line(body_details)
+        char_base += f"\n{anatomy_line}"
+
     if tier == "nsfw":
         char_context = char_base
     else:
@@ -834,6 +1247,9 @@ def generate_fighter(
         if skimpiness_level is None:
             skimpiness_level = _roll_skimpiness(None)
 
+    body_traits = _roll_body_traits(archetype)
+    body_directive = _build_body_directive(body_traits)
+
     supernatural_instruction = ""
     if has_supernatural:
         supernatural_instruction = (
@@ -871,6 +1287,8 @@ Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing
 
 {blueprint_text}
 
+{body_directive}
+
 {supernatural_instruction}
 
 STAT CONSTRAINTS:
@@ -893,13 +1311,11 @@ Return ONLY valid JSON with this exact structure:
   "age": <18-34>,
   "origin": "<specific city/region, country>",
   "gender": "<male|female>",
-  "height": "<height in feet/inches>",
-  "weight": "<weight in lbs>",
-  "build": "<body type description>",
+  "build": "<body type description incorporating the rolled body traits above>",
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
   "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
   "personality": "<max 10 words — their vibe and attitude, e.g. 'cold, calculating predator who enjoys breaking opponents slowly'>",
-  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally>",
+  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. MUST incorporate the rolled body traits (waist, abs, butt, face shape, lips, nose, eyes, brows, makeup) naturally into this description>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
   "stats": {{
@@ -927,6 +1343,8 @@ Return ONLY valid JSON with this exact structure:
     personality_pose = result.get("image_prompt_personality_pose", "")
     gender = result.get("gender", "female")
 
+    result["body_type_details"] = body_traits
+
     outfit_data = _generate_outfits(
         config,
         result,
@@ -952,8 +1370,8 @@ Return ONLY valid JSON with this exact structure:
         age=result.get("age", 25),
         origin=result.get("origin", "Unknown"),
         gender=gender,
-        height=result.get("height", ""),
-        weight=result.get("weight", ""),
+        height=body_traits["height"],
+        weight=body_traits["weight"],
         build=result.get("build", ""),
         distinguishing_features=result.get("distinguishing_features", ""),
         iconic_features=result.get("iconic_features", ""),
@@ -995,6 +1413,7 @@ Return ONLY valid JSON with this exact structure:
         condition=Condition(),
         storyline_log=[],
         outfit_suggestions=outfit_suggestions,
+        body_type_details=body_traits,
         rivalries=[],
         last_fight_date=None,
         ranking=None,
