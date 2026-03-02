@@ -12,6 +12,7 @@ from app.engine.fighter_generator import (
     _generate_outfits,
     _build_charsheet_prompt,
     _roll_skimpiness,
+    _find_subtype,
     load_outfit_options,
     filter_outfit_options,
     ARCHETYPES_FEMALE,
@@ -38,12 +39,22 @@ PROMPT_RELEVANT_FIELDS = {
 }
 
 
+def _get_subtype_info(fighter: dict) -> dict | None:
+    archetype = fighter.get("primary_archetype", "")
+    subtype_name = fighter.get("subtype", "")
+    if archetype and subtype_name:
+        return _find_subtype(archetype, subtype_name)
+    return None
+
+
 def _rebuild_prompts(fighter: dict):
     body_parts = fighter.get("image_prompt", {}).get("body_parts", "")
     expression = fighter.get("image_prompt", {}).get("expression", "")
     personality_pose = fighter.get("image_prompt_personality_pose", "")
     gender = fighter.get("gender", "female")
     skimpiness = fighter.get("skimpiness_level", 2)
+    subtype_info = _get_subtype_info(fighter)
+    iconic_features = fighter.get("iconic_features", "")
 
     clothing_sfw = fighter.get("ring_attire_sfw", "") or fighter.get("image_prompt_sfw", {}).get("clothing", "")
     clothing_barely = fighter.get("ring_attire", "") or fighter.get("image_prompt", {}).get("clothing", "")
@@ -53,16 +64,22 @@ def _rebuild_prompts(fighter: dict):
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
         gender=gender, skimpiness_level=skimpiness,
+        subtype_info=subtype_info,
+        iconic_features=iconic_features,
     )
     fighter["image_prompt"] = _build_charsheet_prompt(
         body_parts, clothing_barely, expression,
         personality_pose=personality_pose, tier="barely",
         gender=gender, skimpiness_level=skimpiness,
+        subtype_info=subtype_info,
+        iconic_features=iconic_features,
     )
     fighter["image_prompt_nsfw"] = _build_charsheet_prompt(
         body_parts, clothing_nsfw, expression,
         personality_pose=personality_pose, tier="nsfw",
         gender=gender, skimpiness_level=skimpiness,
+        subtype_info=subtype_info,
+        iconic_features=iconic_features,
     )
 
 
@@ -339,6 +356,8 @@ def regenerate_outfits(fighter_id: str):
         expression = existing.get("image_prompt", {}).get("expression", "")
         personality_pose = existing.get("image_prompt_personality_pose", "")
         gender = existing.get("gender", "female")
+        subtype_info = _get_subtype_info(existing)
+        iconic_features = existing.get("iconic_features", "")
 
         clothing_sfw = outfit_data.get("image_prompt_clothing_sfw", "")
         clothing = outfit_data.get("image_prompt_clothing", "")
@@ -354,6 +373,8 @@ def regenerate_outfits(fighter_id: str):
                 body_parts, clothing_sfw, expression,
                 personality_pose=pose_sfw, tier="sfw",
                 gender=gender, skimpiness_level=skimpiness_level,
+                subtype_info=subtype_info,
+                iconic_features=iconic_features,
             )
         if not tiers or "barely" in tiers:
             existing["ring_attire"] = outfit_data.get("ring_attire", existing.get("ring_attire", ""))
@@ -361,6 +382,8 @@ def regenerate_outfits(fighter_id: str):
                 body_parts, clothing, expression,
                 personality_pose=pose_barely, tier="barely",
                 gender=gender, skimpiness_level=skimpiness_level,
+                subtype_info=subtype_info,
+                iconic_features=iconic_features,
             )
         if not tiers or "nsfw" in tiers:
             existing["ring_attire_nsfw"] = outfit_data.get("ring_attire_nsfw", existing.get("ring_attire_nsfw", ""))
@@ -368,6 +391,8 @@ def regenerate_outfits(fighter_id: str):
                 body_parts, clothing_nsfw, expression,
                 personality_pose=pose_nsfw, tier="nsfw",
                 gender=gender, skimpiness_level=skimpiness_level,
+                subtype_info=subtype_info,
+                iconic_features=iconic_features,
             )
 
         existing["skimpiness_level"] = skimpiness_level

@@ -76,6 +76,8 @@ def _build_charsheet_prompt(
     skimpiness_level: int = 4,
     body_type_details: dict | None = None,
     origin: str = "",
+    subtype_info: dict | None = None,
+    iconic_features: str = "",
 ) -> dict:
     if not body_parts:
         return {}
@@ -85,6 +87,9 @@ def _build_charsheet_prompt(
         body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
         if tier == "nsfw":
             anatomy = _build_nsfw_anatomy_line(body_type_details)
+
+    if subtype_info:
+        body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
 
     style = _charsheet_style(gender, tier, skimpiness_level)
 
@@ -105,6 +110,11 @@ def _build_charsheet_prompt(
             )
     else:
         clothing_part = clothing
+
+    if iconic_features and clothing_part:
+        clothing_part = f"{clothing_part}, {iconic_features}"
+    elif iconic_features:
+        clothing_part = iconic_features
 
     character_desc = body_parts
     if clothing_part:
@@ -218,6 +228,7 @@ def build_body_reference_prompt(
     gender: str = "female",
     body_type_details: dict | None = None,
     origin: str = "",
+    subtype_info: dict | None = None,
 ) -> dict:
     if not body_parts:
         return {}
@@ -227,6 +238,9 @@ def build_body_reference_prompt(
     if body_type_details:
         body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
         anatomy = _build_nsfw_anatomy_line(body_type_details)
+
+    if subtype_info:
+        body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
 
     subject = body_parts
     if origin:
@@ -337,6 +351,11 @@ def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
     body_parts = tier_prompt.get("body_parts", "")
     clothing = tier_prompt.get("clothing", "")
     expression = tier_prompt.get("expression", "")
+    iconic_features = fighter.get("iconic_features", "")
+    if iconic_features and clothing:
+        clothing = f"{clothing}, {iconic_features}"
+    elif iconic_features:
+        clothing = iconic_features
 
     move_name = move.get("name", "")
     move_snapshot = move.get("image_snapshot", move.get("description", ""))

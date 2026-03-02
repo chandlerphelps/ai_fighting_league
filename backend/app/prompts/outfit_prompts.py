@@ -1,5 +1,7 @@
 from app.engine.fighter_config import (
     SKIMPINESS_LEVELS,
+    ARCHETYPE_DESCRIPTIONS,
+    ARCHETYPE_SUBTYPES,
     _build_body_shape_line,
     _build_nsfw_anatomy_line,
 )
@@ -42,9 +44,21 @@ def build_tier_prompt(
 
     archetype_line = ""
     if primary_archetype:
+        arch_key = f"The {primary_archetype}" if not primary_archetype.startswith("The ") else primary_archetype
+        arch_desc = ARCHETYPE_DESCRIPTIONS.get(arch_key, "")
         archetype_str = primary_archetype
+        if arch_desc:
+            archetype_str += f" — {arch_desc}"
         if subtype:
-            archetype_str += f" ({subtype})"
+            subtype_desc = ""
+            for st in ARCHETYPE_SUBTYPES.get(arch_key, []):
+                if st["name"].lower() == subtype.lower():
+                    subtype_desc = st["description"]
+                    break
+            if subtype_desc:
+                archetype_str += f"\n  Subtype: {subtype} — {subtype_desc}"
+            else:
+                archetype_str += f"\n  Subtype: {subtype}"
         archetype_line = f"\nArchetype: {archetype_str}"
 
     personality_line = ""

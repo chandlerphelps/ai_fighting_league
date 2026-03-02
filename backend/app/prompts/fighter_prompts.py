@@ -330,13 +330,15 @@ def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "") -
     archetype_list = _shuffled_archetype_names()
     subtype_block = _shuffled_subtype_lines()
 
-    return f"""{GUIDE_CORE_PHILOSOPHY}
+    return f"""{existing_roster_text}
+
+{GUIDE_CORE_PHILOSOPHY}
 
 {GUIDE_COMMON_MISTAKES}
 
 You are planning a roster of {roster_size} fighters for the AI Fighting League.
 Design all {roster_size} fighters as an interconnected ensemble — they should feel like
-a cast, not a random collection.{existing_roster_text}
+a cast, not a random collection.
 
 ROSTER BALANCE CONSTRAINTS:
 - Gender: ALL fighters must be female
@@ -379,12 +381,25 @@ def build_generate_fighter_prompt(
     supernatural_instruction: str,
     min_total_stats: int,
     max_total_stats: int,
+    subtype_info: dict | None = None,
 ) -> str:
+    subtype_directive = ""
+    if subtype_info:
+        subtype_directive = (
+            f"\n\nSUBTYPE IDENTITY — this is the character's specific angle within their archetype:\n"
+            f"  Subtype: {subtype_info['name']}\n"
+            f"  Concept: {subtype_info['description']}\n"
+            f"The subtype MUST shape the character's visual identity. The image_prompt_body_parts, "
+            f"image_prompt_expression, and image_prompt_personality_pose should all reflect "
+            f"a \"{subtype_info['name']}\" specifically — not just a generic {archetype_text.replace('Primary archetype: ', '')}. "
+            f"A {subtype_info['name']} should LOOK different from other subtypes of the same archetype."
+        )
+
     return f"""{FULL_CHARACTER_GUIDE}
 
 Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing_roster_text}
 
-{blueprint_text}
+{blueprint_text}{subtype_directive}
 
 {body_directive}
 

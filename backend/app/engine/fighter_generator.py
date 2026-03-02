@@ -79,6 +79,7 @@ def plan_roster(
     result = call_openrouter_json(
         prompt,
         config,
+        model="minimax/minimax-m2.5",
         system_prompt=SYSTEM_PROMPT_ROSTER_PLANNER,
         temperature=0.9,
         max_tokens=8192,
@@ -210,6 +211,7 @@ def generate_fighter(
         supernatural_instruction=supernatural_instruction,
         min_total_stats=config.min_total_stats,
         max_total_stats=config.max_total_stats,
+        subtype_info=subtype_info,
     )
 
     result = call_openrouter_json(
@@ -249,6 +251,8 @@ def generate_fighter(
     pose_barely = outfit_data.get("image_prompt_pose", "") or personality_pose
     pose_nsfw = outfit_data.get("image_prompt_pose_nsfw", "") or personality_pose
 
+    iconic_features = result.get("iconic_features", "")
+
     return Fighter(
         id=fighter_id,
         ring_name=result.get("ring_name", "Unknown"),
@@ -275,6 +279,7 @@ def generate_fighter(
             gender=gender,
             body_type_details=body_traits,
             origin=origin,
+            subtype_info=subtype_info,
         ),
         image_prompt=_build_charsheet_prompt(
             body_parts,
@@ -286,6 +291,8 @@ def generate_fighter(
             skimpiness_level=skimpiness_level,
             body_type_details=body_traits,
             origin=origin,
+            subtype_info=subtype_info,
+            iconic_features=iconic_features,
         ),
         image_prompt_sfw=_build_charsheet_prompt(
             body_parts,
@@ -297,6 +304,8 @@ def generate_fighter(
             skimpiness_level=skimpiness_level,
             body_type_details=body_traits,
             origin=origin,
+            subtype_info=subtype_info,
+            iconic_features=iconic_features,
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
             body_parts,
@@ -308,6 +317,8 @@ def generate_fighter(
             skimpiness_level=skimpiness_level,
             body_type_details=body_traits,
             origin=origin,
+            subtype_info=subtype_info,
+            iconic_features=iconic_features,
         ),
         stats=stats,
         record=Record(),

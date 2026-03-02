@@ -56,6 +56,27 @@ def filter_outfit_options(
     return result
 
 
+ARCHETYPE_DESCRIPTIONS = {
+    "The Siren": "weaponized beauty, seduction, charm",
+    "The Witch": "mysticism, dark arts, supernatural",
+    "The Viper": "poison, subterfuge, dirty tricks",
+    "The Prodigy": "young technical genius, speed and precision",
+    "The Doll": "deceptive innocence, psychological warfare",
+    "The Huntress": "predatory, relentless, speed-based",
+    "The Empress": "dominance through authority and manipulation",
+    "The Experiment": "cybernetics, body modification, science",
+    "The Demon": "infernal power, dark seduction, hellfire",
+    "The Assassin": "lethal precision, stealth, silent killing",
+    "The Nymph": "nature magic, fae trickery, ethereal allure",
+    "The Brute": "raw physical power, intimidation",
+    "The Veteran": "battle-scarred, tactical, experienced",
+    "The Monster": "inhuman size and strength, terrifying",
+    "The Technician": "precise, methodical, strategic",
+    "The Wildcard": "unpredictable, chaotic",
+    "The Mystic": "supernatural warrior, ancient traditions",
+}
+
+
 ARCHETYPES_FEMALE = [
     "The Siren",
     "The Witch",
@@ -109,7 +130,7 @@ BODY_TRAIT_OPTIONS = {
     "breast_size": ["barely there", "small perky", "medium", "large", "very large"],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
     "vulva_type": [
-        "tucked pussy, small hidden labia",
+        "tucked pussy, small labia",
         "tasteful outer labia",
         "compact petite tight pussy",
         "visible labia minora peeking out",
@@ -126,7 +147,11 @@ BODY_PROFILES = {
     },
     "Slim": {
         "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
-        "abs_tone": ["soft with no definition", "slight definition", "toned and defined"],
+        "abs_tone": [
+            "soft with no definition",
+            "slight definition",
+            "toned and defined",
+        ],
         "waist": ["narrow", "medium"],
         "breast_size": ["barely there", "small perky", "medium"],
         "butt_size": ["small tight", "medium round"],
@@ -140,7 +165,11 @@ BODY_PROFILES = {
     },
     "Curvy": {
         "body_fat_pct": ["athletic 17-20%", "fit 21-24%"],
-        "abs_tone": ["soft with no definition", "slight definition", "toned and defined"],
+        "abs_tone": [
+            "soft with no definition",
+            "slight definition",
+            "toned and defined",
+        ],
         "waist": ["narrow", "medium"],
         "breast_size": ["medium", "large", "very large"],
         "butt_size": ["medium round", "large full", "very large prominent"],
@@ -184,12 +213,18 @@ ARCHETYPE_HEIGHT_RANGES = {
 
 ARCHETYPE_BODY_WEIGHTS = {
     "The Siren": {
-        "breast_size": {"barely there": 2, "small perky": 5, "medium": 20, "large": 48, "very large": 25},
+        "breast_size": {
+            "barely there": 2,
+            "small perky": 7,
+            "medium": 23,
+            "large": 50,
+            "very large": 18,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 2,
-            "athletic 17-20%": 28,
-            "fit 21-24%": 48,
-            "soft 25-30%": 22,
+            "lean 12-16%": 5,
+            "athletic 17-20%": 32,
+            "fit 21-24%": 53,
+            "soft 25-30%": 10,
         },
         "makeup_level": {
             "bare-faced": 3,
@@ -204,20 +239,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 15,
-            "medium round": 40,
-            "large full": 30,
-            "very large prominent": 15,
+            "small tight": 18,
+            "medium round": 43,
+            "large full": 33,
+            "very large prominent": 6,
         },
         "waist": {"narrow": 40, "medium": 45, "wide": 15},
     },
     "The Witch": {
-        "breast_size": {"barely there": 8, "small perky": 20, "medium": 32, "large": 27, "very large": 13},
+        "breast_size": {
+            "barely there": 9,
+            "small perky": 22,
+            "medium": 34,
+            "large": 27,
+            "very large": 8,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 8,
-            "athletic 17-20%": 30,
-            "fit 21-24%": 35,
-            "soft 25-30%": 27,
+            "lean 12-16%": 11,
+            "athletic 17-20%": 35,
+            "fit 21-24%": 40,
+            "soft 25-30%": 14,
         },
         "makeup_level": {
             "bare-faced": 5,
@@ -232,20 +273,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 20,
-            "medium round": 40,
-            "large full": 30,
-            "very large prominent": 10,
+            "small tight": 22,
+            "medium round": 42,
+            "large full": 32,
+            "very large prominent": 4,
         },
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
     },
     "The Viper": {
-        "breast_size": {"barely there": 10, "small perky": 25, "medium": 37, "large": 22, "very large": 6},
+        "breast_size": {
+            "barely there": 10,
+            "small perky": 26,
+            "medium": 38,
+            "large": 23,
+            "very large": 3,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 15,
-            "athletic 17-20%": 45,
-            "fit 21-24%": 32,
-            "soft 25-30%": 8,
+            "lean 12-16%": 16,
+            "athletic 17-20%": 47,
+            "fit 21-24%": 34,
+            "soft 25-30%": 3,
         },
         "makeup_level": {
             "bare-faced": 10,
@@ -260,20 +307,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 10,
         },
         "butt_size": {
-            "small tight": 25,
-            "medium round": 45,
-            "large full": 23,
-            "very large prominent": 7,
+            "small tight": 26,
+            "medium round": 47,
+            "large full": 25,
+            "very large prominent": 2,
         },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
     },
     "The Prodigy": {
-        "breast_size": {"barely there": 15, "small perky": 33, "medium": 32, "large": 16, "very large": 4},
+        "breast_size": {
+            "barely there": 15,
+            "small perky": 33,
+            "medium": 33,
+            "large": 17,
+            "very large": 2,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 20,
-            "athletic 17-20%": 48,
-            "fit 21-24%": 25,
-            "soft 25-30%": 7,
+            "lean 12-16%": 21,
+            "athletic 17-20%": 50,
+            "fit 21-24%": 26,
+            "soft 25-30%": 3,
         },
         "makeup_level": {
             "bare-faced": 25,
@@ -288,20 +341,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 12,
         },
         "butt_size": {
-            "small tight": 35,
-            "medium round": 40,
-            "large full": 20,
-            "very large prominent": 5,
+            "small tight": 36,
+            "medium round": 41,
+            "large full": 21,
+            "very large prominent": 2,
         },
         "waist": {"narrow": 45, "medium": 45, "wide": 10},
     },
     "The Doll": {
-        "breast_size": {"barely there": 12, "small perky": 28, "medium": 30, "large": 22, "very large": 8},
+        "breast_size": {
+            "barely there": 12,
+            "small perky": 29,
+            "medium": 31,
+            "large": 23,
+            "very large": 5,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 8,
-            "athletic 17-20%": 28,
-            "fit 21-24%": 42,
-            "soft 25-30%": 22,
+            "lean 12-16%": 11,
+            "athletic 17-20%": 32,
+            "fit 21-24%": 47,
+            "soft 25-30%": 10,
         },
         "makeup_level": {
             "bare-faced": 8,
@@ -316,20 +375,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 20,
-            "medium round": 40,
-            "large full": 30,
-            "very large prominent": 10,
+            "small tight": 22,
+            "medium round": 42,
+            "large full": 32,
+            "very large prominent": 4,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
     },
     "The Huntress": {
-        "breast_size": {"barely there": 8, "small perky": 20, "medium": 37, "large": 27, "very large": 8},
+        "breast_size": {
+            "barely there": 8,
+            "small perky": 21,
+            "medium": 38,
+            "large": 28,
+            "very large": 5,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 18,
-            "athletic 17-20%": 47,
-            "fit 21-24%": 27,
-            "soft 25-30%": 8,
+            "lean 12-16%": 19,
+            "athletic 17-20%": 49,
+            "fit 21-24%": 29,
+            "soft 25-30%": 3,
         },
         "makeup_level": {
             "bare-faced": 20,
@@ -344,20 +409,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 15,
         },
         "butt_size": {
-            "small tight": 25,
-            "medium round": 40,
-            "large full": 25,
-            "very large prominent": 10,
+            "small tight": 27,
+            "medium round": 42,
+            "large full": 27,
+            "very large prominent": 4,
         },
         "waist": {"narrow": 35, "medium": 50, "wide": 15},
     },
     "The Empress": {
-        "breast_size": {"barely there": 1, "small perky": 5, "medium": 24, "large": 45, "very large": 25},
+        "breast_size": {
+            "barely there": 2,
+            "small perky": 7,
+            "medium": 26,
+            "large": 47,
+            "very large": 18,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 2,
-            "athletic 17-20%": 22,
-            "fit 21-24%": 44,
-            "soft 25-30%": 32,
+            "lean 12-16%": 6,
+            "athletic 17-20%": 28,
+            "fit 21-24%": 50,
+            "soft 25-30%": 16,
         },
         "makeup_level": {
             "bare-faced": 3,
@@ -372,20 +443,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 15,
-            "medium round": 40,
-            "large full": 30,
-            "very large prominent": 15,
+            "small tight": 18,
+            "medium round": 43,
+            "large full": 33,
+            "very large prominent": 6,
         },
         "waist": {"narrow": 25, "medium": 45, "wide": 30},
     },
     "The Experiment": {
-        "breast_size": {"barely there": 8, "small perky": 18, "medium": 28, "large": 28, "very large": 18},
+        "breast_size": {
+            "barely there": 8,
+            "small perky": 20,
+            "medium": 30,
+            "large": 30,
+            "very large": 12,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 12,
-            "athletic 17-20%": 40,
-            "fit 21-24%": 30,
-            "soft 25-30%": 18,
+            "lean 12-16%": 14,
+            "athletic 17-20%": 44,
+            "fit 21-24%": 34,
+            "soft 25-30%": 8,
         },
         "makeup_level": {
             "bare-faced": 12,
@@ -400,20 +477,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 12,
         },
         "butt_size": {
-            "small tight": 25,
-            "medium round": 40,
-            "large full": 25,
-            "very large prominent": 20,
+            "small tight": 28,
+            "medium round": 42,
+            "large full": 22,
+            "very large prominent": 8,
         },
         "waist": {"narrow": 30, "medium": 45, "wide": 25},
     },
     "The Demon": {
-        "breast_size": {"barely there": 2, "small perky": 8, "medium": 22, "large": 42, "very large": 26},
+        "breast_size": {
+            "barely there": 4,
+            "small perky": 10,
+            "medium": 24,
+            "large": 44,
+            "very large": 18,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 5,
-            "athletic 17-20%": 25,
-            "fit 21-24%": 45,
-            "soft 25-30%": 25,
+            "lean 12-16%": 8,
+            "athletic 17-20%": 30,
+            "fit 21-24%": 50,
+            "soft 25-30%": 12,
         },
         "makeup_level": {
             "bare-faced": 3,
@@ -428,20 +511,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 5,
         },
         "butt_size": {
-            "small tight": 5,
-            "medium round": 25,
-            "large full": 42,
-            "very large prominent": 28,
+            "small tight": 9,
+            "medium round": 31,
+            "large full": 48,
+            "very large prominent": 12,
         },
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
     },
     "The Assassin": {
-        "breast_size": {"barely there": 15, "small perky": 35, "medium": 32, "large": 14, "very large": 4},
+        "breast_size": {
+            "barely there": 15,
+            "small perky": 35,
+            "medium": 33,
+            "large": 15,
+            "very large": 2,
+        },
         "body_fat_pct": {
             "lean 12-16%": 35,
-            "athletic 17-20%": 45,
-            "fit 21-24%": 17,
-            "soft 25-30%": 3,
+            "athletic 17-20%": 46,
+            "fit 21-24%": 18,
+            "soft 25-30%": 1,
         },
         "makeup_level": {
             "bare-faced": 35,
@@ -456,20 +545,26 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 30,
         },
         "butt_size": {
-            "small tight": 30,
-            "medium round": 42,
-            "large full": 22,
-            "very large prominent": 6,
+            "small tight": 31,
+            "medium round": 44,
+            "large full": 23,
+            "very large prominent": 2,
         },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
     },
     "The Nymph": {
-        "breast_size": {"barely there": 10, "small perky": 30, "medium": 35, "large": 18, "very large": 7},
+        "breast_size": {
+            "barely there": 10,
+            "small perky": 31,
+            "medium": 36,
+            "large": 19,
+            "very large": 4,
+        },
         "body_fat_pct": {
-            "lean 12-16%": 10,
-            "athletic 17-20%": 30,
-            "fit 21-24%": 40,
-            "soft 25-30%": 20,
+            "lean 12-16%": 12,
+            "athletic 17-20%": 34,
+            "fit 21-24%": 44,
+            "soft 25-30%": 10,
         },
         "makeup_level": {
             "bare-faced": 30,
@@ -484,10 +579,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 5,
         },
         "butt_size": {
-            "small tight": 15,
-            "medium round": 40,
-            "large full": 32,
-            "very large prominent": 13,
+            "small tight": 17,
+            "medium round": 43,
+            "large full": 35,
+            "very large prominent": 5,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
     },
@@ -496,87 +591,411 @@ ARCHETYPE_BODY_WEIGHTS = {
 
 ARCHETYPE_SUBTYPES = {
     "The Siren": [
-        {"name": "Chanteuse", "description": "Hypnotic voice, musical seduction", "body_profile_bias": {"Slim": +25, "Curvy": -20, "Athletic": -5}},
-        {"name": "Femme Fatale", "description": "Deadly beauty, lethal allure", "body_profile_bias": {"Curvy": +20, "Athletic": +10, "Petite": -30}},
-        {"name": "Temptress", "description": "Overt seduction, irresistible magnetism", "body_profile_bias": {"Curvy": +25, "Slim": -15, "Petite": -10}},
-        {"name": "Enchantress", "description": "Mystical charm, spellbinding presence", "body_profile_bias": {"Slim": +20, "Athletic": -10, "Curvy": -10}},
-        {"name": "Muse", "description": "Inspires obsession, ethereal beauty", "body_profile_bias": {"Petite": +25, "Slim": +15, "Curvy": -35}},
+        {
+            "name": "Chanteuse",
+            "description": "Hypnotic voice, musical seduction",
+            "body_profile_bias": {"Slim": +25, "Curvy": -20, "Athletic": -5},
+        },
+        {
+            "name": "Femme Fatale",
+            "description": "Deadly beauty, lethal allure",
+            "body_profile_bias": {"Curvy": +20, "Athletic": +10, "Petite": -30},
+        },
+        {
+            "name": "Temptress",
+            "description": "Overt seduction, irresistible magnetism",
+            "body_profile_bias": {"Curvy": +25, "Slim": -15, "Petite": -10},
+        },
+        {
+            "name": "Enchantress",
+            "description": "Mystical charm, spellbinding presence",
+            "body_profile_bias": {"Slim": +20, "Athletic": -10, "Curvy": -10},
+        },
+        {
+            "name": "Muse",
+            "description": "Inspires obsession, ethereal beauty",
+            "body_profile_bias": {"Petite": +25, "Slim": +15, "Curvy": -35},
+        },
     ],
     "The Witch": [
-        {"name": "Hexcaster", "description": "Curse specialist, hex-focused combat", "body_profile_bias": {"Slim": +20, "Athletic": -10, "Curvy": -10}},
-        {"name": "Oracle", "description": "Sees the future, fights with foreknowledge", "body_profile_bias": {"Petite": +20, "Slim": +10, "Curvy": -25}},
-        {"name": "Necromancer", "description": "Death magic, drains life force", "body_profile_bias": {"Slim": +25, "Petite": +10, "Curvy": -30}},
-        {"name": "Alchemist", "description": "Potions, transmutation, chemical warfare", "body_profile_bias": {"Athletic": +20, "Petite": -15, "Slim": -5}},
-        {"name": "Coven Mother", "description": "Ritual power, commands dark authority", "body_profile_bias": {"Curvy": +25, "Slim": -15, "Petite": -10}},
+        {
+            "name": "Hexcaster",
+            "description": "Curse specialist, hex-focused combat",
+            "body_profile_bias": {"Slim": +20, "Athletic": -10, "Curvy": -10},
+        },
+        {
+            "name": "Oracle",
+            "description": "Sees the future, fights with foreknowledge",
+            "body_profile_bias": {"Petite": +20, "Slim": +10, "Curvy": -25},
+        },
+        {
+            "name": "Necromancer",
+            "description": "Death magic, drains life force",
+            "body_profile_bias": {"Slim": +25, "Petite": +10, "Curvy": -30},
+        },
+        {
+            "name": "Alchemist",
+            "description": "Potions, transmutation, chemical warfare",
+            "body_profile_bias": {"Athletic": +20, "Petite": -15, "Slim": -5},
+        },
+        {
+            "name": "Coven Mother",
+            "description": "Ritual power, commands dark authority",
+            "body_profile_bias": {"Curvy": +25, "Slim": -15, "Petite": -10},
+        },
     ],
     "The Viper": [
-        {"name": "Poisoner", "description": "Toxic specialist, venomous attacks", "body_profile_bias": {"Slim": +20, "Curvy": -15, "Athletic": -5}},
-        {"name": "Schemer", "description": "Manipulative mastermind, always three steps ahead", "body_profile_bias": {"Athletic": +15, "Curvy": +10, "Petite": -25}},
-        {"name": "Blackmailer", "description": "Leverages secrets, psychological torment", "body_profile_bias": {"Curvy": +25, "Athletic": -15, "Petite": -10}},
-        {"name": "Saboteur", "description": "Disables opponents before the fight begins", "body_profile_bias": {"Athletic": +25, "Curvy": -20, "Slim": -5}},
-        {"name": "Infiltrator", "description": "Master of disguise, strikes from within", "body_profile_bias": {"Slim": +15, "Petite": +10, "Curvy": -15, "Athletic": -10}},
+        {
+            "name": "Poisoner",
+            "description": "Toxic specialist, venomous attacks",
+            "body_profile_bias": {"Slim": +20, "Curvy": -15, "Athletic": -5},
+        },
+        {
+            "name": "Schemer",
+            "description": "Manipulative mastermind, always three steps ahead",
+            "body_profile_bias": {"Athletic": +15, "Curvy": +10, "Petite": -25},
+        },
+        {
+            "name": "Blackmailer",
+            "description": "Leverages secrets, psychological torment",
+            "body_profile_bias": {"Curvy": +25, "Athletic": -15, "Petite": -10},
+        },
+        {
+            "name": "Saboteur",
+            "description": "Disables opponents before the fight begins",
+            "body_profile_bias": {"Athletic": +25, "Curvy": -20, "Slim": -5},
+        },
+        {
+            "name": "Infiltrator",
+            "description": "Master of disguise, strikes from within",
+            "body_profile_bias": {
+                "Slim": +15,
+                "Petite": +10,
+                "Curvy": -15,
+                "Athletic": -10,
+            },
+        },
     ],
     "The Prodigy": [
-        {"name": "Wunderkind", "description": "Impossibly talented youth", "body_profile_bias": {"Petite": +25, "Slim": +10, "Curvy": -20, "Athletic": -15}},
-        {"name": "Savant", "description": "One transcendent skill, narrow brilliance", "body_profile_bias": {"Slim": +25, "Athletic": -15, "Curvy": -10}},
-        {"name": "Phenom", "description": "Natural athlete, explosive raw talent", "body_profile_bias": {"Athletic": +30, "Petite": -20, "Slim": -10}},
-        {"name": "Virtuoso", "description": "Technical perfection, flawless execution", "body_profile_bias": {"Slim": +20, "Athletic": +10, "Curvy": -20, "Petite": -10}},
-        {"name": "Ingenue", "description": "Deceptively innocent, underestimated", "body_profile_bias": {"Petite": +30, "Curvy": +5, "Athletic": -25, "Slim": -10}},
+        {
+            "name": "Wunderkind",
+            "description": "Impossibly talented youth",
+            "body_profile_bias": {
+                "Petite": +25,
+                "Slim": +10,
+                "Curvy": -20,
+                "Athletic": -15,
+            },
+        },
+        {
+            "name": "Savant",
+            "description": "One transcendent skill, narrow brilliance",
+            "body_profile_bias": {"Slim": +25, "Athletic": -15, "Curvy": -10},
+        },
+        {
+            "name": "Phenom",
+            "description": "Natural athlete, explosive raw talent",
+            "body_profile_bias": {"Athletic": +30, "Petite": -20, "Slim": -10},
+        },
+        {
+            "name": "Virtuoso",
+            "description": "Technical perfection, flawless execution",
+            "body_profile_bias": {
+                "Slim": +20,
+                "Athletic": +10,
+                "Curvy": -20,
+                "Petite": -10,
+            },
+        },
+        {
+            "name": "Ingenue",
+            "description": "Deceptively innocent, underestimated",
+            "body_profile_bias": {
+                "Petite": +30,
+                "Curvy": +5,
+                "Athletic": -25,
+                "Slim": -10,
+            },
+        },
     ],
     "The Doll": [
-        {"name": "Porcelain", "description": "Fragile appearance, eerie perfection", "body_profile_bias": {"Petite": +25, "Slim": +10, "Athletic": -25, "Curvy": -10}},
-        {"name": "Marionette", "description": "Moves like she's controlled by strings", "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -25}},
-        {"name": "Ragdoll", "description": "Limp and loose until she strikes", "body_profile_bias": {"Slim": +15, "Curvy": +10, "Athletic": -20}},
-        {"name": "China Doll", "description": "Delicate beauty hiding sharp edges", "body_profile_bias": {"Petite": +20, "Slim": +15, "Curvy": -25, "Athletic": -10}},
-        {"name": "Wind-Up", "description": "Mechanical precision, clockwork violence", "body_profile_bias": {"Athletic": +25, "Curvy": -15, "Petite": -10}},
+        {
+            "name": "Porcelain",
+            "description": "Fragile appearance, eerie perfection",
+            "body_profile_bias": {
+                "Petite": +25,
+                "Slim": +10,
+                "Athletic": -25,
+                "Curvy": -10,
+            },
+        },
+        {
+            "name": "Marionette",
+            "description": "Moves like she's controlled by strings",
+            "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -25},
+        },
+        {
+            "name": "Ragdoll",
+            "description": "Limp and loose until she strikes",
+            "body_profile_bias": {"Slim": +15, "Curvy": +10, "Athletic": -20},
+        },
+        {
+            "name": "China Doll",
+            "description": "Delicate beauty hiding sharp edges",
+            "body_profile_bias": {
+                "Petite": +20,
+                "Slim": +15,
+                "Curvy": -25,
+                "Athletic": -10,
+            },
+        },
+        {
+            "name": "Wind-Up",
+            "description": "Mechanical precision, clockwork violence",
+            "body_profile_bias": {"Athletic": +25, "Curvy": -15, "Petite": -10},
+        },
     ],
     "The Huntress": [
-        {"name": "Stalker", "description": "Patient tracker, wears opponents down", "body_profile_bias": {"Athletic": +15, "Slim": +10, "Curvy": -20}},
-        {"name": "Apex", "description": "Top predator, dominant aggression", "body_profile_bias": {"Athletic": +25, "Curvy": +5, "Petite": -25}},
-        {"name": "Trapper", "description": "Sets up opponents, controls the cage", "body_profile_bias": {"Slim": +20, "Petite": +10, "Athletic": -20}},
-        {"name": "Bloodhound", "description": "Relentless pursuit, never loses the scent", "body_profile_bias": {"Athletic": +20, "Curvy": -10, "Slim": -10}},
-        {"name": "Falconer", "description": "Precision strikes from distance", "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -20, "Athletic": -10}},
+        {
+            "name": "Stalker",
+            "description": "Patient tracker, wears opponents down",
+            "body_profile_bias": {"Athletic": +15, "Slim": +10, "Curvy": -20},
+        },
+        {
+            "name": "Apex",
+            "description": "Top predator, dominant aggression",
+            "body_profile_bias": {"Athletic": +25, "Curvy": +5, "Petite": -25},
+        },
+        {
+            "name": "Trapper",
+            "description": "Sets up opponents, controls the cage",
+            "body_profile_bias": {"Slim": +20, "Petite": +10, "Athletic": -20},
+        },
+        {
+            "name": "Bloodhound",
+            "description": "Relentless pursuit, never loses the scent",
+            "body_profile_bias": {"Athletic": +20, "Curvy": -10, "Slim": -10},
+        },
+        {
+            "name": "Falconer",
+            "description": "Precision strikes from distance",
+            "body_profile_bias": {
+                "Slim": +25,
+                "Petite": +5,
+                "Curvy": -20,
+                "Athletic": -10,
+            },
+        },
     ],
     "The Empress": [
-        {"name": "Sovereign", "description": "Born to rule, unquestioned authority", "body_profile_bias": {"Curvy": +15, "Athletic": +10, "Petite": -20}},
-        {"name": "Warlord", "description": "Conquers through force of will", "body_profile_bias": {"Athletic": +30, "Slim": -15, "Petite": -15}},
-        {"name": "Matriarch", "description": "Protective fury, motherly wrath", "body_profile_bias": {"Curvy": +25, "Petite": -20, "Slim": -5}},
-        {"name": "Tyrant", "description": "Rules through fear and dominance", "body_profile_bias": {"Athletic": +20, "Curvy": +5, "Petite": -20}},
-        {"name": "Regent", "description": "Graceful authority, silk over steel", "body_profile_bias": {"Slim": +25, "Petite": +5, "Athletic": -15, "Curvy": -15}},
+        {
+            "name": "Sovereign",
+            "description": "Born to rule, unquestioned authority",
+            "body_profile_bias": {"Curvy": +15, "Athletic": +10, "Petite": -20},
+        },
+        {
+            "name": "Warlord",
+            "description": "Conquers through force of will",
+            "body_profile_bias": {"Athletic": +30, "Slim": -15, "Petite": -15},
+        },
+        {
+            "name": "Matriarch",
+            "description": "Protective fury, motherly wrath",
+            "body_profile_bias": {"Curvy": +25, "Petite": -20, "Slim": -5},
+        },
+        {
+            "name": "Tyrant",
+            "description": "Rules through fear and dominance",
+            "body_profile_bias": {"Athletic": +20, "Curvy": +5, "Petite": -20},
+        },
+        {
+            "name": "Regent",
+            "description": "Graceful authority, silk over steel",
+            "body_profile_bias": {
+                "Slim": +25,
+                "Petite": +5,
+                "Athletic": -15,
+                "Curvy": -15,
+            },
+        },
     ],
     "The Experiment": [
-        {"name": "Cyborg", "description": "Mechanical augmentation, part machine", "body_profile_bias": {"Athletic": +30, "Curvy": -20, "Slim": -10}},
-        {"name": "Chimera", "description": "Gene-spliced hybrid, unstable biology", "body_profile_bias": {"Curvy": +20, "Athletic": +5, "Slim": -15, "Petite": -10}},
-        {"name": "Prototype", "description": "First of her kind, untested potential", "body_profile_bias": {"Athletic": +20, "Slim": +10, "Petite": -20}},
-        {"name": "Splice", "description": "DNA rewritten, evolved beyond human", "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -25}},
-        {"name": "Ghost in the Machine", "description": "Digital consciousness in synthetic body", "body_profile_bias": {"Slim": +20, "Petite": +15, "Curvy": -30}},
+        {
+            "name": "Cyborg",
+            "description": "Mechanical augmentation, part machine",
+            "body_profile_bias": {"Athletic": +30, "Curvy": -20, "Slim": -10},
+        },
+        {
+            "name": "Chimera",
+            "description": "Gene-spliced hybrid, unstable biology",
+            "body_profile_bias": {
+                "Curvy": +20,
+                "Athletic": +5,
+                "Slim": -15,
+                "Petite": -10,
+            },
+        },
+        {
+            "name": "Prototype",
+            "description": "First of her kind, untested potential",
+            "body_profile_bias": {"Athletic": +20, "Slim": +10, "Petite": -20},
+        },
+        {
+            "name": "Splice",
+            "description": "DNA rewritten, evolved beyond human",
+            "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -25},
+        },
+        {
+            "name": "Ghost in the Machine",
+            "description": "Digital consciousness in synthetic body",
+            "body_profile_bias": {"Slim": +20, "Petite": +15, "Curvy": -30},
+        },
     ],
     "The Demon": [
-        {"name": "Succubus", "description": "Feeds on desire, drains through seduction", "body_profile_bias": {"Curvy": +30, "Petite": -20, "Slim": -10}},
-        {"name": "Hellion", "description": "Chaotic hellfire, wild destruction", "body_profile_bias": {"Athletic": +25, "Slim": -15, "Curvy": -10}},
-        {"name": "Infernal", "description": "Ancient evil, smoldering menace", "body_profile_bias": {"Curvy": +15, "Athletic": +10, "Petite": -20}},
-        {"name": "Corrupted", "description": "Once pure, now twisted by dark power", "body_profile_bias": {"Slim": +20, "Petite": +10, "Curvy": -25}},
-        {"name": "Abyssal", "description": "Deep darkness, void-touched horror", "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -20, "Athletic": -10}},
+        {
+            "name": "Succubus",
+            "description": "Feeds on desire, drains through seduction",
+            "body_profile_bias": {"Curvy": +30, "Petite": -20, "Slim": -10},
+        },
+        {
+            "name": "Hellion",
+            "description": "Chaotic hellfire, wild destruction",
+            "body_profile_bias": {"Athletic": +25, "Slim": -15, "Curvy": -10},
+        },
+        {
+            "name": "Infernal",
+            "description": "Ancient evil, smoldering menace",
+            "body_profile_bias": {"Curvy": +15, "Athletic": +10, "Petite": -20},
+        },
+        {
+            "name": "Corrupted",
+            "description": "Once pure, now twisted by dark power",
+            "body_profile_bias": {"Slim": +20, "Petite": +10, "Curvy": -25},
+        },
+        {
+            "name": "Abyssal",
+            "description": "Deep darkness, void-touched horror",
+            "body_profile_bias": {
+                "Slim": +25,
+                "Petite": +5,
+                "Curvy": -20,
+                "Athletic": -10,
+            },
+        },
     ],
     "The Assassin": [
-        {"name": "Shadow", "description": "Invisible until the killing blow", "body_profile_bias": {"Slim": +25, "Petite": +5, "Curvy": -20, "Athletic": -10}},
-        {"name": "Blade", "description": "Edged weapon master, surgical precision", "body_profile_bias": {"Athletic": +25, "Slim": +5, "Petite": -20, "Curvy": -10}},
-        {"name": "Phantom", "description": "Ghost-like movement, untouchable", "body_profile_bias": {"Petite": +25, "Slim": +10, "Curvy": -20, "Athletic": -15}},
-        {"name": "Silencer", "description": "Ends fights before they start", "body_profile_bias": {"Slim": +20, "Athletic": +15, "Curvy": -25, "Petite": -10}},
-        {"name": "Venom", "description": "Poisoned weapons, toxic specialist", "body_profile_bias": {"Slim": +15, "Athletic": +10, "Petite": -15, "Curvy": -10}},
+        {
+            "name": "Shadow",
+            "description": "Invisible until the killing blow",
+            "body_profile_bias": {
+                "Slim": +25,
+                "Petite": +5,
+                "Curvy": -20,
+                "Athletic": -10,
+            },
+        },
+        {
+            "name": "Blade",
+            "description": "Edged weapon master, surgical precision",
+            "body_profile_bias": {
+                "Athletic": +25,
+                "Slim": +5,
+                "Petite": -20,
+                "Curvy": -10,
+            },
+        },
+        {
+            "name": "Phantom",
+            "description": "Ghost-like movement, untouchable",
+            "body_profile_bias": {
+                "Petite": +25,
+                "Slim": +10,
+                "Curvy": -20,
+                "Athletic": -15,
+            },
+        },
+        {
+            "name": "Silencer",
+            "description": "Ends fights before they start",
+            "body_profile_bias": {
+                "Slim": +20,
+                "Athletic": +15,
+                "Curvy": -25,
+                "Petite": -10,
+            },
+        },
+        {
+            "name": "Venom",
+            "description": "Poisoned weapons, toxic specialist",
+            "body_profile_bias": {
+                "Slim": +15,
+                "Athletic": +10,
+                "Petite": -15,
+                "Curvy": -10,
+            },
+        },
     ],
     "The Nymph": [
-        {"name": "Dryad", "description": "Forest spirit, nature's living weapon", "body_profile_bias": {"Slim": +20, "Petite": +10, "Curvy": -20, "Athletic": -10}},
-        {"name": "Naiad", "description": "Water spirit, fluid and unpredictable", "body_profile_bias": {"Curvy": +20, "Slim": +10, "Petite": -20, "Athletic": -10}},
-        {"name": "Pixie", "description": "Tiny chaos agent, mischievous trickster", "body_profile_bias": {"Petite": +30, "Slim": +5, "Curvy": -25, "Athletic": -10}},
-        {"name": "Sylph", "description": "Air spirit, impossibly graceful", "body_profile_bias": {"Slim": +25, "Athletic": +5, "Curvy": -20, "Petite": -10}},
-        {"name": "Fae Queen", "description": "Otherworldly royalty, beautiful and cruel", "body_profile_bias": {"Curvy": +25, "Athletic": +5, "Petite": -20, "Slim": -10}},
+        {
+            "name": "Dryad",
+            "description": "Forest spirit, nature's living weapon",
+            "body_profile_bias": {
+                "Slim": +20,
+                "Petite": +10,
+                "Curvy": -20,
+                "Athletic": -10,
+            },
+        },
+        {
+            "name": "Naiad",
+            "description": "Water spirit, fluid and unpredictable",
+            "body_profile_bias": {
+                "Curvy": +20,
+                "Slim": +10,
+                "Petite": -20,
+                "Athletic": -10,
+            },
+        },
+        {
+            "name": "Pixie",
+            "description": "Tiny chaos agent, mischievous trickster",
+            "body_profile_bias": {
+                "Petite": +30,
+                "Slim": +5,
+                "Curvy": -25,
+                "Athletic": -10,
+            },
+        },
+        {
+            "name": "Sylph",
+            "description": "Air spirit, impossibly graceful",
+            "body_profile_bias": {
+                "Slim": +25,
+                "Athletic": +5,
+                "Curvy": -20,
+                "Petite": -10,
+            },
+        },
+        {
+            "name": "Fae Queen",
+            "description": "Otherworldly royalty, beautiful and cruel",
+            "body_profile_bias": {
+                "Curvy": +25,
+                "Athletic": +5,
+                "Petite": -20,
+                "Slim": -10,
+            },
+        },
     ],
 }
 
 
 def _roll_subtype(archetype: str) -> dict | None:
-    arch = f"The {archetype}" if archetype and not archetype.startswith("The ") else archetype
+    arch = (
+        f"The {archetype}"
+        if archetype and not archetype.startswith("The ")
+        else archetype
+    )
     subtypes = ARCHETYPE_SUBTYPES.get(arch, [])
     if not subtypes:
         return None
@@ -584,7 +1003,11 @@ def _roll_subtype(archetype: str) -> dict | None:
 
 
 def _find_subtype(archetype: str, name: str) -> dict | None:
-    arch = f"The {archetype}" if archetype and not archetype.startswith("The ") else archetype
+    arch = (
+        f"The {archetype}"
+        if archetype and not archetype.startswith("The ")
+        else archetype
+    )
     subtypes = ARCHETYPE_SUBTYPES.get(arch, [])
     for st in subtypes:
         if st["name"].lower() == name.lower():
@@ -686,9 +1109,13 @@ def _roll_body_traits(archetype: str | None, subtype: dict | None = None) -> dic
         "body_profile": profile,
         "waist": _weighted_choice("waist", arch, allowed.get("waist")),
         "abs_tone": _weighted_choice("abs_tone", arch, allowed.get("abs_tone")),
-        "body_fat_pct": _weighted_choice("body_fat_pct", arch, allowed.get("body_fat_pct")),
+        "body_fat_pct": _weighted_choice(
+            "body_fat_pct", arch, allowed.get("body_fat_pct")
+        ),
         "butt_size": _weighted_choice("butt_size", arch, allowed.get("butt_size")),
-        "breast_size": _weighted_choice("breast_size", arch, allowed.get("breast_size")),
+        "breast_size": _weighted_choice(
+            "breast_size", arch, allowed.get("breast_size")
+        ),
         "face_shape": _weighted_choice("face_shape", arch),
         "eye_shape": _weighted_choice("eye_shape", arch),
         "makeup_level": _weighted_choice("makeup_level", arch),
