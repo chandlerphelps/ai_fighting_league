@@ -232,6 +232,9 @@ def generate_fighter(
     origin = result.get("origin", "")
 
     result["body_type_details"] = body_traits
+    result["primary_archetype"] = archetype or ""
+    result["secondary_archetype"] = secondary_archetype
+    result["subtype"] = subtype_info["name"] if subtype_info else ""
 
     outfit_data = _generate_outfits(
         config,

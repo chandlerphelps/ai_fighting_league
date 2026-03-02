@@ -1,45 +1,93 @@
 [
   {
-    "concept_hook": "19-year-old martial prodigy who dismantles giants with acrobatic flurries and a cold joy in exploiting every flaw.",
-    "ring_name": "Blitz Phenom",
+    "concept_hook": "Methodical tracker who breaks prey with psychological pursuits and traps, her stoic facade cracking into savage glee at the kill.",
+    "ring_name": "Luna Stalker",
     "gender": "female",
-    "age": 19,
-    "origin": "Los Angeles, USA",
-    "primary_archetype": "Prodigy",
+    "age": 27,
+    "origin": "Madrid, Spain",
+    "primary_archetype": "Huntress",
     "secondary_archetype": "Assassin",
-    "subtype": "Phenom",
+    "subtype": "Stalker",
     "has_supernatural": false,
-    "power_tier": "prospect",
-    "narrative_role": "Innocent-faced underdog exposing the roster's fragile egos",
+    "power_tier": "contender",
+    "narrative_role": "the arena's unyielding predator",
     "rivalry_seeds": [
-      "Fatal Siren",
-      "Night Stalker"
+      "Sly Schemer",
+      "Neo Cyborg"
     ],
-    "media_archetype_inspiration": "Hit-Girl from Kick-Ass",
+    "media_archetype_inspiration": "Aloy from Horizon Zero Dawn",
     "skimpiness_weights": [
       15,
-      40,
+      35,
       30,
-      15
+      20
     ]
   },
   {
-    "concept_hook": "Shadow ninja who savors the panic in her prey's eyes before vanishing blades end the hunt.",
-    "ring_name": "Shadow Veil",
+    "concept_hook": "Whimsical wind dancer who flays skin with razor gusts, her playful taunts turning to petulant fury when battered.",
+    "ring_name": "Zephyr Nymph",
     "gender": "female",
-    "age": 28,
-    "origin": "Tokyo, Japan",
-    "primary_archetype": "Assassin",
-    "secondary_archetype": "Viper",
-    "subtype": "Shadow",
-    "has_supernatural": false,
+    "age": 21,
+    "origin": "Santorini, Greece",
+    "primary_archetype": "Nymph",
+    "secondary_archetype": "Siren",
+    "subtype": "Sylph",
+    "has_supernatural": true,
     "power_tier": "gatekeeper",
-    "narrative_role": "Stoic enforcer demanding perfection from chaotic rivals",
+    "narrative_role": "the capricious aerial trickster",
     "rivalry_seeds": [
-      "Iron Empress",
-      "Venom Kiss"
+      "Blaze Succubus",
+      "Porcelain Doll"
     ],
-    "media_archetype_inspiration": "Kasumi from Dead or Alive",
+    "media_archetype_inspiration": "Janna from League of Legends",
+    "skimpiness_weights": [
+      5,
+      25,
+      40,
+      30
+    ]
+  },
+  {
+    "concept_hook": "Seductive firebrand who incinerates resolve with draining touches, her ecstatic moans souring to wrathful snarls when resisted.",
+    "ring_name": "Blaze Succubus",
+    "gender": "female",
+    "age": 31,
+    "origin": "Miami, USA",
+    "primary_archetype": "Demon",
+    "secondary_archetype": "Empress",
+    "subtype": "Succubus",
+    "has_supernatural": true,
+    "power_tier": "champion",
+    "narrative_role": "the arena's corrupting queen",
+    "rivalry_seeds": [
+      "Zephyr Nymph",
+      "Vesper Hex"
+    ],
+    "media_archetype_inspiration": "Morrigan Aensland from Darkstalkers",
+    "skimpiness_weights": [
+      0,
+      10,
+      30,
+      60
+    ]
+  },
+  {
+    "concept_hook": "Eerily serene marionette who garrotes with invisible wires, her doll-like smile unwavering even as porcelain cracks.",
+    "ring_name": "Porcelain Doll",
+    "gender": "female",
+    "age": 23,
+    "origin": "Paris, France",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Prodigy",
+    "subtype": "Porcelain",
+    "has_supernatural": false,
+    "power_tier": "prospect",
+    "narrative_role": "the deceptively fragile killer",
+    "rivalry_seeds": [
+      "Fatal Blade",
+      "Sly Schemer"
+    ],
+    "media_archetype_inspiration": "Gogo Yubari from Kill Bill",
     "skimpiness_weights": [
       20,
       40,
@@ -48,70 +96,46 @@
     ]
   },
   {
-    "concept_hook": "Hypnotic dancer whose sultry rhythms shatter focus, leaving foes broken and begging for mercy she denies.",
-    "ring_name": "Fatal Siren",
+    "concept_hook": "Emotionless augment who shorts out nerves with EMP bursts, her systems stuttering coldly when jammed.",
+    "ring_name": "Neo Cyborg",
     "gender": "female",
-    "age": 25,
-    "origin": "Rio de Janeiro, Brazil",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Nymph",
-    "subtype": "Femme Fatale",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "Flashy performer turning fights into seductive spectacles",
+    "age": 26,
+    "origin": "Seoul, South Korea",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Prodigy",
+    "subtype": "Cyborg",
+    "has_supernatural": false,
+    "power_tier": "gatekeeper",
+    "narrative_role": "the unstoppable tech horror",
     "rivalry_seeds": [
-      "Blitz Phenom",
-      "Porcelain Doll"
+      "Luna Stalker",
+      "Vesper Hex"
     ],
-    "media_archetype_inspiration": "Ivy Valentine from Soulcalibur",
+    "media_archetype_inspiration": "Major Kusanagi from Ghost in the Shell",
     "skimpiness_weights": [
-      5,
-      10,
-      45,
-      40
-    ]
-  },
-  {
-    "concept_hook": "Dominant ruler who crushes spirits with commanding presence, haunted by the solitude of her throne.",
-    "ring_name": "Iron Empress",
-    "gender": "female",
-    "age": 32,
-    "origin": "Moscow, Russia",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Huntress",
-    "subtype": "Tyrant",
-    "has_supernatural": true,
-    "power_tier": "champion",
-    "narrative_role": "Unflinching heel anchoring the league's power structure",
-    "rivalry_seeds": [
-      "Shadow Veil",
-      "Cyber Forge"
-    ],
-    "media_archetype_inspiration": "Bayonetta from Bayonetta",
-    "skimpiness_weights": [
-      10,
+      15,
       40,
-      35,
+      30,
       15
     ]
   },
   {
-    "concept_hook": "Cunning poisoner who giggles at the agony of her slow-killing toxins, seeking foes worthy of her art.",
-    "ring_name": "Venom Kiss",
+    "concept_hook": "Wily whisperer who engineers falls with feints and traps, her smug grin twisting to venomous spite when hoisted by her petard.",
+    "ring_name": "Sly Schemer",
     "gender": "female",
     "age": 27,
-    "origin": "Seoul, South Korea",
+    "origin": "Bogot\u00e1, Colombia",
     "primary_archetype": "Viper",
-    "secondary_archetype": "Witch",
-    "subtype": "Poisoner",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "Scheming intriguer weaving betrayals across the roster",
+    "secondary_archetype": "Empress",
+    "subtype": "Schemer",
+    "has_supernatural": false,
+    "power_tier": "prospect",
+    "narrative_role": "the manipulative puppet master",
     "rivalry_seeds": [
-      "Shadow Veil",
-      "Night Stalker"
+      "Luna Stalker",
+      "Porcelain Doll"
     ],
-    "media_archetype_inspiration": "Juri from Street Fighter",
+    "media_archetype_inspiration": "Atomic Blonde from Atomic Blonde",
     "skimpiness_weights": [
       10,
       30,
@@ -120,22 +144,22 @@
     ]
   },
   {
-    "concept_hook": "Relentless tracker who pursues with feral glee, her traps turning the arena into a personal killing ground.",
-    "ring_name": "Night Stalker",
+    "concept_hook": "Graceful sword savant who vivisects with phasing blades, her composure shattering into berserk slashes when wounded.",
+    "ring_name": "Fatal Blade",
     "gender": "female",
-    "age": 30,
-    "origin": "Mexico City, Mexico",
-    "primary_archetype": "Huntress",
-    "secondary_archetype": "Demon",
-    "subtype": "Stalker",
+    "age": 29,
+    "origin": "Moscow, Russia",
+    "primary_archetype": "Assassin",
+    "secondary_archetype": "Huntress",
+    "subtype": "Blade",
     "has_supernatural": true,
-    "power_tier": "gatekeeper",
-    "narrative_role": "Primal force disrupting civilized pretenders",
+    "power_tier": "contender",
+    "narrative_role": "the elegant executioner",
     "rivalry_seeds": [
-      "Blitz Phenom",
-      "Venom Kiss"
+      "Neo Cyborg",
+      "Blaze Succubus"
     ],
-    "media_archetype_inspiration": "Cammy from Street Fighter",
+    "media_archetype_inspiration": "Akali from League of Legends",
     "skimpiness_weights": [
       15,
       35,
@@ -144,46 +168,22 @@
     ]
   },
   {
-    "concept_hook": "Deceptively fragile fighter whose cracking porcelain reveals vengeful fury and unnatural resilience.",
-    "ring_name": "Porcelain Doll",
+    "concept_hook": "Cackling curser who warps flesh with hexes, her triumphant jeers falling silent in pained vulnerability to purity.",
+    "ring_name": "Vesper Hex",
     "gender": "female",
-    "age": 22,
-    "origin": "London, UK",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Experiment",
-    "subtype": "Porcelain",
-    "has_supernatural": true,
-    "power_tier": "prospect",
-    "narrative_role": "Eerie wildcard unsettling the veterans",
-    "rivalry_seeds": [
-      "Fatal Siren",
-      "Cyber Forge"
-    ],
-    "media_archetype_inspiration": "Android 18 from Dragon Ball",
-    "skimpiness_weights": [
-      20,
-      30,
-      30,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Cybernetic hacker who overrides nerves for ecstatic pain, addicted to the thrill of breaking bodies and minds.",
-    "ring_name": "Cyber Forge",
-    "gender": "female",
-    "age": 24,
+    "age": 32,
     "origin": "Sydney, Australia",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Prodigy",
-    "subtype": "Cyborg",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Demon",
+    "subtype": "Hexcaster",
     "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "Tech disruptor challenging organic supremacy",
+    "power_tier": "gatekeeper",
+    "narrative_role": "the vengeful fate-twister",
     "rivalry_seeds": [
-      "Iron Empress",
-      "Porcelain Doll"
+      "Neo Cyborg",
+      "Blaze Succubus"
     ],
-    "media_archetype_inspiration": "Alita from Alita: Battle Angel",
+    "media_archetype_inspiration": "Scarlet Witch from Marvel",
     "skimpiness_weights": [
       10,
       30,

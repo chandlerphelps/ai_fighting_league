@@ -31,13 +31,30 @@ def build_tier_prompt(
     ring_name = character_summary.get("ring_name", "Unknown")
     body_parts = character_summary.get("image_prompt_body_parts", "")
     expression = character_summary.get("image_prompt_expression", "")
+    primary_archetype = character_summary.get("primary_archetype", "")
+    secondary_archetype = character_summary.get("secondary_archetype", "")
+    subtype = character_summary.get("subtype", "")
+    personality = character_summary.get("personality", "")
 
     if tier == "barely":
         effective_skimpiness = skimpiness_level + 4
     else:
         effective_skimpiness = skimpiness_level
 
-    char_base = f"""CHARACTER: {ring_name}
+    archetype_line = ""
+    if primary_archetype:
+        parts = [primary_archetype]
+        if subtype:
+            parts[0] += f" ({subtype})"
+        if secondary_archetype:
+            parts.append(f"secondary: {secondary_archetype}")
+        archetype_line = f"\nArchetype: {', '.join(parts)}"
+
+    personality_line = ""
+    if personality:
+        personality_line = f"\nPersonality: {personality}"
+
+    char_base = f"""CHARACTER: {ring_name}{archetype_line}{personality_line}
 Iconic features (MUST be visible in every tier): {sig}
 Body: {body_parts}
 Expression: {expression}"""

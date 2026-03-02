@@ -70,13 +70,13 @@ Artefacts
 
 ## app/engine/fighter_generator.py
 File: app/engine/fighter_generator.py
-File Length: ~270 lines
-Purpose: Orchestration for AI fighter creation. Config data lives in `fighter_config.py`, prompts in `app/prompts/`. Re-exports symbols for backward compatibility.
+File Length: 364 lines
+Purpose: Orchestration for AI fighter creation. Rolls subtypes, body profiles, generates outfits in parallel, builds body reference and charsheet image prompts. Config data lives in `fighter_config.py`, prompts in `app/prompts/`.
 
 Artefacts
-- plan_roster(config, roster_size, existing_fighters) - builds existing roster text, calls build_plan_roster_prompt(), calls OpenRouter
+- plan_roster(config, roster_size, existing_fighters) - builds existing roster text (including subtypes), calls build_plan_roster_prompt(), calls OpenRouter
 - _generate_outfits(config, character_summary, skimpiness_level, tiers, outfit_options_by_tier) - parallel tier outfit generation using build_tier_prompt()
-- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ...) - full fighter generation pipeline
+- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ...) - full pipeline: rolls subtype via _find_subtype/_roll_subtype, rolls body traits with subtype bias, generates character JSON, generates outfits, builds image_prompt_body_ref + 3 tier charsheet prompts, returns Fighter
 - _extract_stats(data, has_supernatural, config) - clamps stat values to config bounds
 - _normalize_core_stats(stats, config) - scales core stats to target range if out of bounds
 
@@ -84,40 +84,43 @@ Artefacts
 
 ## app/engine/fighter_config.py
 File: app/engine/fighter_config.py
-File Length: ~480 lines
-Purpose: All configuration data for fighter generation: body traits, archetypes, outfit options, skimpiness levels, weight derivation tables, and body trait utility functions.
+File Length: 813 lines
+Purpose: All configuration data for fighter generation: archetypes with subtypes and body profile biases, body profiles constraining trait ranges, outfit options, skimpiness levels, weight derivation tables, and body trait utility functions.
 
 Artefacts
-- DEFAULT_OUTFIT_OPTIONS - tier-keyed dict of outfit item lists (sfw/barely/nsfw)
-- load_outfit_options(config) - load from data dir JSON or create default
-- filter_outfit_options(options_for_tier, skimpiness_level) - sample 3 items per category matching skimpiness
-- ARCHETYPES_FEMALE / ARCHETYPES_MALE - archetype name lists
-- BODY_TRAIT_OPTIONS - category->options for body trait rolling
-- MAKEUP_DESCRIPTIONS - makeup level descriptions
-- ARCHETYPE_HEIGHT_RANGES - height range tuples per archetype
-- ARCHETYPE_BODY_WEIGHTS - weighted probability tables per archetype per body trait
+- load_outfit_options(config) / filter_outfit_options(options_for_tier, skimpiness_level) - outfit option loading and filtering
+- ARCHETYPES_FEMALE - 11 archetypes (Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, Nymph)
+- ARCHETYPES_MALE - 8 archetypes (Brute, Veteran, Monster, Technician, Wildcard, Mystic, Prodigy, Experiment)
+- BODY_TRAIT_OPTIONS - category->options dict (waist, abs_tone, body_fat_pct, butt_size, breast_size, nipple_size, vulva_type, face_shape, eye_shape, makeup_level)
+- BODY_PROFILES - 4 profiles (Petite, Slim, Athletic, Curvy) each constraining allowed trait ranges
+- ARCHETYPE_BODY_PROFILE_WEIGHTS - per-archetype probability weights across the 4 body profiles
+- ARCHETYPE_SUBTYPES - per-archetype list of 5 subtypes, each with name, description, body_profile_bias adjustments
+- _roll_subtype(archetype) / _find_subtype(archetype, name) - random or lookup subtype selection
+- ARCHETYPE_BODY_WEIGHTS - per-archetype weighted probability tables for individual body traits
+- ARCHETYPE_HEIGHT_RANGES / MAKEUP_DESCRIPTIONS - height ranges and makeup descriptions per archetype
 - BODY_FAT_MULTIPLIERS / BREAST_WEIGHT_LBS / BUTT_WEIGHT_LBS / WAIST_MULTIPLIERS - weight derivation tables
-- _weighted_choice(category, archetype) - roll a body trait with archetype-weighted probabilities
-- _format_height(inches) - convert inches to feet'inches" string
-- _derive_weight(height_inches, traits) - calculate weight from height + body traits
-- _roll_body_traits(archetype) - roll all body traits for an archetype
-- _build_body_directive(traits) - format body traits as LLM directive string
-- _build_body_shape_line(traits) - "X breasts, Y butt" for image prompts
-- _build_nsfw_anatomy_line(traits) - detailed anatomy line for NSFW image prompts
-- SKIMPINESS_LEVELS - 4-level dict of tier-specific outfit rules (sfw/barely/nsfw labels, hard rules, guidance)
+- _weighted_choice(category, archetype, allowed) - roll a body trait with archetype weights, optionally constrained by allowed list
+- _format_height(inches) / _derive_weight(height_inches, traits) - height formatting and weight calculation
+- _roll_body_profile(archetype, subtype_bias) - weighted body profile selection with optional subtype adjustments
+- _roll_body_traits(archetype, subtype) - rolls body profile then all traits within profile constraints, adds subtype name
+- _build_body_directive(traits) / _build_body_shape_line(traits) / _build_nsfw_anatomy_line(traits) - format traits for LLM/image prompts
+- SKIMPINESS_LEVELS - 4-level dict of tier-specific outfit rules
 - _roll_skimpiness(weights) - weighted random choice of skimpiness level 1-4
 
 ---
 
 ## app/prompts/fighter_prompts.py
 File: app/prompts/fighter_prompts.py
-Purpose: Character design guide constants and fighter creation prompt builders.
+File Length: 430 lines
+Purpose: Character design guide constants and fighter creation prompt builders. Includes archetype/subtype system integration.
 
 Artefacts
-- GUIDE_CORE_PHILOSOPHY / GUIDE_VISUAL_DESIGN / GUIDE_CREATION_WORKFLOW / GUIDE_COMMON_MISTAKES / FULL_CHARACTER_GUIDE - design philosophy text
+- GUIDE_CORE_PHILOSOPHY / GUIDE_VISUAL_DESIGN / GUIDE_CREATION_WORKFLOW / GUIDE_COMMON_MISTAKES / FULL_CHARACTER_GUIDE - design philosophy text; GUIDE_CREATION_WORKFLOW lists all 11 female + 8 male archetypes with subtypes
 - SYSTEM_PROMPT_ROSTER_PLANNER / SYSTEM_PROMPT_CHARACTER_DESIGNER - system prompts
-- build_plan_roster_prompt(roster_size, existing_roster_text) - returns roster planning user prompt
-- build_generate_fighter_prompt(archetype_text, existing_roster_text, blueprint_text, body_directive, supernatural_instruction, min_total_stats, max_total_stats) - returns fighter generation user prompt
+- _shuffled_archetype_names() - returns comma-separated archetype names in random order (for prompt variety)
+- _shuffled_subtype_lines() - returns formatted subtype list per archetype in random order
+- build_plan_roster_prompt(roster_size, existing_roster_text) - roster planning prompt with shuffled archetypes/subtypes, requires subtype selection
+- build_generate_fighter_prompt(archetype_text, existing_roster_text, blueprint_text, body_directive, supernatural_instruction, min_total_stats, max_total_stats) - fighter generation prompt
 
 ---
 
@@ -165,16 +168,19 @@ Artefacts
 
 ## app/prompts/image_builders.py
 File: app/prompts/image_builders.py
-Purpose: Image prompt assembly for charsheet images (Grok API) and move action images. Not LLM prompts.
+File Length: 381 lines
+Purpose: Image prompt assembly for charsheet images (Grok API), body reference sheets, and move action images. Not LLM prompts.
 
 Artefacts
-- CHARSHEET_LAYOUT - character reference sheet turnaround prompt template
-- _charsheet_style_base(gender) - art style + reference sheet prefix
-- _charsheet_style(gender, tier, skimpiness_level) - adds NSFW nudity prefix when needed
-- _charsheet_tail(gender, tier, skimpiness_level) - art style tail with tier-specific nudity descriptors
+- CHARSHEET_LAYOUT - character reference sheet turnaround prompt template (3 views)
+- _charsheet_style_base/style/tail(gender, tier, skimpiness_level) - charsheet art style with NSFW nudity prefixes when needed
 - _build_charsheet_prompt(body_parts, clothing, expression, ...) - assembles full charsheet image prompt dict
-- _nsfw_prefix(gender, skimpiness_level) - NSFW prefix for move images
-- _nsfw_tail(gender, skimpiness_level) - NSFW tail for move images
+- BODY_REF_STYLE_BASE / BODY_REF_STYLE_FEMALE / BODY_REF_STYLE_MALE - painterly anatomy study style strings
+- BODY_REF_PAGE_STYLE - anatomy study page layout description (5 isolated body part drawings)
+- BODY_REF_LAYOUT - template string with {torso_detail} and {intimate_label} format slots for gendered 5-panel layout
+- BODY_REF_QUALITY - quality descriptors for body reference images
+- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin) - assembles 5-panel body reference prompt: face, rear angled view, chest/torso, butt study, intimate study; gender-specific panel descriptions with body trait details
+- _nsfw_prefix/tail(gender, skimpiness_level) - NSFW prefix/tail for move images
 - build_move_image_prompt(fighter, move, tier) - assembles move action image prompt string
 
 ---
@@ -233,7 +239,7 @@ Artefacts
 
 ## app/engine/image_style.py
 File: app/engine/image_style.py
-File Length: 42 lines
+File Length: 44 lines
 Purpose: Art style constants and gender-aware accessors for Arcane-inspired image generation prompts.
 
 Artefacts
@@ -246,15 +252,16 @@ Artefacts
 
 ## app/models/fighter.py
 File: app/models/fighter.py
-File Length: 134 lines
-Purpose: Fighter data model with nested Stats, Record, Injury, and Condition dataclasses.
+File Length: 165 lines
+Purpose: Fighter data model with nested Stats, Record, Injury, Condition, and Move dataclasses.
 
 Artefacts
 - Stats - power, speed, technique, toughness, supernatural; core_total()
 - Record - wins, losses, draws, kos, submissions; total_fights(), win_percentage()
 - Injury - type, severity, recovery_days_remaining
 - Condition - health_status, injuries list, recovery_days_remaining, morale, momentum
-- Fighter - full fighter profile with identity, physical, attire (3 tiers), image_prompt dicts (3 tiers + triple), stats, record, condition, storyline_log, rivalries
+- Move - name, description, stat_affinity
+- Fighter - full fighter profile: identity (id, ring_name, real_name, age, origin, gender, primary/secondary_archetype, subtype), physical (height, weight, build, distinguishing_features, iconic_features), attire (3 tiers), image_prompt dicts (body_ref + 3 tiers), stats, record, condition, moves, storyline_log, body_type_details, rivalries
 
 ---
 
@@ -321,25 +328,25 @@ Artefacts
 
 ## app/services/grok_image.py
 File: app/services/grok_image.py
-File Length: 200 lines
-Purpose: Grok (x.ai) image generation and editing API client for character sheet images.
+File Length: 231 lines
+Purpose: Grok (x.ai) image generation and editing API client. Generates body reference image first, then uses it as reference input for tier charsheets via edit_image.
 
 Artefacts
-- TIER_PROMPT_KEYS - maps tier names to fighter prompt dict keys
+- TIER_PROMPT_KEYS - maps tier names ("sfw","barely","nsfw") to fighter prompt dict keys
 - generate_image(prompt, config, aspect_ratio, resolution, n) - calls Grok image generation API with retries, returns URL list
 - edit_image(prompt, image_paths, config, ...) - calls Grok image edit API with base64-encoded reference images
 - download_image(url, save_path) - downloads image URL to disk
-- generate_charsheet_images(fighter, config, output_dir, tiers) - generates per-tier charsheet images + optional triple panel, saves to output_dir
+- generate_charsheet_images(fighter, config, output_dir, tiers) - generates body_ref image at 1:1 first, then uses it as reference for each tier charsheet via edit_image (falls back to generate_image if no body_ref prompt)
 
 ---
 
 ## app/scripts/generate_roster.py
 File: app/scripts/generate_roster.py
-File Length: 162 lines
+File Length: 191 lines
 Purpose: Two-phase roster generation script: plan roster via AI, then generate fighters from plan with optional image generation.
 
 Artefacts
-- plan_roster_cmd() - calls plan_roster, saves roster_plan.json, prints summary
-- generate_from_plan(generate_images) - reads roster_plan.json, generates each fighter via generate_fighter, optionally generates charsheet images, initializes WorldState
-- generate_roster(generate_images) - runs both phases sequentially
-- CLI: --plan (phase 1 only), --generate (phase 2 only), --images (include charsheet generation)
+- plan_roster_cmd() - calls plan_roster (passes existing fighters including subtypes), saves roster_plan.json, prints summary
+- generate_from_plan(generate_images, tiers, count) - reads roster_plan.json, generates each fighter via generate_fighter with skimpiness and outfit options, optionally generates charsheet images, initializes WorldState
+- generate_roster(generate_images, tiers, count) - runs both phases sequentially
+- CLI: --plan, --generate, --images, --tiers [sfw barely nsfw], -n/--count

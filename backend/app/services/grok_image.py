@@ -161,11 +161,17 @@ def generate_charsheet_images(
             return prompt_data.get("full_prompt", "")
         return ""
 
+    regen_body_ref = "body_ref" in tiers
+    actual_tiers = [t for t in tiers if t != "body_ref"]
+
     body_ref_prompt = _get_prompt("image_prompt_body_ref")
 
     tier_prompts = {}
-    for tier in tiers:
-        key = TIER_PROMPT_KEYS[tier]
+    for tier in actual_tiers:
+        key = TIER_PROMPT_KEYS.get(tier)
+        if not key:
+            print(f"    Unknown tier '{tier}', skipping")
+            continue
         prompt = _get_prompt(key)
         if not prompt:
             print(f"    No prompt for tier '{tier}', skipping")
@@ -174,10 +180,10 @@ def generate_charsheet_images(
 
     saved = {}
     body_ref_path = None
+    body_ref_filename = f"{base}_body_ref.png"
+    body_ref_save_path = output_dir / body_ref_filename
 
-    if body_ref_prompt:
-        body_ref_filename = f"{base}_body_ref.png"
-        body_ref_save_path = output_dir / body_ref_filename
+    if regen_body_ref and body_ref_prompt:
         print(f"    Generating body reference image...")
         urls = generate_image(
             prompt=body_ref_prompt,
@@ -190,8 +196,21 @@ def generate_charsheet_images(
         print(f"    Saved: {body_ref_filename}")
         saved["body_ref"] = body_ref_save_path
         body_ref_path = body_ref_save_path
-    else:
-        print("    No body reference prompt found, generating tiers without reference")
+    elif body_ref_save_path.exists():
+        body_ref_path = body_ref_save_path
+    elif body_ref_prompt and actual_tiers:
+        print(f"    Generating body reference image...")
+        urls = generate_image(
+            prompt=body_ref_prompt,
+            config=config,
+            aspect_ratio="1:1",
+            resolution="2k",
+            n=1,
+        )
+        download_image(urls[0], body_ref_save_path)
+        print(f"    Saved: {body_ref_filename}")
+        saved["body_ref"] = body_ref_save_path
+        body_ref_path = body_ref_save_path
 
     if tier_prompts:
         def _gen_and_save(tier, prompt):

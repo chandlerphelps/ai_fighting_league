@@ -19,7 +19,7 @@ export default function FighterProfile() {
   const [fightHistory, setFightHistory] = useState<Match[]>([])
   const [rivalFighters, setRivalFighters] = useState<Record<string, Fighter>>({})
   const [imageExpanded, setImageExpanded] = useState(false)
-  const TIERS = ['sfw', 'barely', 'nsfw'] as const
+  const TIERS = ['sfw', 'barely', 'nsfw', 'body_ref'] as const
   const [tierIndex, setTierIndex] = useState(0)
 
   const cycleTier = useCallback((direction: 1 | -1) => {
