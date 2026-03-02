@@ -103,7 +103,7 @@ BODY_TRAIT_OPTIONS = {
         "cat-like",
     ],
     "makeup_level": ["bare-faced", "light", "moderate", "heavy"],
-    "breast_size": ["small perky", "medium", "large", "very large"],
+    "breast_size": ["barely there", "small perky", "medium", "large", "very large"],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
     "vulva_type": [
         "tucked pussy, small hidden labia",
@@ -111,6 +111,48 @@ BODY_TRAIT_OPTIONS = {
         "compact petite tight pussy",
         "visible labia minora peeking out",
     ],
+}
+
+BODY_PROFILES = {
+    "Petite": {
+        "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
+        "abs_tone": ["slight definition", "toned and defined"],
+        "waist": ["narrow"],
+        "breast_size": ["barely there", "small perky", "medium"],
+        "butt_size": ["small tight", "medium round"],
+    },
+    "Slim": {
+        "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
+        "abs_tone": ["soft with no definition", "slight definition", "toned and defined"],
+        "waist": ["narrow", "medium"],
+        "breast_size": ["barely there", "small perky", "medium"],
+        "butt_size": ["small tight", "medium round"],
+    },
+    "Athletic": {
+        "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
+        "abs_tone": ["toned and defined", "ripped and shredded"],
+        "waist": ["narrow", "medium"],
+        "breast_size": ["small perky", "medium", "large"],
+        "butt_size": ["medium round", "large full"],
+    },
+    "Curvy": {
+        "body_fat_pct": ["athletic 17-20%", "fit 21-24%"],
+        "abs_tone": ["soft with no definition", "slight definition", "toned and defined"],
+        "waist": ["narrow", "medium"],
+        "breast_size": ["medium", "large", "very large"],
+        "butt_size": ["medium round", "large full", "very large prominent"],
+    },
+}
+
+ARCHETYPE_BODY_PROFILE_WEIGHTS = {
+    "The Siren": {"Petite": 5, "Slim": 20, "Athletic": 20, "Curvy": 55},
+    "The Witch": {"Petite": 20, "Slim": 30, "Athletic": 20, "Curvy": 30},
+    "The Viper": {"Petite": 10, "Slim": 30, "Athletic": 42, "Curvy": 18},
+    "The Prodigy": {"Petite": 35, "Slim": 33, "Athletic": 22, "Curvy": 10},
+    "The Doll": {"Petite": 35, "Slim": 25, "Athletic": 12, "Curvy": 28},
+    "The Huntress": {"Petite": 5, "Slim": 20, "Athletic": 50, "Curvy": 25},
+    "The Empress": {"Petite": 5, "Slim": 15, "Athletic": 25, "Curvy": 55},
+    "The Experiment": {"Petite": 15, "Slim": 22, "Athletic": 30, "Curvy": 33},
 }
 
 MAKEUP_DESCRIPTIONS = {
@@ -133,7 +175,7 @@ ARCHETYPE_HEIGHT_RANGES = {
 
 ARCHETYPE_BODY_WEIGHTS = {
     "The Siren": {
-        "breast_size": {"small perky": 5, "medium": 20, "large": 50, "very large": 25},
+        "breast_size": {"barely there": 2, "small perky": 5, "medium": 20, "large": 48, "very large": 25},
         "body_fat_pct": {
             "lean 12-16%": 2,
             "athletic 17-20%": 28,
@@ -161,7 +203,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 40, "medium": 45, "wide": 15},
     },
     "The Witch": {
-        "breast_size": {"small perky": 20, "medium": 35, "large": 30, "very large": 15},
+        "breast_size": {"barely there": 8, "small perky": 20, "medium": 32, "large": 27, "very large": 13},
         "body_fat_pct": {
             "lean 12-16%": 8,
             "athletic 17-20%": 30,
@@ -189,7 +231,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
     },
     "The Viper": {
-        "breast_size": {"small perky": 25, "medium": 40, "large": 25, "very large": 10},
+        "breast_size": {"barely there": 10, "small perky": 25, "medium": 37, "large": 22, "very large": 6},
         "body_fat_pct": {
             "lean 12-16%": 15,
             "athletic 17-20%": 45,
@@ -217,7 +259,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
     },
     "The Prodigy": {
-        "breast_size": {"small perky": 35, "medium": 40, "large": 20, "very large": 5},
+        "breast_size": {"barely there": 15, "small perky": 33, "medium": 32, "large": 16, "very large": 4},
         "body_fat_pct": {
             "lean 12-16%": 20,
             "athletic 17-20%": 48,
@@ -245,7 +287,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 45, "medium": 45, "wide": 10},
     },
     "The Doll": {
-        "breast_size": {"small perky": 30, "medium": 35, "large": 25, "very large": 10},
+        "breast_size": {"barely there": 12, "small perky": 28, "medium": 30, "large": 22, "very large": 8},
         "body_fat_pct": {
             "lean 12-16%": 8,
             "athletic 17-20%": 28,
@@ -273,7 +315,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
     },
     "The Huntress": {
-        "breast_size": {"small perky": 20, "medium": 40, "large": 30, "very large": 10},
+        "breast_size": {"barely there": 8, "small perky": 20, "medium": 37, "large": 27, "very large": 8},
         "body_fat_pct": {
             "lean 12-16%": 18,
             "athletic 17-20%": 47,
@@ -301,7 +343,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 35, "medium": 50, "wide": 15},
     },
     "The Empress": {
-        "breast_size": {"small perky": 5, "medium": 25, "large": 45, "very large": 25},
+        "breast_size": {"barely there": 1, "small perky": 5, "medium": 24, "large": 45, "very large": 25},
         "body_fat_pct": {
             "lean 12-16%": 2,
             "athletic 17-20%": 22,
@@ -329,7 +371,7 @@ ARCHETYPE_BODY_WEIGHTS = {
         "waist": {"narrow": 25, "medium": 45, "wide": 30},
     },
     "The Experiment": {
-        "breast_size": {"small perky": 20, "medium": 30, "large": 30, "very large": 20},
+        "breast_size": {"barely there": 8, "small perky": 18, "medium": 28, "large": 28, "very large": 18},
         "body_fat_pct": {
             "lean 12-16%": 12,
             "athletic 17-20%": 40,
@@ -359,8 +401,10 @@ ARCHETYPE_BODY_WEIGHTS = {
 }
 
 
-def _weighted_choice(category: str, archetype: str | None) -> str:
-    options = BODY_TRAIT_OPTIONS[category]
+def _weighted_choice(
+    category: str, archetype: str | None, allowed: list[str] | None = None
+) -> str:
+    options = allowed if allowed else BODY_TRAIT_OPTIONS[category]
     weights_dict = {}
     if archetype and archetype in ARCHETYPE_BODY_WEIGHTS:
         weights_dict = ARCHETYPE_BODY_WEIGHTS[archetype].get(category, {})
@@ -385,6 +429,7 @@ BODY_FAT_MULTIPLIERS = {
 }
 
 BREAST_WEIGHT_LBS = {
+    "barely there": 0,
     "small perky": 1,
     "medium": 3,
     "large": 6,
@@ -416,6 +461,17 @@ def _derive_weight(height_inches: int, traits: dict) -> int:
     return round(base)
 
 
+def _roll_body_profile(archetype: str | None) -> str:
+    profile_weights = ARCHETYPE_BODY_PROFILE_WEIGHTS.get(archetype, {})
+    if profile_weights:
+        profiles = list(profile_weights.keys())
+        weights = [profile_weights[p] for p in profiles]
+    else:
+        profiles = list(BODY_PROFILES.keys())
+        weights = [1] * len(profiles)
+    return random.choices(profiles, weights=weights, k=1)[0]
+
+
 def _roll_body_traits(archetype: str | None) -> dict:
     arch = (
         f"The {archetype}"
@@ -423,19 +479,23 @@ def _roll_body_traits(archetype: str | None) -> dict:
         else archetype
     )
 
+    profile = _roll_body_profile(arch)
+    allowed = BODY_PROFILES[profile]
+
     height_range = ARCHETYPE_HEIGHT_RANGES.get(arch, (59, 71))
     height_inches = random.randint(height_range[0], height_range[1])
 
     traits = {
         "height_inches": height_inches,
-        "waist": _weighted_choice("waist", arch),
-        "abs_tone": _weighted_choice("abs_tone", arch),
-        "body_fat_pct": _weighted_choice("body_fat_pct", arch),
-        "butt_size": _weighted_choice("butt_size", arch),
+        "body_profile": profile,
+        "waist": _weighted_choice("waist", arch, allowed.get("waist")),
+        "abs_tone": _weighted_choice("abs_tone", arch, allowed.get("abs_tone")),
+        "body_fat_pct": _weighted_choice("body_fat_pct", arch, allowed.get("body_fat_pct")),
+        "butt_size": _weighted_choice("butt_size", arch, allowed.get("butt_size")),
+        "breast_size": _weighted_choice("breast_size", arch, allowed.get("breast_size")),
         "face_shape": _weighted_choice("face_shape", arch),
         "eye_shape": _weighted_choice("eye_shape", arch),
         "makeup_level": _weighted_choice("makeup_level", arch),
-        "breast_size": _weighted_choice("breast_size", arch),
         "nipple_size": _weighted_choice("nipple_size", arch),
         "vulva_type": _weighted_choice("vulva_type", arch),
     }
@@ -453,6 +513,7 @@ def _build_body_directive(traits: dict) -> str:
     )
     return (
         "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):\n"
+        f"- Build: {traits.get('body_profile', 'Average')}\n"
         f"- Height: {traits['height']}\n"
         f"- Weight: {traits['weight']}\n"
         f"- Breast size: {traits['breast_size']}\n"
