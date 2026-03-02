@@ -42,12 +42,13 @@ DEFAULT_OUTFIT_OPTIONS = {
     "barely": {
         "tops": [
             "micro bikini top",
-            "sheer bralette",
             "tape crosses",
-            "strappy harness top",
-            "cut-out sports bra",
-            "underboob sling harness",
             "nano adhesive nipple pasties",
+            "tiny triangle bralette",
+            "low-cut wrap top",
+            "sideboob slit crop top",
+            "deep plunge halter",
+            "underboob sling harness",
         ],
         "bottoms": [
             "micro thong",
@@ -73,6 +74,8 @@ DEFAULT_OUTFIT_OPTIONS = {
             "suspenders framing bare breasts",
             "nipple chain harness",
             "collar with body chains",
+            "strappy harness top with bare breasts",
+            "cut-out sports bra with bare nipples",
         ],
         "bottoms": [
             "micro thong",
@@ -206,10 +209,10 @@ BODY_TRAIT_OPTIONS = {
     "breast_size": ["small perky", "medium", "large", "very large"],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
     "vulva_type": [
-        "tucked (small labia minora, mostly hidden)",
-        "puffy mound (prominent mons, plump outer labia)",
-        "compact petite (small, tight, everything close together)",
-        "visible labia (labia minora peeking past outer lips)",
+        "tucked pussy, small hidden labia",
+        "tasteful outer labia",
+        "compact petite tight pussy",
+        "visible labia minora peeking out",
     ],
 }
 
@@ -467,23 +470,6 @@ ARCHETYPE_BODY_WEIGHTS = {
     },
 }
 
-WEIGHT_MODIFIERS = {
-    "body_fat_pct": {
-        "lean 12-16%": -8,
-        "athletic 17-20%": -3,
-        "fit 21-24%": 2,
-        "soft 25-30%": 10,
-    },
-    "breast_size": {"small perky": -3, "medium": 0, "large": 4, "very large": 8},
-    "butt_size": {
-        "small tight": -3,
-        "medium round": 0,
-        "large full": 4,
-        "very large prominent": 8,
-    },
-    "waist": {"narrow": -3, "medium": 0, "wide": 4},
-}
-
 
 def _weighted_choice(category: str, archetype: str | None) -> str:
     options = BODY_TRAIT_OPTIONS[category]
@@ -503,11 +489,41 @@ def _format_height(inches: int) -> str:
     return f"{feet}'{remaining}\""
 
 
+BODY_FAT_MULTIPLIERS = {
+    "lean 12-16%": 0.90,
+    "athletic 17-20%": 0.95,
+    "fit 21-24%": 1.00,
+    "soft 25-30%": 1.08,
+}
+
+BREAST_WEIGHT_LBS = {
+    "small perky": 1,
+    "medium": 3,
+    "large": 6,
+    "very large": 10,
+}
+
+BUTT_WEIGHT_LBS = {
+    "small tight": 0,
+    "medium round": 2,
+    "large full": 5,
+    "very large prominent": 9,
+}
+
+WAIST_MULTIPLIERS = {
+    "narrow": 0.97,
+    "medium": 1.00,
+    "wide": 1.04,
+}
+
+
 def _derive_weight(height_inches: int, traits: dict) -> int:
-    base = (height_inches - 60) * 3.5 + 100
-    for category, mod_map in WEIGHT_MODIFIERS.items():
-        trait_val = traits.get(category, "")
-        base += mod_map.get(trait_val, 0)
+    lean_mass = (height_inches - 60) * 3.0 + 105
+    bf_mult = BODY_FAT_MULTIPLIERS.get(traits.get("body_fat_pct", ""), 1.0)
+    waist_mult = WAIST_MULTIPLIERS.get(traits.get("waist", ""), 1.0)
+    base = lean_mass * bf_mult * waist_mult
+    base += BREAST_WEIGHT_LBS.get(traits.get("breast_size", ""), 0)
+    base += BUTT_WEIGHT_LBS.get(traits.get("butt_size", ""), 0)
     base += random.randint(-3, 3)
     return round(base)
 
@@ -554,6 +570,7 @@ def _build_body_directive(traits: dict) -> str:
         "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):\n"
         f"- Height: {traits['height']}\n"
         f"- Weight: {traits['weight']}\n"
+        f"- Breast size: {traits['breast_size']}\n"
         f"- Waist: {traits['waist']}\n"
         f"- Abs/core: {traits['abs_tone']}\n"
         f"- Body fat: {traits['body_fat_pct']}\n"
@@ -569,10 +586,15 @@ def _build_body_directive(traits: dict) -> str:
     )
 
 
+def _build_body_shape_line(traits: dict) -> str:
+    return f"{traits['breast_size']} breasts, " f"{traits['butt_size']} butt"
+
+
 def _build_nsfw_anatomy_line(traits: dict) -> str:
     return (
-        f"Anatomy details: {traits['breast_size']} breasts, "
+        f"{traits['breast_size']} breasts, "
         f"{traits['nipple_size']} nipples, "
+        f"{traits['butt_size']} butt, "
         f"{traits['vulva_type']}"
     )
 
@@ -869,6 +891,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Conservative — only face, hands, and forearms visible. Full coverage everywhere else.",
         "barely_label": "Flirty",
         "barely_skin_pct": "45-55",
+        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
         "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
         "nsfw_adjective": "Scandalous",
         "nsfw_hard_rules": "Topless — bare breasts fully visible. Bottoms stay on but must be ultra-sexy: thongs, micro-bikini bottoms, strappy lingerie, or sheer panties. Show off legs and hips.",
@@ -882,6 +905,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
         "barely_label": "Risqué",
         "barely_skin_pct": "60-70",
+        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
         "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
         "nsfw_adjective": "Confident",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible.",
@@ -895,7 +919,8 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Bold — shows skin confidently but still looks like a real outfit.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
-        "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only.",
+        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
+        "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only. Areola peeking out from tiny pasties is encouraged.",
         "nsfw_adjective": "Tease",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast or running her hands along her body - teasing sensually.",
         "nsfw_description": "Teasing, playful energy. Anatomy on display with flirty self-touching.",
@@ -908,7 +933,8 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "99",
-        "barely_guidance": "Extreme — nipple tape and a tiny nail-sized strip over the clit.",
+        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
+        "barely_guidance": "Extreme — micro pasties with areola peeking out and a tiny nail-sized strip over the clit. Areola exposure is expected at this level.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
         "nsfw_description": "Maximum explicit posing. Pierced nipples allowed or tiny subtle clit piercings allowed (tasteful small rings only). Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
@@ -920,8 +946,9 @@ SKIMPINESS_LEVELS = {
 OUTFIT_STYLE_RULES = """STYLE RULES (apply to ALL tiers):
 - Be CONCISE. No fluff or purple prose. "chain necklace with sickle pendant" not "kusarigama chain necklace with sickle pendant swaying menacingly".
 - List MORE pieces of apparel. Include footwear, gloves/hand wraps, jewelry, belts, and accessories.
-- Above all, the character needs to LOOK COOL and dangerous in their outift. 
-- Every outfit should have at least 4-5 distinct items. Even minimal outfits should specify shoes, jewelry, gloves, and accessories."""
+- Above all, the character needs to LOOK COOL and dangerous in their outift.
+- Every outfit should have at least 4-5 distinct items. Even minimal outfits should specify shoes, jewelry, gloves, and accessories.
+- FOOTWEAR: Avoid stilettos unless a strong personality match with the character. Prefer combat boots, sneakers, bare feet, platform boots, or flats."""
 
 
 def _build_tier_prompt(
@@ -947,9 +974,10 @@ Body: {body_parts}
 Expression: {expression}"""
 
     body_details = character_summary.get("body_type_details", {})
-    if tier in ("barely", "nsfw") and body_details:
-        anatomy_line = _build_nsfw_anatomy_line(body_details)
-        char_base += f"\n{anatomy_line}"
+    if body_details:
+        char_base += f"\n{_build_body_shape_line(body_details)}"
+        if tier == "nsfw":
+            char_base += f"\n{_build_nsfw_anatomy_line(body_details)}"
 
     if tier == "nsfw":
         char_context = char_base
@@ -1005,7 +1033,7 @@ Generate the "{level['barely_label']}" tier outfit for this character (skimpines
 {OUTFIT_STYLE_RULES}
 {outfit_examples_text}
 RULES:
-  HARD RULES: No nipples, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.
+  HARD RULES: {level['barely_hard_rules']}
   SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
   VIBE: {level['barely_label']} — {level['barely_guidance']}
   Iconic features + additional pieces to hit the skin target.
@@ -1389,6 +1417,7 @@ Return ONLY valid JSON with this exact structure:
             tier="barely",
             gender=gender,
             skimpiness_level=skimpiness_level,
+            body_type_details=body_traits,
         ),
         image_prompt_sfw=_build_charsheet_prompt(
             body_parts,
@@ -1398,6 +1427,7 @@ Return ONLY valid JSON with this exact structure:
             tier="sfw",
             gender=gender,
             skimpiness_level=skimpiness_level,
+            body_type_details=body_traits,
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
             body_parts,
@@ -1407,6 +1437,7 @@ Return ONLY valid JSON with this exact structure:
             tier="nsfw",
             gender=gender,
             skimpiness_level=skimpiness_level,
+            body_type_details=body_traits,
         ),
         stats=stats,
         record=Record(),
@@ -1516,9 +1547,16 @@ def _build_charsheet_prompt(
     tier: str = "barely",
     gender: str = "female",
     skimpiness_level: int = 4,
+    body_type_details: dict | None = None,
 ) -> dict:
     if not body_parts:
         return {}
+
+    anatomy = ""
+    if body_type_details:
+        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
+        if tier == "nsfw":
+            anatomy = _build_nsfw_anatomy_line(body_type_details)
 
     style = _charsheet_style(gender, tier, skimpiness_level)
 
@@ -1550,19 +1588,17 @@ def _build_charsheet_prompt(
 
     tail = _charsheet_tail(gender, tier, skimpiness_level)
 
-    full = ", ".join(
-        p
-        for p in [
-            style,
-            character_desc,
-            front_view,
-            center_pose,
-            back_view,
-            expression,
-            tail,
-        ]
-        if p
-    )
+    sections = [
+        f"[STYLE] {style}",
+        f"[CHARACTER] {character_desc}",
+        f"[ANATOMY] {anatomy}" if anatomy else "",
+        f"[VIEWS] {front_view}, {center_pose}, {back_view}",
+        f"[EXPRESSION] {expression}" if expression else "",
+        f"[QUALITY] {tail}",
+        f"[ANATOMY EMPHASIS] {anatomy}" if anatomy else "",
+    ]
+    full = "\n".join(s for s in sections if s)
+
     return {
         "style": style,
         "layout": CHARSHEET_LAYOUT,
