@@ -189,14 +189,6 @@ BODY_TRAIT_OPTIONS = {
         "oval",
         "diamond",
     ],
-    "lip_type": ["full pouty", "bow-shaped", "wide", "plump"],
-    "nose_type": [
-        "button",
-        "upturned",
-        "straight",
-        "small delicate",
-        "petite",
-    ],
     "eye_shape": [
         "almond",
         "round",
@@ -204,7 +196,6 @@ BODY_TRAIT_OPTIONS = {
         "doe",
         "cat-like",
     ],
-    "brow_shape": ["strong thick", "arched", "straight", "delicate thin"],
     "makeup_level": ["bare-faced", "light", "moderate", "heavy"],
     "breast_size": ["small perky", "medium", "large", "very large"],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
@@ -536,10 +527,7 @@ def _roll_body_traits(archetype: str | None) -> dict:
         "body_fat_pct": _weighted_choice("body_fat_pct", arch),
         "butt_size": _weighted_choice("butt_size", arch),
         "face_shape": _weighted_choice("face_shape", arch),
-        "lip_type": _weighted_choice("lip_type", arch),
-        "nose_type": _weighted_choice("nose_type", arch),
         "eye_shape": _weighted_choice("eye_shape", arch),
-        "brow_shape": _weighted_choice("brow_shape", arch),
         "makeup_level": _weighted_choice("makeup_level", arch),
         "breast_size": _weighted_choice("breast_size", arch),
         "nipple_size": _weighted_choice("nipple_size", arch),
@@ -566,9 +554,7 @@ def _build_body_directive(traits: dict) -> str:
         f"- Abs/core: {traits['abs_tone']}\n"
         f"- Body fat: {traits['body_fat_pct']}\n"
         f"- Butt: {traits['butt_size']}\n"
-        f"- Face: {traits['face_shape']}, {traits['lip_type']} lips, "
-        f"{traits['nose_type']} nose, {traits['eye_shape']} eyes, "
-        f"{traits['brow_shape']} brows\n"
+        f"- Face: {traits['face_shape']}, {traits['eye_shape']} eyes\n"
         f"- Makeup: {traits['makeup_level']} — {makeup_desc}\n"
         "\nThe height and weight are EXACT — use these values directly.\n"
         "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
@@ -1334,7 +1320,7 @@ Return ONLY valid JSON with this exact structure:
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
   "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
   "personality": "<max 10 words — their vibe and attitude, e.g. 'cold, calculating predator who enjoys breaking opponents slowly'>",
-  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. MUST incorporate the rolled body traits (waist, abs, butt, face shape, lips, nose, eyes, brows, makeup) naturally into this description>",
+  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. MUST incorporate the rolled body traits (waist, abs, butt, face shape, eyes, makeup) naturally into this description>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
   "stats": {{
