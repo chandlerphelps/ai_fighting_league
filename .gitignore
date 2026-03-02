@@ -43,8 +43,5 @@ htmlcov/
 # Temp output
 _TMP_OUTPUT.md
 
-# Data (optional - uncomment to exclude generated data from git)
-# data/fighters/
-# data/matches/
-# data/events/
-# data/world_state.json
+# Data
+data/**/*.json

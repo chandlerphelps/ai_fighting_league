@@ -1,69 +1,93 @@
 [
   {
-    "concept_hook": "Lifelike android assassin who deploys seductive micro-drones to overload nerves with euphoric feedback, reveling in the irony of foes' blissful defeat.",
-    "ring_name": "Silk Doll",
+    "concept_hook": "Hypnotic Parisian dancer who entrances foes with sultry siren songs before garroting them with razor wires.",
+    "ring_name": "Lorelei",
     "gender": "female",
-    "age": 22,
-    "origin": "Seoul, South Korea",
-    "primary_archetype": "Doll",
-    "secondary_archetype": "Experiment",
-    "has_supernatural": false,
-    "body_type": "petite and hyper-curvy with porcelain-smooth synthetic skin",
-    "power_tier": "gatekeeper",
-    "narrative_role": "uncanny seductress whose artificial allure creeps out traditionalists",
+    "age": 27,
+    "origin": "Paris, France",
+    "primary_archetype": "Siren",
+    "secondary_archetype": "Viper",
+    "has_supernatural": true,
+    "body_type": "voluptuous dancer's physique",
+    "power_tier": "contender",
+    "narrative_role": "the league's ultimate temptress, drawing crowds while igniting jealous vendettas",
     "rivalry_seeds": [
-      "Crimson Empress",
-      "Iron Huntress"
+      "Ravenna",
+      "Imperia"
     ],
-    "media_archetype_inspiration": "Alita from Battle Angel Alita",
+    "media_archetype_inspiration": "Bayonetta",
     "skimpiness_weights": [
       5,
       15,
-      45,
+      40,
+      40
+    ]
+  },
+  {
+    "concept_hook": "Stoic Swedish runecaster who carves debilitating curses into flesh, reveling in foes' slow unraveling.",
+    "ring_name": "Ravenna",
+    "gender": "female",
+    "age": 29,
+    "origin": "Stockholm, Sweden",
+    "primary_archetype": "Witch",
+    "secondary_archetype": "Empress",
+    "has_supernatural": true,
+    "body_type": "slender pale mystic",
+    "power_tier": "gatekeeper",
+    "narrative_role": "calculating veteran who mentors selectively but betrays for power",
+    "rivalry_seeds": [
+      "Lorelei",
+      "Proxima"
+    ],
+    "media_archetype_inspiration": "Yennefer from The Witcher",
+    "skimpiness_weights": [
+      10,
+      25,
+      30,
       35
     ]
   },
   {
-    "concept_hook": "Haughty royal scion who ensnares enemies with pheromone-laced fans and imperious glares, secretly despising the moral rot her victories demand.",
-    "ring_name": "Crimson Empress",
+    "concept_hook": "Shadowy Aussie ambusher who deploys aerosol neurotoxins and fang strikes, thriving on panicked prey.",
+    "ring_name": "Taipan",
     "gender": "female",
-    "age": 28,
-    "origin": "Buenos Aires, Argentina",
-    "primary_archetype": "Empress",
-    "secondary_archetype": "Siren",
-    "has_supernatural": true,
-    "body_type": "voluptuous hourglass with commanding posture",
-    "power_tier": "champion",
-    "narrative_role": "arrogant overlord fueling underdog storylines",
+    "age": 24,
+    "origin": "Sydney, Australia",
+    "primary_archetype": "Viper",
+    "secondary_archetype": "Huntress",
+    "has_supernatural": false,
+    "body_type": "lithe tanned surfer's build",
+    "power_tier": "prospect",
+    "narrative_role": "brash upstart who poisons her way to relevance, haunted by a botched hit",
     "rivalry_seeds": [
-      "Silk Doll",
-      "Mist Witch"
+      "Artemis",
+      "Helix"
     ],
-    "media_archetype_inspiration": "Bayonetta's regal witch vibe",
+    "media_archetype_inspiration": "O-Ren Ishii from Kill Bill",
     "skimpiness_weights": [
-      10,
-      25,
-      40,
-      25
+      15,
+      35,
+      30,
+      20
     ]
   },
   {
-    "concept_hook": "Gene-modded escapee with venomous retractable spurs who savors dismantling cocky tech foes, but flashbacks cripple her in prolonged bouts.",
-    "ring_name": "Vixen Experiment",
+    "concept_hook": "Acrobatic prodigy whose predictive chain grappling turns any exchange into inevitable submission.",
+    "ring_name": "Proxima",
     "gender": "female",
-    "age": 24,
-    "origin": "Silicon Valley, California, USA",
-    "primary_archetype": "Experiment",
-    "secondary_archetype": "Viper",
+    "age": 22,
+    "origin": "Manila, Philippines",
+    "primary_archetype": "Prodigy",
+    "secondary_archetype": "Doll",
     "has_supernatural": false,
-    "body_type": "lithe and toned with subtle bioluminescent tattoos",
+    "body_type": "petite flexible acrobat",
     "power_tier": "prospect",
-    "narrative_role": "vengeful lab rejector exposing roster corruption",
+    "narrative_role": "underestimated genius driven by a need to prove her intellect through dominance",
     "rivalry_seeds": [
-      "Silk Doll",
-      "Nova Prodigy"
+      "Helix",
+      "Ravenna"
     ],
-    "media_archetype_inspiration": "Elektra with lab enhancements",
+    "media_archetype_inspiration": "Juri from Street Fighter",
     "skimpiness_weights": [
       20,
       40,
@@ -72,46 +96,22 @@
     ]
   },
   {
-    "concept_hook": "Coven enchantress weaving pain-illusions that break wills, who winces at each curse's backlash on her own psyche.",
-    "ring_name": "Mist Witch",
+    "concept_hook": "Ethereal puppeteer who twists spectral threads to contort her body and shred enemies like marionettes.",
+    "ring_name": "Marionette",
     "gender": "female",
-    "age": 26,
-    "origin": "Paris, France",
-    "primary_archetype": "Witch",
-    "secondary_archetype": "Empress",
+    "age": 25,
+    "origin": "Bangkok, Thailand",
+    "primary_archetype": "Doll",
+    "secondary_archetype": "Experiment",
     "has_supernatural": true,
-    "body_type": "slender and alluring with hypnotic eyes",
-    "power_tier": "contender",
-    "narrative_role": "tormented mystic clashing with science purists",
-    "rivalry_seeds": [
-      "Crimson Empress",
-      "Nova Prodigy"
-    ],
-    "media_archetype_inspiration": "Yennefer from The Witcher",
-    "skimpiness_weights": [
-      15,
-      30,
-      35,
-      20
-    ]
-  },
-  {
-    "concept_hook": "Chem-lab prodigy slinging paralytic nanites via blow darts and hip sways, addicted to the screams but haunted by collateral innocents.",
-    "ring_name": "Jade Viper",
-    "gender": "female",
-    "age": 23,
-    "origin": "Bogot\u00e1, Colombia",
-    "primary_archetype": "Viper",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "agile and curvaceous with serpentine flexibility",
+    "body_type": "fragile curvaceous doll-like",
     "power_tier": "gatekeeper",
-    "narrative_role": "sneaky opportunist igniting dirty tactics debates",
+    "narrative_role": "haunted performer who blurs art and atrocity, craving applause amid the carnage",
     "rivalry_seeds": [
-      "Vixen Experiment",
-      "Echo Siren"
+      "Proxima",
+      "Imperia"
     ],
-    "media_archetype_inspiration": "Viper from Valorant",
+    "media_archetype_inspiration": "Millia Rage from Guilty Gear",
     "skimpiness_weights": [
       5,
       20,
@@ -120,75 +120,74 @@
     ]
   },
   {
-    "concept_hook": "Sonic-voiced beach bombshell whose harmonies induce berserk rages in rivals, masking her loneliness with post-fight parties.",
-    "ring_name": "Echo Siren",
+    "concept_hook": "Primal tracker who hurls bolas and spears while setting brutal traps, feeding on the hunt's thrill.",
+    "ring_name": "Artemis",
     "gender": "female",
-    "age": 21,
-    "origin": "Sydney, Australia",
-    "primary_archetype": "Siren",
-    "secondary_archetype": "Doll",
-    "has_supernatural": true,
-    "body_type": "busty and sun-kissed athletic",
-    "power_tier": "prospect",
-    "narrative_role": "fun-loving disruptor of stoic veterans",
-    "rivalry_seeds": [
-      "Jade Viper",
-      "Iron Huntress"
-    ],
-    "media_archetype_inspiration": "Dazzler from Marvel",
-    "skimpiness_weights": [
-      0,
-      10,
-      40,
-      50
-    ]
-  },
-  {
-    "concept_hook": "Gymnast savant dismantling foes via anatomy knowledge, whose joy in perfect submissions wars with guilt over broken dreams.",
-    "ring_name": "Nova Prodigy",
-    "gender": "female",
-    "age": 19,
-    "origin": "Beijing, China",
-    "primary_archetype": "Prodigy",
-    "secondary_archetype": "Huntress",
-    "has_supernatural": false,
-    "body_type": "slim, flexible, and toned gymnast",
-    "power_tier": "prospect",
-    "narrative_role": "rising pure-talent star challenging cheaters",
-    "rivalry_seeds": [
-      "Vixen Experiment",
-      "Mist Witch"
-    ],
-    "media_archetype_inspiration": "Hit-Girl from Kick-Ass",
-    "skimpiness_weights": [
-      30,
-      40,
-      20,
-      10
-    ]
-  },
-  {
-    "concept_hook": "Tundra-born tracker with smart-spears and pressure snares, who bonds with prey in the agony of the chase before merciful ends.",
-    "ring_name": "Iron Huntress",
-    "gender": "female",
-    "age": 30,
-    "origin": "Moscow, Russia",
+    "age": 28,
+    "origin": "Buenos Aires, Argentina",
     "primary_archetype": "Huntress",
-    "secondary_archetype": "Viper",
+    "secondary_archetype": "Siren",
     "has_supernatural": false,
-    "body_type": "tall, muscular yet feminine powerhouse",
+    "body_type": "toned athletic curves",
     "power_tier": "contender",
-    "narrative_role": "relentless apex predator defining endurance tests",
+    "narrative_role": "feral survivor who protects her 'territory' with savage loyalty and wrath",
     "rivalry_seeds": [
-      "Silk Doll",
-      "Echo Siren"
+      "Taipan"
     ],
-    "media_archetype_inspiration": "Huntress from DC Comics",
+    "media_archetype_inspiration": "Lara Croft from Tomb Raider",
     "skimpiness_weights": [
-      25,
-      45,
+      15,
+      30,
+      35,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Aura-wielding despot who crushes spirits with commands before pulverizing bodies in submission holds.",
+    "ring_name": "Imperia",
+    "gender": "female",
+    "age": 32,
+    "origin": "Toronto, Canada",
+    "primary_archetype": "Empress",
+    "secondary_archetype": "Witch",
+    "has_supernatural": true,
+    "body_type": "statuesque commanding figure",
+    "power_tier": "champion",
+    "narrative_role": "arrogant ruler who demands tribute, softened only by a hidden fear of obsolescence",
+    "rivalry_seeds": [
+      "Lorelei",
+      "Marionette"
+    ],
+    "media_archetype_inspiration": "Sindel from Mortal Kombat",
+    "skimpiness_weights": [
       20,
-      10
+      30,
+      30,
+      20
+    ]
+  },
+  {
+    "concept_hook": "Nanite-infused escapee whose body mutates mid-fight to heal wounds and mimic foes' strengths.",
+    "ring_name": "Helix",
+    "gender": "female",
+    "age": 23,
+    "origin": "Rome, Italy",
+    "primary_archetype": "Experiment",
+    "secondary_archetype": "Prodigy",
+    "has_supernatural": true,
+    "body_type": "perfectly sculpted enhanced physique",
+    "power_tier": "gatekeeper",
+    "narrative_role": "tormented creation fighting for identity, addicted to the evolution of battle",
+    "rivalry_seeds": [
+      "Proxima",
+      "Taipan"
+    ],
+    "media_archetype_inspiration": "Alita from Alita: Battle Angel",
+    "skimpiness_weights": [
+      10,
+      25,
+      35,
+      30
     ]
   }
 ]

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
@@ -11,12 +11,31 @@ import InjuryBadge from '../components/InjuryBadge'
 import FighterLink from '../components/FighterLink'
 import FighterPortrait from '../components/FighterPortrait'
 import NoData from '../components/NoData'
+import { fighterImagePath } from '../lib/images'
 
 export default function FighterProfile() {
   const { id } = useParams<{ id: string }>()
   const { data: fighter, loading } = useFighter(id ?? '')
   const [fightHistory, setFightHistory] = useState<Match[]>([])
   const [rivalFighters, setRivalFighters] = useState<Record<string, Fighter>>({})
+  const [imageExpanded, setImageExpanded] = useState(false)
+  const TIERS = ['sfw', 'barely', 'nsfw'] as const
+  const [tierIndex, setTierIndex] = useState(0)
+
+  const cycleTier = useCallback((direction: 1 | -1) => {
+    setTierIndex(prev => (prev + direction + TIERS.length) % TIERS.length)
+  }, [])
+
+  useEffect(() => {
+    if (!imageExpanded) return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); cycleTier(1) }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); cycleTier(-1) }
+      else if (e.key === 'Escape') { setImageExpanded(false) }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [imageExpanded, cycleTier])
 
   useEffect(() => {
     if (!fighter) return
@@ -45,7 +64,9 @@ export default function FighterProfile() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xl }}>
       <div style={{ display: 'flex', gap: spacing.lg, alignItems: 'flex-start' }}>
-        <FighterPortrait fighterId={fighter.id} name={fighter.ring_name} size={96} />
+        <div onClick={() => setImageExpanded(!imageExpanded)} style={{ cursor: 'pointer', flexShrink: 0 }}>
+          <FighterPortrait fighterId={fighter.id} name={fighter.ring_name} size={96} />
+        </div>
         <div>
           <h1 style={{ fontSize: fontSizes.xxl, color: colors.accent, marginBottom: spacing.xs }}>{fighter.ring_name}</h1>
           <p style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
@@ -53,6 +74,51 @@ export default function FighterProfile() {
           </p>
         </div>
       </div>
+
+      {imageExpanded && (
+        <div style={{
+          backgroundColor: colors.surface,
+          borderRadius: '4px',
+          border: `1px solid ${colors.border}`,
+          padding: spacing.md,
+        }}>
+          <div style={{ display: 'flex', gap: spacing.sm, marginBottom: spacing.md }}>
+            {TIERS.map((tier, i) => (
+              <button
+                key={tier}
+                onClick={() => setTierIndex(i)}
+                style={{
+                  padding: `${spacing.xs} ${spacing.md}`,
+                  backgroundColor: i === tierIndex ? colors.accent : colors.surfaceLight,
+                  color: i === tierIndex ? colors.background : colors.text,
+                  border: `1px solid ${i === tierIndex ? colors.accent : colors.border}`,
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: fontSizes.sm,
+                  fontWeight: i === tierIndex ? 'bold' : 'normal',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {tier}
+              </button>
+            ))}
+            <span style={{ color: colors.textDim, fontSize: fontSizes.xs, marginLeft: 'auto', alignSelf: 'center' }}>
+              arrow keys to cycle · esc to close
+            </span>
+          </div>
+          <img
+            src={fighterImagePath(fighter.id, fighter.ring_name, TIERS[tierIndex])}
+            alt={`${fighter.ring_name} — ${TIERS[tierIndex]}`}
+            onClick={() => cycleTier(1)}
+            style={{
+              maxWidth: '100%',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          />
+        </div>
+      )}
 
       <section>
         <h2 style={sectionHeader}>Physical Description</h2>

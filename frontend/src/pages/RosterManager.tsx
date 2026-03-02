@@ -50,9 +50,11 @@ export default function RosterManager() {
   const [globalTier, setGlobalTier] = useState<Tier>('sfw')
   const [movesViewId, setMovesViewId] = useState<string | null>(null)
   const [lightbox, setLightbox] = useState<{
-    url: string
+    fighterId: string
+    ringName: string
+    tier: Tier
     label: string
-    onRedo?: () => void
+    onRedo?: (tier: Tier) => void
   } | null>(null)
   const [imageVersion, setImageVersion] = useState(0)
   const [showOutfitOptions, setShowOutfitOptions] = useState(false)
@@ -395,9 +397,11 @@ export default function RosterManager() {
                   <FighterImage fighterId={fighter.id} ringName={fighter.ring_name} tier={globalTier} version={imageVersion} />
                   <ImageOverlayButtons
                     onExpand={() => setLightbox({
-                      url: `${fighterImagePath(fighter.id, fighter.ring_name, globalTier)}?v=${imageVersion}`,
-                      label: `${fighter.ring_name} — ${globalTier.toUpperCase()}`,
-                      onRedo: () => handleRegenImages(fighter.id, [globalTier]),
+                      fighterId: fighter.id,
+                      ringName: fighter.ring_name,
+                      tier: globalTier,
+                      label: fighter.ring_name,
+                      onRedo: (tier: Tier) => handleRegenImages(fighter.id, [tier]),
                     })}
                     onRedo={busy ? undefined : () => handleRegenImages(fighter.id, [globalTier])}
                   />
@@ -408,24 +412,38 @@ export default function RosterManager() {
                     right: 0,
                     background: `linear-gradient(transparent, ${withAlpha(colors.background, 0.95)})`,
                     padding: `${spacing.xl} ${spacing.md} ${spacing.md}`,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
                   }}>
-                    <div style={{
-                      fontSize: fontSizes.lg,
-                      fontFamily: fonts.heading,
-                      color: colors.accent,
-                      fontWeight: 'bold',
-                      lineHeight: 1.2,
-                    }}>
-                      {fighter.ring_name}
+                    <div>
+                      <div style={{
+                        fontSize: fontSizes.lg,
+                        fontFamily: fonts.heading,
+                        color: colors.accent,
+                        fontWeight: 'bold',
+                        lineHeight: 1.2,
+                      }}>
+                        {fighter.ring_name}
+                      </div>
+                      <div style={{
+                        fontSize: fontSizes.xs,
+                        fontFamily: fonts.body,
+                        color: colors.textMuted,
+                        marginTop: '2px',
+                      }}>
+                        {fighter.origin}
+                      </div>
                     </div>
-                    <div style={{
-                      fontSize: fontSizes.xs,
-                      fontFamily: fonts.body,
-                      color: colors.textMuted,
-                      marginTop: '2px',
-                    }}>
-                      {fighter.origin}
-                    </div>
+                    {fighter.skimpiness_level && (
+                      <span style={{
+                        fontSize: fontSizes.sm,
+                        fontFamily: fonts.body,
+                        color: colors.textDim,
+                      }}>
+                        {fighter.skimpiness_level}
+                      </span>
+                    )}
                   </div>
                   {busy && (
                     <div style={{
@@ -587,7 +605,13 @@ export default function RosterManager() {
                     fighter={fighter}
                     tier={globalTier}
                     imageVersion={imageVersion}
-                    onExpand={(url, label, onRedo) => setLightbox({ url, label, onRedo })}
+                    onExpand={() => setLightbox({
+                      fighterId: fighter.id,
+                      ringName: fighter.ring_name,
+                      tier: globalTier,
+                      label: fighter.ring_name,
+                      onRedo: (tier: Tier) => handleRegenImages(fighter.id, [tier]),
+                    })}
                     onRedoMove={(moveIndex, tier) => {
                       const task_promise = regenerateMoveImage(fighter.id, moveIndex, tier)
                       task_promise.then(task => {
@@ -612,8 +636,11 @@ export default function RosterManager() {
 
       {lightbox && (
         <Lightbox
-          url={lightbox.url}
+          fighterId={lightbox.fighterId}
+          ringName={lightbox.ringName}
+          initialTier={lightbox.tier}
           label={lightbox.label}
+          imageVersion={imageVersion}
           onRedo={lightbox.onRedo}
           onClose={() => setLightbox(null)}
         />
@@ -792,7 +819,7 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
   fighter: Fighter
   tier: string
   imageVersion: number
-  onExpand: (url: string, label: string, onRedo?: () => void) => void
+  onExpand: () => void
   onRedoMove: (moveIndex: number, tier: string) => void
   busy: boolean
 }) {
@@ -833,11 +860,7 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
                   version={imageVersion}
                 />
                 <ImageOverlayButtons
-                  onExpand={() => onExpand(
-                    imgUrl,
-                    `${fighter.ring_name} — ${move.name}`,
-                    () => onRedoMove(index, tier),
-                  )}
+                  onExpand={() => onExpand()}
                   onRedo={busy ? undefined : () => onRedoMove(index, tier)}
                 />
               </div>
@@ -1522,19 +1545,36 @@ function Spinner() {
   )
 }
 
-function Lightbox({ url, label, onRedo, onClose }: {
-  url: string
+function Lightbox({ fighterId, ringName, initialTier, label, imageVersion, onRedo, onClose }: {
+  fighterId: string
+  ringName: string
+  initialTier: Tier
   label: string
-  onRedo?: () => void
+  imageVersion: number
+  onRedo?: (tier: Tier) => void
   onClose: () => void
 }) {
+  const [activeTier, setActiveTier] = useState<Tier>(initialTier)
+  const tierKeys: Tier[] = ['sfw', 'barely', 'nsfw']
+
+  const cycleTier = useCallback((dir: 1 | -1) => {
+    setActiveTier(prev => {
+      const idx = tierKeys.indexOf(prev)
+      return tierKeys[(idx + dir + tierKeys.length) % tierKeys.length]
+    })
+  }, [])
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); cycleTier(1) }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); cycleTier(-1) }
     }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [onClose])
+  }, [onClose, cycleTier])
+
+  const url = `${fighterImagePath(fighterId, ringName, activeTier)}?v=${imageVersion}`
 
   return (
     <div
@@ -1565,8 +1605,31 @@ function Lightbox({ url, label, onRedo, onClose }: {
           color: colors.accent,
           fontWeight: 'bold',
         }}>
-          {label}
+          {label} — {activeTier.toUpperCase()}
         </span>
+        <div style={{ display: 'flex', gap: spacing.xs }} onClick={e => e.stopPropagation()}>
+          {tierKeys.map(tier => (
+            <button
+              key={tier}
+              onClick={() => setActiveTier(tier)}
+              style={{
+                padding: `${spacing.xs} ${spacing.md}`,
+                backgroundColor: tier === activeTier ? withAlpha(colors.accent, 0.25) : withAlpha(colors.background, 0.6),
+                border: `1px solid ${tier === activeTier ? colors.accent : withAlpha(colors.textDim, 0.3)}`,
+                borderRadius: '4px',
+                color: tier === activeTier ? colors.accent : colors.textMuted,
+                fontFamily: fonts.body,
+                fontSize: fontSizes.sm,
+                fontWeight: tier === activeTier ? 'bold' : 'normal',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}
+            >
+              {tier}
+            </button>
+          ))}
+        </div>
       </div>
       <div style={{
         position: 'absolute',
@@ -1577,7 +1640,7 @@ function Lightbox({ url, label, onRedo, onClose }: {
       }}>
         {onRedo && (
           <button
-            onClick={e => { e.stopPropagation(); onRedo() }}
+            onClick={e => { e.stopPropagation(); onRedo(activeTier) }}
             style={{
               ...btnStyle(colors.face),
               padding: `${spacing.sm} ${spacing.lg}`,
@@ -1600,14 +1663,14 @@ function Lightbox({ url, label, onRedo, onClose }: {
       </div>
       <img
         src={url}
-        alt={label}
-        onClick={e => e.stopPropagation()}
+        alt={`${label} — ${activeTier}`}
+        onClick={e => { e.stopPropagation(); cycleTier(1) }}
         style={{
           maxWidth: '90vw',
           maxHeight: '85vh',
           objectFit: 'contain',
           borderRadius: '8px',
-          cursor: 'default',
+          cursor: 'pointer',
         }}
       />
     </div>

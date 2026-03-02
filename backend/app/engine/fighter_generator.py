@@ -205,7 +205,7 @@ BODY_TRAIT_OPTIONS = {
         "cat-like",
     ],
     "brow_shape": ["strong thick", "arched", "straight", "delicate thin"],
-    "makeup_level": ["bare-faced", "light", "moderate", "heavy", "dramatic"],
+    "makeup_level": ["bare-faced", "light", "moderate", "heavy"],
     "breast_size": ["small perky", "medium", "large", "very large"],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
     "vulva_type": [
@@ -221,7 +221,6 @@ MAKEUP_DESCRIPTIONS = {
     "light": "subtle enhancement, lip tint, light mascara",
     "moderate": "polished look, foundation, defined eyes, lipstick",
     "heavy": "full glam, smoky eyes, contoured, bold lip",
-    "dramatic": "theatrical, extreme eye makeup, painted, avant-garde",
 }
 
 ARCHETYPE_HEIGHT_RANGES = {
@@ -239,81 +238,50 @@ ARCHETYPE_BODY_WEIGHTS = {
     "The Siren": {
         "breast_size": {"small perky": 5, "medium": 20, "large": 50, "very large": 25},
         "body_fat_pct": {
-            "lean 12-16%": 5,
-            "athletic 17-20%": 25,
-            "fit 21-24%": 50,
-            "soft 25-30%": 20,
+            "lean 12-16%": 2,
+            "athletic 17-20%": 28,
+            "fit 21-24%": 48,
+            "soft 25-30%": 22,
         },
         "makeup_level": {
-            "bare-faced": 2,
-            "light": 10,
-            "moderate": 30,
-            "heavy": 56,
-            "dramatic": 2,
+            "bare-faced": 3,
+            "light": 35,
+            "moderate": 47,
+            "heavy": 15,
         },
         "abs_tone": {
-            "soft with no definition": 20,
-            "slight definition": 45,
-            "toned and defined": 30,
-            "ripped and shredded": 5,
+            "soft with no definition": 22,
+            "slight definition": 48,
+            "toned and defined": 28,
+            "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 5,
-            "medium round": 25,
-            "large full": 45,
-            "very large prominent": 25,
+            "small tight": 15,
+            "medium round": 40,
+            "large full": 30,
+            "very large prominent": 15,
         },
         "waist": {"narrow": 40, "medium": 45, "wide": 15},
     },
     "The Witch": {
         "breast_size": {"small perky": 20, "medium": 35, "large": 30, "very large": 15},
         "body_fat_pct": {
-            "lean 12-16%": 15,
-            "athletic 17-20%": 25,
+            "lean 12-16%": 8,
+            "athletic 17-20%": 30,
             "fit 21-24%": 35,
-            "soft 25-30%": 25,
+            "soft 25-30%": 27,
         },
         "makeup_level": {
             "bare-faced": 5,
-            "light": 15,
-            "moderate": 30,
-            "heavy": 48,
-            "dramatic": 2,
+            "light": 35,
+            "moderate": 42,
+            "heavy": 18,
         },
         "abs_tone": {
-            "soft with no definition": 30,
-            "slight definition": 40,
-            "toned and defined": 25,
-            "ripped and shredded": 5,
-        },
-        "butt_size": {
-            "small tight": 15,
-            "medium round": 35,
-            "large full": 35,
-            "very large prominent": 15,
-        },
-        "waist": {"narrow": 35, "medium": 45, "wide": 20},
-    },
-    "The Viper": {
-        "breast_size": {"small perky": 25, "medium": 40, "large": 25, "very large": 10},
-        "body_fat_pct": {
-            "lean 12-16%": 30,
-            "athletic 17-20%": 40,
-            "fit 21-24%": 25,
-            "soft 25-30%": 5,
-        },
-        "makeup_level": {
-            "bare-faced": 10,
-            "light": 27,
-            "moderate": 36,
-            "heavy": 25,
-            "dramatic": 2,
-        },
-        "abs_tone": {
-            "soft with no definition": 5,
-            "slight definition": 25,
-            "toned and defined": 50,
-            "ripped and shredded": 20,
+            "soft with no definition": 32,
+            "slight definition": 42,
+            "toned and defined": 24,
+            "ripped and shredded": 2,
         },
         "butt_size": {
             "small tight": 20,
@@ -321,33 +289,60 @@ ARCHETYPE_BODY_WEIGHTS = {
             "large full": 30,
             "very large prominent": 10,
         },
+        "waist": {"narrow": 35, "medium": 45, "wide": 20},
+    },
+    "The Viper": {
+        "breast_size": {"small perky": 25, "medium": 40, "large": 25, "very large": 10},
+        "body_fat_pct": {
+            "lean 12-16%": 15,
+            "athletic 17-20%": 45,
+            "fit 21-24%": 32,
+            "soft 25-30%": 8,
+        },
+        "makeup_level": {
+            "bare-faced": 10,
+            "light": 35,
+            "moderate": 40,
+            "heavy": 15,
+        },
+        "abs_tone": {
+            "soft with no definition": 8,
+            "slight definition": 30,
+            "toned and defined": 52,
+            "ripped and shredded": 10,
+        },
+        "butt_size": {
+            "small tight": 25,
+            "medium round": 45,
+            "large full": 23,
+            "very large prominent": 7,
+        },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
     },
     "The Prodigy": {
         "breast_size": {"small perky": 35, "medium": 40, "large": 20, "very large": 5},
         "body_fat_pct": {
-            "lean 12-16%": 40,
-            "athletic 17-20%": 40,
-            "fit 21-24%": 15,
-            "soft 25-30%": 5,
+            "lean 12-16%": 20,
+            "athletic 17-20%": 48,
+            "fit 21-24%": 25,
+            "soft 25-30%": 7,
         },
         "makeup_level": {
-            "bare-faced": 40,
-            "light": 35,
-            "moderate": 20,
+            "bare-faced": 25,
+            "light": 40,
+            "moderate": 30,
             "heavy": 5,
-            "dramatic": 0,
         },
         "abs_tone": {
-            "soft with no definition": 5,
-            "slight definition": 15,
-            "toned and defined": 55,
-            "ripped and shredded": 25,
+            "soft with no definition": 8,
+            "slight definition": 22,
+            "toned and defined": 58,
+            "ripped and shredded": 12,
         },
         "butt_size": {
-            "small tight": 30,
+            "small tight": 35,
             "medium round": 40,
-            "large full": 25,
+            "large full": 20,
             "very large prominent": 5,
         },
         "waist": {"narrow": 45, "medium": 45, "wide": 10},
@@ -355,115 +350,111 @@ ARCHETYPE_BODY_WEIGHTS = {
     "The Doll": {
         "breast_size": {"small perky": 30, "medium": 35, "large": 25, "very large": 10},
         "body_fat_pct": {
-            "lean 12-16%": 15,
-            "athletic 17-20%": 25,
-            "fit 21-24%": 40,
-            "soft 25-30%": 20,
+            "lean 12-16%": 8,
+            "athletic 17-20%": 28,
+            "fit 21-24%": 42,
+            "soft 25-30%": 22,
         },
         "makeup_level": {
-            "bare-faced": 10,
-            "light": 28,
-            "moderate": 38,
-            "heavy": 22,
-            "dramatic": 2,
+            "bare-faced": 8,
+            "light": 37,
+            "moderate": 42,
+            "heavy": 13,
         },
         "abs_tone": {
-            "soft with no definition": 25,
-            "slight definition": 40,
-            "toned and defined": 30,
-            "ripped and shredded": 5,
+            "soft with no definition": 27,
+            "slight definition": 43,
+            "toned and defined": 28,
+            "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 15,
-            "medium round": 35,
-            "large full": 35,
-            "very large prominent": 15,
+            "small tight": 20,
+            "medium round": 40,
+            "large full": 30,
+            "very large prominent": 10,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
     },
     "The Huntress": {
         "breast_size": {"small perky": 20, "medium": 40, "large": 30, "very large": 10},
         "body_fat_pct": {
-            "lean 12-16%": 35,
-            "athletic 17-20%": 45,
-            "fit 21-24%": 15,
-            "soft 25-30%": 5,
+            "lean 12-16%": 18,
+            "athletic 17-20%": 47,
+            "fit 21-24%": 27,
+            "soft 25-30%": 8,
         },
         "makeup_level": {
-            "bare-faced": 35,
-            "light": 35,
-            "moderate": 20,
+            "bare-faced": 20,
+            "light": 40,
+            "moderate": 32,
             "heavy": 8,
-            "dramatic": 2,
         },
         "abs_tone": {
-            "soft with no definition": 5,
-            "slight definition": 15,
-            "toned and defined": 50,
-            "ripped and shredded": 30,
+            "soft with no definition": 8,
+            "slight definition": 25,
+            "toned and defined": 52,
+            "ripped and shredded": 15,
         },
         "butt_size": {
-            "small tight": 15,
-            "medium round": 35,
-            "large full": 35,
-            "very large prominent": 15,
+            "small tight": 25,
+            "medium round": 40,
+            "large full": 25,
+            "very large prominent": 10,
         },
         "waist": {"narrow": 35, "medium": 50, "wide": 15},
     },
     "The Empress": {
         "breast_size": {"small perky": 5, "medium": 25, "large": 45, "very large": 25},
         "body_fat_pct": {
-            "lean 12-16%": 5,
-            "athletic 17-20%": 20,
-            "fit 21-24%": 45,
-            "soft 25-30%": 30,
+            "lean 12-16%": 2,
+            "athletic 17-20%": 22,
+            "fit 21-24%": 44,
+            "soft 25-30%": 32,
         },
         "makeup_level": {
-            "bare-faced": 2,
-            "light": 10,
-            "moderate": 38,
-            "heavy": 48,
-            "dramatic": 2,
+            "bare-faced": 3,
+            "light": 32,
+            "moderate": 47,
+            "heavy": 18,
         },
         "abs_tone": {
-            "soft with no definition": 25,
-            "slight definition": 40,
-            "toned and defined": 30,
-            "ripped and shredded": 5,
+            "soft with no definition": 27,
+            "slight definition": 43,
+            "toned and defined": 28,
+            "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 5,
-            "medium round": 25,
-            "large full": 45,
-            "very large prominent": 25,
+            "small tight": 15,
+            "medium round": 40,
+            "large full": 30,
+            "very large prominent": 15,
         },
         "waist": {"narrow": 25, "medium": 45, "wide": 30},
     },
     "The Experiment": {
         "breast_size": {"small perky": 20, "medium": 30, "large": 30, "very large": 20},
         "body_fat_pct": {
-            "lean 12-16%": 25,
-            "athletic 17-20%": 35,
-            "fit 21-24%": 25,
-            "soft 25-30%": 15,
+            "lean 12-16%": 12,
+            "athletic 17-20%": 40,
+            "fit 21-24%": 30,
+            "soft 25-30%": 18,
         },
         "makeup_level": {
-            "bare-faced": 22,
-            "light": 25,
-            "moderate": 28,
-            "heavy": 21,
-            "dramatic": 2,
+            "bare-faced": 12,
+            "light": 37,
+            "moderate": 38,
+            "heavy": 13,
         },
         "abs_tone": {
-            "soft with no definition": 10,
-            "slight definition": 25,
-            "toned and defined": 40,
-            "ripped and shredded": 25,
+            "soft with no definition": 15,
+            "slight definition": 30,
+            "toned and defined": 43,
+            "ripped and shredded": 12,
         },
         "butt_size": {
-            "small tight": 20,
-            "medium round": 30,
-            "large full": 30,
+            "small tight": 25,
+            "medium round": 40,
+            "large full": 25,
             "very large prominent": 20,
         },
         "waist": {"narrow": 30, "medium": 45, "wide": 25},
@@ -891,7 +882,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Conservative — only face, hands, and forearms visible. Full coverage everywhere else.",
         "barely_label": "Flirty",
         "barely_skin_pct": "45-55",
-        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
+        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
         "nsfw_adjective": "Scandalous",
         "nsfw_hard_rules": "Topless — bare breasts fully visible. Bottoms stay on but must be ultra-sexy: thongs, micro-bikini bottoms, strappy lingerie, or sheer panties. Show off legs and hips.",
@@ -905,7 +896,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
         "barely_label": "Risqué",
         "barely_skin_pct": "60-70",
-        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
+        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Risqué — significant skin exposure, sideboob, underbutt. Clearly pushing boundaries.",
         "nsfw_adjective": "Confident",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible.",
@@ -919,7 +910,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Bold — shows skin confidently but still looks like a real outfit.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
-        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
+        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only. Areola peeking out from tiny pasties is encouraged.",
         "nsfw_adjective": "Tease",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast or running her hands along her body - teasing sensually.",
@@ -933,7 +924,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "99",
-        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK.",
+        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
         "barely_guidance": "Extreme — micro pasties with areola peeking out and a tiny nail-sized strip over the clit. Areola exposure is expected at this level.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
@@ -1149,7 +1140,7 @@ ROSTER BALANCE CONSTRAINTS:
 - Archetypes: cover at least 5 different primary archetypes from the FEMALE list: Siren, Witch, Viper, Prodigy, Doll, Huntress, Empress, Experiment
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
-- Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. A Siren might weight heavily toward 3-4, a Prodigy toward 1-2, an Empress toward 2-3. The 4 weights must sum to 100.
+- Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean slightly toward the skimpier side — most fighters should center around levels 2-3. A Siren might weight heavily toward 3-4, a Prodigy toward 2-3, an Empress toward 2-3. The 4 weights must sum to 100.
 
 Return ONLY valid JSON — an array of {roster_size} objects with this structure:
 [
@@ -1197,10 +1188,10 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
 
 def _roll_skimpiness(weights: list[int] | None) -> int:
     if not weights or len(weights) != 4:
-        weights = [15, 35, 35, 15]
+        weights = [10, 30, 38, 22]
     total = sum(weights)
     if total <= 0:
-        weights = [15, 35, 35, 15]
+        weights = [10, 30, 38, 22]
         total = 100
     normalized = [w / total for w in weights]
     return random.choices([1, 2, 3, 4], weights=normalized, k=1)[0]
@@ -1370,6 +1361,7 @@ Return ONLY valid JSON with this exact structure:
     expression = result.get("image_prompt_expression", "")
     personality_pose = result.get("image_prompt_personality_pose", "")
     gender = result.get("gender", "female")
+    origin = result.get("origin", "")
 
     result["body_type_details"] = body_traits
 
@@ -1418,6 +1410,7 @@ Return ONLY valid JSON with this exact structure:
             gender=gender,
             skimpiness_level=skimpiness_level,
             body_type_details=body_traits,
+            origin=origin,
         ),
         image_prompt_sfw=_build_charsheet_prompt(
             body_parts,
@@ -1428,6 +1421,7 @@ Return ONLY valid JSON with this exact structure:
             gender=gender,
             skimpiness_level=skimpiness_level,
             body_type_details=body_traits,
+            origin=origin,
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
             body_parts,
@@ -1438,6 +1432,7 @@ Return ONLY valid JSON with this exact structure:
             gender=gender,
             skimpiness_level=skimpiness_level,
             body_type_details=body_traits,
+            origin=origin,
         ),
         stats=stats,
         record=Record(),
@@ -1548,6 +1543,7 @@ def _build_charsheet_prompt(
     gender: str = "female",
     skimpiness_level: int = 4,
     body_type_details: dict | None = None,
+    origin: str = "",
 ) -> dict:
     if not body_parts:
         return {}
@@ -1581,6 +1577,8 @@ def _build_charsheet_prompt(
     character_desc = body_parts
     if clothing_part:
         character_desc = f"{body_parts}, {clothing_part}"
+    if origin:
+        character_desc = f"{character_desc}, from {origin}"
 
     front_view = "front slightly angled view standing tall"
     center_pose = f"center personality pose: {pose_base}"
