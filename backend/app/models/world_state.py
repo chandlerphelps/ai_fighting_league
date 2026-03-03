@@ -28,6 +28,20 @@ class WorldState:
     last_daily_summary: str = ""
     event_counter: int = 0
 
+    season_number: int = 1
+    season_week: int = 1
+    season_day_in_week: int = 1
+    tier_rankings: dict = field(default_factory=lambda: {
+        "championship": [],
+        "contender": [],
+        "underground": [],
+    })
+    belt_holder_id: str = ""
+    belt_history: list = field(default_factory=list)
+    retired_fighter_ids: list = field(default_factory=list)
+    promotion_fights: list = field(default_factory=list)
+    title_fight: dict = field(default_factory=dict)
+
     def to_dict(self) -> dict:
         return asdict(self)
 
@@ -44,4 +58,17 @@ class WorldState:
             rivalry_graph=rivalry_graph,
             last_daily_summary=d.get("last_daily_summary", ""),
             event_counter=d.get("event_counter", 0),
+            season_number=d.get("season_number", 1),
+            season_week=d.get("season_week", 1),
+            season_day_in_week=d.get("season_day_in_week", 1),
+            tier_rankings=d.get("tier_rankings", {
+                "championship": [],
+                "contender": [],
+                "underground": [],
+            }),
+            belt_holder_id=d.get("belt_holder_id", ""),
+            belt_history=d.get("belt_history", []),
+            retired_fighter_ids=d.get("retired_fighter_ids", []),
+            promotion_fights=d.get("promotion_fights", []),
+            title_fight=d.get("title_fight", {}),
         )

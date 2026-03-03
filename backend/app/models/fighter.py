@@ -119,6 +119,19 @@ class Fighter:
     last_fight_date: Optional[str] = None
     ranking: Optional[int] = None
 
+    tier: str = "underground"
+    status: str = "active"
+    training_focus: str = "technique"
+    training_days_accumulated: float = 0.0
+    training_streak: int = 0
+    seasons_in_current_tier: int = 0
+    career_season_count: int = 0
+    peak_tier: str = "underground"
+    promotion_desperation: float = 0.0
+    season_wins: int = 0
+    season_losses: int = 0
+    consecutive_losses: int = 0
+
     def total_core_stats(self) -> int:
         return self.stats.core_total()
 
@@ -162,4 +175,16 @@ class Fighter:
             rivalries=d.get("rivalries", []),
             last_fight_date=d.get("last_fight_date"),
             ranking=d.get("ranking"),
+            tier=d.get("tier", "underground"),
+            status=d.get("status", "active"),
+            training_focus=d.get("training_focus", "technique"),
+            training_days_accumulated=d.get("training_days_accumulated", 0.0),
+            training_streak=d.get("training_streak", 0),
+            seasons_in_current_tier=d.get("seasons_in_current_tier", 0),
+            career_season_count=d.get("career_season_count", 0),
+            peak_tier=d.get("peak_tier", "underground"),
+            promotion_desperation=d.get("promotion_desperation", 0.0),
+            season_wins=d.get("season_wins", 0),
+            season_losses=d.get("season_losses", 0),
+            consecutive_losses=d.get("consecutive_losses", 0),
         )

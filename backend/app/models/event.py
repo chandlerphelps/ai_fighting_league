@@ -26,6 +26,7 @@ class Event:
     matches: list[EventMatch] = field(default_factory=list)
     completed: bool = False
     summary: str = ""
+    tier: str = ""
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -40,4 +41,5 @@ class Event:
             matches=matches,
             completed=d.get("completed", False),
             summary=d.get("summary", ""),
+            tier=d.get("tier", ""),
         )
