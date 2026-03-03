@@ -53,7 +53,7 @@ A two-part system: a Python engine that generates fighters, simulates fights wit
 - **Purpose**: Autonomous engine — generates fighters, simulates fights, progresses league state
 - **AI**: All LLM calls go through OpenRouter for model flexibility
 - **Data**: File-based JSON storage in `/data/` (no database)
-- **Entry point**: `python -m app.run_day` advances the world one day
+- **Entry point**: `python -m app.scripts.simulate_seasons` simulates multiple seasons
 
 Key directories:
 
@@ -103,8 +103,8 @@ File-based JSON storage shared between backend and frontend:
 cd backend
 pyenv activate aifl
 pip install -r requirements.txt
-python -m app.run_day              # Advance one day
-python -m app.scripts.generate_roster  # Generate initial roster
+python -m app.scripts.simulate_seasons --seasons 30  # Simulate 30 seasons
+python -m app.scripts.generate_roster                # Generate initial roster
 ```
 
 ### Frontend Commands

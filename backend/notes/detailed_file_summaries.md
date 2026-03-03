@@ -5,8 +5,7 @@ Comprehensive documentation of backend code.
 ## TABLE OF CONTENTS
 
 1. [app/config.py](#appconfig)
-2. [app/run_day.py](#apprun_day)
-3. [app/api.py](#appapi)
+2. [app/api.py](#appapi)
 4. [app/engine/combat/__init__.py](#appenginecombat__init__)
 5. [app/engine/combat/models.py](#appenginecombatmodels)
 6. [app/engine/combat/moves.py](#appenginecombatmoves)
@@ -16,48 +15,42 @@ Comprehensive documentation of backend code.
 10. [app/engine/combat/strategy.py](#appenginecombatstrategy)
 11. [app/engine/combat/simulator.py](#appenginecombatsimulator)
 12. [app/engine/combat/win_conditions.py](#appenginecombatwin_conditions)
-13. [app/engine/fight_simulator.py](#appenginefight_simulator)
-14. [app/engine/fighter_generator.py](#appenginefighter_generator)
-15. [app/engine/fighter_config.py](#appenginefighter_config)
-16. [app/engine/post_fight.py](#appenginepost_fight)
-17. [app/engine/rankings.py](#appenginerankings)
-18. [app/engine/matchmaker.py](#appenginematchmaker)
-19. [app/engine/day_ticker.py](#appengineday_ticker)
-20. [app/engine/image_style.py](#appengineimage_style)
-21. [app/prompts/fighter_prompts.py](#apppromptsfighter_prompts)
-22. [app/prompts/outfit_prompts.py](#apppromptsoutfit_prompts)
-23. [app/prompts/fight_prompts.py](#apppromptsfight_prompts)
-24. [app/prompts/move_prompts.py](#apppromptsmove_prompts)
-25. [app/prompts/post_fight_prompts.py](#apppromptspost_fight_prompts)
-26. [app/prompts/image_builders.py](#apppromptsimage_builders)
-27. [app/models/fighter.py](#appmodelsfighter)
-28. [app/models/match.py](#appmodelsmatch)
-29. [app/models/event.py](#appmodelsevent)
-30. [app/models/world_state.py](#appmodelsworld_state)
-31. [app/services/data_manager.py](#appservicesdata_manager)
-32. [app/services/openrouter.py](#appservicesopenrouter)
-33. [app/services/grok_image.py](#appservicesgrok_image)
-34. [app/scripts/generate_roster.py](#appscriptsgenerate_roster)
+13. [app/engine/between_fights/__init__.py](#appenginebetween_fights__init__)
+14. [app/engine/between_fights/training.py](#appenginebetween_fightstraining)
+15. [app/engine/between_fights/retirement.py](#appenginebetween_fightsretirement)
+16. [app/engine/between_fights/league_tiers.py](#appenginebetween_fightsleague_tiers)
+17. [app/engine/between_fights/season.py](#appenginebetween_fightsseason)
+18. [app/engine/fight_simulator.py](#appenginefight_simulator)
+19. [app/engine/fighter_generator.py](#appenginefighter_generator)
+20. [app/engine/fighter_config.py](#appenginefighter_config)
+21. [app/engine/post_fight.py](#appenginepost_fight)
+22. [app/engine/rankings.py](#appenginerankings)
+23. [app/engine/image_style.py](#appengineimage_style)
+26. [app/prompts/fighter_prompts.py](#apppromptsfighter_prompts)
+27. [app/prompts/outfit_prompts.py](#apppromptsoutfit_prompts)
+28. [app/prompts/fight_prompts.py](#apppromptsfight_prompts)
+29. [app/prompts/move_prompts.py](#apppromptsmove_prompts)
+30. [app/prompts/post_fight_prompts.py](#apppromptspost_fight_prompts)
+31. [app/prompts/image_builders.py](#apppromptsimage_builders)
+32. [app/models/fighter.py](#appmodelsfighter)
+33. [app/models/match.py](#appmodelsmatch)
+34. [app/models/event.py](#appmodelsevent)
+35. [app/models/world_state.py](#appmodelsworld_state)
+36. [app/services/data_manager.py](#appservicesdata_manager)
+37. [app/services/openrouter.py](#appservicesopenrouter)
+38. [app/services/grok_image.py](#appservicesgrok_image)
+39. [app/scripts/generate_roster.py](#appscriptsgenerate_roster)
+40. [app/scripts/simulate_seasons.py](#appscriptssimulate_seasons)
 
 ---
 
 ## app/config.py
 File: app/config.py
-File Length: 55 lines
-Purpose: Central configuration dataclass loaded from .env, holds API keys, league constants, stat ranges, recovery tuning, and combat engine parameters.
+File Length: 60 lines
+Purpose: Central configuration dataclass loaded from .env, holds API keys, league constants, tier sizes, stat ranges, recovery tuning, and combat engine parameters.
 
 Artefacts
-- Config - dataclass with openrouter_api_key, grok_api_key, model names (default_model, narrative_model), roster/event counts, stat bounds, recovery ranges, rematch_cooldown_days, max_idle_days, combat tuning (ticks_per_round, base_stamina_recovery_pct, stamina_recovery_decay, tko_base_threshold, tko_toughness_factor, tko_late_round_drop, tko_late_round_start, max_combat_rounds), data_dir
-
----
-
-## app/run_day.py
-File: app/run_day.py
-File Length: 63 lines
-Purpose: CLI entry point that advances the league by N days, optionally initializing the roster first.
-
-Artefacts
-- main() - argparse CLI (--days N, --init), loads config, calls advance_day in loop, prints summary/rankings/injuries
+- Config - dataclass with openrouter_api_key, grok_api_key, model names (default_model, narrative_model), roster/event counts, stat bounds, recovery ranges, rematch_cooldown_days, max_idle_days, tier sizes (championship_size=16, contender_size=20, underground_size=100), season_length_weeks=8, combat tuning (ticks_per_round, base_stamina_recovery_pct, stamina_recovery_decay, tko_base_threshold, tko_toughness_factor, tko_late_round_drop, tko_late_round_start, max_combat_rounds), data_dir
 
 ---
 
@@ -224,6 +217,75 @@ Artefacts
 
 ---
 
+## app/engine/between_fights/__init__.py
+File: app/engine/between_fights/__init__.py
+File Length: 4 lines
+Purpose: Package exports for between-fight systems: training, retirement, league tiers, and season processing.
+
+Artefacts
+- Exports: process_daily_training, apply_fight_camp_boost, check_retirement, apply_aging, update_promotion_desperation, generate_replacement_fighter, calculate_tier_rankings, get_promotion_matchups, apply_promotion_results, apply_title_fight_result, process_end_of_season, get_tier_event_config
+
+---
+
+## app/engine/between_fights/training.py
+File: app/engine/between_fights/training.py
+File Length: 84 lines
+Purpose: Daily training system with tier-based progression rates, age modifiers, overtraining injury risk, and fight camp stat boosts.
+
+Artefacts
+- TRAINING_RATES - tier->rate dict (championship 0.15, contender 0.12, underground 0.10)
+- FIGHT_CAMP_BOOSTS - tier->boost dict (championship 4, contender 3, underground 2)
+- process_daily_training(fighter, rng) - accumulates training progress at tier rate (age-reduced for 32+/36+), increments focus stat when accumulated >= 1.0, tracks overtraining streak with 5% injury chance above 21 days
+- apply_fight_camp_boost(fighter) - returns copy of fighter stats with training_focus stat boosted by tier amount (capped at 95)
+
+---
+
+## app/engine/between_fights/retirement.py
+File: app/engine/between_fights/retirement.py
+File Length: 210 lines
+Purpose: Fighter retirement logic, aging with stat decay/growth, promotion desperation tracking, and replacement fighter generation.
+
+Artefacts
+- RING_NAMES - 160+ ring name options for generated fighters
+- PREFIXES - 19 name prefixes (The, Kid, Big, etc.)
+- check_retirement(fighter, rng) - returns (should_retire, reason): age_and_losing_record (34+ with losing season), underground_stagnation (30+ stuck 4+ seasons), morale_collapse (5+ consecutive losses), career_ending_injury (32+ with severe injury, 30% chance), graceful_exit (belt holder 33+, 20% chance)
+- apply_aging(fighter, rng) - increments age, applies stat changes: under 26 gains 1-2 in 2-3 stats, 26-31 stable, 32-35 loses speed/toughness (-2) and maybe power (-1), 36+ loses all stats (-2 to -3)
+- update_promotion_desperation(fighter) - increases desperation +0.15/season for underground fighters 28+, maxes at 1.0 for 30+ who never left underground
+- generate_replacement_fighter(fighter_id_counter, season, rng, used_names) - creates new underground fighter aged 18-22 with 140-200 total stats, random name from RING_NAMES/PREFIXES
+- _distribute_stats(target_total, rng) - allocates stat points across 4 core stats within 25-60 range, scales to target
+
+---
+
+## app/engine/between_fights/league_tiers.py
+File: app/engine/between_fights/league_tiers.py
+File Length: 145 lines
+Purpose: Tier ranking calculation, promotion/relegation matchup generation, promotion result application, and championship title fight tracking.
+
+Artefacts
+- TIER_ORDER - dict mapping tier names to numeric order (underground=0, contender=1, championship=2)
+- TIER_NAMES - ordered list of tier name strings
+- calculate_tier_rankings(fighters, tier, season_matches) - ranks active fighters in a tier by (has_fought, win_pct, season_wins, recent_wins from last 5, core_total)
+- get_promotion_matchups(tier_rankings, slots_per_boundary=3) - pairs bottom N of upper tier vs top N of lower tier at each boundary (champ/contender, contender/underground)
+- apply_promotion_results(fighters, promotion_results) - swaps tiers for winners who beat upper-tier fighters, resets seasons_in_current_tier, updates peak_tier
+- apply_title_fight_result(ws, winner_id, loser_id, season) - tracks belt_holder_id and belt_history (defenses count, won/lost dates)
+
+---
+
+## app/engine/between_fights/season.py
+File: app/engine/between_fights/season.py
+File Length: 168 lines
+Purpose: End-of-season processing and tier event configuration. Handles aging, retirement, backfill promotions, replacement generation, and season state reset.
+
+Artefacts
+- TIER_EVENT_CONFIG - events/week and fights/event by tier (championship 2/wk 3-4 fights, contender 3/wk 3-4, underground 7/wk 5-8)
+- TIER_SIZES - target roster sizes (championship 16, contender 20, underground 100)
+- get_tier_event_config(tier) - returns event config dict for given tier
+- process_end_of_season(fighters, ws, fighter_counter, rng, used_names) - full end-of-season pipeline: apply_aging to all, check_retirement (handles belt vacancy), update_promotion_desperation for underground, _backfill_tiers, reset season_wins/losses/consecutive_losses, increment season counters
+- _count_tiers(fighters) - returns dict of active fighter counts per tier
+- _backfill_tiers(fighters, ws, summary, fighter_counter, rng, season, used_names) - promotes top lower-tier fighters to fill upper-tier vacancies, generates new underground fighters to maintain TIER_SIZES
+
+---
+
 ## app/engine/fight_simulator.py
 File: app/engine/fight_simulator.py
 File Length: 268 lines
@@ -256,7 +318,7 @@ Artefacts
 
 ## app/engine/fighter_config.py
 File: app/engine/fighter_config.py
-File Length: 1250 lines
+File Length: 1285 lines
 Purpose: All configuration data for fighter generation: archetypes with subtypes and body profile biases, body profiles constraining trait ranges, outfit options, skimpiness levels, weight derivation tables, tech levels, archetype descriptions, and body trait utility functions.
 
 Artefacts
@@ -310,30 +372,6 @@ Artefacts
 
 ---
 
-## app/engine/matchmaker.py
-File: app/engine/matchmaker.py
-File Length: 123 lines
-Purpose: Generates fight cards by scoring fighter pairings on rank proximity, rivalry, and idle time.
-
-Artefacts
-- generate_fight_card(world_state, fighters, matches, config) - filters available fighters, scores all pairs, greedily selects top non-overlapping pairs
-- _score_pairing(fighter1, fighter2, rank_map, world_state, current_date) - scoring: rank proximity (+10/+5), rivalry (+15), idle time bonus (up to +20)
-- _get_recent_pairings(matches, current_date, cooldown_days) - returns set of fighter-pair tuples within cooldown window
-
----
-
-## app/engine/day_ticker.py
-File: app/engine/day_ticker.py
-File Length: 225 lines
-Purpose: Advances the league one day: heals injuries, runs scheduled events, auto-schedules future events.
-
-Artefacts
-- advance_day(config) - increments date/day_number, processes injuries, runs events, ensures schedule, saves world_state
-- _process_injury_recovery(ws, config) - decrements injury days, heals at 0, returns list of healed fighter names
-- _run_todays_event(ws, config) - finds today's event, runs each fight via run_fight, applies results, recalculates rankings
-- _ensure_upcoming_schedule(ws, config) - maintains 2 future events within 7-day horizon
-- _create_event(ws, event_date, config) - calls generate_fight_card, creates Event with EventMatches, saves to disk
-
 ---
 
 ## app/engine/image_style.py
@@ -366,13 +404,13 @@ Artefacts
 
 ## app/prompts/outfit_prompts.py
 File: app/prompts/outfit_prompts.py
-File Length: 210 lines
-Purpose: Tier-based outfit prompt builder for SFW/barely/NSFW tiers with archetype, subtype, personality, and tech level context.
+File Length: 230 lines
+Purpose: Tier-based outfit prompt builder for SFW/barely/NSFW tiers with archetype, subtype, personality, tech level context, and exotic outfit support.
 
 Artefacts
 - OUTFIT_STYLE_RULES - universal style rules applied to all tiers
 - SYSTEM_PROMPT_OUTFIT_DESIGNER - system prompt
-- build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options, tech_level) - returns outfit generation prompt including archetype description (from ARCHETYPE_DESCRIPTIONS), subtype description (from ARCHETYPE_SUBTYPES), personality line, and technology era design constraint
+- build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options, tech_level) - returns outfit generation prompt including archetype description (from ARCHETYPE_DESCRIPTIONS), subtype description (from ARCHETYPE_SUBTYPES), personality line, technology era design constraint, and exotic_one_pieces outfit options support for both NSFW and non-NSFW tiers
 
 ---
 
@@ -409,18 +447,18 @@ Artefacts
 
 ## app/prompts/image_builders.py
 File: app/prompts/image_builders.py
-File Length: 400 lines
+File Length: 424 lines
 Purpose: Image prompt assembly for charsheet images (Grok API), body reference sheets, and move action images. Not LLM prompts.
 
 Artefacts
 - CHARSHEET_LAYOUT - character reference sheet turnaround prompt template (3 views)
 - _charsheet_style_base/style/tail(gender, tier, skimpiness_level) - charsheet art style with NSFW nudity prefixes when needed
-- _build_charsheet_prompt(body_parts, clothing, expression, personality_pose, tier, gender, skimpiness_level, body_type_details, origin, subtype_info, iconic_features) - assembles full charsheet image prompt dict with subtype aesthetic and iconic features integration
+- _build_charsheet_prompt(body_parts, clothing, expression, personality_pose, tier, gender, skimpiness_level, body_type_details, origin, subtype_info, iconic_features, age) - assembles full charsheet image prompt dict with subtype aesthetic, iconic features, and age integration
 - BODY_REF_STYLE_BASE / BODY_REF_STYLE_FEMALE / BODY_REF_STYLE_MALE - painterly anatomy study style strings
 - BODY_REF_PAGE_STYLE - anatomy study page layout description (5 isolated body part drawings)
 - BODY_REF_LAYOUT - template string with {torso_detail} and {intimate_label} format slots for gendered 5-panel layout
 - BODY_REF_QUALITY - quality descriptors for body reference images
-- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info) - assembles 5-panel body reference prompt with subtype aesthetic
+- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info, age) - assembles 5-panel body reference prompt with subtype aesthetic and age
 - _nsfw_prefix/tail(gender, skimpiness_level) - NSFW prefix/tail for move images
 - build_move_image_prompt(fighter, move, tier) - assembles move action image prompt string
 
@@ -428,8 +466,8 @@ Artefacts
 
 ## app/models/fighter.py
 File: app/models/fighter.py
-File Length: 165 lines
-Purpose: Fighter data model with nested Stats, Record, Injury, Condition, and Move dataclasses.
+File Length: 190 lines
+Purpose: Fighter data model with nested Stats, Record, Injury, Condition, and Move dataclasses. Includes league season tracking fields.
 
 Artefacts
 - Stats - power, speed, technique, toughness, supernatural; core_total()
@@ -437,7 +475,7 @@ Artefacts
 - Injury - type, severity, recovery_days_remaining
 - Condition - health_status, injuries list, recovery_days_remaining, morale, momentum
 - Move - name, description, stat_affinity
-- Fighter - full fighter profile: identity (id, ring_name, real_name, age, origin, gender, primary_archetype, subtype), physical (height, weight, build, distinguishing_features, iconic_features), attire (3 tiers), skimpiness_level, tech_level, image_prompt dicts (body_ref + 3 tiers), stats, record, condition, moves, storyline_log, body_type_details, rivalries
+- Fighter - full fighter profile: identity (id, ring_name, real_name, age, origin, gender, primary_archetype, subtype), physical (height, weight, build, distinguishing_features, iconic_features), attire (3 tiers), skimpiness_level, tech_level, image_prompt dicts (body_ref + 3 tiers), stats, record, condition, moves, storyline_log, body_type_details, rivalries, league fields (tier, status, training_focus, training_days_accumulated, training_streak, seasons_in_current_tier, career_season_count, peak_tier, promotion_desperation, season_wins, season_losses, consecutive_losses)
 
 ---
 
@@ -456,23 +494,23 @@ Artefacts
 
 ## app/models/event.py
 File: app/models/event.py
-File Length: 43 lines
-Purpose: Event data model representing a fight night with its scheduled matches.
+File Length: 45 lines
+Purpose: Event data model representing a fight night with its scheduled matches and tier assignment.
 
 Artefacts
 - EventMatch - match_id, fighter1/2 IDs and names, completed, winner_id, method
-- Event - id, date, name, matches list, completed, summary; to_dict(), from_dict()
+- Event - id, date, name, matches list, completed, summary, tier; to_dict(), from_dict()
 
 ---
 
 ## app/models/world_state.py
 File: app/models/world_state.py
-File Length: 47 lines
-Purpose: Global league state tracking date, rankings, events, injuries, and rivalries.
+File Length: 74 lines
+Purpose: Global league state tracking date, rankings, events, injuries, rivalries, seasons, tiers, belt history, and promotion/title fights.
 
 Artefacts
 - RivalryRecord - fighter1/2_id, fights, wins, draws, is_rivalry
-- WorldState - current_date, day_number, rankings, upcoming/completed events, active_injuries, rivalry_graph, event_counter
+- WorldState - current_date, day_number, rankings, upcoming/completed events, active_injuries, rivalry_graph, event_counter, season_number, season_week, season_day_in_week, tier_rankings (championship/contender/underground lists), belt_holder_id, belt_history list, retired_fighter_ids list, promotion_fights list, title_fight dict
 
 ---
 
@@ -528,3 +566,29 @@ Artefacts
 - generate_from_plan(generate_images, tiers, count) - reads roster_plan.json, generates each fighter via generate_fighter with skimpiness and outfit options, optionally generates charsheet images, initializes WorldState
 - generate_roster(generate_images, tiers, count) - runs both phases sequentially
 - CLI: --plan, --generate, --images, --tiers [sfw barely nsfw], -n/--count
+
+---
+
+## app/scripts/simulate_seasons.py
+File: app/scripts/simulate_seasons.py
+File Length: 713 lines
+Purpose: Standalone league season simulation script. Generates a full roster across 3 tiers, simulates N seasons with weekly events, promotion/relegation, title fights, injuries, training, aging, and retirement. Outputs comprehensive career arc statistics.
+
+Artefacts
+- EVENT_DAYS - tier->weekday list (championship Wed/Sat, contender Tue/Thu/Sun, underground daily)
+- INJURY_TYPES_WINNER/LOSER_KO/LOSER_OTHER - injury type pools by outcome
+- MINOR/MODERATE/SEVERE_RECOVERY - recovery day ranges by severity
+- LeagueSimulator - main simulation class:
+  - __init__(seed, verbose) - initializes RNG, empty roster, world_state with season/tier tracking
+  - generate_initial_roster() - creates 136 fighters (16 championship, 20 contender, 100 underground) with tier-appropriate age/stat/record ranges, assigns initial belt holder
+  - _make_fighter(counter, tier, age_range, stat_range, career_seasons_range, tier_seasons_range) - creates fighter dict with full league fields
+  - _distribute_stats(target_total) - allocates stat points across 4 core stats
+  - simulate_season() - runs 8-week season: weeks 1-6 regular, week 7 regular + promotion prep, week 8 promotion/title fights, then process_end_of_season
+  - _simulate_regular_week(week) - daily recovery/training + tier events on scheduled days
+  - _run_tier_event(tier) - schedules and runs fights for a tier based on tier event config
+  - _run_single_fight(f1_id, f2_id) - runs combat via simulate_combat with fight camp boosts, updates records/injuries/morale
+  - _apply_injury(fighter, is_winner, method) - probabilistic injury assignment (10% winner, 40% loser, +15% for KO/TKO losers)
+  - _prepare_promotion_week() - calculates tier rankings, generates promotion matchups and title fight
+  - _simulate_promotion_week() - runs promotion fights, applies tier swaps, runs title fight
+  - print_final_summary(num_seasons) - outputs career arc stats, tier mobility, belt history, fighter archetypes, notable careers
+- main() - CLI entry (--seasons N, --seed, --verbose)
