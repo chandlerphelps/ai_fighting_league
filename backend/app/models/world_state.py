@@ -41,6 +41,7 @@ class WorldState:
     retired_fighter_ids: list = field(default_factory=list)
     promotion_fights: list = field(default_factory=list)
     title_fight: dict = field(default_factory=dict)
+    season_champions: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -71,4 +72,5 @@ class WorldState:
             retired_fighter_ids=d.get("retired_fighter_ids", []),
             promotion_fights=d.get("promotion_fights", []),
             title_fight=d.get("title_fight", {}),
+            season_champions=d.get("season_champions", []),
         )

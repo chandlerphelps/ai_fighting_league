@@ -58,6 +58,7 @@ class LeagueSimulator:
             "belt_history": [],
             "retired_fighter_ids": [],
             "active_injuries": {},
+            "season_champions": [],
         }
         self.total_fights_run = 0
         self.mid_season_retirements = []
@@ -583,23 +584,49 @@ class LeagueSimulator:
                 print(f"    {fname}: {change['action']} -> {change['tier']}")
 
         title_fight = self.world_state.get("title_fight", {})
-        if title_fight:
-            champ_id = title_fight.get("champion_id", "")
-            challenger_id = title_fight.get("challenger_id", "")
-            champ = self.fighters.get(champ_id)
-            challenger = self.fighters.get(challenger_id)
+        champ_id = title_fight.get("champion_id", "")
+        challenger_id = title_fight.get("challenger_id", "")
 
-            if champ and challenger and champ.get("status") == "active" and challenger.get("status") == "active":
-                if champ.get("tier") == "championship" and challenger.get("tier") == "championship":
-                    match = self._run_single_fight(champ_id, challenger_id)
-                    winner_id = match["outcome"]["winner_id"]
-                    loser_id = match["outcome"]["loser_id"]
-                    season = self.world_state["season_number"]
-                    apply_title_fight_result(self.world_state, winner_id, loser_id, season)
+        eligible_champs = [
+            fid for fid, f in self.fighters.items()
+            if f.get("status") == "active" and f.get("tier") == "championship"
+        ]
 
-                    if self.verbose:
-                        winner_name = self.fighters[winner_id]["ring_name"]
-                        print(f"    TITLE FIGHT: {winner_name} wins the belt!")
+        def _is_eligible(fid):
+            f = self.fighters.get(fid)
+            return f and f.get("status") == "active" and f.get("tier") == "championship"
+
+        if not _is_eligible(champ_id):
+            champ_id = ""
+        if not _is_eligible(challenger_id) or challenger_id == champ_id:
+            challenger_id = ""
+
+        if not champ_id and eligible_champs:
+            champ_id = eligible_champs[0]
+        if not challenger_id:
+            fallbacks = [fid for fid in eligible_champs if fid != champ_id]
+            if fallbacks:
+                challenger_id = fallbacks[0]
+
+        if champ_id and challenger_id:
+            match = self._run_single_fight(champ_id, challenger_id)
+            winner_id = match["outcome"]["winner_id"]
+            loser_id = match["outcome"]["loser_id"]
+            season = self.world_state["season_number"]
+            apply_title_fight_result(self.world_state, winner_id, loser_id, season)
+
+            season_champion = {
+                "season": season,
+                "fighter_id": winner_id,
+                "ring_name": self.fighters[winner_id]["ring_name"],
+                "defeated_id": loser_id,
+                "defeated_name": self.fighters[loser_id]["ring_name"],
+            }
+            self.world_state.setdefault("season_champions", []).append(season_champion)
+
+            if self.verbose:
+                winner_name = self.fighters[winner_id]["ring_name"]
+                print(f"    TITLE FIGHT: {winner_name} wins the belt!")
 
         self.world_state["promotion_fights"] = []
         self.world_state["title_fight"] = {}
@@ -655,12 +682,13 @@ class LeagueSimulator:
             for nf in summary["new_fighters"]:
                 print(f"    {nf['ring_name']:20s} age:{nf['age']}")
 
-        belt_holder_id = self.world_state.get("belt_holder_id", "")
-        if belt_holder_id:
-            holder = self.fighters.get(belt_holder_id, {})
-            print(f"  Belt Holder: {holder.get('ring_name', '?')} (age {holder.get('age', '?')})")
+        champions = self.world_state.get("season_champions", [])
+        season_num = self.world_state["season_number"] - 1
+        season_champ = next((c for c in champions if c["season"] == season_num), None)
+        if season_champ:
+            print(f"  Season Champion: {season_champ['ring_name']} (defeated {season_champ['defeated_name']})")
         else:
-            print(f"  Belt: VACANT")
+            print(f"  Season Champion: None (no title fight held)")
 
     def print_final_summary(self, num_seasons):
         print(f"\n{'='*70}")
@@ -718,6 +746,12 @@ class LeagueSimulator:
         if ug_stuck:
             avg_ug_career = sum(r.get("career_seasons", 0) for r in ug_stuck) / len(ug_stuck)
             print(f"    Avg career stuck in UG:    {avg_ug_career:.1f} seasons")
+
+        season_champions = self.world_state.get("season_champions", [])
+        if season_champions:
+            print(f"\n  SEASON CHAMPIONS:")
+            for sc in season_champions:
+                print(f"    Season {sc['season']:3d}: {sc['ring_name']:20s} (defeated {sc['defeated_name']})")
 
         belt_history = self.world_state.get("belt_history", [])
         if belt_history:
@@ -808,10 +842,12 @@ def main():
             season_num = sim.world_state["season_number"] - 1
             retirements = len(sim.season_logs[-1].get("retirements", []))
             new_fighters = len(sim.season_logs[-1].get("new_fighters", []))
-            belt = sim.fighters.get(sim.world_state.get("belt_holder_id", ""), {}).get("ring_name", "VACANT")
+            champions = sim.world_state.get("season_champions", [])
+            season_champ = next((c for c in champions if c["season"] == season_num), None)
+            champ_name = season_champ["ring_name"] if season_champ else "None"
             sys.stdout.write(f"\r  Season {season_num:3d} complete | "
                              f"Retirements: {retirements} | New: {new_fighters} | "
-                             f"Belt: {belt:20s} | Fights: {sim.total_fights_run}")
+                             f"Champion: {champ_name:20s} | Fights: {sim.total_fights_run}")
             sys.stdout.flush()
 
     if not args.verbose:

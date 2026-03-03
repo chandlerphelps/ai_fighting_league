@@ -38,9 +38,11 @@ def initialize_league(seasons=30, seed=42, verbose=False):
     for s in range(seasons):
         sim.simulate_season()
         season_num = sim.world_state["season_number"] - 1
-        belt = sim.fighters.get(sim.world_state.get("belt_holder_id", ""), {}).get("ring_name", "VACANT")
+        champions = sim.world_state.get("season_champions", [])
+        season_champ = next((c for c in champions if c["season"] == season_num), None)
+        champ_name = season_champ["ring_name"] if season_champ else "None"
         active = sum(1 for f in sim.fighters.values() if f.get("status") == "active")
-        sys.stdout.write(f"\r  Season {season_num:3d}/{seasons} | Belt: {belt:20s} | Active: {active} | Fights: {sim.total_fights_run}")
+        sys.stdout.write(f"\r  Season {season_num:3d}/{seasons} | Champion: {champ_name:20s} | Active: {active} | Fights: {sim.total_fights_run}")
         sys.stdout.flush()
 
     print(f"\n  Simulation complete. {sim.total_fights_run} total fights.")
@@ -72,17 +74,13 @@ def initialize_league(seasons=30, seed=42, verbose=False):
 
     season_summaries = []
     for log in sim.season_logs:
-        belt_id = ""
-        for entry in sim.world_state.get("belt_history", []):
-            won = entry.get("won_date", "")
-            if f"season_{log['season']}" in str(won) or (not entry.get("lost_date") and log == sim.season_logs[-1]):
-                belt_id = entry["fighter_id"]
-                break
-        holder_name = sim.fighters.get(belt_id, {}).get("ring_name", "VACANT") if belt_id else "VACANT"
+        season_champ = next((c for c in sim.world_state.get("season_champions", []) if c["season"] == log["season"]), None)
         season_summaries.append({
             "season": log["season"],
-            "belt_holder_name": holder_name,
-            "belt_holder_id": belt_id,
+            "champion_name": season_champ["ring_name"] if season_champ else "None",
+            "champion_id": season_champ["fighter_id"] if season_champ else "",
+            "belt_holder_name": sim.fighters.get(sim.world_state.get("belt_holder_id", ""), {}).get("ring_name", "VACANT"),
+            "belt_holder_id": sim.world_state.get("belt_holder_id", ""),
             "retirements": len(log.get("retirements", [])),
             "new_fighters": len(log.get("new_fighters", [])),
             "tier_counts": log.get("tier_counts_after", {}),
@@ -97,6 +95,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
         "tier_rankings": sim.world_state["tier_rankings"],
         "belt_holder_id": sim.world_state.get("belt_holder_id", ""),
         "belt_history": sim.world_state.get("belt_history", []),
+        "season_champions": sim.world_state.get("season_champions", []),
         "retired_fighter_ids": sim.world_state.get("retired_fighter_ids", []),
         "active_injuries": {},
         "rivalry_graph": [],
@@ -116,8 +115,12 @@ def initialize_league(seasons=30, seed=42, verbose=False):
     data_manager.save_world_state(ws, config)
     print(f"  Saved world_state.json (Season {ws['season_number']}, Month {ws['season_month']})")
 
-    belt_holder = sim.fighters.get(ws["belt_holder_id"], {})
-    print(f"\n  Belt Holder: {belt_holder.get('ring_name', 'VACANT')}")
+    champions = ws.get("season_champions", [])
+    latest_champ = champions[-1] if champions else None
+    if latest_champ:
+        print(f"\n  Latest Season Champion: {latest_champ['ring_name']}")
+    else:
+        print(f"\n  Latest Season Champion: None")
     print(f"  Championship: {len(ws['tier_rankings']['championship'])} fighters")
     print(f"  Contender: {len(ws['tier_rankings']['contender'])} fighters")
     print(f"  Underground: {len(ws['tier_rankings']['underground'])} fighters")

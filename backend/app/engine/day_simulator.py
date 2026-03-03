@@ -318,8 +318,12 @@ def _advance_calendar(fighters: dict, ws: dict, rng, day_result: dict):
                     continue
             day_result["phase"] = "season_end"
 
+            champions = ws.get("season_champions", [])
+            season_champ = next((c for c in champions if c["season"] == season), None)
             ws.setdefault("season_logs", []).append({
                 "season": season,
+                "champion_name": season_champ["ring_name"] if season_champ else "None",
+                "champion_id": season_champ["fighter_id"] if season_champ else "",
                 "belt_holder_name": fighters.get(ws.get("belt_holder_id", ""), {}).get("ring_name", "VACANT"),
                 "belt_holder_id": ws.get("belt_holder_id", ""),
                 "retirements": len(season_summary.get("retirements", [])),
@@ -408,19 +412,31 @@ def _run_promotions(fighters: dict, ws: dict, rng, day_result: dict):
 
 def _run_title_fight(fighters: dict, ws: dict, rng, day_result: dict):
     tf = ws.get("title_fight", {})
-    if not tf:
-        return
-
     champ_id = tf.get("champion_id", "")
     challenger_id = tf.get("challenger_id", "")
-    champ = fighters.get(champ_id)
-    challenger = fighters.get(challenger_id)
 
-    if not champ or not challenger or champ.get("status") != "active" or challenger.get("status") != "active":
-        ws["title_fight"] = {}
-        return
+    eligible_champs = [
+        fid for fid, f in fighters.items()
+        if f.get("status") == "active" and f.get("tier") == "championship"
+    ]
 
-    if champ.get("tier") != "championship" or challenger.get("tier") != "championship":
+    def _is_eligible(fid):
+        f = fighters.get(fid)
+        return f and f.get("status") == "active" and f.get("tier") == "championship"
+
+    if not _is_eligible(champ_id):
+        champ_id = ""
+    if not _is_eligible(challenger_id) or challenger_id == champ_id:
+        challenger_id = ""
+
+    if not champ_id and eligible_champs:
+        champ_id = eligible_champs[0]
+    if not challenger_id:
+        fallbacks = [fid for fid in eligible_champs if fid != champ_id]
+        if fallbacks:
+            challenger_id = fallbacks[0]
+
+    if not champ_id or not challenger_id:
         ws["title_fight"] = {}
         return
 
@@ -430,7 +446,18 @@ def _run_title_fight(fighters: dict, ws: dict, rng, day_result: dict):
 
     winner_id = match["winner_id"]
     loser_id = [fid for fid in [champ_id, challenger_id] if fid != winner_id][0]
-    apply_title_fight_result(ws, winner_id, loser_id, ws["season_number"])
+    season = ws["season_number"]
+    apply_title_fight_result(ws, winner_id, loser_id, season)
+
+    season_champion = {
+        "season": season,
+        "fighter_id": winner_id,
+        "ring_name": fighters[winner_id].get("ring_name", "?"),
+        "defeated_id": loser_id,
+        "defeated_name": fighters[loser_id].get("ring_name", "?"),
+    }
+    ws.setdefault("season_champions", []).append(season_champion)
+
     ws["title_fight"] = {}
 
 
