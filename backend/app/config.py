@@ -32,9 +32,9 @@ class Config:
     rematch_cooldown_days: int = 14
     max_idle_days: int = 14
 
-    championship_size: int = 8
-    contender_size: int = 8
-    underground_size: int = 24
+    championship_size: int = 16
+    contender_size: int = 20
+    underground_size: int = 100
     season_length_weeks: int = 8
 
     ticks_per_round: int = 30

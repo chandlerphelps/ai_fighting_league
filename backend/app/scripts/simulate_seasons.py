@@ -21,9 +21,9 @@ from app.engine.between_fights.season import (
 
 
 EVENT_DAYS = {
-    "championship": [2, 5],
-    "contender": [3, 6],
-    "underground": [1, 4, 7],
+    "championship": [3, 6],
+    "contender": [2, 4, 7],
+    "underground": [1, 2, 3, 4, 5, 6, 7],
 }
 
 INJURY_TYPES_WINNER = ["minor bruising", "hand strain", "mild concussion"]
@@ -59,7 +59,7 @@ class LeagueSimulator:
         self.used_names = set()
 
     def generate_initial_roster(self):
-        for i in range(8):
+        for i in range(TIER_SIZES["championship"]):
             self.fighter_counter += 1
             f = self._make_fighter(
                 self.fighter_counter,
@@ -71,7 +71,7 @@ class LeagueSimulator:
             )
             self.fighters[f["id"]] = f
 
-        for i in range(8):
+        for i in range(TIER_SIZES["contender"]):
             self.fighter_counter += 1
             f = self._make_fighter(
                 self.fighter_counter,
@@ -83,7 +83,7 @@ class LeagueSimulator:
             )
             self.fighters[f["id"]] = f
 
-        for i in range(24):
+        for i in range(TIER_SIZES["underground"]):
             self.fighter_counter += 1
             f = self._make_fighter(
                 self.fighter_counter,

@@ -23,6 +23,17 @@ RING_NAMES = [
     "Jinx", "Hex", "Curse", "Bane", "Doom", "Dread", "Malice", "Spite",
     "Vengeance", "Wrath", "Rage", "Savage", "Feral", "Predator", "Hunter",
     "Stalker", "Ambush", "Snare", "Trap", "Lure", "Decoy", "Bluff", "Gambit",
+    "Comet", "Nebula", "Zenith", "Apex", "Summit", "Ridge", "Flint", "Granite",
+    "Marble", "Slate", "Pyro", "Frost", "Sleet", "Hail", "Gale", "Breeze",
+    "Typhoon", "Tsunami", "Torrent", "Cascade", "Raptor", "Falcon", "Osprey",
+    "Kestrel", "Merlin", "Harrier", "Sparrow", "Wren", "Kingpin", "Baron",
+    "Duke", "Knight", "Bishop", "Pawn", "Rook", "Ace", "Joker", "Maverick",
+    "Rebel", "Outlaw", "Bandit", "Rascal", "Hustler", "Grifter", "Shark",
+    "Wolf", "Fox", "Bear", "Boar", "Ram", "Buck", "Stag", "Moose",
+    "Bison", "Cobra", "Venom", "Fist", "Claw", "Thorn", "Barb", "Edge",
+    "Blade", "Saber", "Lance", "Pike", "Bolt", "Spark", "Flash", "Flare",
+    "Blaze", "Torch", "Beacon", "Signal", "Sentry", "Scout", "Ranger", "Marshal",
+    "Warden", "Captain", "Chief", "Boss", "Czar", "King", "Prince", "Titan",
 ]
 
 PREFIXES = [

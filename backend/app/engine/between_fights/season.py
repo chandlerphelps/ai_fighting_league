@@ -4,15 +4,15 @@ from .retirement import check_retirement, apply_aging, update_promotion_desperat
 from .league_tiers import calculate_tier_rankings, TIER_ORDER
 
 TIER_EVENT_CONFIG = {
-    "championship": {"events_per_week": 2, "fights_min": 2, "fights_max": 3},
-    "contender": {"events_per_week": 2, "fights_min": 2, "fights_max": 3},
-    "underground": {"events_per_week": 3, "fights_min": 3, "fights_max": 4},
+    "championship": {"events_per_week": 2, "fights_min": 3, "fights_max": 4},
+    "contender": {"events_per_week": 3, "fights_min": 3, "fights_max": 4},
+    "underground": {"events_per_week": 7, "fights_min": 5, "fights_max": 8},
 }
 
 TIER_SIZES = {
-    "championship": 8,
-    "contender": 8,
-    "underground": 24,
+    "championship": 16,
+    "contender": 20,
+    "underground": 100,
 }
 
 

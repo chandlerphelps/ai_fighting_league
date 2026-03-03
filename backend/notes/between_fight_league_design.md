@@ -4,38 +4,38 @@
 
 ```
         ┌─────────────────────┐
-        │   AFL Championship   │  8 fighters - The elite
+        │   AFL Championship   │  16 fighters - The elite
         │   (The Pros)         │  Full fight week, belt, max fanfare
         ├─────────────────────┤
-        │  AFL Contender Series│  8 fighters - Minor leagues
+        │  AFL Contender Series│  20 fighters - Minor leagues
         │  (The Minors)        │  Fight week, proving ground
         ├─────────────────────┤
         │                     │
-        │   AFL Underground    │  24 fighters - The farm system
+        │   AFL Underground    │  100 fighters - The farm system
         │   (The Amateurs)     │  High turnover, raw talent
         │                     │  Abbreviated fight week
         └─────────────────────┘
 ```
 
-**40 fighters total** in the ecosystem at any time.
+**136 fighters total** in the ecosystem at any time.
 
 ### Tier Characteristics
 
-**Championship (8 fighters)**
-- 2 events per week, 2-3 fights per event
+**Championship (16 fighters)**
+- 2 events per week, 3-4 fights per event
 - Full 7-day fight week with all rituals
 - Title belt for #1 ranked fighter
 - Title defenses once per season (season finale main event)
 - Events named: "AFL Championship: [Event Name]"
 
-**Contender Series (8 fighters)**
-- 2 events per week, 2-3 fights per event
+**Contender Series (20 fighters)**
+- 3 events per week, 3-4 fights per event
 - Full fight week (same rituals as Championship)
 - No belt, but top performers earn promotion
 - Events named: "AFL Contender Series: [Event Name]"
 
-**Underground (24 fighters)**
-- 3 events per week, 3-4 fights per event (more fighters = more frequent fights)
+**Underground (100 fighters)**
+- 7 events per week (daily), 5-8 fights per event (more fighters = more frequent fights)
 - Abbreviated fight week: weigh-in (day before) + fight day only
 - No press conferences — these fighters haven't earned the mic yet
 - Events named: "AFL Underground: [Event Name]"
@@ -54,14 +54,14 @@ Week 8:    Promotion/relegation fights + Championship title fight (season finale
 End of each season, movement between tiers is decided by **head-to-head promotion fights**:
 
 **Championship ↔ Contender:**
-- Bottom 2 of Championship face Top 2 of Contender
-- Two promotion fights: Champ #7 vs Contender #2, Champ #8 vs Contender #1
+- Bottom 3 of Championship face Top 3 of Contender
+- Three promotion fights: Champ #14 vs Contender #3, Champ #15 vs Contender #2, Champ #16 vs Contender #1
 - Winner of each fight earns/keeps the Championship spot
 - These fights happen ON a Championship card (big stage for Contender fighters)
 
 **Contender ↔ Underground:**
-- Bottom 2 of Contender face Top 2 of Underground
-- Same format: two promotion fights
+- Bottom 3 of Contender face Top 3 of Underground
+- Same format: three promotion fights
 - Held on a Contender Series card
 
 **Championship Title Fight:**
