@@ -22,31 +22,31 @@
 ### Tier Characteristics
 
 **Championship (16 fighters)**
-- 2 events per week, 3-4 fights per event
+- 3 events per week, 2-3 fights per event
 - Full 7-day fight week with all rituals
 - Title belt for #1 ranked fighter
 - Title defenses once per season (season finale main event)
 - Events named: "AFL Championship: [Event Name]"
 
 **Contender Series (20 fighters)**
-- 3 events per week, 3-4 fights per event
+- 3 events per week, 3 fights per event
 - Full fight week (same rituals as Championship)
 - No belt, but top performers earn promotion
 - Events named: "AFL Contender Series: [Event Name]"
 
 **Underground (100 fighters)**
-- 7 events per week (daily), 5-8 fights per event (more fighters = more frequent fights)
+- 5 events per week, 4-5 fights per event (more fighters = more frequent fights)
 - Abbreviated fight week: weigh-in (day before) + fight day only
 - No press conferences — these fighters haven't earned the mic yet
 - Events named: "AFL Underground: [Event Name]"
 - Higher injury tolerance in matchmaking (scrappier, less protected)
 
-## Season Structure (8 weeks)
+## Season Structure (1 in-game year = 1 season)
 
 ```
-Week 1-6:  Regular season fights
-Week 7:    Final regular season fights + promotion/relegation matches announced
-Week 8:    Promotion/relegation fights + Championship title fight (season finale)
+Months 1-10:  Regular season fights
+Month 11:     Final regular season fights + promotion/relegation matches announced
+Month 12:     Promotion/relegation fights + Championship title fight (season finale)
 ```
 
 ### Promotion & Relegation
@@ -147,7 +147,7 @@ This means Championship fighters develop faster, creating a compounding advantag
 ### Entry
 - New fighters enter Underground at age 18-26
 - Generated with randomized stats within Underground-appropriate ranges (slightly lower total stats than established fighters)
-- Each season, 2-4 new fighters are generated to replace retirees/cuts
+- Each season, 8-12 new fighters are generated to replace retirees/cuts
 
 ### Peak & Decline
 - **Rising (18-25)**: Slight natural stat growth each season (+1-2 random stats)
@@ -341,7 +341,7 @@ Week 5:
   - Underground: Iron Mike wins a gritty decision. Brief hope, but time is running out.
 
 Week 7:
-  - Promotion fights announced. Blaze earned Contender #1. Faces Championship #8 "Granite" next week.
+  - Promotion fights announced. Blaze earned Contender #1. Faces Championship #16 "Granite" next week.
   - Iron Mike finishes Underground #15. Not enough — he's #4. No promotion fight for him.
 
 Week 8 (Season Finale):
@@ -351,5 +351,5 @@ Week 8 (Season Finale):
 
 Season 4, Week 1:
   - Blaze enters Championship as the fresh face everyone's watching.
-  - 3 new Underground fighters generated. The cycle continues.
+  - 8 new Underground fighters generated. The cycle continues.
 ```
