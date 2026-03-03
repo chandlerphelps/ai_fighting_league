@@ -36,6 +36,7 @@ def _skimpiness_matches(item_level_str: str, fighter_level: int | None) -> bool:
 def filter_outfit_options(
     options_for_tier: dict,
     skimpiness_level: int | None = None,
+    exotic_one_pieces: list[str] | None = None,
 ) -> dict:
     result = {}
     for key in ["tops", "bottoms", "one_pieces"]:
@@ -53,7 +54,41 @@ def filter_outfit_options(
         random.shuffle(sampled)
         result[key] = [_parse_outfit_item(item)[0] for item in sampled]
 
+    if exotic_one_pieces:
+        extras = random.sample(exotic_one_pieces, min(2, len(exotic_one_pieces)))
+        result.setdefault("one_pieces", []).extend(extras)
+
     return result
+
+
+def load_exotic_outfit_options(config) -> list[dict]:
+    path = Path(config.data_dir) / "exotic_outfit_options.json"
+    if path.exists():
+        with open(path) as f:
+            return json.load(f)
+    return []
+
+
+def filter_exotic_for_fighter(
+    exotics: list[dict],
+    archetype: str = "",
+    subtype: str = "",
+    tier: str = "sfw",
+    skimpiness_level: int = 2,
+) -> list[str]:
+    matched = []
+    for item in exotics:
+        if archetype in item.get("archetypes", []) or subtype in item.get("subtypes", []):
+            tier_vars = item.get("variations", {}).get(tier, [])
+            candidates = [
+                _parse_outfit_item(v)[0]
+                for v in tier_vars
+                if _skimpiness_matches(_parse_outfit_item(v)[1], skimpiness_level)
+            ]
+            if not candidates and tier_vars:
+                candidates = [_parse_outfit_item(tier_vars[0])[0]]
+            matched.extend(candidates)
+    return matched
 
 
 TECH_LEVELS = [

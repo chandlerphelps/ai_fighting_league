@@ -15,6 +15,8 @@ from app.engine.fighter_generator import (
     _find_subtype,
     load_outfit_options,
     filter_outfit_options,
+    load_exotic_outfit_options,
+    filter_exotic_for_fighter,
     ARCHETYPES_FEMALE,
     ARCHETYPES_MALE,
 )
@@ -229,7 +231,7 @@ def generate_new_fighter():
     def do_generate():
         weights = body.get("skimpiness_weights", [15, 35, 35, 15])
         skimpiness = _roll_skimpiness(weights)
-        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness)
+        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness, archetype=archetype or "")
         fighter = generate_fighter(
             config,
             archetype=archetype,
@@ -295,7 +297,7 @@ def regenerate_character(fighter_id: str):
     def do_regenerate():
         weights = body.get("skimpiness_weights", [15, 35, 35, 15])
         skimpiness = _roll_skimpiness(weights)
-        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness)
+        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness, archetype=archetype or "")
         fighter = generate_fighter(
             config,
             archetype=archetype,
@@ -351,7 +353,11 @@ def regenerate_outfits(fighter_id: str):
         }
 
         tech_level = existing.get("tech_level", "")
-        outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness_level)
+        outfit_opts = _build_outfit_options_for_fighter(
+            skimpiness_level=skimpiness_level,
+            archetype=existing.get("primary_archetype", ""),
+            subtype=existing.get("subtype", ""),
+        )
         outfit_data = _generate_outfits(config, character_summary, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_opts, tech_level=tech_level)
 
         new_suggestions = outfit_data.pop("_outfit_suggestions", {})
@@ -545,12 +551,27 @@ def save_outfit_options():
 
 def _build_outfit_options_for_fighter(
     skimpiness_level: int | None = None,
+    archetype: str = "",
+    subtype: str = "",
 ) -> dict:
     all_options = load_outfit_options(config)
+    exotics = None
+    if archetype or subtype:
+        exotics = load_exotic_outfit_options(config)
+    base = skimpiness_level or 2
     result = {}
     for tier in ["sfw", "barely", "nsfw"]:
         tier_options = all_options.get(tier, {})
-        result[tier] = filter_outfit_options(tier_options, skimpiness_level=skimpiness_level)
+        tier_exotics = None
+        if exotics:
+            tier_exotics = filter_exotic_for_fighter(
+                exotics, archetype=archetype, subtype=subtype,
+                tier=tier, skimpiness_level=base,
+            ) or None
+        result[tier] = filter_outfit_options(
+            tier_options, skimpiness_level=skimpiness_level,
+            exotic_one_pieces=tier_exotics,
+        )
     return result
 
 

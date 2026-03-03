@@ -45,3 +45,4 @@ _TMP_OUTPUT.md
 
 # Data
 data/**/*.json
+!data/*.json

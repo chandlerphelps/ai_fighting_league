@@ -5,7 +5,7 @@ import time
 from datetime import date
 
 from app.config import load_config
-from app.engine.fighter_generator import generate_fighter, plan_roster, load_outfit_options, filter_outfit_options, _roll_skimpiness
+from app.engine.fighter_generator import generate_fighter, plan_roster, load_outfit_options, filter_outfit_options, load_exotic_outfit_options, filter_exotic_for_fighter, _roll_skimpiness
 from app.models.world_state import WorldState
 from app.services import data_manager
 from app.services.grok_image import generate_charsheet_images
@@ -76,6 +76,7 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
     print(f"Generating {len(roster_plan)} fighters from plan...")
 
     all_outfit_options = load_outfit_options(config)
+    all_exotics = load_exotic_outfit_options(config)
 
     existing_on_disk = data_manager.load_all_fighters(config)
     existing_fighters = [
@@ -101,10 +102,21 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
 
         skimpiness_level = _roll_skimpiness(entry.get("skimpiness_weights"))
 
+        entry_archetype = entry.get("primary_archetype", "")
+        entry_subtype = entry.get("subtype", "")
         outfit_options_by_tier = {}
         for tier in ["sfw", "barely", "nsfw"]:
             tier_options = all_outfit_options.get(tier, {})
-            outfit_options_by_tier[tier] = filter_outfit_options(tier_options, skimpiness_level=skimpiness_level)
+            tier_exotics = None
+            if entry_archetype or entry_subtype:
+                tier_exotics = filter_exotic_for_fighter(
+                    all_exotics, archetype=entry_archetype, subtype=entry_subtype,
+                    tier=tier, skimpiness_level=skimpiness_level,
+                ) or None
+            outfit_options_by_tier[tier] = filter_outfit_options(
+                tier_options, skimpiness_level=skimpiness_level,
+                exotic_one_pieces=tier_exotics,
+            )
 
         try:
             fighter = generate_fighter(

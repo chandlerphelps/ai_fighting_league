@@ -22,6 +22,8 @@ from app.engine.fighter_config import (
     _build_nsfw_anatomy_line,
     load_outfit_options,
     filter_outfit_options,
+    load_exotic_outfit_options,
+    filter_exotic_for_fighter,
 )
 from app.prompts.fighter_prompts import (
     GUIDE_CORE_PHILOSOPHY,

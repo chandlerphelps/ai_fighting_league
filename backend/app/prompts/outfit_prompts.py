@@ -95,17 +95,26 @@ Expression: {expression}"""
         tops = outfit_options.get("tops", [])
         bottoms = outfit_options.get("bottoms", [])
         one_pieces = outfit_options.get("one_pieces", [])
-        lines = []
-        if tops:
-            lines.append(f"Example tops to consider: {', '.join(tops)}")
-        if bottoms:
-            lines.append(f"Example bottoms to consider: {', '.join(bottoms)}")
-        if one_pieces:
-            lines.append(
-                f"Example one-pieces to consider (use instead of top+bottom): {', '.join(one_pieces)}"
-            )
-        if lines:
-            outfit_examples_text = "\n" + "\n".join(lines) + "\n"
+        if tier == "nsfw":
+            all_accessories = tops + bottoms + one_pieces
+            if all_accessories:
+                outfit_examples_text = (
+                    "\nExample accessories to consider: "
+                    + ", ".join(all_accessories)
+                    + "\n"
+                )
+        else:
+            lines = []
+            if tops:
+                lines.append(f"Example tops to consider: {', '.join(tops)}")
+            if bottoms:
+                lines.append(f"Example bottoms to consider: {', '.join(bottoms)}")
+            if one_pieces:
+                lines.append(
+                    f"Example one-pieces to consider (use instead of top+bottom): {', '.join(one_pieces)}"
+                )
+            if lines:
+                outfit_examples_text = "\n" + "\n".join(lines) + "\n"
 
     if tier == "sfw":
         return f"""{char_context}
