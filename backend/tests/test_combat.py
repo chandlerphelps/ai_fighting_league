@@ -228,26 +228,29 @@ class TestWinConditions:
     def test_tko_conditions(self):
         state = FighterCombatState.from_fighter_data(_make_fighter_data(toughness=50))
         state.accumulated_damage = 100
-        state.hp = state.max_hp * 0.10
-        assert check_tko(state, round_number=5) is True
+        state.hp = state.max_hp * 0.05
+        rng = random.Random(31)
+        assert check_tko(state, round_number=5, rng=rng) is True
 
     def test_no_tko_when_healthy(self):
         state = FighterCombatState.from_fighter_data(_make_fighter_data())
         assert check_tko(state, round_number=1) is False
 
     def test_submission_requires_low_stats(self):
+        rng = random.Random(42)
         move = UNIVERSAL_MOVES["armbar_attempt"]
         attacker = FighterCombatState.from_fighter_data(_make_fighter_data(technique=80))
         defender = FighterCombatState.from_fighter_data(_make_fighter_data(technique=30))
         defender.hp = defender.max_hp * 0.20
         defender.stamina = defender.max_stamina * 0.10
-        assert check_submission(move, attacker, defender) is True
+        assert check_submission(move, attacker, defender, rng) is True
 
     def test_no_submission_when_healthy(self):
+        rng = random.Random(42)
         move = UNIVERSAL_MOVES["armbar_attempt"]
         attacker = FighterCombatState.from_fighter_data(_make_fighter_data())
         defender = FighterCombatState.from_fighter_data(_make_fighter_data())
-        assert check_submission(move, attacker, defender) is False
+        assert check_submission(move, attacker, defender, rng) is False
 
 
 class TestStrategy:

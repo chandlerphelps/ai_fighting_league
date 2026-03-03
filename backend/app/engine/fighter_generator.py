@@ -287,6 +287,7 @@ def generate_fighter(
             body_type_details=body_traits,
             origin=origin,
             subtype_info=subtype_info,
+            age=result.get("age", 25),
         ),
         image_prompt=_build_charsheet_prompt(
             body_parts,
@@ -300,6 +301,7 @@ def generate_fighter(
             origin=origin,
             subtype_info=subtype_info,
             iconic_features=iconic_features,
+            age=result.get("age", 25),
         ),
         image_prompt_sfw=_build_charsheet_prompt(
             body_parts,
@@ -313,6 +315,7 @@ def generate_fighter(
             origin=origin,
             subtype_info=subtype_info,
             iconic_features=iconic_features,
+            age=result.get("age", 25),
         ),
         image_prompt_nsfw=_build_charsheet_prompt(
             body_parts,
@@ -326,6 +329,7 @@ def generate_fighter(
             origin=origin,
             subtype_info=subtype_info,
             iconic_features=iconic_features,
+            age=result.get("age", 25),
         ),
         stats=stats,
         record=Record(),

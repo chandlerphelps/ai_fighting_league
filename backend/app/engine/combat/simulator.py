@@ -15,8 +15,8 @@ from app.engine.combat.strategy import FightStrategy, WeightedStrategy
 from app.engine.combat.conditions import update_emotions_between_rounds
 
 TICKS_PER_ROUND = 30
-BASE_STAMINA_RECOVERY_PCT = 0.30
-STAMINA_RECOVERY_DECAY_PER_ROUND = 0.03
+BASE_STAMINA_RECOVERY_PCT = 0.40
+STAMINA_RECOVERY_DECAY_PER_ROUND = 0.02
 MAX_ROUNDS = 30
 
 
@@ -100,7 +100,7 @@ def simulate_combat(
         _between_rounds(f1, f2, round_num)
 
     if not finish_method:
-        finish_method = FinishMethod.TKO.value
+        finish_method = FinishMethod.TKO
         winner_id = f1.fighter_id if f1.hp > f2.hp else f2.fighter_id
 
     loser_id = f2.fighter_id if winner_id == f1.fighter_id else f1.fighter_id

@@ -72,13 +72,13 @@ def resolve_single_attack(
         if att_move.base_damage == 0 and att_move.position_change is not None:
             pass
 
-    win = check_win_condition(attacker, defender, att_move, outcome, round_number)
+    win = check_win_condition(attacker, defender, att_move, outcome, round_number, rng)
     finish = None
     if win:
         finish = win[0]
 
     if outcome == TickOutcome.COUNTER:
-        counter_win = check_win_condition(defender, attacker, att_move, TickOutcome.HIT, round_number)
+        counter_win = check_win_condition(defender, attacker, att_move, TickOutcome.HIT, round_number, rng)
         if counter_win:
             finish = counter_win[0]
 
@@ -159,7 +159,7 @@ def resolve_tick(
 
 def _end_of_tick_maintenance(f1: FighterCombatState, f2: FighterCombatState):
     for f in (f1, f2):
-        f.stamina = min(f.max_stamina, f.stamina + 2.0)
+        f.stamina = min(f.max_stamina, f.stamina + 3.0)
         f.guard = min(f.max_guard, f.guard + 3.0)
         if f.stun_ticks > 0:
             f.stun_ticks -= 1

@@ -60,12 +60,14 @@ def _rebuild_prompts(fighter: dict):
     clothing_barely = fighter.get("ring_attire", "") or fighter.get("image_prompt", {}).get("clothing", "")
     clothing_nsfw = fighter.get("ring_attire_nsfw", "") or fighter.get("image_prompt_nsfw", {}).get("clothing", "")
 
+    age = fighter.get("age", 0)
     fighter["image_prompt_sfw"] = _build_charsheet_prompt(
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
         gender=gender, skimpiness_level=skimpiness,
         subtype_info=subtype_info,
         iconic_features=iconic_features,
+        age=age,
     )
     fighter["image_prompt"] = _build_charsheet_prompt(
         body_parts, clothing_barely, expression,
@@ -73,6 +75,7 @@ def _rebuild_prompts(fighter: dict):
         gender=gender, skimpiness_level=skimpiness,
         subtype_info=subtype_info,
         iconic_features=iconic_features,
+        age=age,
     )
     fighter["image_prompt_nsfw"] = _build_charsheet_prompt(
         body_parts, clothing_nsfw, expression,
@@ -80,6 +83,7 @@ def _rebuild_prompts(fighter: dict):
         gender=gender, skimpiness_level=skimpiness,
         subtype_info=subtype_info,
         iconic_features=iconic_features,
+        age=age,
     )
 
 
@@ -371,6 +375,7 @@ def regenerate_outfits(fighter_id: str):
         pose_barely = outfit_data.get("image_prompt_pose", "") or personality_pose
         pose_nsfw = outfit_data.get("image_prompt_pose_nsfw", "") or personality_pose
 
+        age = existing.get("age", 0)
         if not tiers or "sfw" in tiers:
             existing["ring_attire_sfw"] = outfit_data.get("ring_attire_sfw", existing.get("ring_attire_sfw", ""))
             existing["image_prompt_sfw"] = _build_charsheet_prompt(
@@ -379,6 +384,7 @@ def regenerate_outfits(fighter_id: str):
                 gender=gender, skimpiness_level=skimpiness_level,
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
+                age=age,
             )
         if not tiers or "barely" in tiers:
             existing["ring_attire"] = outfit_data.get("ring_attire", existing.get("ring_attire", ""))
@@ -388,6 +394,7 @@ def regenerate_outfits(fighter_id: str):
                 gender=gender, skimpiness_level=skimpiness_level,
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
+                age=age,
             )
         if not tiers or "nsfw" in tiers:
             existing["ring_attire_nsfw"] = outfit_data.get("ring_attire_nsfw", existing.get("ring_attire_nsfw", ""))
@@ -397,6 +404,7 @@ def regenerate_outfits(fighter_id: str):
                 gender=gender, skimpiness_level=skimpiness_level,
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
+                age=age,
             )
 
         existing["skimpiness_level"] = skimpiness_level

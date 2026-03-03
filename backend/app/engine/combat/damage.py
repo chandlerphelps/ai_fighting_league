@@ -72,9 +72,9 @@ def calculate_damage(
     stamina_factor = 0.7 + 0.3 * (attacker.stamina / attacker.max_stamina)
     combo_bonus = 1.0 + min(0.3, attacker.combo_counter * 0.05)
 
-    raw *= scaling_total * stamina_factor * att_mods["damage_mult"] * combo_bonus
+    raw *= scaling_total * stamina_factor * att_mods["damage_mult"] * combo_bonus * 0.45
 
-    reduction = 0.05 + 0.15 * (defender.toughness / 95.0)
+    reduction = 0.10 + 0.25 * (defender.toughness / 95.0)
     if defender.guard > 20:
         reduction += 0.05 * (defender.guard / defender.max_guard if defender.max_guard > 0 else 0)
 
@@ -82,7 +82,7 @@ def calculate_damage(
 
 
 def calculate_block_damage(full_damage: float) -> float:
-    return full_damage * 0.3
+    return full_damage * 0.15
 
 
 def resolve_attack(

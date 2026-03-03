@@ -78,6 +78,7 @@ def _build_charsheet_prompt(
     origin: str = "",
     subtype_info: dict | None = None,
     iconic_features: str = "",
+    age: int = 0,
 ) -> dict:
     if not body_parts:
         return {}
@@ -117,8 +118,10 @@ def _build_charsheet_prompt(
         clothing_part = iconic_features
 
     character_desc = body_parts
+    if age:
+        character_desc = f"{character_desc}, {age} years old"
     if clothing_part:
-        character_desc = f"{body_parts}, {clothing_part}"
+        character_desc = f"{character_desc}, {clothing_part}"
     if origin:
         character_desc = f"{character_desc}, from {origin}"
 
@@ -229,6 +232,7 @@ def build_body_reference_prompt(
     body_type_details: dict | None = None,
     origin: str = "",
     subtype_info: dict | None = None,
+    age: int = 0,
 ) -> dict:
     if not body_parts:
         return {}
@@ -243,6 +247,8 @@ def build_body_reference_prompt(
         body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
 
     subject = body_parts
+    if age:
+        subject = f"{subject}, {age} years old"
     if origin:
         subject = f"{subject}, from {origin}"
 

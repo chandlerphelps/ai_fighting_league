@@ -45,7 +45,11 @@ def build_tier_prompt(
 
     archetype_line = ""
     if primary_archetype:
-        arch_key = f"The {primary_archetype}" if not primary_archetype.startswith("The ") else primary_archetype
+        arch_key = (
+            f"The {primary_archetype}"
+            if not primary_archetype.startswith("The ")
+            else primary_archetype
+        )
         arch_desc = ARCHETYPE_DESCRIPTIONS.get(arch_key, "")
         archetype_str = primary_archetype
         if arch_desc:
@@ -109,6 +113,7 @@ Expression: {expression}"""
 Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
 
 {OUTFIT_STYLE_RULES}
+You are encouraged (but not required) to include pieces from the following in your outfit design:
 {outfit_examples_text}
 RULES:
   HARD RULES: {level['sfw_hard_rules']}
@@ -116,7 +121,7 @@ RULES:
   VIBE: {level['sfw_label']} — {level['sfw_guidance']}
   Iconic features + additional clothing pieces to hit the skin target.
 
-You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
+The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 POSE: Also generate a short personality pose for this tier — a confident, powerful pose that fits a family-friendly context. 5-10 words max describing the body position and attitude.
 
@@ -133,6 +138,7 @@ Return ONLY valid JSON:
 Generate the "{level['barely_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
 
 {OUTFIT_STYLE_RULES}
+You are encouraged to include pieces from the following in your outfit design:
 {outfit_examples_text}
 RULES:
   HARD RULES: {level['barely_hard_rules']}
@@ -140,7 +146,7 @@ RULES:
   VIBE: {level['barely_label']} — {level['barely_guidance']}
   Iconic features + additional pieces to hit the skin target.
 
-You have FULL creative freedom on what clothing items to use. The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
+The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 POSE: Also generate a short personality pose for this tier — suggestive, flirty, showing off the outfit and sex appeal. 5-10 words max.
 
