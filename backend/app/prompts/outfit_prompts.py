@@ -92,11 +92,12 @@ Expression: {expression}"""
 
     outfit_examples_text = ""
     if outfit_options:
+        exotic_one_pieces = outfit_options.get("exotic_one_pieces", [])
         tops = outfit_options.get("tops", [])
         bottoms = outfit_options.get("bottoms", [])
         one_pieces = outfit_options.get("one_pieces", [])
         if tier == "nsfw":
-            all_accessories = tops + bottoms + one_pieces
+            all_accessories = exotic_one_pieces + tops + bottoms + one_pieces
             if all_accessories:
                 outfit_examples_text = (
                     "\nExample accessories to consider: "
@@ -105,6 +106,10 @@ Expression: {expression}"""
                 )
         else:
             lines = []
+            if exotic_one_pieces:
+                lines.append(
+                    f"Exotic one-pieces unique to this character (use instead of top+bottom): {', '.join(exotic_one_pieces)}"
+                )
             if tops:
                 lines.append(f"Example tops to consider: {', '.join(tops)}")
             if bottoms:

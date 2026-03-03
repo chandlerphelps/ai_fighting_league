@@ -16,7 +16,10 @@ CHARSHEET_LAYOUT = (
 
 
 def _charsheet_style_base(gender: str = "female") -> str:
-    return get_art_style(gender) + ", character design reference sheet"
+    return (
+        get_art_style(gender)
+        + ", character (strictly over 18 years old), character design reference sheet"
+    )
 
 
 def _charsheet_style(
@@ -188,9 +191,7 @@ BODY_REF_STYLE_BASE = (
     "professional perfect shading"
 )
 
-BODY_REF_STYLE_FEMALE = (
-    BODY_REF_STYLE_BASE + ", strictly female character, beautiful features"
-)
+BODY_REF_STYLE_FEMALE = BODY_REF_STYLE_BASE + ", female character, beautiful features"
 
 BODY_REF_STYLE_MALE = (
     BODY_REF_STYLE_BASE + ", male character, masculine build, rugged handsome features"
@@ -259,7 +260,11 @@ def build_body_reference_prompt(
             torso_detail="chest and abs",
             intimate_label="male",
         )
-        butt_size = body_type_details.get("butt_size", "muscular") if body_type_details else "muscular"
+        butt_size = (
+            body_type_details.get("butt_size", "muscular")
+            if body_type_details
+            else "muscular"
+        )
         rear_angled_panel = (
             f"isolated nude rear view at an angle, "
             f"bent forward back very arched, "
@@ -284,10 +289,24 @@ def build_body_reference_prompt(
             torso_detail="breasts",
             intimate_label="spread-leg",
         )
-        breast_size = body_type_details.get("breast_size", "medium") if body_type_details else "medium"
-        nipple_size = body_type_details.get("nipple_size", "medium") if body_type_details else "medium"
-        butt_size = body_type_details.get("butt_size", "medium round") if body_type_details else "medium round"
-        vulva_type = body_type_details.get("vulva_type", "") if body_type_details else ""
+        breast_size = (
+            body_type_details.get("breast_size", "medium")
+            if body_type_details
+            else "medium"
+        )
+        nipple_size = (
+            body_type_details.get("nipple_size", "medium")
+            if body_type_details
+            else "medium"
+        )
+        butt_size = (
+            body_type_details.get("butt_size", "medium round")
+            if body_type_details
+            else "medium round"
+        )
+        vulva_type = (
+            body_type_details.get("vulva_type", "") if body_type_details else ""
+        )
         rear_angled_panel = (
             f"isolated nude rear view at an angle, "
             f"bent forward back very arched sensuously, "
@@ -314,8 +333,7 @@ def build_body_reference_prompt(
             f"{vulva_type} fully visible and detailed, "
             f"front view, extremely detailed pussy, perfectly drawn anatomically accurate"
             if vulva_type
-            else
-            "isolated nude female intimate study from navel to mid-thigh, "
+            else "isolated nude female intimate study from navel to mid-thigh, "
             "legs up and spread apart, "
             "tasteful outer labia fully visible and detailed, "
             "front view, extremely detailed pussy, perfectly drawn anatomically accurate"

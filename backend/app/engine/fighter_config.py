@@ -56,7 +56,7 @@ def filter_outfit_options(
 
     if exotic_one_pieces:
         extras = random.sample(exotic_one_pieces, min(2, len(exotic_one_pieces)))
-        result.setdefault("one_pieces", []).extend(extras)
+        result["exotic_one_pieces"] = extras
 
     return result
 
