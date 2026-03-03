@@ -4,9 +4,9 @@ from .retirement import check_retirement, apply_aging, update_promotion_desperat
 from .league_tiers import calculate_tier_rankings, TIER_ORDER
 
 TIER_EVENT_CONFIG = {
-    "championship": {"events_per_week": 2, "fights_min": 3, "fights_max": 4},
-    "contender": {"events_per_week": 3, "fights_min": 3, "fights_max": 4},
-    "underground": {"events_per_week": 7, "fights_min": 5, "fights_max": 8},
+    "championship": {"events_per_month": 2, "fights_min": 3, "fights_max": 4},
+    "contender": {"events_per_month": 3, "fights_min": 3, "fights_max": 4},
+    "underground": {"events_per_month": 7, "fights_min": 5, "fights_max": 8},
 }
 
 TIER_SIZES = {
@@ -96,9 +96,20 @@ def process_end_of_season(
         if condition.get("morale") == "low":
             condition["morale"] = "neutral"
 
+        fighter.pop("_season_record_at_injury", None)
+        injuries = condition.get("injuries", [])
+        if any(i.get("severity") == "season_ending" for i in injuries):
+            fighter["condition"] = {
+                "health_status": "healthy",
+                "injuries": [],
+                "recovery_days_remaining": 0,
+                "morale": condition.get("morale", "neutral"),
+                "momentum": condition.get("momentum", "neutral"),
+            }
+
     ws["season_number"] = season + 1
-    ws["season_week"] = 1
-    ws["season_day_in_week"] = 1
+    ws["season_month"] = 1
+    ws["season_day_in_month"] = 1
 
     summary["tier_counts_after"] = _count_tiers(fighters)
     return summary

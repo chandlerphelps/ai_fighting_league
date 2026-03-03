@@ -70,7 +70,7 @@ def check_retirement(fighter: dict, rng: _random.Random = None) -> tuple[bool, s
     injuries = condition.get("injuries", [])
     has_severe = any(i.get("severity") == "severe" for i in injuries)
     if age >= 32 and has_severe and rng.random() < 0.30:
-        return True, "career_ending_injury"
+        return True, "severe_injury_retirement"
 
     if belt_holder and age >= 33 and rng.random() < 0.20:
         return True, "graceful_exit"

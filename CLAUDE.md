@@ -47,6 +47,13 @@ A two-part system: a Python engine that generates fighters, simulates fights wit
 
 ## Project Architecture
 
+### Time Flow
+Each season = 1 in-game year, divided into **8 months**.
+- Months 1-7: regular fights + training (fights are roughly a month apart)
+- Month 7: promotion/relegation matchups announced
+- Month 8: promotion/relegation fights + title fight
+- End of season: retirement, aging, backfill, stat resets
+
 ### Backend (`/backend/`)
 
 - **Language**: Python 3.12

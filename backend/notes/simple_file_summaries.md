@@ -2,7 +2,7 @@
 
 Quick reference for finding code. See detailed_file_summaries.md for full documentation.
 
-**app/config.py** - Config dataclass with API keys, tier sizes (16/20/100), season length, combat tuning, data_dir
+**app/config.py** - Config dataclass with API keys, tier sizes (16/20/100), season_length_months=8, combat tuning, data_dir
 - Config, load_config()
 
 **app/api.py** - Flask REST API for roster management, fighter CRUD, image generation
@@ -24,12 +24,12 @@ Quick reference for finding code. See detailed_file_summaries.md for full docume
 - process_daily_training(), apply_fight_camp_boost()
 **app/engine/between_fights/retirement.py** - Retirement checks, aging stat decay/growth, replacement fighter generation
 - check_retirement(), apply_aging(), update_promotion_desperation(), generate_replacement_fighter()
-**app/engine/between_fights/league_tiers.py** - Tier rankings, promotion/relegation matchups, title fight tracking
+**app/engine/between_fights/league_tiers.py** - Tier rankings, promotion/relegation matchups with protected fighters, title fight tracking
 - calculate_tier_rankings(), get_promotion_matchups(), apply_promotion_results(), apply_title_fight_result()
-**app/engine/between_fights/season.py** - End-of-season processing, tier event config, backfill promotions
+**app/engine/between_fights/season.py** - End-of-season processing, tier event config, backfill promotions, season-ending injury cleanup
 - TIER_EVENT_CONFIG, TIER_SIZES, process_end_of_season(), get_tier_event_config()
 
-**app/engine/fight_simulator.py** - Fight pipeline: combat engine -> Match model with moments/injuries
+**app/engine/fight_simulator.py** - Fight pipeline: combat engine -> Match model with moments/injuries (career-ending + season-ending)
 - run_fight(), _derive_injuries(), _filter_significant_moments()
 **app/engine/fighter_generator.py** - AI fighter creation: subtypes, body profiles, outfits, image prompts
 - plan_roster(), generate_fighter(), _generate_outfits()
@@ -53,11 +53,11 @@ Quick reference for finding code. See detailed_file_summaries.md for full docume
 **app/models/fighter.py** - Fighter dataclass with Stats, Record, Injury, Condition, Move + league fields (tier, status, training, season tracking)
 **app/models/match.py** - Match dataclass with FightMoment, MatchupAnalysis, MatchOutcome, combat_log
 **app/models/event.py** - Event dataclass with EventMatch list and tier field
-**app/models/world_state.py** - WorldState with season/tier tracking, belt history, promotion/title fights
+**app/models/world_state.py** - WorldState with season/tier tracking (season_month, season_day_in_month), belt history, promotion/title fights
 
 **app/services/data_manager.py** - JSON file CRUD for fighters, matches, events, world_state
 **app/services/openrouter.py** - OpenRouter API client with retry and JSON extraction
 **app/services/grok_image.py** - Grok image gen/edit client, generate_charsheet_images()
 
 **app/scripts/generate_roster.py** - Two-phase roster generation: plan via AI then generate fighters
-**app/scripts/simulate_seasons.py** - LeagueSimulator: 136-fighter roster, N-season sim with training/injuries/promotion/title fights/retirement stats
+**app/scripts/simulate_seasons.py** - LeagueSimulator: 136-fighter roster, N-season sim with month-based events, training/injuries (career-ending + season-ending)/promotion/title fights/retirement stats

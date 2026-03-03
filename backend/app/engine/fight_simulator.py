@@ -94,11 +94,34 @@ def _derive_injuries(
     else:
         injury_type = random.choice(["facial laceration", "broken nose", "hand fracture", "bruised ribs"])
 
-    return [{
+    injuries = [{
         "type": injury_type,
         "severity": severity,
         "recovery_days_remaining": recovery_days,
     }]
+
+    if not is_winner:
+        fighter_data = None
+        for rs in combat_result.round_summaries:
+            if rs.fighter1_id == fighter_id:
+                fighter_data = {"id": rs.fighter1_id}
+            elif rs.fighter2_id == fighter_id:
+                fighter_data = {"id": rs.fighter2_id}
+
+        ko_multiplier = 2.0 if method in ("ko", "tko") else 1.0
+
+        career_end_chance = 0.005 * ko_multiplier
+        if random.random() < career_end_chance:
+            career_types = ["spinal injury", "traumatic brain injury", "shattered knee"]
+            return [{"type": random.choice(career_types), "severity": "career_ending", "recovery_days_remaining": 999}]
+
+        season_end_chance = 0.02 * ko_multiplier
+        if random.random() < season_end_chance:
+            season_types = ["torn ACL", "fractured vertebra", "severe concussion syndrome", "shattered orbital"]
+            se_recovery = random.randint(90, 120)
+            return [{"type": random.choice(season_types), "severity": "season_ending", "recovery_days_remaining": se_recovery}]
+
+    return injuries
 
 
 def _tick_to_moment(

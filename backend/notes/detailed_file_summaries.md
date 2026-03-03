@@ -46,11 +46,11 @@ Comprehensive documentation of backend code.
 
 ## app/config.py
 File: app/config.py
-File Length: 60 lines
+File Length: 61 lines
 Purpose: Central configuration dataclass loaded from .env, holds API keys, league constants, tier sizes, stat ranges, recovery tuning, and combat engine parameters.
 
 Artefacts
-- Config - dataclass with openrouter_api_key, grok_api_key, model names (default_model, narrative_model), roster/event counts, stat bounds, recovery ranges, rematch_cooldown_days, max_idle_days, tier sizes (championship_size=16, contender_size=20, underground_size=100), season_length_weeks=8, combat tuning (ticks_per_round, base_stamina_recovery_pct, stamina_recovery_decay, tko_base_threshold, tko_toughness_factor, tko_late_round_drop, tko_late_round_start, max_combat_rounds), data_dir
+- Config - dataclass with openrouter_api_key, grok_api_key, model names (default_model="x-ai/grok-4.1-fast", narrative_model="x-ai/grok-4.1-fast"), roster/event counts, stat bounds, recovery ranges, rematch_cooldown_days, max_idle_days, tier sizes (championship_size=16, contender_size=20, underground_size=100), season_length_months=8, combat tuning (ticks_per_round, base_stamina_recovery_pct, stamina_recovery_decay, tko_base_threshold, tko_toughness_factor, tko_late_round_drop, tko_late_round_start, max_combat_rounds), data_dir
 
 ---
 
@@ -242,13 +242,13 @@ Artefacts
 
 ## app/engine/between_fights/retirement.py
 File: app/engine/between_fights/retirement.py
-File Length: 210 lines
+File Length: 211 lines
 Purpose: Fighter retirement logic, aging with stat decay/growth, promotion desperation tracking, and replacement fighter generation.
 
 Artefacts
 - RING_NAMES - 160+ ring name options for generated fighters
 - PREFIXES - 19 name prefixes (The, Kid, Big, etc.)
-- check_retirement(fighter, rng) - returns (should_retire, reason): age_and_losing_record (34+ with losing season), underground_stagnation (30+ stuck 4+ seasons), morale_collapse (5+ consecutive losses), career_ending_injury (32+ with severe injury, 30% chance), graceful_exit (belt holder 33+, 20% chance)
+- check_retirement(fighter, rng) - returns (should_retire, reason): age_and_losing_record (34+ with losing season), underground_stagnation (30+ stuck 4+ seasons, escalating chance), morale_collapse (5+ consecutive losses, age 25+), severe_injury_retirement (32+ with severe injury, 30% chance), graceful_exit (belt holder 33+, 20% chance)
 - apply_aging(fighter, rng) - increments age, applies stat changes: under 26 gains 1-2 in 2-3 stats, 26-31 stable, 32-35 loses speed/toughness (-2) and maybe power (-1), 36+ loses all stats (-2 to -3)
 - update_promotion_desperation(fighter) - increases desperation +0.15/season for underground fighters 28+, maxes at 1.0 for 30+ who never left underground
 - generate_replacement_fighter(fighter_id_counter, season, rng, used_names) - creates new underground fighter aged 18-22 with 140-200 total stats, random name from RING_NAMES/PREFIXES
@@ -258,14 +258,14 @@ Artefacts
 
 ## app/engine/between_fights/league_tiers.py
 File: app/engine/between_fights/league_tiers.py
-File Length: 145 lines
-Purpose: Tier ranking calculation, promotion/relegation matchup generation, promotion result application, and championship title fight tracking.
+File Length: 156 lines
+Purpose: Tier ranking calculation, promotion/relegation matchup generation with protection for injured fighters, promotion result application, and championship title fight tracking.
 
 Artefacts
 - TIER_ORDER - dict mapping tier names to numeric order (underground=0, contender=1, championship=2)
 - TIER_NAMES - ordered list of tier name strings
 - calculate_tier_rankings(fighters, tier, season_matches) - ranks active fighters in a tier by (has_fought, win_pct, season_wins, recent_wins from last 5, core_total)
-- get_promotion_matchups(tier_rankings, slots_per_boundary=3) - pairs bottom N of upper tier vs top N of lower tier at each boundary (champ/contender, contender/underground)
+- get_promotion_matchups(tier_rankings, champ_contender_slots=4, contender_underground_slots=6, protected_fighter_ids=None) - pairs bottom N of upper tier vs top N of lower tier at each boundary, excludes protected fighters (belt holder, season-ending injured) from relegation eligibility
 - apply_promotion_results(fighters, promotion_results) - swaps tiers for winners who beat upper-tier fighters, resets seasons_in_current_tier, updates peak_tier
 - apply_title_fight_result(ws, winner_id, loser_id, season) - tracks belt_holder_id and belt_history (defenses count, won/lost dates)
 
@@ -273,14 +273,14 @@ Artefacts
 
 ## app/engine/between_fights/season.py
 File: app/engine/between_fights/season.py
-File Length: 168 lines
-Purpose: End-of-season processing and tier event configuration. Handles aging, retirement, backfill promotions, replacement generation, and season state reset.
+File Length: 180 lines
+Purpose: End-of-season processing and tier event configuration. Handles aging, retirement, backfill promotions, replacement generation, season-ending injury cleanup, and season state reset.
 
 Artefacts
-- TIER_EVENT_CONFIG - events/week and fights/event by tier (championship 2/wk 3-4 fights, contender 3/wk 3-4, underground 7/wk 5-8)
+- TIER_EVENT_CONFIG - events/month and fights/event by tier (championship 2/mo 3-4 fights, contender 3/mo 3-4, underground 7/mo 5-8)
 - TIER_SIZES - target roster sizes (championship 16, contender 20, underground 100)
 - get_tier_event_config(tier) - returns event config dict for given tier
-- process_end_of_season(fighters, ws, fighter_counter, rng, used_names) - full end-of-season pipeline: apply_aging to all, check_retirement (handles belt vacancy), update_promotion_desperation for underground, _backfill_tiers, reset season_wins/losses/consecutive_losses, increment season counters
+- process_end_of_season(fighters, ws, fighter_counter, rng, used_names) - full end-of-season pipeline: apply_aging to all, check_retirement (handles belt vacancy), update_promotion_desperation for underground, _backfill_tiers, reset season_wins/losses/consecutive_losses, clear season-ending injuries, clean up _season_record_at_injury, reset to season_month=1/season_day_in_month=1, increment season counters
 - _count_tiers(fighters) - returns dict of active fighter counts per tier
 - _backfill_tiers(fighters, ws, summary, fighter_counter, rng, season, used_names) - promotes top lower-tier fighters to fill upper-tier vacancies, generates new underground fighters to maintain TIER_SIZES
 
@@ -288,13 +288,13 @@ Artefacts
 
 ## app/engine/fight_simulator.py
 File: app/engine/fight_simulator.py
-File Length: 268 lines
-Purpose: Fight pipeline adapter: runs deterministic combat engine, converts results to Match model with moments, injuries, and combat log.
+File Length: 292 lines
+Purpose: Fight pipeline adapter: runs deterministic combat engine, converts results to Match model with moments, injuries (including career-ending and season-ending), and combat log.
 
 Artefacts
 - _make_seed(fighter1_id, fighter2_id, match_date) - SHA-256 seed from IDs and date
 - _assess_performance(fighter_id, combat_result) - dominant/competitive/poor based on rounds and tick count
-- _derive_injuries(fighter_id, combat_result, config) - probabilistic injury generation from accumulated damage and winner/loser status
+- _derive_injuries(fighter_id, combat_result, config) - probabilistic injury generation from accumulated damage and winner/loser status; losers face additional career-ending (0.5% * ko_multiplier, severity "career_ending", 999 recovery days) and season-ending (2% * ko_multiplier, severity "season_ending", 90-120 recovery days) injury chances
 - _tick_to_moment(tick, moment_number, fighter names/IDs) - converts TickResult to FightMoment with full combat state (hp/stamina/mana/emotions)
 - _filter_significant_moments(tick_log, max_moments=50) - selects most impactful ticks: finishers > big hits > counters > medium hits
 - run_fight(fighter1_id, fighter2_id, event_id, match_date, config) - loads fighters, calls simulate_combat, converts tick log to moments, derives injuries, builds Match with combat_log and combat_seed
@@ -369,8 +369,6 @@ Purpose: Calculates fighter rankings by win%, total wins, recent form (last 5 ma
 
 Artefacts
 - calculate_rankings(fighters, recent_matches) - returns ordered list of fighter IDs sorted by (has_fought, win_pct, total_wins, recent_wins, last_fight)
-
----
 
 ---
 
@@ -505,12 +503,12 @@ Artefacts
 
 ## app/models/world_state.py
 File: app/models/world_state.py
-File Length: 74 lines
+File Length: 75 lines
 Purpose: Global league state tracking date, rankings, events, injuries, rivalries, seasons, tiers, belt history, and promotion/title fights.
 
 Artefacts
 - RivalryRecord - fighter1/2_id, fights, wins, draws, is_rivalry
-- WorldState - current_date, day_number, rankings, upcoming/completed events, active_injuries, rivalry_graph, event_counter, season_number, season_week, season_day_in_week, tier_rankings (championship/contender/underground lists), belt_holder_id, belt_history list, retired_fighter_ids list, promotion_fights list, title_fight dict
+- WorldState - current_date, day_number, rankings, upcoming/completed events, active_injuries, rivalry_graph, event_counter, season_number, season_month, season_day_in_month, tier_rankings (championship/contender/underground lists), belt_holder_id, belt_history list, retired_fighter_ids list, promotion_fights list, title_fight dict; from_dict handles backwards compat with old season_week/season_day_in_week field names
 
 ---
 
@@ -571,24 +569,30 @@ Artefacts
 
 ## app/scripts/simulate_seasons.py
 File: app/scripts/simulate_seasons.py
-File Length: 713 lines
-Purpose: Standalone league season simulation script. Generates a full roster across 3 tiers, simulates N seasons with weekly events, promotion/relegation, title fights, injuries, training, aging, and retirement. Outputs comprehensive career arc statistics.
+File Length: 825 lines
+Purpose: Standalone league season simulation script. Generates a full roster across 3 tiers, simulates N seasons with month-based events, promotion/relegation, title fights, injuries (including career-ending and season-ending), training, aging, and retirement. Outputs comprehensive career arc statistics.
 
 Artefacts
-- EVENT_DAYS - tier->weekday list (championship Wed/Sat, contender Tue/Thu/Sun, underground daily)
+- EVENT_DAYS - tier->weekday list (championship days 3/6, contender days 2/4/7, underground daily)
 - INJURY_TYPES_WINNER/LOSER_KO/LOSER_OTHER - injury type pools by outcome
 - MINOR/MODERATE/SEVERE_RECOVERY - recovery day ranges by severity
+- SEASON_ENDING_INJURY_TYPES - pool of 4 season-ending injury types (torn ACL, fractured vertebra, etc.)
+- CAREER_ENDING_INJURY_TYPES - pool of 3 career-ending injury types (spinal injury, TBI, etc.)
+- SEASON_ENDING_RECOVERY - (90, 120) day recovery range
 - LeagueSimulator - main simulation class:
-  - __init__(seed, verbose) - initializes RNG, empty roster, world_state with season/tier tracking
+  - __init__(seed, verbose) - initializes RNG, empty roster, world_state with season/tier tracking, mid_season_retirements, season_ending_injuries, total_career_ending/total_season_ending counters, used_names set
   - generate_initial_roster() - creates 136 fighters (16 championship, 20 contender, 100 underground) with tier-appropriate age/stat/record ranges, assigns initial belt holder
   - _make_fighter(counter, tier, age_range, stat_range, career_seasons_range, tier_seasons_range) - creates fighter dict with full league fields
   - _distribute_stats(target_total) - allocates stat points across 4 core stats
-  - simulate_season() - runs 8-week season: weeks 1-6 regular, week 7 regular + promotion prep, week 8 promotion/title fights, then process_end_of_season
-  - _simulate_regular_week(week) - daily recovery/training + tier events on scheduled days
+  - simulate_season() - runs 8-month season: months 1-6 regular, month 7 regular + promotion prep, month 8 promotion/title fights, then process_end_of_season; tracks mid-season retirements and season-ending injuries
+  - _simulate_regular_month(month) - 7 days of recovery/training + tier events on scheduled days
+  - _process_daily_recovery() - decrements injury recovery days, clears healed fighters
+  - _process_daily_training_all() - runs process_daily_training for all active fighters
   - _run_tier_event(tier) - schedules and runs fights for a tier based on tier event config
-  - _run_single_fight(f1_id, f2_id) - runs combat via simulate_combat with fight camp boosts, updates records/injuries/morale
-  - _apply_injury(fighter, is_winner, method) - probabilistic injury assignment (10% winner, 40% loser, +15% for KO/TKO losers)
-  - _prepare_promotion_week() - calculates tier rankings, generates promotion matchups and title fight
-  - _simulate_promotion_week() - runs promotion fights, applies tier swaps, runs title fight
-  - print_final_summary(num_seasons) - outputs career arc stats, tier mobility, belt history, fighter archetypes, notable careers
+  - _run_single_fight(f1_id, f2_id) - runs combat via simulate_combat with fight camp boosts, updates records/injuries/morale, tracks mid-season career-ending retirements
+  - _apply_injury(fighter, is_winner, method) - probabilistic injury assignment (10% winner, 40% loser, +15% KO/TKO); losers face age-scaled career-ending (0.5%+0.5%*(age-30) * ko_mult) and season-ending (2%+0.5%*(age-28) * ko_mult) chances, saves _season_record_at_injury for relegation protection
+  - _prepare_promotion_month() - calculates tier rankings, protects belt holder and season-ending-injured fighters with winning records from relegation, generates promotion matchups (4 champ/contender + 6 contender/underground) and title fight
+  - _simulate_promotion_month() - runs promotion fights, applies tier swaps, runs title fight
+  - _recalculate_all_rankings() - recalculates tier rankings for all tiers from season matches
+  - print_final_summary(num_seasons) - outputs career arc stats, tier mobility, belt history, fighter archetypes, notable careers, total career-ending and season-ending injury counts
 - main() - CLI entry (--seasons N, --seed, --verbose)

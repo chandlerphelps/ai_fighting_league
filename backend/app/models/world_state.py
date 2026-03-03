@@ -29,8 +29,8 @@ class WorldState:
     event_counter: int = 0
 
     season_number: int = 1
-    season_week: int = 1
-    season_day_in_week: int = 1
+    season_month: int = 1
+    season_day_in_month: int = 1
     tier_rankings: dict = field(default_factory=lambda: {
         "championship": [],
         "contender": [],
@@ -59,8 +59,8 @@ class WorldState:
             last_daily_summary=d.get("last_daily_summary", ""),
             event_counter=d.get("event_counter", 0),
             season_number=d.get("season_number", 1),
-            season_week=d.get("season_week", 1),
-            season_day_in_week=d.get("season_day_in_week", 1),
+            season_month=d.get("season_month", d.get("season_week", 1)),
+            season_day_in_month=d.get("season_day_in_month", d.get("season_day_in_week", 1)),
             tier_rankings=d.get("tier_rankings", {
                 "championship": [],
                 "contender": [],

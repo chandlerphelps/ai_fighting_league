@@ -18,7 +18,7 @@ class Config:
 
     roster_size: int = 8
     fights_per_event: int = 3
-    events_per_week: int = 2
+    events_per_month: int = 2
     min_total_stats: int = 120
     max_total_stats: int = 340
     stat_min: int = 15
@@ -35,7 +35,7 @@ class Config:
     championship_size: int = 16
     contender_size: int = 20
     underground_size: int = 100
-    season_length_weeks: int = 8
+    season_length_months: int = 8
 
     ticks_per_round: int = 30
     base_stamina_recovery_pct: float = 0.30

@@ -63,25 +63,35 @@ def calculate_tier_rankings(fighters: list[dict], tier: str, season_matches: lis
     return [f["id"] for f in fighter_stats]
 
 
-def get_promotion_matchups(tier_rankings: dict, slots_per_boundary: int = 3) -> list[dict]:
+def get_promotion_matchups(
+    tier_rankings: dict,
+    champ_contender_slots: int = 4,
+    contender_underground_slots: int = 6,
+    protected_fighter_ids: set = None,
+) -> list[dict]:
+    if protected_fighter_ids is None:
+        protected_fighter_ids = set()
+
     matchups = []
 
     champ_ranks = tier_rankings.get("championship", [])
     contender_ranks = tier_rankings.get("contender", [])
     underground_ranks = tier_rankings.get("underground", [])
 
-    n = min(slots_per_boundary, len(champ_ranks), len(contender_ranks))
+    champ_eligible = [fid for fid in champ_ranks if fid not in protected_fighter_ids]
+    n = min(champ_contender_slots, len(champ_eligible), len(contender_ranks))
     for i in range(n):
         matchups.append({
-            "upper_fighter_id": champ_ranks[-(i + 1)],
+            "upper_fighter_id": champ_eligible[-(i + 1)],
             "lower_fighter_id": contender_ranks[i],
             "tier_boundary": "champ_contender",
         })
 
-    n = min(slots_per_boundary, len(contender_ranks), len(underground_ranks))
+    contender_eligible = [fid for fid in contender_ranks if fid not in protected_fighter_ids]
+    n = min(contender_underground_slots, len(contender_eligible), len(underground_ranks))
     for i in range(n):
         matchups.append({
-            "upper_fighter_id": contender_ranks[-(i + 1)],
+            "upper_fighter_id": contender_eligible[-(i + 1)],
             "lower_fighter_id": underground_ranks[i],
             "tier_boundary": "contender_underground",
         })
