@@ -52,30 +52,39 @@ export interface Fighter {
   ring_name: string
   real_name: string
   age: number
-  origin: string
+  origin?: string
   gender: string
-  height: string
-  weight: string
-  build: string
-  distinguishing_features: string
+  height?: string
+  weight?: string
+  build?: string
+  distinguishing_features?: string
   iconic_features?: string
   personality?: string
+  primary_archetype?: string
   image_prompt_personality_pose?: string
-  ring_attire: string
-  ring_attire_sfw: string
-  ring_attire_nsfw: string
+  ring_attire?: string
+  ring_attire_sfw?: string
+  ring_attire_nsfw?: string
   skimpiness_level?: number
   image_prompt_body_ref?: CharsheetPrompt
-  image_prompt: CharsheetPrompt
-  image_prompt_sfw: CharsheetPrompt
-  image_prompt_nsfw: CharsheetPrompt
+  image_prompt?: CharsheetPrompt
+  image_prompt_sfw?: CharsheetPrompt
+  image_prompt_nsfw?: CharsheetPrompt
   stats: Stats
   record: Record
   condition: Condition
-  storyline_log: string[]
+  storyline_log?: string[]
   moves?: Move[]
-  rivalries: string[]
-  last_fight_date: string | null
-  ranking: number | null
+  rivalries?: string[]
+  last_fight_date?: string | null
+  ranking?: number | null
+  tier?: string
+  status?: string
+  season_wins?: number
+  season_losses?: number
+  consecutive_losses?: number
+  peak_tier?: string
+  career_season_count?: number
+  seasons_in_current_tier?: number
   _available_images?: string[]
 }

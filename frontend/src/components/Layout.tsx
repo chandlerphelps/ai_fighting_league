@@ -12,9 +12,8 @@ export default function Layout({ children }: LayoutProps) {
   const { data: worldState } = useWorldState()
 
   const navItems = [
-    { path: '/', label: 'Dashboard' },
+    { path: '/', label: 'Home' },
     { path: '/rankings', label: 'Rankings' },
-    { path: '/schedule', label: 'Schedule' },
     { path: '/roster', label: 'Roster' },
   ]
 
@@ -60,7 +59,7 @@ export default function Layout({ children }: LayoutProps) {
         </div>
         {worldState && (
           <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
-            Day {worldState.day_number} — {worldState.current_date}
+            S{worldState.season_number} M{worldState.season_month} D{worldState.season_day_in_month}
           </div>
         )}
       </nav>

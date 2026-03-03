@@ -575,5 +575,34 @@ def _build_outfit_options_for_fighter(
     return result
 
 
+@app.get("/api/world-state")
+def get_world_state():
+    ws = data_manager.load_world_state(config)
+    if not ws:
+        return jsonify({"error": "No world state found"}), 404
+    return jsonify(ws)
+
+
+@app.post("/api/simulate-day")
+def simulate_day():
+    from app.engine.day_simulator import simulate_one_day
+
+    ws = data_manager.load_world_state(config)
+    if not ws:
+        return jsonify({"error": "No world state found. Run initialize_league first."}), 404
+
+    all_fighters = data_manager.load_all_fighters(config)
+    fighters = {f["id"]: f for f in all_fighters if f.get("status") == "active"}
+
+    day_result = simulate_one_day(fighters, ws)
+
+    for fid, fighter in fighters.items():
+        data_manager.save_fighter(fighter, config)
+
+    data_manager.save_world_state(ws, config)
+
+    return jsonify(day_result)
+
+
 if __name__ == "__main__":
     app.run(port=5001, debug=True)

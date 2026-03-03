@@ -1,26 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { Fighter } from '../types/fighter'
-import type { Match } from '../types/match'
-import type { Event } from '../types/event'
 import type { WorldState } from '../types/world_state'
 import {
   loadWorldState,
   loadFighter,
-  loadAllFighters,
-  loadMatch,
-  loadAllMatches,
-  loadEvent,
-  loadAllEvents,
+  loadFightersForTier,
 } from '../lib/data'
 
 interface DataState<T> {
   data: T | null
   loading: boolean
   error: string | null
+  refresh: () => void
 }
 
 function useDataLoader<T>(loader: () => Promise<T | null>, deps: unknown[] = []): DataState<T> {
-  const [state, setState] = useState<DataState<T>>({ data: null, loading: true, error: null })
+  const [state, setState] = useState<{ data: T | null; loading: boolean; error: string | null }>({
+    data: null, loading: true, error: null,
+  })
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const refresh = useCallback(() => setRefreshKey(k => k + 1), [])
 
   useEffect(() => {
     let cancelled = false
@@ -40,9 +40,9 @@ function useDataLoader<T>(loader: () => Promise<T | null>, deps: unknown[] = [])
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps)
+  }, [...deps, refreshKey])
 
-  return state
+  return { ...state, refresh }
 }
 
 export function useWorldState(): DataState<WorldState> {
@@ -53,31 +53,10 @@ export function useFighter(id: string): DataState<Fighter> {
   return useDataLoader(() => loadFighter(id), [id])
 }
 
-export function useAllFighters(): DataState<Fighter[]> {
+export function useTierFighters(ids: string[]): DataState<Fighter[]> {
   return useDataLoader(async () => {
-    const fighters = await loadAllFighters()
+    if (!ids.length) return null
+    const fighters = await loadFightersForTier(ids)
     return fighters.length > 0 ? fighters : null
-  })
-}
-
-export function useMatch(id: string): DataState<Match> {
-  return useDataLoader(() => loadMatch(id), [id])
-}
-
-export function useAllMatches(): DataState<Match[]> {
-  return useDataLoader(async () => {
-    const matches = await loadAllMatches()
-    return matches.length > 0 ? matches : null
-  })
-}
-
-export function useEvent(id: string): DataState<Event> {
-  return useDataLoader(() => loadEvent(id), [id])
-}
-
-export function useAllEvents(): DataState<Event[]> {
-  return useDataLoader(async () => {
-    const events = await loadAllEvents()
-    return events.length > 0 ? events : null
-  })
+  }, [ids.join(',')])
 }

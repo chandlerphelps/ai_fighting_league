@@ -8,14 +8,72 @@ export interface RivalryRecord {
   is_rivalry: boolean
 }
 
+export interface MatchResult {
+  fighter1_id: string
+  fighter1_name: string
+  fighter2_id: string
+  fighter2_name: string
+  winner_id: string
+  method: string
+  round_ended: number
+  tier: string
+  date: string
+  is_title_fight?: boolean
+}
+
+export interface BeltHistoryEntry {
+  fighter_id: string
+  won_date: string
+  lost_date: string | null
+  defenses: number
+}
+
+export interface SeasonLog {
+  season: number
+  belt_holder_name: string
+  belt_holder_id: string
+  retirements: number
+  new_fighters: number
+  tier_counts: Record<string, number>
+}
+
 export interface WorldState {
   current_date: string
   day_number: number
+  season_number: number
+  season_month: number
+  season_day_in_month: number
+  tier_rankings: {
+    championship: string[]
+    contender: string[]
+    underground: string[]
+  }
+  belt_holder_id: string
+  belt_history: BeltHistoryEntry[]
+  retired_fighter_ids: string[]
+  active_injuries: Record<string, number>
+  rivalry_graph: RivalryRecord[]
+  recent_matches: MatchResult[]
+  season_logs: SeasonLog[]
+  promotion_fights: unknown[]
+  title_fight: Record<string, string>
   rankings: string[]
   upcoming_events: string[]
   completed_events: string[]
-  active_injuries: Record<string, number>
-  rivalry_graph: RivalryRecord[]
   last_daily_summary: string
   event_counter: number
+}
+
+export interface DaySimulationResult {
+  season: number
+  month: number
+  day: number
+  matches: MatchResult[]
+  recoveries: { fighter_id: string; fighter_name: string }[]
+  phase: string
+  season_end?: {
+    retirements: number
+    new_fighters: number
+    backfill_promotions: number
+  }
 }

@@ -168,9 +168,9 @@ export default function RosterManager() {
       ring_attire_sfw: fighter.ring_attire_sfw,
       ring_attire_nsfw: fighter.ring_attire_nsfw,
       skimpiness_level: fighter.skimpiness_level,
-      image_prompt: { ...fighter.image_prompt },
-      image_prompt_sfw: { ...fighter.image_prompt_sfw },
-      image_prompt_nsfw: { ...fighter.image_prompt_nsfw },
+      image_prompt: fighter.image_prompt ? { ...fighter.image_prompt } : undefined,
+      image_prompt_sfw: fighter.image_prompt_sfw ? { ...fighter.image_prompt_sfw } : undefined,
+      image_prompt_nsfw: fighter.image_prompt_nsfw ? { ...fighter.image_prompt_nsfw } : undefined,
       stats: { ...fighter.stats },
     })
   }
@@ -849,7 +849,6 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
         gap: spacing.lg,
       }}>
         {moves.map((move, index) => {
-          const imgUrl = `${moveImagePath(fighter.id, fighter.ring_name, index, tier)}?v=${imageVersion}`
           return (
             <div key={index}>
               <div style={{ position: 'relative' }}>
@@ -1416,12 +1415,12 @@ function ExpandedDetails({ fighter }: { fighter: Fighter }) {
           <DetailRow label="Real Name" value={fighter.real_name} />
           <DetailRow label="ID" value={fighter.id} />
           <DetailRow label="Age" value={String(fighter.age)} />
-          <DetailRow label="Height" value={fighter.height} />
-          <DetailRow label="Weight" value={fighter.weight} />
-          <DetailRow label="Build" value={fighter.build} />
+          <DetailRow label="Height" value={fighter.height || ''} />
+          <DetailRow label="Weight" value={fighter.weight || ''} />
+          <DetailRow label="Build" value={fighter.build || ''} />
           <DetailRow label="Gender" value={fighter.gender} />
           <DetailRow label="Skimpiness" value={String(fighter.skimpiness_level || '?')} />
-          <DetailRow label="Features" value={fighter.distinguishing_features} />
+          <DetailRow label="Features" value={fighter.distinguishing_features || ''} />
           <DetailRow label="Iconic" value={fighter.iconic_features || ''} />
         </div>
       </div>
@@ -1455,7 +1454,7 @@ function ExpandedDetails({ fighter }: { fighter: Fighter }) {
           </div>
         </div>
       </div>
-      {fighter.rivalries.length > 0 && (
+      {fighter.rivalries && fighter.rivalries.length > 0 && (
         <div style={{ marginTop: spacing.md }}>
           <SectionLabel>Rivalries</SectionLabel>
           <div style={{
@@ -1463,7 +1462,7 @@ function ExpandedDetails({ fighter }: { fighter: Fighter }) {
             fontFamily: fonts.body,
             color: colors.text,
           }}>
-            {fighter.rivalries.join(', ')}
+            {(fighter.rivalries || []).join(', ')}
           </div>
         </div>
       )}
@@ -1561,7 +1560,8 @@ function Lightbox({ fighterId, ringName, initialTier, label, imageVersion, onRed
   const cycleTier = useCallback((dir: 1 | -1) => {
     setActiveTier(prev => {
       const idx = tierKeys.indexOf(prev)
-      return tierKeys[(idx + dir + tierKeys.length) % tierKeys.length]
+      const next = tierKeys[(idx + dir + tierKeys.length) % tierKeys.length]
+      return next ?? prev
     })
   }, [])
 

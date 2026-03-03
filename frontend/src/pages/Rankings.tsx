@@ -1,166 +1,211 @@
 import { useState, useEffect } from 'react'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
-import { useWorldState, useAllFighters } from '../hooks/useData'
-import { loadAllMatches } from '../lib/data'
+import { useWorldState } from '../hooks/useData'
+import { loadFightersForTier } from '../lib/data'
 import type { Fighter } from '../types/fighter'
-import type { Match } from '../types/match'
-import FighterLink from '../components/FighterLink'
-import FighterPortrait from '../components/FighterPortrait'
-import InjuryBadge from '../components/InjuryBadge'
-import NoData from '../components/NoData'
+
+const TIER_CONFIG = [
+  { key: 'championship' as const, label: 'Championship', color: colors.accent },
+  { key: 'contender' as const, label: 'Contender', color: colors.face },
+  { key: 'underground' as const, label: 'Underground', color: colors.textMuted },
+]
 
 export default function Rankings() {
-  const { data: worldState, loading: wsLoading } = useWorldState()
-  const { data: fighters } = useAllFighters()
-  const [matches, setMatches] = useState<Match[]>([])
+  const { data: ws, loading, error } = useWorldState()
+  const [fighters, setFighters] = useState<Record<string, Fighter>>({})
+  const [loadingFighters, setLoadingFighters] = useState(false)
 
   useEffect(() => {
-    loadAllMatches().then(setMatches)
-  }, [])
+    if (!ws?.tier_rankings) return
+    setLoadingFighters(true)
 
-  if (wsLoading) return <div style={{ color: colors.textMuted, padding: spacing.lg }}>Loading...</div>
-  if (!worldState || !fighters) return <NoData />
+    const allIds = [
+      ...ws.tier_rankings.championship,
+      ...ws.tier_rankings.contender,
+      ...ws.tier_rankings.underground,
+    ]
+    loadFightersForTier(allIds).then(loaded => {
+      const map: Record<string, Fighter> = {}
+      for (const f of loaded) map[f.id] = f
+      setFighters(map)
+      setLoadingFighters(false)
+    })
+  }, [ws?.tier_rankings])
 
-  const rankedFighters = worldState.rankings
-    .map(id => fighters.find(f => f.id === id))
-    .filter((f): f is Fighter => f !== undefined)
+  if (loading) return <div style={{ color: colors.textMuted, padding: spacing.lg }}>Loading...</div>
+  if (error || !ws) return <div style={{ color: colors.injured, padding: spacing.lg }}>No data available.</div>
 
   return (
-    <div>
-      <h1 style={{ fontSize: fontSizes.xxl, color: colors.accent, marginBottom: spacing.lg }}>
-        Rankings
-      </h1>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '50px 1fr 100px 80px 140px',
-        gap: spacing.xs,
-        padding: `${spacing.sm} ${spacing.md}`,
-        backgroundColor: colors.surface,
-        borderBottom: `1px solid ${colors.border}`,
-        fontSize: fontSizes.xs,
-        color: colors.textDim,
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-      }}>
-        <span>#</span>
-        <span>Fighter</span>
-        <span>Record</span>
-        <span>Streak</span>
-        <span>Recent Form</span>
-      </div>
-
-      {rankedFighters.map((fighter, i) => {
-        const rank = i + 1
-        const isInjured = fighter.condition.health_status === 'injured'
-        const streak = getStreak(matches, fighter.id)
-        const recentForm = getRecentForm(matches, fighter.id, 5)
-
+    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xl }}>
+      {loadingFighters && (
+        <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>Loading fighters...</div>
+      )}
+      {TIER_CONFIG.map(tier => {
+        const ids = ws.tier_rankings?.[tier.key] || []
         return (
-          <div
-            key={fighter.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '50px 1fr 100px 80px 140px',
-              gap: spacing.xs,
-              padding: `${spacing.sm} ${spacing.md}`,
-              backgroundColor: rank % 2 === 0 ? colors.surfaceLight : 'transparent',
-              borderBottom: `1px solid ${colors.border}`,
-              opacity: isInjured ? 0.6 : 1,
-              fontSize: fontSizes.sm,
-              alignItems: 'center',
-            }}
-          >
-            <span style={{ color: colors.accent, fontWeight: 'bold' }}>
-              {rank}
-            </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-              <FighterPortrait fighterId={fighter.id} name={fighter.ring_name} size={28} />
-              <FighterLink id={fighter.id} name={fighter.ring_name} />
-              {isInjured && <InjuryBadge daysRemaining={fighter.condition.recovery_days_remaining} />}
-            </div>
-            <span>
-              <span style={{ color: colors.win }}>{fighter.record.wins}</span>
-              <span style={{ color: colors.textDim }}>-</span>
-              <span style={{ color: colors.loss }}>{fighter.record.losses}</span>
-              <span style={{ color: colors.textDim }}>-</span>
-              <span style={{ color: colors.draw }}>{fighter.record.draws}</span>
-            </span>
-            <span style={{
-              color: streak.startsWith('W') ? colors.win : streak.startsWith('L') ? colors.loss : colors.textMuted,
-              fontWeight: 'bold',
-            }}>
-              {streak}
-            </span>
-            <div style={{ display: 'flex', gap: '3px' }}>
-              {recentForm.map((result, j) => (
-                <span
-                  key={j}
-                  style={{
-                    display: 'inline-block',
-                    width: '22px',
-                    height: '22px',
-                    lineHeight: '22px',
-                    textAlign: 'center',
-                    fontSize: fontSizes.xs,
-                    borderRadius: '3px',
-                    fontWeight: 'bold',
-                    color: colors.text,
-                    backgroundColor: result === 'W' ? withAlpha(colors.win, 0.3)
-                      : result === 'L' ? withAlpha(colors.loss, 0.3)
-                      : withAlpha(colors.draw, 0.3),
-                  }}
-                >
-                  {result}
-                </span>
-              ))}
-            </div>
-          </div>
+          <TierSection
+            key={tier.key}
+            label={tier.label}
+            color={tier.color}
+            ids={ids}
+            fighters={fighters}
+            beltHolderId={tier.key === 'championship' ? ws.belt_holder_id : undefined}
+          />
         )
       })}
     </div>
   )
 }
 
-function getStreak(matches: Match[], fighterId: string): string {
-  const fighterMatches = matches
-    .filter(m => m.fighter1_id === fighterId || m.fighter2_id === fighterId)
-    .filter(m => m.outcome)
-    .sort((a, b) => b.date.localeCompare(a.date))
+function TierSection({
+  label,
+  color,
+  ids,
+  fighters,
+  beltHolderId,
+}: {
+  label: string
+  color: string
+  ids: string[]
+  fighters: Record<string, Fighter>
+  beltHolderId?: string
+}) {
+  return (
+    <div>
+      <div style={{
+        fontSize: fontSizes.lg,
+        color,
+        fontWeight: 'bold',
+        marginBottom: spacing.sm,
+        paddingBottom: spacing.xs,
+        borderBottom: `2px solid ${withAlpha(color, 0.3)}`,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline',
+      }}>
+        <span>{label}</span>
+        <span style={{ fontSize: fontSizes.xs, color: colors.textDim }}>{ids.length} fighters</span>
+      </div>
 
-  if (fighterMatches.length === 0) return '-'
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '40px 1fr 100px 80px 100px 80px 60px 80px',
+        gap: '0',
+        fontSize: fontSizes.sm,
+      }}>
+        <HeaderCell>#</HeaderCell>
+        <HeaderCell>Fighter</HeaderCell>
+        <HeaderCell align="center">Record</HeaderCell>
+        <HeaderCell align="center">Season</HeaderCell>
+        <HeaderCell align="center">KO / Sub</HeaderCell>
+        <HeaderCell align="center">Age</HeaderCell>
+        <HeaderCell align="center">Peak</HeaderCell>
+        <HeaderCell align="center">Status</HeaderCell>
 
-  let streakType = ''
-  let streakCount = 0
-
-  for (const match of fighterMatches) {
-    const outcome = match.outcome!
-    let result: string
-    if (outcome.is_draw) result = 'D'
-    else if (outcome.winner_id === fighterId) result = 'W'
-    else result = 'L'
-
-    if (streakType === '') {
-      streakType = result
-      streakCount = 1
-    } else if (result === streakType) {
-      streakCount++
-    } else {
-      break
-    }
-  }
-
-  return `${streakType}${streakCount}`
+        {ids.map((id, idx) => {
+          const f = fighters[id]
+          if (!f) return null
+          const isBeltHolder = beltHolderId === id
+          return <FighterRow key={id} fighter={f} rank={idx + 1} isBeltHolder={isBeltHolder} />
+        })}
+      </div>
+    </div>
+  )
 }
 
-function getRecentForm(matches: Match[], fighterId: string, count: number): string[] {
-  return matches
-    .filter(m => m.fighter1_id === fighterId || m.fighter2_id === fighterId)
-    .filter(m => m.outcome)
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, count)
-    .map(m => {
-      if (m.outcome!.is_draw) return 'D'
-      return m.outcome!.winner_id === fighterId ? 'W' : 'L'
-    })
+function HeaderCell({ children, align = 'left' }: { children: React.ReactNode; align?: string }) {
+  return (
+    <div style={{
+      padding: `${spacing.xs} ${spacing.sm}`,
+      color: colors.textDim,
+      fontSize: fontSizes.xs,
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+      borderBottom: `1px solid ${colors.border}`,
+      textAlign: align as 'left' | 'center' | 'right',
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function FighterRow({ fighter, rank, isBeltHolder }: { fighter: Fighter; rank: number; isBeltHolder: boolean }) {
+  const rec = fighter.record
+  const isInjured = fighter.condition?.health_status === 'injured'
+  const totalFights = rec.wins + rec.losses + rec.draws
+  const winPct = totalFights > 0 ? Math.round((rec.wins / totalFights) * 100) : 0
+
+  const tierShort: Record<string, string> = {
+    championship: 'C',
+    contender: 'Co',
+    underground: 'UG',
+  }
+
+  return (
+    <>
+      <Cell dim={isInjured}>
+        <span style={{ color: colors.textDim }}>{rank}</span>
+      </Cell>
+      <Cell dim={isInjured}>
+        <span style={{ color: isBeltHolder ? colors.accentBright : colors.text, fontWeight: isBeltHolder ? 'bold' : 'normal' }}>
+          {isBeltHolder && <span style={{ color: colors.accent, marginRight: spacing.xs }}>&#9733;</span>}
+          {fighter.ring_name}
+        </span>
+      </Cell>
+      <Cell dim={isInjured} align="center">
+        <span style={{ color: colors.win }}>{rec.wins}</span>
+        <span style={{ color: colors.textDim }}>-</span>
+        <span style={{ color: colors.loss }}>{rec.losses}</span>
+        <span style={{ color: colors.textDim }}>-</span>
+        <span style={{ color: colors.draw }}>{rec.draws}</span>
+        <span style={{ color: colors.textDim, fontSize: fontSizes.xs, marginLeft: spacing.xs }}>
+          ({winPct}%)
+        </span>
+      </Cell>
+      <Cell dim={isInjured} align="center">
+        <span style={{ color: colors.win }}>{fighter.season_wins ?? 0}</span>
+        <span style={{ color: colors.textDim }}>-</span>
+        <span style={{ color: colors.loss }}>{fighter.season_losses ?? 0}</span>
+      </Cell>
+      <Cell dim={isInjured} align="center">
+        <span style={{ color: colors.ko }}>{rec.kos}</span>
+        <span style={{ color: colors.textDim }}> / </span>
+        <span style={{ color: colors.submission }}>{rec.submissions}</span>
+      </Cell>
+      <Cell dim={isInjured} align="center">
+        {fighter.age}
+      </Cell>
+      <Cell dim={isInjured} align="center">
+        <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
+          {tierShort[fighter.peak_tier ?? ''] ?? ''}
+        </span>
+      </Cell>
+      <Cell dim={isInjured} align="center">
+        {isInjured ? (
+          <span style={{ color: colors.injured, fontSize: fontSizes.xs }}>
+            INJ ({fighter.condition.recovery_days_remaining}d)
+          </span>
+        ) : (
+          <span style={{ color: colors.healthy, fontSize: fontSizes.xs }}>OK</span>
+        )}
+      </Cell>
+    </>
+  )
+}
+
+function Cell({ children, dim, align = 'left' }: { children: React.ReactNode; dim?: boolean; align?: string }) {
+  return (
+    <div style={{
+      padding: `${spacing.xs} ${spacing.sm}`,
+      borderBottom: `1px solid ${withAlpha(colors.border, 0.5)}`,
+      opacity: dim ? 0.6 : 1,
+      textAlign: align as 'left' | 'center' | 'right',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: align === 'center' ? 'center' : 'flex-start',
+      gap: '2px',
+    }}>
+      {children}
+    </div>
+  )
 }
