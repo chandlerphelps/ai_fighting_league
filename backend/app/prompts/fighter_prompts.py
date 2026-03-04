@@ -412,6 +412,14 @@ ROSTER BALANCE CONSTRAINTS:
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
 - Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean slightly toward the skimpier side — most fighters should center around levels 2-3. A Siren might weight heavily toward 3-4, a Prodigy toward 2-3, an Empress toward 2-3. The 4 weights must sum to 100.
 
+SIGNATURE VISUAL IDENTITY — each fighter needs a unique visual signature that makes them
+instantly recognizable. These 4 elements are tracked across the entire roster to prevent duplicates:
+- primary_outfit_color: the dominant color of their ring attire (e.g., "crimson red", "midnight blue", "emerald green", "gold and black")
+- hair_style: distinctive hairstyle (e.g., "long flowing waves", "buzz cut", "twin braids", "mohawk", "slicked back ponytail")
+- hair_color: hair color (e.g., "platinum blonde", "jet black", "fire red", "silver", "dark brown with red streaks")
+- face_adornment: mask, face paint, headwear, or "none" (e.g., "oni half-mask", "tribal war paint", "crown of thorns", "eye patch", "none")
+No two fighters should share the same primary_outfit_color. Aim for maximum visual diversity in hair combos and face adornments.
+
 Return ONLY valid JSON — an array of {roster_size} objects with this structure:
 [
   {{
@@ -427,7 +435,11 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "narrative_role": "<what they bring to the story>",
     "rivalry_seeds": ["<ring_name of 1-2 other fighters in this plan>"],
     "media_archetype_inspiration": "<what popular media archetype this draws from>",
-    "skimpiness_weights": [<level1_pct>, <level2_pct>, <level3_pct>, <level4_pct>]
+    "skimpiness_weights": [<level1_pct>, <level2_pct>, <level3_pct>, <level4_pct>],
+    "primary_outfit_color": "<dominant color of ring attire — MUST be unique across roster>",
+    "hair_style": "<distinctive hairstyle>",
+    "hair_color": "<hair color>",
+    "face_adornment": "<mask, face paint, headwear, or 'none'>"
   }}
 ]
 
