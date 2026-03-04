@@ -54,8 +54,8 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
     season = ws["season_number"]
     today = _current_date(ws)
     base = today.year - season + 1
-    if today.month >= 11:
-        base += 1
+    if today.month < 11:
+        base -= 1
     set_base_year(base)
     month = today.month
     day_of_month = today.day
