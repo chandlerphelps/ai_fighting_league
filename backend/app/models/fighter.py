@@ -131,6 +131,10 @@ class Fighter:
     season_wins: int = 0
     season_losses: int = 0
     consecutive_losses: int = 0
+    consecutive_wins: int = 0
+    learning_rate: float = 1.0
+    work_ethic: float = 1.0
+    tier_records: dict = field(default_factory=dict)
 
     def total_core_stats(self) -> int:
         return self.stats.core_total()
@@ -187,4 +191,8 @@ class Fighter:
             season_wins=d.get("season_wins", 0),
             season_losses=d.get("season_losses", 0),
             consecutive_losses=d.get("consecutive_losses", 0),
+            consecutive_wins=d.get("consecutive_wins", 0),
+            learning_rate=d.get("learning_rate", 1.0),
+            work_ethic=d.get("work_ethic", 1.0),
+            tier_records=d.get("tier_records", {}),
         )

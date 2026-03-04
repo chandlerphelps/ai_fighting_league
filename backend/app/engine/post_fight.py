@@ -73,10 +73,21 @@ def apply_fight_results(match: Match, config: Config) -> dict:
     return changes
 
 
+def _increment_tier_record(fighter: Fighter, tier: str, result: str):
+    if not fighter.tier_records:
+        fighter.tier_records = {}
+    tr = fighter.tier_records.setdefault(tier, {"wins": 0, "losses": 0, "draws": 0})
+    tr[result] = tr.get(result, 0) + 1
+
+
 def _update_records(f1: Fighter, f2: Fighter, outcome):
+    fight_tier = f1.tier
+
     if outcome.is_draw:
         f1.record.draws += 1
         f2.record.draws += 1
+        _increment_tier_record(f1, fight_tier, "draws")
+        _increment_tier_record(f2, fight_tier, "draws")
         return
 
     if outcome.winner_id == f1.id:
@@ -86,6 +97,28 @@ def _update_records(f1: Fighter, f2: Fighter, outcome):
 
     winner.record.wins += 1
     loser.record.losses += 1
+
+    _increment_tier_record(winner, fight_tier, "wins")
+    _increment_tier_record(loser, fight_tier, "losses")
+
+    winner.consecutive_wins += 1
+    winner.consecutive_losses = 0
+    loser.consecutive_losses += 1
+    loser.consecutive_wins = 0
+
+    if winner.consecutive_wins >= 2:
+        winner.condition.morale = "high"
+        winner.condition.momentum = "rising"
+    else:
+        winner.condition.morale = "neutral"
+        winner.condition.momentum = "neutral"
+
+    if loser.consecutive_losses >= 2:
+        loser.condition.morale = "low"
+        loser.condition.momentum = "falling"
+    else:
+        loser.condition.morale = "neutral"
+        loser.condition.momentum = "neutral"
 
     if outcome.method in ("ko", "tko", "ko_tko"):
         winner.record.kos += 1

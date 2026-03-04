@@ -2,6 +2,7 @@ import { type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { colors, fonts, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
+import TierBadge from './TierBadge'
 import type { MatchResult } from '../types/world_state'
 
 interface LayoutProps {
@@ -30,6 +31,7 @@ function TickerItem({ match }: { match: MatchResult }) {
       fontSize: fontSizes.xs,
       borderRight: `1px solid ${colors.border}`,
     }}>
+      <TierBadge tier={match.tier} size={12} />
       <span style={{ color: colors.text, fontWeight: 'bold' }}>{winnerName}</span>
       <span style={{ color: colors.textDim }}>def.</span>
       <span style={{ color: colors.textMuted }}>{loserName}</span>
@@ -90,11 +92,15 @@ export default function Layout({ children }: LayoutProps) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg }}>
           <Link to="/" style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: spacing.sm,
             fontSize: fontSizes.lg,
             fontWeight: 'bold',
             color: colors.accent,
             letterSpacing: '0.05em',
           }}>
+            <img src="/logo_apex_mid.png" alt="AFL" style={{ height: '32px', objectFit: 'contain' }} />
             AFL
           </Link>
           <div style={{ display: 'flex', gap: spacing.md }}>

@@ -1,13 +1,13 @@
 import random as _random
 
 TRAINING_RATES = {
-    "championship": 0.035,
+    "apex": 0.035,
     "contender": 0.028,
     "underground": 0.023,
 }
 
 FIGHT_CAMP_BOOSTS = {
-    "championship": 4,
+    "apex": 4,
     "contender": 3,
     "underground": 2,
 }
@@ -20,12 +20,24 @@ OVERTRAINING_THRESHOLD = 90
 OVERTRAINING_INJURY_CHANCE = 0.05
 
 
+MORALE_TRAINING_MULTIPLIERS = {
+    "high": 1.3,
+    "neutral": 1.0,
+    "low": 0.6,
+}
+
+
 def process_daily_training(fighter: dict, rng: _random.Random = None) -> dict:
     if rng is None:
         rng = _random.Random()
 
     condition = fighter.get("condition", {})
     if condition.get("health_status") != "healthy":
+        fighter["training_streak"] = 0
+        return fighter
+
+    work_ethic = fighter.get("work_ethic", 1.0)
+    if work_ethic < 1.0 and rng.random() < (1.0 - work_ethic):
         fighter["training_streak"] = 0
         return fighter
 
@@ -37,6 +49,14 @@ def process_daily_training(fighter: dict, rng: _random.Random = None) -> dict:
         rate *= 0.4
     elif age >= 32:
         rate *= 0.7
+
+    rate *= fighter.get("learning_rate", 1.0)
+
+    morale = condition.get("morale", "neutral")
+    rate *= MORALE_TRAINING_MULTIPLIERS.get(morale, 1.0)
+
+    if work_ethic >= 1.0:
+        rate += (work_ethic - 1.0) * 0.5 * TRAINING_RATES.get(tier, 0.08)
 
     focus = fighter.get("training_focus", "technique")
 

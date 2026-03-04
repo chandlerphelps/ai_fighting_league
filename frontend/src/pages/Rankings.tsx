@@ -4,8 +4,14 @@ import { useWorldState } from '../hooks/useData'
 import { loadFightersForTier } from '../lib/data'
 import type { Fighter } from '../types/fighter'
 
+const TIER_LOGOS: Record<string, string> = {
+  apex: '/logo_apex_mid.png',
+  contender: '/logo_contender_mid.png',
+  underground: '/logo_underground_mid.png',
+}
+
 const TIER_CONFIG = [
-  { key: 'championship' as const, label: 'Championship', color: colors.accent },
+  { key: 'apex' as const, label: 'Apex', color: colors.accent },
   { key: 'contender' as const, label: 'Contender', color: colors.face },
   { key: 'underground' as const, label: 'Underground', color: colors.textMuted },
 ]
@@ -20,7 +26,7 @@ export default function Rankings() {
     setLoadingFighters(true)
 
     const allIds = [
-      ...ws.tier_rankings.championship,
+      ...ws.tier_rankings.apex,
       ...ws.tier_rankings.contender,
       ...ws.tier_rankings.underground,
     ]
@@ -45,11 +51,12 @@ export default function Rankings() {
         return (
           <TierSection
             key={tier.key}
+            tierKey={tier.key}
             label={tier.label}
             color={tier.color}
             ids={ids}
             fighters={fighters}
-            beltHolderId={tier.key === 'championship' ? ws.belt_holder_id : undefined}
+            beltHolderId={tier.key === 'apex' ? ws.belt_holder_id : undefined}
           />
         )
       })}
@@ -58,18 +65,21 @@ export default function Rankings() {
 }
 
 function TierSection({
+  tierKey,
   label,
   color,
   ids,
   fighters,
   beltHolderId,
 }: {
+  tierKey: string
   label: string
   color: string
   ids: string[]
   fighters: Record<string, Fighter>
   beltHolderId?: string
 }) {
+  const logoSrc = TIER_LOGOS[tierKey]
   return (
     <div>
       <div style={{
@@ -81,22 +91,35 @@ function TierSection({
         borderBottom: `2px solid ${withAlpha(color, 0.3)}`,
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'baseline',
+        alignItems: 'center',
       }}>
-        <span>{label}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          {logoSrc && (
+            <img src={logoSrc} alt={label} style={{ height: '36px', objectFit: 'contain' }} />
+          )}
+          {label}
+        </span>
         <span style={{ fontSize: fontSizes.xs, color: colors.textDim }}>{ids.length} fighters</span>
       </div>
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '40px 1fr 100px 80px 100px 80px 60px 80px',
+        gridTemplateColumns: '40px 1fr 100px 80px 80px 80px 100px 80px 60px 80px',
         gap: '0',
         fontSize: fontSizes.sm,
       }}>
         <HeaderCell>#</HeaderCell>
         <HeaderCell>Fighter</HeaderCell>
         <HeaderCell align="center">Record</HeaderCell>
-        <HeaderCell align="center">Season</HeaderCell>
+        <HeaderCell align="center">
+          <span style={{ color: colors.accent }}>A</span>
+        </HeaderCell>
+        <HeaderCell align="center">
+          <span style={{ color: colors.face }}>Co</span>
+        </HeaderCell>
+        <HeaderCell align="center">
+          <span style={{ color: colors.textMuted }}>UG</span>
+        </HeaderCell>
         <HeaderCell align="center">KO / Sub</HeaderCell>
         <HeaderCell align="center">Age</HeaderCell>
         <HeaderCell align="center">Peak</HeaderCell>
@@ -136,7 +159,7 @@ function FighterRow({ fighter, rank, isBeltHolder }: { fighter: Fighter; rank: n
   const winPct = totalFights > 0 ? Math.round((rec.wins / totalFights) * 100) : 0
 
   const tierShort: Record<string, string> = {
-    championship: 'C',
+    apex: 'A',
     contender: 'Co',
     underground: 'UG',
   }
@@ -156,17 +179,13 @@ function FighterRow({ fighter, rank, isBeltHolder }: { fighter: Fighter; rank: n
         <span style={{ color: colors.win }}>{rec.wins}</span>
         <span style={{ color: colors.textDim }}>-</span>
         <span style={{ color: colors.loss }}>{rec.losses}</span>
-        <span style={{ color: colors.textDim }}>-</span>
-        <span style={{ color: colors.draw }}>{rec.draws}</span>
         <span style={{ color: colors.textDim, fontSize: fontSizes.xs, marginLeft: spacing.xs }}>
           ({winPct}%)
         </span>
       </Cell>
-      <Cell dim={isInjured} align="center">
-        <span style={{ color: colors.win }}>{fighter.season_wins ?? 0}</span>
-        <span style={{ color: colors.textDim }}>-</span>
-        <span style={{ color: colors.loss }}>{fighter.season_losses ?? 0}</span>
-      </Cell>
+      <TierRecordCell fighter={fighter} tier="apex" dim={isInjured} />
+      <TierRecordCell fighter={fighter} tier="contender" dim={isInjured} />
+      <TierRecordCell fighter={fighter} tier="underground" dim={isInjured} />
       <Cell dim={isInjured} align="center">
         <span style={{ color: colors.ko }}>{rec.kos}</span>
         <span style={{ color: colors.textDim }}> / </span>
@@ -190,6 +209,24 @@ function FighterRow({ fighter, rank, isBeltHolder }: { fighter: Fighter; rank: n
         )}
       </Cell>
     </>
+  )
+}
+
+function TierRecordCell({ fighter, tier, dim }: { fighter: Fighter; tier: string; dim?: boolean }) {
+  const tr = fighter.tier_records?.[tier]
+  if (!tr || (tr.wins === 0 && tr.losses === 0)) {
+    return (
+      <Cell dim={dim} align="center">
+        <span style={{ color: colors.textDim }}>—</span>
+      </Cell>
+    )
+  }
+  return (
+    <Cell dim={dim} align="center">
+      <span style={{ color: colors.win }}>{tr.wins}</span>
+      <span style={{ color: colors.textDim }}>-</span>
+      <span style={{ color: colors.loss }}>{tr.losses}</span>
+    </Cell>
   )
 }
 

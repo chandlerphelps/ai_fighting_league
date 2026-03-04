@@ -13,12 +13,14 @@ from app.engine.between_fights.league_tiers import (
 from app.engine.between_fights.season import (
     process_end_of_season,
     get_tier_event_config,
+    get_fight_start_time,
     is_fight_day,
     REGULAR_MONTHS,
     PROMOTION_MONTH,
     season_start_date,
     season_end_date,
     days_remaining_in_season,
+    set_base_year,
 )
 from app.scripts.simulate_seasons import (
     INJURY_TYPES_WINNER,
@@ -51,6 +53,10 @@ def _sync_date_fields(ws: dict, d: _date):
 def simulate_one_day(fighters: dict, ws: dict) -> dict:
     season = ws["season_number"]
     today = _current_date(ws)
+    base = today.year - season + 1
+    if today.month >= 11:
+        base += 1
+    set_base_year(base)
     month = today.month
     day_of_month = today.day
 
@@ -82,11 +88,11 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
                     and f1.get("status") == "active" and f2.get("status") == "active"
                     and f1.get("condition", {}).get("health_status") == "healthy"
                     and f2.get("condition", {}).get("health_status") == "healthy"):
-                    match = _run_single_fight(fighters, ws, f1_id, f2_id, rng)
+                    match = _run_single_fight(fighters, ws, f1_id, f2_id, rng, start_time=sf.get("start_time", ""))
                     day_result["matches"].append(match)
             ws["scheduled_fights"] = []
         else:
-            for tier in ["championship", "contender", "underground"]:
+            for tier in ["apex", "contender", "underground"]:
                 if is_fight_day(today, season, tier):
                     matches = _run_tier_event(fighters, ws, tier, rng)
                     day_result["matches"].extend(matches)
@@ -156,7 +162,7 @@ def _schedule_next_day(fighters: dict, ws: dict):
 
     scheduled = []
     season = ws["season_number"]
-    for tier in ["championship", "contender", "underground"]:
+    for tier in ["apex", "contender", "underground"]:
         if not is_fight_day(next_date, season, tier):
             continue
 
@@ -182,12 +188,14 @@ def _schedule_next_day(fighters: dict, ws: dict):
             for j in range(i + 1, len(available)):
                 if available[i]["id"] in used or available[j]["id"] in used:
                     continue
+                tier_count = len([s for s in scheduled if s["tier"] == tier])
                 scheduled.append({
                     "tier": tier,
                     "fighter1_id": available[i]["id"],
                     "fighter1_name": available[i].get("ring_name", "?"),
                     "fighter2_id": available[j]["id"],
                     "fighter2_name": available[j].get("ring_name", "?"),
+                    "start_time": get_fight_start_time(tier, tier_count),
                 })
                 used.add(available[i]["id"])
                 used.add(available[j]["id"])
@@ -226,14 +234,14 @@ def _run_tier_event(fighters: dict, ws: dict, tier: str, rng) -> list:
             break
 
     matches = []
-    for f1_id, f2_id in fights_scheduled:
-        match = _run_single_fight(fighters, ws, f1_id, f2_id, rng)
+    for idx, (f1_id, f2_id) in enumerate(fights_scheduled):
+        match = _run_single_fight(fighters, ws, f1_id, f2_id, rng, start_time=get_fight_start_time(tier, idx))
         matches.append(match)
 
     return matches
 
 
-def _run_single_fight(fighters: dict, ws: dict, f1_id: str, f2_id: str, rng) -> dict:
+def _run_single_fight(fighters: dict, ws: dict, f1_id: str, f2_id: str, rng, start_time: str = "") -> dict:
     f1 = fighters[f1_id]
     f2 = fighters[f2_id]
 
@@ -299,6 +307,7 @@ def _run_single_fight(fighters: dict, ws: dict, f1_id: str, f2_id: str, rng) -> 
         "round_ended": final_round,
         "tier": f1.get("tier", "underground"),
         "date": date_str,
+        "start_time": start_time,
     }
 
 
@@ -441,7 +450,7 @@ def _prepare_promotions(fighters: dict, ws: dict):
                 "date": m.get("date", ""),
             })
 
-    for tier in ["championship", "contender", "underground"]:
+    for tier in ["apex", "contender", "underground"]:
         ws["tier_rankings"][tier] = calculate_tier_rankings(active, tier, season_matches)
 
     protected = set()
@@ -468,8 +477,8 @@ def _prepare_promotions(fighters: dict, ws: dict):
     )
     ws["promotion_fights"] = matchups
 
-    champ_rankings = ws["tier_rankings"].get("championship", [])
-    if belt_holder and belt_holder in [f["id"] for f in fighters.values() if f.get("status") == "active" and f.get("tier") == "championship"]:
+    champ_rankings = ws["tier_rankings"].get("apex", [])
+    if belt_holder and belt_holder in [f["id"] for f in fighters.values() if f.get("status") == "active" and f.get("tier") == "apex"]:
         challengers = [fid for fid in champ_rankings if fid != belt_holder]
         if challengers:
             ws["title_fight"] = {"champion_id": belt_holder, "challenger_id": challengers[0]}
@@ -479,6 +488,7 @@ def _prepare_promotions(fighters: dict, ws: dict):
 
 def _run_promotions(fighters: dict, ws: dict, rng, day_result: dict):
     results = []
+    fight_idx = 0
     for matchup in ws.get("promotion_fights", []):
         upper_id = matchup["upper_fighter_id"]
         lower_id = matchup["lower_fighter_id"]
@@ -487,7 +497,8 @@ def _run_promotions(fighters: dict, ws: dict, rng, day_result: dict):
         if not upper or not lower or upper.get("status") != "active" or lower.get("status") != "active":
             continue
 
-        match = _run_single_fight(fighters, ws, upper_id, lower_id, rng)
+        match = _run_single_fight(fighters, ws, upper_id, lower_id, rng, start_time=get_fight_start_time("contender", fight_idx))
+        fight_idx += 1
         day_result["matches"].append(match)
         results.append({
             "upper_fighter_id": upper_id,
@@ -508,12 +519,12 @@ def _run_title_fight(fighters: dict, ws: dict, rng, day_result: dict):
 
     eligible_champs = [
         fid for fid, f in fighters.items()
-        if f.get("status") == "active" and f.get("tier") == "championship"
+        if f.get("status") == "active" and f.get("tier") == "apex"
     ]
 
     def _is_eligible(fid):
         f = fighters.get(fid)
-        return f and f.get("status") == "active" and f.get("tier") == "championship"
+        return f and f.get("status") == "active" and f.get("tier") == "apex"
 
     if not _is_eligible(champ_id):
         champ_id = ""
@@ -531,7 +542,7 @@ def _run_title_fight(fighters: dict, ws: dict, rng, day_result: dict):
         ws["title_fight"] = {}
         return
 
-    match = _run_single_fight(fighters, ws, champ_id, challenger_id, rng)
+    match = _run_single_fight(fighters, ws, champ_id, challenger_id, rng, start_time=get_fight_start_time("apex", 0))
     match["is_title_fight"] = True
     day_result["matches"].append(match)
 
@@ -565,11 +576,11 @@ def _recalculate_rankings(fighters: dict, ws: dict):
                 "date": m.get("date", ""),
             })
 
-    for tier in ["championship", "contender", "underground"]:
+    for tier in ["apex", "contender", "underground"]:
         ws["tier_rankings"][tier] = calculate_tier_rankings(active, tier, season_matches)
 
     ws["rankings"] = (
-        list(ws["tier_rankings"].get("championship", []))
+        list(ws["tier_rankings"].get("apex", []))
         + list(ws["tier_rankings"].get("contender", []))
         + list(ws["tier_rankings"].get("underground", []))
     )

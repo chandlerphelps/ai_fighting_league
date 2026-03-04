@@ -31,6 +31,7 @@ export interface Match {
   id: string
   event_id: string
   date: string
+  start_time?: string
   fighter1_id: string
   fighter1_name: string
   fighter2_id: string

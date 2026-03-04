@@ -261,6 +261,9 @@ def generate_fighter(
 
     iconic_features = result.get("iconic_features", "")
 
+    lr = round(random.uniform(0.7, 1.4), 2)
+    we = round(random.uniform(0.6, 1.3), 2)
+
     return Fighter(
         id=fighter_id,
         ring_name=result.get("ring_name", "Unknown"),
@@ -342,6 +345,8 @@ def generate_fighter(
         rivalries=[],
         last_fight_date=None,
         ranking=None,
+        learning_rate=lr,
+        work_ethic=we,
     )
 
 

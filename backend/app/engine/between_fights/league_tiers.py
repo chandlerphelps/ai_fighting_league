@@ -1,5 +1,5 @@
-TIER_ORDER = {"underground": 0, "contender": 1, "championship": 2}
-TIER_NAMES = ["underground", "contender", "championship"]
+TIER_ORDER = {"underground": 0, "contender": 1, "apex": 2}
+TIER_NAMES = ["underground", "contender", "apex"]
 
 
 def calculate_tier_rankings(fighters: list[dict], tier: str, season_matches: list[dict] = None) -> list[str]:
@@ -52,8 +52,8 @@ def calculate_tier_rankings(fighters: list[dict], tier: str, season_matches: lis
     fighter_stats.sort(
         key=lambda f: (
             f["total_fights"] > 0,
-            f["win_pct"],
             f["season_wins"],
+            f["win_pct"],
             f["recent_wins"],
             f["core_total"],
         ),
@@ -74,7 +74,7 @@ def get_promotion_matchups(
 
     matchups = []
 
-    champ_ranks = tier_rankings.get("championship", [])
+    champ_ranks = tier_rankings.get("apex", [])
     contender_ranks = tier_rankings.get("contender", [])
     underground_ranks = tier_rankings.get("underground", [])
 
@@ -109,7 +109,7 @@ def apply_promotion_results(fighters: dict, promotion_results: list[dict]) -> li
         upper_fighter_id = result["upper_fighter_id"]
 
         if boundary == "champ_contender":
-            upper_tier, lower_tier = "championship", "contender"
+            upper_tier, lower_tier = "apex", "contender"
         else:
             upper_tier, lower_tier = "contender", "underground"
 

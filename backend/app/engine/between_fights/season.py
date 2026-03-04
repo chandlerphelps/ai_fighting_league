@@ -10,10 +10,25 @@ REGULAR_MONTHS = [11, 12, 1, 2, 3, 4, 5]
 PROMOTION_MONTH = 6
 
 EVENT_INTERVAL = {
-    "championship": 10,
+    "apex": 10,
     "contender": 6,
     "underground": 1,
 }
+
+TIER_START_TIMES = {
+    "underground": "14:00",
+    "contender": "18:00",
+    "apex": "21:00",
+}
+
+FIGHT_STAGGER_MINUTES = 30
+
+
+def get_fight_start_time(tier: str, fight_index: int) -> str:
+    base = TIER_START_TIMES.get(tier, "14:00")
+    h, m = int(base.split(":")[0]), int(base.split(":")[1])
+    total_minutes = h * 60 + m + fight_index * FIGHT_STAGGER_MINUTES
+    return f"{total_minutes // 60:02d}:{total_minutes % 60:02d}"
 
 
 def is_fight_day(current: _date, season_number: int, tier: str) -> bool:
@@ -23,8 +38,16 @@ def is_fight_day(current: _date, season_number: int, tier: str) -> bool:
     return days_since > 0 and days_since % interval == 0
 
 
+_BASE_YEAR = 2024
+
+
+def set_base_year(year: int):
+    global _BASE_YEAR
+    _BASE_YEAR = year
+
+
 def season_start_year(season_number: int) -> int:
-    return 2024 + season_number - 1
+    return _BASE_YEAR + season_number - 1
 
 
 def season_start_date(season_number: int) -> _date:
@@ -48,13 +71,13 @@ def days_remaining_in_season(current: _date, season_number: int) -> int:
     return max(0, (end - current).days)
 
 TIER_EVENT_CONFIG = {
-    "championship": {"events_per_month": 6, "fights_min": 2, "fights_max": 3},
+    "apex": {"events_per_month": 6, "fights_min": 2, "fights_max": 3},
     "contender": {"events_per_month": 10, "fights_min": 2, "fights_max": 3},
     "underground": {"events_per_month": 30, "fights_min": 4, "fights_max": 6},
 }
 
 TIER_SIZES = {
-    "championship": 16,
+    "apex": 16,
     "contender": 20,
     "underground": 100,
 }
@@ -162,7 +185,7 @@ def process_end_of_season(
 
 
 def _count_tiers(fighters: dict) -> dict:
-    counts = {"championship": 0, "contender": 0, "underground": 0}
+    counts = {"apex": 0, "contender": 0, "underground": 0}
     for f in fighters.values():
         if f.get("status") == "active":
             tier = f.get("tier", "underground")
@@ -179,7 +202,7 @@ def _backfill_tiers(
     season: int,
     used_names: set = None,
 ) -> int:
-    for upper_tier, lower_tier in [("championship", "contender"), ("contender", "underground")]:
+    for upper_tier, lower_tier in [("apex", "contender"), ("contender", "underground")]:
         target = TIER_SIZES[upper_tier]
         active_in_tier = [f for f in fighters.values() if f.get("tier") == upper_tier and f.get("status") == "active"]
         deficit = target - len(active_in_tier)

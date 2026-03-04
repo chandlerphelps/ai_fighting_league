@@ -33,7 +33,7 @@ class WorldState:
     season_month: int = 1
     season_day_in_month: int = 1
     tier_rankings: dict = field(default_factory=lambda: {
-        "championship": [],
+        "apex": [],
         "contender": [],
         "underground": [],
     })
@@ -76,7 +76,7 @@ class WorldState:
             season_month=season_month,
             season_day_in_month=season_day_in_month,
             tier_rankings=d.get("tier_rankings", {
-                "championship": [],
+                "apex": [],
                 "contender": [],
                 "underground": [],
             }),

@@ -4,7 +4,7 @@ CORE_STATS = ["power", "speed", "technique", "toughness"]
 STAT_MIN = 15
 STAT_CAP = 95
 
-TIER_ORDER = {"underground": 0, "contender": 1, "championship": 2}
+TIER_ORDER = {"underground": 0, "contender": 1, "apex": 2}
 
 RING_NAMES = [
     "Viper", "Blaze", "Phantom", "Crusher", "Storm", "Shadow", "Fury", "Hawk",
@@ -143,7 +143,7 @@ def generate_replacement_fighter(fighter_id_counter: int, season: int, rng: _ran
     ages = [18, 19, 20, 21, 22]
     age = rng.choices(ages, weights=age_weights, k=1)[0]
 
-    target_total = rng.randint(140, 200)
+    target_total = rng.randint(120, 240)
     stats = _distribute_stats(target_total, rng)
 
     for _ in range(100):
@@ -179,6 +179,10 @@ def generate_replacement_fighter(fighter_id_counter: int, season: int, rng: _ran
         "season_wins": 0,
         "season_losses": 0,
         "consecutive_losses": 0,
+        "consecutive_wins": 0,
+        "learning_rate": round(rng.uniform(0.7, 1.4), 2),
+        "work_ethic": round(rng.uniform(0.6, 1.3), 2),
+        "tier_records": {},
         "last_fight_date": None,
         "rivalries": [],
         "storyline_log": [],

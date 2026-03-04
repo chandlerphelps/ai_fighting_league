@@ -32,7 +32,7 @@ class Config:
     rematch_cooldown_days: int = 14
     max_idle_days: int = 14
 
-    championship_size: int = 16
+    apex_size: int = 16
     contender_size: int = 20
     underground_size: int = 100
     season_length_months: int = 8

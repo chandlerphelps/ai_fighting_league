@@ -109,6 +109,26 @@ class FighterCombatState:
         max_mana = float(supernatural * 2)
         max_guard = min(100.0, technique * 0.8)
 
+        emotions = EmotionalState.from_stats(technique)
+
+        condition = fighter.get("condition", {})
+        momentum = condition.get("momentum", "neutral")
+        morale = condition.get("morale", "neutral")
+
+        if momentum == "rising":
+            emotions.confidence += 15
+            emotions.composure += 10
+        elif momentum == "falling":
+            emotions.confidence -= 10
+            emotions.fear += 10
+
+        if morale == "high":
+            emotions.focus += 10
+        elif morale == "low":
+            emotions.focus -= 10
+
+        emotions.clamp()
+
         return cls(
             fighter_id=fighter.get("id", ""),
             fighter_name=fighter.get("ring_name", ""),
@@ -125,7 +145,7 @@ class FighterCombatState:
             accumulated_damage=0.0,
             supernatural_debt=0.0,
             combo_counter=0,
-            emotional_state=EmotionalState.from_stats(technique),
+            emotional_state=emotions,
             power=power,
             speed=speed,
             technique=technique,

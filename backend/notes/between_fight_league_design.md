@@ -4,7 +4,7 @@
 
 ```
         ┌─────────────────────┐
-        │   AFL Championship   │  16 fighters - The elite
+        │   AFL Apex   │  16 fighters - The elite
         │   (The Pros)         │  Full fight week, belt, max fanfare
         ├─────────────────────┤
         │  AFL Contender Series│  20 fighters - Minor leagues
@@ -21,16 +21,16 @@
 
 ### Tier Characteristics
 
-**Championship (16 fighters)**
+**Apex (16 fighters)**
 - 3 events per week, 2-3 fights per event
 - Full 7-day fight week with all rituals
 - Title belt for #1 ranked fighter
 - Title defenses once per season (season finale main event)
-- Events named: "AFL Championship: [Event Name]"
+- Events named: "AFL Apex: [Event Name]"
 
 **Contender Series (20 fighters)**
 - 3 events per week, 3 fights per event
-- Full fight week (same rituals as Championship)
+- Full fight week (same rituals as Apex)
 - No belt, but top performers earn promotion
 - Events named: "AFL Contender Series: [Event Name]"
 
@@ -46,25 +46,25 @@
 ```
 Months 1-10:  Regular season fights
 Month 11:     Final regular season fights + promotion/relegation matches announced
-Month 12:     Promotion/relegation fights + Championship title fight (season finale)
+Month 12:     Promotion/relegation fights + Apex title fight (season finale)
 ```
 
 ### Promotion & Relegation
 
 End of each season, movement between tiers is decided by **head-to-head promotion fights**:
 
-**Championship ↔ Contender:**
-- Bottom 3 of Championship face Top 3 of Contender
+**Apex ↔ Contender:**
+- Bottom 3 of Apex face Top 3 of Contender
 - Three promotion fights: Champ #14 vs Contender #3, Champ #15 vs Contender #2, Champ #16 vs Contender #1
-- Winner of each fight earns/keeps the Championship spot
-- These fights happen ON a Championship card (big stage for Contender fighters)
+- Winner of each fight earns/keeps the Apex spot
+- These fights happen ON a Apex card (big stage for Contender fighters)
 
 **Contender ↔ Underground:**
 - Bottom 3 of Contender face Top 3 of Underground
 - Same format: three promotion fights
 - Held on a Contender Series card
 
-**Championship Title Fight:**
+**Apex Title Fight:**
 - #1 ranked challenger vs current belt holder
 - Main event of Season Finale
 - If no current champion (vacated), #1 vs #2
@@ -78,7 +78,7 @@ Each tier has its own independent ranking. Rankings determine:
 
 ## Fight Week Timeline
 
-### Championship & Contender (7-day build)
+### Apex & Contender (7-day build)
 
 | Day | Activity | Content Generated |
 |-----|----------|-------------------|
@@ -136,11 +136,11 @@ Between fights, healthy fighters train. Each fighter has a **training_focus** th
 
 ### Training Quality by Tier
 
-- **Championship**: Best camps. +0.15/day base training rate, +4 fight-night boost
+- **Apex**: Best camps. +0.15/day base training rate, +4 fight-night boost
 - **Contender**: Solid camps. +0.1/day, +3 fight-night boost
 - **Underground**: Basic facilities. +0.08/day, +2 fight-night boost
 
-This means Championship fighters develop faster, creating a compounding advantage — but a dominant Underground fighter who gets promoted can catch up with better training facilities.
+This means Apex fighters develop faster, creating a compounding advantage — but a dominant Underground fighter who gets promoted can catch up with better training facilities.
 
 ## Fighter Lifecycle
 
@@ -163,7 +163,7 @@ Fighters don't fight forever. A fighter retires when ANY of these conditions are
 2. **Underground stagnation**: 3+ consecutive seasons in Underground without promotion
 3. **Morale collapse**: Morale at "broken" (new state below "low") after 3+ consecutive losses
 4. **Career-ending injury**: Severe injury while age 32+ has 30% chance of forced retirement
-5. **Graceful exit**: Fighter who just won a Championship title defense at age 33+ may retire on top (20% chance — rare, creates legacy moments)
+5. **Graceful exit**: Fighter who just won a Apex title defense at age 33+ may retire on top (20% chance — rare, creates legacy moments)
 
 When a fighter retires:
 - Final storyline entry generated ("X hung up the gloves after...")
@@ -186,7 +186,7 @@ This creates natural story arcs: hungry young prospect vs grizzled Underground v
 ### Fighter (additions)
 
 ```python
-tier: str = "underground"              # "championship", "contender", "underground"
+tier: str = "underground"              # "apex", "contender", "underground"
 status: str = "active"                 # "active", "injured", "retired"
 training_focus: str = "technique"      # Current training focus
 training_days_accumulated: int = 0     # Days trained since last stat bump
@@ -205,12 +205,12 @@ season_week: int = 1                          # 1-8
 season_day_in_week: int = 1                   # 1-7
 
 tier_rankings: dict = {                        # Rankings per tier
-    "championship": ["f_id1", ...],
+    "apex": ["f_id1", ...],
     "contender": ["f_id2", ...],
     "underground": ["f_id3", ...]
 }
 
-belt_holder_id: str = ""                       # Current championship belt holder
+belt_holder_id: str = ""                       # Current apex belt holder
 belt_history: list = [                         # Historical record
     {"fighter_id": "f_1", "won_date": "...", "lost_date": "...", "defenses": 2}
 ]
@@ -218,7 +218,7 @@ belt_history: list = [                         # Historical record
 retired_fighters: list[str] = []               # IDs of retired fighters
 
 promotion_fights: list = [                     # Scheduled for season week 8
-    {"championship_fighter_id": "f_1", "contender_fighter_id": "f_2", "tier_boundary": "champ_contender"}
+    {"apex_fighter_id": "f_1", "contender_fighter_id": "f_2", "tier_boundary": "apex_contender"}
 ]
 ```
 
@@ -287,7 +287,7 @@ def advance_day():
     generate_fight_week_events()    # Press conferences, weigh-ins, etc.
 
     # 5. Run today's events (per tier)
-    run_championship_events()
+    run_apex_events()
     run_contender_events()
     run_underground_events()
 
@@ -330,26 +330,26 @@ def advance_day():
 
 ```
 Season 3, Week 1:
-  - Championship: "Viper" defends belt. Underground phenom "Blaze" just got promoted to Contender.
+  - Apex: "Viper" defends belt. Underground phenom "Blaze" just got promoted to Contender.
 
 Week 3:
   - Contender: Blaze wins second fight by KO. Fans buzzing.
   - Underground: Veteran "Iron Mike" (age 31, 3rd season in Underground) loses again. Morale dropping.
 
 Week 5:
-  - Championship: Two top fighters develop rivalry after heated press conference.
+  - Apex: Two top fighters develop rivalry after heated press conference.
   - Underground: Iron Mike wins a gritty decision. Brief hope, but time is running out.
 
 Week 7:
-  - Promotion fights announced. Blaze earned Contender #1. Faces Championship #16 "Granite" next week.
+  - Promotion fights announced. Blaze earned Contender #1. Faces Apex #16 "Granite" next week.
   - Iron Mike finishes Underground #15. Not enough — he's #4. No promotion fight for him.
 
 Week 8 (Season Finale):
-  - Blaze beats Granite by TKO Round 3. Promoted to Championship. The crowd erupts.
-  - Championship title fight: Viper retains by decision. Dominant.
+  - Blaze beats Granite by TKO Round 3. Promoted to Apex. The crowd erupts.
+  - Apex title fight: Viper retains by decision. Dominant.
   - Iron Mike retires. "Underground gatekeeper" storyline concludes. New fighters enter next season.
 
 Season 4, Week 1:
-  - Blaze enters Championship as the fresh face everyone's watching.
+  - Blaze enters Apex as the fresh face everyone's watching.
   - 8 new Underground fighters generated. The cycle continues.
 ```

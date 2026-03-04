@@ -29,6 +29,7 @@ backend/env.production
 *.swo
 *~
 *.png
+!frontend/public/*.png
 
 # OS
 .DS_Store

@@ -18,6 +18,7 @@ export interface MatchResult {
   round_ended: number
   tier: string
   date: string
+  start_time?: string
   is_title_fight?: boolean
 }
 
@@ -53,6 +54,7 @@ export interface ScheduledFight {
   fighter1_name: string
   fighter2_id: string
   fighter2_name: string
+  start_time?: string
 }
 
 export interface WorldState {
@@ -62,7 +64,7 @@ export interface WorldState {
   season_month: number
   season_day_in_month: number
   tier_rankings: {
-    championship: string[]
+    apex: string[]
     contender: string[]
     underground: string[]
   }

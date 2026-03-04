@@ -2,16 +2,23 @@ import { useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
+import TierBadge from '../components/TierBadge'
 import { simulateDay } from '../lib/data'
 import type { DaySimulationResult, MatchResult, ScheduledFight } from '../types/world_state'
 
 const TIER_LABELS: Record<string, string> = {
-  championship: 'Championship',
+  apex: 'Apex',
   contender: 'Contender',
   underground: 'Underground',
 }
 
-const TIER_ORDER = ['championship', 'contender', 'underground']
+const TIER_LOGOS: Record<string, string> = {
+  apex: '/logo_apex_mid.png',
+  contender: '/logo_contender_mid.png',
+  underground: '/logo_underground_mid.png',
+}
+
+const TIER_ORDER = ['apex', 'contender', 'underground']
 
 const METHOD_COLORS: Record<string, string> = {
   ko: colors.ko,
@@ -28,6 +35,17 @@ const MONTH_NAMES = [
   '', 'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
 ]
+
+function formatTime(time24: string): string {
+  if (!time24) return ''
+  const [hStr, mStr] = time24.split(':')
+  let h = parseInt(hStr || '0')
+  const m = mStr || '00'
+  const period = h >= 12 ? 'PM' : 'AM'
+  if (h === 0) h = 12
+  else if (h > 12) h -= 12
+  return `${h}:${m} ${period}`
+}
 
 function parseDateKey(d: string): number {
   if (d.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -105,6 +123,7 @@ export default function Home() {
         label: formatDateLabel(date),
         matches: [...matches].sort(
           (a, b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier)
+            || (a.start_time || '').localeCompare(b.start_time || '')
         ),
       }))
   }, [ws?.recent_matches])
@@ -113,7 +132,7 @@ export default function Home() {
     if (!ws?.recent_matches?.length) return null
     const titleFight = ws.recent_matches.find(m => m.is_title_fight)
     if (titleFight) return titleFight
-    const champFight = ws.recent_matches.find(m => m.tier === 'championship')
+    const champFight = ws.recent_matches.find(m => m.tier === 'apex')
     if (champFight) return champFight
     return ws.recent_matches[0]
   }, [ws?.recent_matches])
@@ -125,7 +144,7 @@ export default function Home() {
     for (const tf of titleFights) {
       const winnerName = tf.winner_id === tf.fighter1_id ? tf.fighter1_name : tf.fighter2_name
       items.push({
-        text: `${winnerName} wins championship title fight`,
+        text: `${winnerName} wins title fight`,
         color: colors.accent,
       })
     }
@@ -173,7 +192,7 @@ export default function Home() {
     : null
 
   const tierCounts = {
-    championship: ws.tier_rankings?.championship?.length ?? 0,
+    apex: ws.tier_rankings?.apex?.length ?? 0,
     contender: ws.tier_rankings?.contender?.length ?? 0,
     underground: ws.tier_rankings?.underground?.length ?? 0,
   }
@@ -278,7 +297,7 @@ export default function Home() {
 function LeftSidebar({ ws, latestChampion, tierCounts, currentMonth, simulating, multiSimulating, multiDayCount, setMultiDayCount, onSimulateDay, onSimulateMultiple }: {
   ws: { season_number: number; current_date: string; season_month: number; season_day_in_month: number; promotion_fights: unknown[]; belt_holder_id: string }
   latestChampion: { ring_name: string; season: number; defeated_name: string; fighter_id: string } | null
-  tierCounts: { championship: number; contender: number; underground: number }
+  tierCounts: { apex: number; contender: number; underground: number }
   currentMonth: number
   simulating: boolean
   multiSimulating: boolean
@@ -433,7 +452,7 @@ function LeftSidebar({ ws, latestChampion, tierCounts, currentMonth, simulating,
         }}>
           League
         </div>
-        {(['championship', 'contender', 'underground'] as const).map(tier => (
+        {(['apex', 'contender', 'underground'] as const).map(tier => (
           <div key={tier} style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -441,7 +460,10 @@ function LeftSidebar({ ws, latestChampion, tierCounts, currentMonth, simulating,
             padding: `2px 0`,
             fontSize: fontSizes.xs,
           }}>
-            <span style={{ color: tier === 'championship' ? colors.accent : colors.textMuted }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: spacing.xs, color: tier === 'apex' ? colors.accent : colors.textMuted }}>
+              {TIER_LOGOS[tier] && (
+                <img src={TIER_LOGOS[tier]} alt={tier} style={{ height: '16px', objectFit: 'contain' }} />
+              )}
               {TIER_LABELS[tier]}
             </span>
             <span style={{ color: colors.text }}>{tierCounts[tier]}</span>
@@ -484,7 +506,13 @@ function HeroFight({ match }: { match: MatchResult }) {
         letterSpacing: '0.1em',
         marginBottom: spacing.sm,
         fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+        gap: spacing.xs,
       }}>
+        {TIER_LOGOS[match.tier] && (
+          <img src={TIER_LOGOS[match.tier]} alt={match.tier} style={{ height: '22px', objectFit: 'contain' }} />
+        )}
         {isTitle ? 'Title Fight' : 'Featured Fight'} — {TIER_LABELS[match.tier] || match.tier}
       </div>
       <div style={{
@@ -717,19 +745,25 @@ function UpcomingDay({ month, currentDate, promotionFights, titleFight, schedule
         {sortedTiers.map(tier => (
           <div key={tier}>
             <div style={{
-              color: tier === 'championship' ? colors.accent : colors.textDim,
+              color: tier === 'apex' ? colors.accent : colors.textDim,
               fontSize: fontSizes.xs,
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
               marginBottom: spacing.xs,
+              display: 'flex',
+              alignItems: 'center',
+              gap: spacing.xs,
             }}>
+              {TIER_LOGOS[tier] && (
+                <img src={TIER_LOGOS[tier]} alt={tier} style={{ height: '18px', objectFit: 'contain' }} />
+              )}
               {TIER_LABELS[tier] || tier}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               {(grouped[tier] || []).map((f, i) => (
                 <div key={i} style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr auto 1fr',
+                  gridTemplateColumns: 'auto 1fr auto 1fr',
                   gap: spacing.sm,
                   alignItems: 'center',
                   padding: `${spacing.xs} ${spacing.sm}`,
@@ -737,6 +771,9 @@ function UpcomingDay({ month, currentDate, promotionFights, titleFight, schedule
                   borderRadius: '3px',
                   fontSize: fontSizes.sm,
                 }}>
+                  <span style={{ color: colors.textDim, fontSize: fontSizes.xs, minWidth: '52px' }}>
+                    {formatTime(f.start_time || '')}
+                  </span>
                   <span style={{ color: colors.text, textAlign: 'right' }}>{f.fighter1_name}</span>
                   <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
                   <span style={{ color: colors.text }}>{f.fighter2_name}</span>
@@ -784,12 +821,18 @@ function TieredMatchList({ matches }: { matches: MatchResult[] }) {
       {sortedTiers.map(tier => (
         <div key={tier}>
           <div style={{
-            color: tier === 'championship' ? colors.accent : colors.textDim,
+            color: tier === 'apex' ? colors.accent : colors.textDim,
             fontSize: fontSizes.xs,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             marginBottom: spacing.xs,
+            display: 'flex',
+            alignItems: 'center',
+            gap: spacing.xs,
           }}>
+            {TIER_LOGOS[tier] && (
+              <img src={TIER_LOGOS[tier]} alt={tier} style={{ height: '18px', objectFit: 'contain' }} />
+            )}
             {TIER_LABELS[tier] || tier}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -805,10 +848,11 @@ function TieredMatchList({ matches }: { matches: MatchResult[] }) {
 
 function MatchRow({ match }: { match: MatchResult }) {
   const isF1Winner = match.winner_id === match.fighter1_id
+  const timeStr = formatTime(match.start_time || '')
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: '1fr auto 1fr auto',
+      gridTemplateColumns: 'auto auto 1fr auto 1fr auto',
       gap: spacing.sm,
       alignItems: 'center',
       padding: `${spacing.xs} ${spacing.sm}`,
@@ -817,6 +861,14 @@ function MatchRow({ match }: { match: MatchResult }) {
       fontSize: fontSizes.sm,
       borderLeft: match.is_title_fight ? `3px solid ${colors.accent}` : 'none',
     }}>
+      <TierBadge tier={match.tier} size={14} />
+      <span style={{
+        color: colors.textDim,
+        fontSize: fontSizes.xs,
+        minWidth: '52px',
+      }}>
+        {timeStr}
+      </span>
       <span style={{
         color: isF1Winner ? colors.win : colors.loss,
         fontWeight: isF1Winner ? 'bold' : 'normal',

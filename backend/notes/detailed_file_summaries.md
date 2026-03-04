@@ -50,7 +50,7 @@ File Length: 61 lines
 Purpose: Central configuration dataclass loaded from .env, holds API keys, league constants, tier sizes, stat ranges, recovery tuning, and combat engine parameters.
 
 Artefacts
-- Config - dataclass with openrouter_api_key, grok_api_key, model names (default_model="x-ai/grok-4.1-fast", narrative_model="x-ai/grok-4.1-fast"), roster/event counts, stat bounds, recovery ranges, rematch_cooldown_days, max_idle_days, tier sizes (championship_size=16, contender_size=20, underground_size=100), season_length_months=8, combat tuning (ticks_per_round, base_stamina_recovery_pct, stamina_recovery_decay, tko_base_threshold, tko_toughness_factor, tko_late_round_drop, tko_late_round_start, max_combat_rounds), data_dir
+- Config - dataclass with openrouter_api_key, grok_api_key, model names (default_model="x-ai/grok-4.1-fast", narrative_model="x-ai/grok-4.1-fast"), roster/event counts, stat bounds, recovery ranges, rematch_cooldown_days, max_idle_days, tier sizes (apex_size=16, contender_size=20, underground_size=100), season_length_months=8, combat tuning (ticks_per_round, base_stamina_recovery_pct, stamina_recovery_decay, tko_base_threshold, tko_toughness_factor, tko_late_round_drop, tko_late_round_start, max_combat_rounds), data_dir
 
 ---
 
@@ -233,8 +233,8 @@ File Length: 84 lines
 Purpose: Daily training system with tier-based progression rates, age modifiers, overtraining injury risk, and fight camp stat boosts.
 
 Artefacts
-- TRAINING_RATES - tier->rate dict (championship 0.15, contender 0.12, underground 0.10)
-- FIGHT_CAMP_BOOSTS - tier->boost dict (championship 4, contender 3, underground 2)
+- TRAINING_RATES - tier->rate dict (apex 0.15, contender 0.12, underground 0.10)
+- FIGHT_CAMP_BOOSTS - tier->boost dict (apex 4, contender 3, underground 2)
 - process_daily_training(fighter, rng) - accumulates training progress at tier rate (age-reduced for 32+/36+), increments focus stat when accumulated >= 1.0, tracks overtraining streak with 5% injury chance above 21 days
 - apply_fight_camp_boost(fighter) - returns copy of fighter stats with training_focus stat boosted by tier amount (capped at 95)
 
@@ -259,10 +259,10 @@ Artefacts
 ## app/engine/between_fights/league_tiers.py
 File: app/engine/between_fights/league_tiers.py
 File Length: 156 lines
-Purpose: Tier ranking calculation, promotion/relegation matchup generation with protection for injured fighters, promotion result application, and championship title fight tracking.
+Purpose: Tier ranking calculation, promotion/relegation matchup generation with protection for injured fighters, promotion result application, and apex title fight tracking.
 
 Artefacts
-- TIER_ORDER - dict mapping tier names to numeric order (underground=0, contender=1, championship=2)
+- TIER_ORDER - dict mapping tier names to numeric order (underground=0, contender=1, apex=2)
 - TIER_NAMES - ordered list of tier name strings
 - calculate_tier_rankings(fighters, tier, season_matches) - ranks active fighters in a tier by (has_fought, win_pct, season_wins, recent_wins from last 5, core_total)
 - get_promotion_matchups(tier_rankings, champ_contender_slots=4, contender_underground_slots=6, protected_fighter_ids=None) - pairs bottom N of upper tier vs top N of lower tier at each boundary, excludes protected fighters (belt holder, season-ending injured) from relegation eligibility
@@ -277,8 +277,8 @@ File Length: 180 lines
 Purpose: End-of-season processing and tier event configuration. Handles aging, retirement, backfill promotions, replacement generation, season-ending injury cleanup, and season state reset.
 
 Artefacts
-- TIER_EVENT_CONFIG - events/month and fights/event by tier (championship 2/mo 3-4 fights, contender 3/mo 3-4, underground 7/mo 5-8)
-- TIER_SIZES - target roster sizes (championship 16, contender 20, underground 100)
+- TIER_EVENT_CONFIG - events/month and fights/event by tier (apex 2/mo 3-4 fights, contender 3/mo 3-4, underground 7/mo 5-8)
+- TIER_SIZES - target roster sizes (apex 16, contender 20, underground 100)
 - get_tier_event_config(tier) - returns event config dict for given tier
 - process_end_of_season(fighters, ws, fighter_counter, rng, used_names) - full end-of-season pipeline: apply_aging to all, check_retirement (handles belt vacancy), update_promotion_desperation for underground, _backfill_tiers, reset season_wins/losses/consecutive_losses, clear season-ending injuries, clean up _season_record_at_injury, reset to season_month=1/season_day_in_month=1, increment season counters
 - _count_tiers(fighters) - returns dict of active fighter counts per tier
@@ -508,7 +508,7 @@ Purpose: Global league state tracking date, rankings, events, injuries, rivalrie
 
 Artefacts
 - RivalryRecord - fighter1/2_id, fights, wins, draws, is_rivalry
-- WorldState - current_date, day_number, rankings, upcoming/completed events, active_injuries, rivalry_graph, event_counter, season_number, season_month, season_day_in_month, tier_rankings (championship/contender/underground lists), belt_holder_id, belt_history list, retired_fighter_ids list, promotion_fights list, title_fight dict; from_dict handles backwards compat with old season_week/season_day_in_week field names
+- WorldState - current_date, day_number, rankings, upcoming/completed events, active_injuries, rivalry_graph, event_counter, season_number, season_month, season_day_in_month, tier_rankings (apex/contender/underground lists), belt_holder_id, belt_history list, retired_fighter_ids list, promotion_fights list, title_fight dict; from_dict handles backwards compat with old season_week/season_day_in_week field names
 
 ---
 
@@ -573,7 +573,7 @@ File Length: 825 lines
 Purpose: Standalone league season simulation script. Generates a full roster across 3 tiers, simulates N seasons with month-based events, promotion/relegation, title fights, injuries (including career-ending and season-ending), training, aging, and retirement. Outputs comprehensive career arc statistics.
 
 Artefacts
-- EVENT_DAYS - tier->weekday list (championship days 3/6, contender days 2/4/7, underground daily)
+- EVENT_DAYS - tier->weekday list (apex days 3/6, contender days 2/4/7, underground daily)
 - INJURY_TYPES_WINNER/LOSER_KO/LOSER_OTHER - injury type pools by outcome
 - MINOR/MODERATE/SEVERE_RECOVERY - recovery day ranges by severity
 - SEASON_ENDING_INJURY_TYPES - pool of 4 season-ending injury types (torn ACL, fractured vertebra, etc.)
@@ -581,7 +581,7 @@ Artefacts
 - SEASON_ENDING_RECOVERY - (90, 120) day recovery range
 - LeagueSimulator - main simulation class:
   - __init__(seed, verbose) - initializes RNG, empty roster, world_state with season/tier tracking, mid_season_retirements, season_ending_injuries, total_career_ending/total_season_ending counters, used_names set
-  - generate_initial_roster() - creates 136 fighters (16 championship, 20 contender, 100 underground) with tier-appropriate age/stat/record ranges, assigns initial belt holder
+  - generate_initial_roster() - creates 136 fighters (16 apex, 20 contender, 100 underground) with tier-appropriate age/stat/record ranges, assigns initial belt holder
   - _make_fighter(counter, tier, age_range, stat_range, career_seasons_range, tier_seasons_range) - creates fighter dict with full league fields
   - _distribute_stats(target_total) - allocates stat points across 4 core stats
   - simulate_season() - runs 8-month season: months 1-6 regular, month 7 regular + promotion prep, month 8 promotion/title fights, then process_end_of_season; tracks mid-season retirements and season-ending injuries

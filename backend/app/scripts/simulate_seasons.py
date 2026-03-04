@@ -18,6 +18,7 @@ from app.engine.between_fights.league_tiers import (
 from app.engine.between_fights.season import (
     process_end_of_season,
     get_tier_event_config,
+    get_fight_start_time,
     TIER_SIZES,
     is_fight_day,
     REGULAR_MONTHS,
@@ -26,6 +27,7 @@ from app.engine.between_fights.season import (
     season_start_date,
     season_end_date,
     days_remaining_in_season,
+    set_base_year,
 )
 
 INJURY_TYPES_WINNER = ["minor bruising", "hand strain", "mild concussion"]
@@ -42,10 +44,18 @@ SEASON_ENDING_RECOVERY = (90, 120)
 
 
 class LeagueSimulator:
-    def __init__(self, seed=42, verbose=False):
+    def __init__(self, seed=42, verbose=False, total_seasons=30):
         self.rng = random.Random(seed)
         self.seed = seed
         self.verbose = verbose
+        self.total_seasons = total_seasons
+
+        today = _date.today()
+        base_year = today.year - total_seasons
+        if today.month >= 11:
+            base_year += 1
+        set_base_year(base_year)
+
         self.fighters = {}
         self.season_matches = []
         self.all_retired = []
@@ -56,7 +66,7 @@ class LeagueSimulator:
             "current_date": season_start_date(1).isoformat(),
             "season_month": 11,
             "season_day_in_month": 1,
-            "tier_rankings": {"championship": [], "contender": [], "underground": []},
+            "tier_rankings": {"apex": [], "contender": [], "underground": []},
             "belt_holder_id": "",
             "belt_history": [],
             "retired_fighter_ids": [],
@@ -71,11 +81,11 @@ class LeagueSimulator:
         self.used_names = set()
 
     def generate_initial_roster(self):
-        for i in range(TIER_SIZES["championship"]):
+        for i in range(TIER_SIZES["apex"]):
             self.fighter_counter += 1
             f = self._make_fighter(
                 self.fighter_counter,
-                tier="championship",
+                tier="apex",
                 age_range=(27, 32),
                 stat_range=(260, 320),
                 career_seasons_range=(5, 10),
@@ -107,7 +117,7 @@ class LeagueSimulator:
             )
             self.fighters[f["id"]] = f
 
-        champ_fighters = [f for f in self.fighters.values() if f["tier"] == "championship"]
+        champ_fighters = [f for f in self.fighters.values() if f["tier"] == "apex"]
         if champ_fighters:
             belt_holder = max(champ_fighters, key=lambda f: sum(f["stats"].get(s, 0) for s in CORE_STATS))
             self.world_state["belt_holder_id"] = belt_holder["id"]
@@ -128,7 +138,7 @@ class LeagueSimulator:
         tier_seasons = self.rng.randint(*tier_seasons_range)
 
         total_fights = career_seasons * self.rng.randint(6, 12)
-        if tier == "championship":
+        if tier == "apex":
             win_rate = self.rng.uniform(0.55, 0.75)
         elif tier == "contender":
             win_rate = self.rng.uniform(0.45, 0.65)
@@ -148,10 +158,10 @@ class LeagueSimulator:
         self.used_names.add(ring_name)
 
         peak_tier = tier
-        if tier == "championship":
-            peak_tier = "championship"
+        if tier == "apex":
+            peak_tier = "apex"
         elif tier == "contender":
-            peak_tier = "contender" if self.rng.random() < 0.7 else "championship"
+            peak_tier = "contender" if self.rng.random() < 0.7 else "apex"
 
         fighter_id = f"sim-{counter:04d}"
 
@@ -177,6 +187,10 @@ class LeagueSimulator:
             "season_wins": 0,
             "season_losses": 0,
             "consecutive_losses": 0,
+            "consecutive_wins": 0,
+            "learning_rate": round(self.rng.uniform(0.7, 1.4), 2),
+            "work_ethic": round(self.rng.uniform(0.6, 1.3), 2),
+            "tier_records": {tier: {"wins": wins, "losses": losses, "draws": 0}},
             "last_fight_date": None,
             "rivalries": [],
             "storyline_log": [],
@@ -238,7 +252,7 @@ class LeagueSimulator:
             self._process_daily_training_all()
 
             if month in REGULAR_MONTHS:
-                for tier in ["championship", "contender", "underground"]:
+                for tier in ["apex", "contender", "underground"]:
                     if is_fight_day(current, season_num, tier):
                         self._run_tier_event(tier)
 
@@ -340,10 +354,10 @@ class LeagueSimulator:
                 used.add(available[j]["id"])
                 break
 
-        for f1_id, f2_id in fights_scheduled:
-            self._run_single_fight(f1_id, f2_id)
+        for idx, (f1_id, f2_id) in enumerate(fights_scheduled):
+            self._run_single_fight(f1_id, f2_id, start_time=get_fight_start_time(tier, idx))
 
-    def _run_single_fight(self, f1_id, f2_id):
+    def _run_single_fight(self, f1_id, f2_id, start_time=""):
         f1 = self.fighters[f1_id]
         f2 = self.fighters[f2_id]
 
@@ -380,19 +394,39 @@ class LeagueSimulator:
         winner["record"] = w_record
         winner["season_wins"] = winner.get("season_wins", 0) + 1
         winner["consecutive_losses"] = 0
+        winner["consecutive_wins"] = winner.get("consecutive_wins", 0) + 1
         winner["training_streak"] = 0
+
+        fight_tier = self.fighters[f1_id].get("tier", "underground")
+        w_tr = winner.setdefault("tier_records", {}).setdefault(fight_tier, {"wins": 0, "losses": 0, "draws": 0})
+        w_tr["wins"] += 1
 
         l_record = loser.get("record", {})
         l_record["losses"] = l_record.get("losses", 0) + 1
         loser["record"] = l_record
         loser["season_losses"] = loser.get("season_losses", 0) + 1
+
+        l_tr = loser.setdefault("tier_records", {}).setdefault(fight_tier, {"wins": 0, "losses": 0, "draws": 0})
+        l_tr["losses"] += 1
         loser["consecutive_losses"] = loser.get("consecutive_losses", 0) + 1
+        loser["consecutive_wins"] = 0
         loser["training_streak"] = 0
 
-        if loser["consecutive_losses"] >= 5:
-            loser.setdefault("condition", {})["morale"] = "low"
-        if winner.get("condition", {}).get("morale") == "low":
-            winner["condition"]["morale"] = "neutral"
+        w_cond = winner.setdefault("condition", {})
+        if winner.get("consecutive_wins", 0) >= 2:
+            w_cond["morale"] = "high"
+            w_cond["momentum"] = "rising"
+        else:
+            w_cond["morale"] = "neutral"
+            w_cond["momentum"] = "neutral"
+
+        l_cond = loser.setdefault("condition", {})
+        if loser["consecutive_losses"] >= 2:
+            l_cond["morale"] = "low"
+            l_cond["momentum"] = "falling"
+        else:
+            l_cond["morale"] = "neutral"
+            l_cond["momentum"] = "neutral"
 
         self._apply_injury(winner, is_winner=True, method=method)
         self._apply_injury(loser, is_winner=False, method=method)
@@ -420,6 +454,7 @@ class LeagueSimulator:
                 "round_ended": final_round,
             },
             "date": self.world_state["current_date"],
+            "start_time": start_time,
         }
         self.season_matches.append(match_record)
 
@@ -533,10 +568,10 @@ class LeagueSimulator:
         )
         self.world_state["promotion_fights"] = matchups
 
-        champ_rankings = tier_rankings.get("championship", [])
+        champ_rankings = tier_rankings.get("apex", [])
         belt_holder = self.world_state.get("belt_holder_id", "")
 
-        if belt_holder and belt_holder in [f["id"] for f in self.fighters.values() if f.get("status") == "active" and f.get("tier") == "championship"]:
+        if belt_holder and belt_holder in [f["id"] for f in self.fighters.values() if f.get("status") == "active" and f.get("tier") == "apex"]:
             challengers = [fid for fid in champ_rankings if fid != belt_holder]
             if challengers:
                 self.world_state["title_fight"] = {
@@ -563,6 +598,7 @@ class LeagueSimulator:
 
     def _simulate_promotion_month(self):
         promotion_results = []
+        fight_idx = 0
         for matchup in self.world_state.get("promotion_fights", []):
             upper_id = matchup["upper_fighter_id"]
             lower_id = matchup["lower_fighter_id"]
@@ -574,7 +610,8 @@ class LeagueSimulator:
             if upper.get("status") != "active" or lower.get("status") != "active":
                 continue
 
-            match = self._run_single_fight(upper_id, lower_id)
+            match = self._run_single_fight(upper_id, lower_id, start_time=get_fight_start_time("contender", fight_idx))
+            fight_idx += 1
             winner_id = match["outcome"]["winner_id"]
             loser_id = match["outcome"]["loser_id"]
 
@@ -600,12 +637,12 @@ class LeagueSimulator:
 
         eligible_champs = [
             fid for fid, f in self.fighters.items()
-            if f.get("status") == "active" and f.get("tier") == "championship"
+            if f.get("status") == "active" and f.get("tier") == "apex"
         ]
 
         def _is_eligible(fid):
             f = self.fighters.get(fid)
-            return f and f.get("status") == "active" and f.get("tier") == "championship"
+            return f and f.get("status") == "active" and f.get("tier") == "apex"
 
         if not _is_eligible(champ_id):
             champ_id = ""
@@ -620,7 +657,7 @@ class LeagueSimulator:
                 challenger_id = fallbacks[0]
 
         if champ_id and challenger_id:
-            match = self._run_single_fight(champ_id, challenger_id)
+            match = self._run_single_fight(champ_id, challenger_id, start_time=get_fight_start_time("apex", 0))
             winner_id = match["outcome"]["winner_id"]
             loser_id = match["outcome"]["loser_id"]
             season = self.world_state["season_number"]
@@ -644,13 +681,13 @@ class LeagueSimulator:
 
     def _recalculate_all_rankings(self):
         active_fighters = [f for f in self.fighters.values() if f.get("status") == "active"]
-        for tier in ["championship", "contender", "underground"]:
+        for tier in ["apex", "contender", "underground"]:
             self.world_state["tier_rankings"][tier] = calculate_tier_rankings(
                 active_fighters, tier, self.season_matches
             )
 
     def _print_tier_rosters(self):
-        for tier in ["championship", "contender", "underground"]:
+        for tier in ["apex", "contender", "underground"]:
             fighters_in_tier = [f for f in self.fighters.values() if f.get("tier") == tier and f.get("status") == "active"]
             fighters_in_tier.sort(key=lambda f: sum(f["stats"].get(s, 0) for s in CORE_STATS), reverse=True)
             print(f"\n  {tier.upper()} ({len(fighters_in_tier)} fighters):")
@@ -741,15 +778,15 @@ class LeagueSimulator:
                 pct = count / len(self.all_retired) * 100
                 print(f"      {reason:30s}: {count:3d} ({pct:.0f}%)")
 
-        reached_championship = sum(1 for r in self.all_retired if r.get("peak_tier") == "championship")
-        reached_contender = sum(1 for r in self.all_retired if r.get("peak_tier") in ("championship", "contender"))
+        reached_apex = sum(1 for r in self.all_retired if r.get("peak_tier") == "apex")
+        reached_contender = sum(1 for r in self.all_retired if r.get("peak_tier") in ("apex", "contender"))
         total_ret = max(1, len(self.all_retired))
         print(f"\n  TIER MOBILITY:")
-        print(f"    Reached Championship:      {reached_championship}/{total_ret} ({reached_championship/total_ret*100:.0f}%)")
+        print(f"    Reached Apex:              {reached_apex}/{total_ret} ({reached_apex/total_ret*100:.0f}%)")
         print(f"    Reached Contender+:        {reached_contender}/{total_ret} ({reached_contender/total_ret*100:.0f}%)")
         print(f"    Never left Underground:    {total_ret - reached_contender}/{total_ret} ({(total_ret - reached_contender)/total_ret*100:.0f}%)")
 
-        champ_careers = [r.get("career_seasons", 0) for r in self.all_retired if r.get("peak_tier") == "championship"]
+        champ_careers = [r.get("career_seasons", 0) for r in self.all_retired if r.get("peak_tier") == "apex"]
         if champ_careers:
             print(f"    Avg career of champ-tier:  {sum(champ_careers)/len(champ_careers):.1f} seasons")
 
@@ -793,10 +830,10 @@ class LeagueSimulator:
         for r in self.all_retired:
             snap = r.get("_fighter_snapshot", {})
             entered_age = snap.get("_entered_age", 18)
-            if r.get("peak_tier") in ("championship", "contender") and entered_age >= 28:
+            if r.get("peak_tier") in ("apex", "contender") and entered_age >= 28:
                 pass
             career_s = r.get("career_seasons", 0)
-            if r.get("peak_tier") in ("championship", "contender") and career_s >= 5:
+            if r.get("peak_tier") in ("apex", "contender") and career_s >= 5:
                 late_bloomers.append(r)
         print(f"    Long-road veterans (5+ to top): {len(late_bloomers)}")
 
@@ -842,7 +879,7 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Print per-season details")
     args = parser.parse_args()
 
-    sim = LeagueSimulator(seed=args.seed, verbose=args.verbose)
+    sim = LeagueSimulator(seed=args.seed, verbose=args.verbose, total_seasons=args.seasons)
     sim.generate_initial_roster()
 
     print(f"Simulating {args.seasons} seasons (seed={args.seed})...")

@@ -65,6 +65,7 @@ class Match:
     id: str = ""
     event_id: str = ""
     date: str = ""
+    start_time: str = ""
     fighter1_id: str = ""
     fighter1_name: str = ""
     fighter2_id: str = ""
@@ -95,6 +96,7 @@ class Match:
             id=d.get("id", ""),
             event_id=d.get("event_id", ""),
             date=d.get("date", ""),
+            start_time=d.get("start_time", ""),
             fighter1_id=d.get("fighter1_id", ""),
             fighter1_name=d.get("fighter1_name", ""),
             fighter2_id=d.get("fighter2_id", ""),

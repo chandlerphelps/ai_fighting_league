@@ -47,6 +47,12 @@ export interface Move {
   image_snapshot?: string
 }
 
+export interface TierRecord {
+  wins: number
+  losses: number
+  draws: number
+}
+
 export interface Fighter {
   id: string
   ring_name: string
@@ -86,5 +92,6 @@ export interface Fighter {
   peak_tier?: string
   career_season_count?: number
   seasons_in_current_tier?: number
+  tier_records?: Record<string, TierRecord>
   _available_images?: string[]
 }

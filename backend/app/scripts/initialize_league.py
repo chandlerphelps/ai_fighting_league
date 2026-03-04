@@ -2,6 +2,7 @@ import argparse
 import json
 import shutil
 import sys
+from datetime import date
 from pathlib import Path
 
 from app.scripts.simulate_seasons import LeagueSimulator
@@ -32,7 +33,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
     data_manager.ensure_data_dirs(config)
 
     print(f"Generating league and simulating {seasons} seasons (seed={seed})...")
-    sim = LeagueSimulator(seed=seed, verbose=verbose)
+    sim = LeagueSimulator(seed=seed, verbose=verbose, total_seasons=seasons)
     sim.generate_initial_roster()
 
     for s in range(seasons):
@@ -70,6 +71,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
             "round_ended": outcome.get("round_ended", 0),
             "tier": f1.get("tier", "underground"),
             "date": match.get("date", ""),
+            "start_time": match.get("start_time", ""),
         })
 
     season_summaries = []
@@ -86,12 +88,13 @@ def initialize_league(seasons=30, seed=42, verbose=False):
             "tier_counts": log.get("tier_counts_after", {}),
         })
 
+    today = date.today()
     ws = {
-        "current_date": sim.world_state.get("current_date", ""),
+        "current_date": today.isoformat(),
         "day_number": sim.world_state.get("day_number", 0),
         "season_number": sim.world_state["season_number"],
-        "season_month": sim.world_state["season_month"],
-        "season_day_in_month": sim.world_state["season_day_in_month"],
+        "season_month": today.month,
+        "season_day_in_month": today.day,
         "tier_rankings": sim.world_state["tier_rankings"],
         "belt_holder_id": sim.world_state.get("belt_holder_id", ""),
         "belt_history": sim.world_state.get("belt_history", []),
@@ -103,7 +106,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
         "season_logs": season_summaries,
         "promotion_fights": [],
         "title_fight": {},
-        "rankings": list(sim.world_state["tier_rankings"].get("championship", []))
+        "rankings": list(sim.world_state["tier_rankings"].get("apex", []))
             + list(sim.world_state["tier_rankings"].get("contender", []))
             + list(sim.world_state["tier_rankings"].get("underground", [])),
         "upcoming_events": [],
@@ -121,7 +124,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
         print(f"\n  Latest Season Champion: {latest_champ['ring_name']}")
     else:
         print(f"\n  Latest Season Champion: None")
-    print(f"  Championship: {len(ws['tier_rankings']['championship'])} fighters")
+    print(f"  Apex: {len(ws['tier_rankings']['apex'])} fighters")
     print(f"  Contender: {len(ws['tier_rankings']['contender'])} fighters")
     print(f"  Underground: {len(ws['tier_rankings']['underground'])} fighters")
 
