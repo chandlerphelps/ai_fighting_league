@@ -226,6 +226,35 @@ BODY_REF_QUALITY = (
 )
 
 
+MALE_BODY_REF_PAGE_STYLE = (
+    "artist anatomy study page, figure drawing body part studies, "
+    "separate isolated body part drawings arranged on the page, "
+    "three drawings in a row: face on the left, front body in the center, back body on the right, "
+    "each body part cropped and drawn individually with space between them, "
+    "clean off-white parchment background, organized sketchbook page layout, "
+    "absolutely no text no words no letters no labels no captions no watermarks, "
+    "drawing guide extremely detailed anatomy"
+)
+
+MALE_BODY_REF_LAYOUT = (
+    "three separate drawings arranged in a row: "
+    "face portrait on the left, "
+    "front full-body view in underwear in the center, "
+    "rear full-body view in underwear on the right, "
+    "clear empty space between each drawing, "
+    "each drawing floats independently"
+)
+
+MALE_BODY_REF_QUALITY = (
+    "hand-painted textures, extremely detailed, anatomical precision, "
+    "figure drawing study quality, "
+    "each drawing rendered as its own separate floating illustration, "
+    "soft even lighting, clean parchment background, "
+    "masculine imposing physique, "
+    "no text no words no labels no watermarks"
+)
+
+
 def build_body_reference_prompt(
     body_parts: str,
     expression: str,
@@ -242,7 +271,8 @@ def build_body_reference_prompt(
     anatomy = ""
     if body_type_details:
         body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
-        anatomy = _build_nsfw_anatomy_line(body_type_details)
+        if not is_male:
+            anatomy = _build_nsfw_anatomy_line(body_type_details)
 
     if subtype_info:
         body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
@@ -256,93 +286,117 @@ def build_body_reference_prompt(
     base_style = BODY_REF_STYLE_MALE if is_male else BODY_REF_STYLE_FEMALE
 
     if is_male:
-        layout = BODY_REF_LAYOUT.format(
-            torso_detail="chest and abs",
-            intimate_label="male",
-        )
-        butt_size = (
-            body_type_details.get("butt_size", "muscular")
+        chest_build = (
+            body_type_details.get("chest_build", "defined pecs")
             if body_type_details
-            else "muscular"
+            else "defined pecs"
         )
-        rear_angled_panel = (
-            f"isolated nude rear view at an angle, "
-            f"bent forward back very arched, "
-            f"{butt_size} muscular glutes, low rear angle looking up, "
-            f"hands raised above head"
-        )
-        chest_panel = (
-            f"isolated nude male torso drawing from collarbone to hips, "
-            f"bare chest, defined pecs, abs, navel visible, front view"
-        )
-        butt_panel = (
-            f"isolated nude male butt study, rear view directly behind, "
-            f"bent forward with back arched and butt popped out toward viewer, "
-            f"{butt_size} muscular glutes, low rear angle looking up"
-        )
-        intimate_panel = (
-            f"isolated nude male intimate study from navel to mid-thigh, "
-            f"legs apart, front view, fully nude, extremely detailed"
-        )
-    else:
-        layout = BODY_REF_LAYOUT.format(
-            torso_detail="breasts",
-            intimate_label="spread-leg",
-        )
-        breast_size = (
-            body_type_details.get("breast_size", "medium")
+        muscle_def = (
+            body_type_details.get("muscle_definition", "toned and defined")
             if body_type_details
-            else "medium"
+            else "toned and defined"
         )
-        nipple_size = (
-            body_type_details.get("nipple_size", "medium")
+        shoulder_width = (
+            body_type_details.get("shoulder_width", "broad")
             if body_type_details
-            else "medium"
+            else "broad"
         )
-        butt_size = (
-            body_type_details.get("butt_size", "medium round")
-            if body_type_details
-            else "medium round"
+
+        face_panel = (
+            f"isolated face and neck portrait drawing, "
+            f"{expression}, three-quarter angle, masculine features"
         )
-        vulva_type = (
-            body_type_details.get("vulva_type", "") if body_type_details else ""
+        front_panel = (
+            f"isolated full-body front view in fitted boxer briefs, "
+            f"standing tall, {chest_build} chest, {muscle_def} physique, "
+            f"{shoulder_width} shoulders, imposing stance, "
+            f"detailed muscle definition visible, front view"
         )
-        rear_angled_panel = (
-            f"isolated nude rear view at an angle, "
-            f"bent forward back very arched sensuously, "
-            f"{butt_size} butt with natural curvature, low rear angle looking up, "
-            f"explicit detail, hands raised above head"
+        back_panel = (
+            f"isolated full-body rear view in fitted boxer briefs, "
+            f"standing tall, {shoulder_width} shoulders, muscular back, "
+            f"{muscle_def} physique, rear view"
         )
-        chest_panel = (
-            f"isolated nude female torso drawing from collarbone to hips, "
-            f"{breast_size} breasts with {nipple_size} nipples, "
-            f"natural breast shape and weight, defined collarbone, "
-            f"slight ab definition on toned flat stomach, navel visible, "
-            f"medium waist, front view"
-        )
-        butt_panel = (
-            f"isolated nude female butt study, rear view directly behind, "
-            f"bent forward sensuously with back arched and butt popped out toward viewer, "
-            f"{butt_size} butt with natural curvature, "
-            f"asshole and pussy visible from behind between spread cheeks, "
-            f"low rear angle looking up, explicit detail, hands spreading ass cheeks"
-        )
-        intimate_panel = (
-            f"isolated nude female intimate study from navel to mid-thigh, "
-            f"legs up and spread apart, "
-            f"{vulva_type} fully visible and detailed, "
-            f"front view, extremely detailed pussy, perfectly drawn anatomically accurate"
-            if vulva_type
-            else "isolated nude female intimate study from navel to mid-thigh, "
-            "legs up and spread apart, "
-            "tasteful outer labia fully visible and detailed, "
-            "front view, extremely detailed pussy, perfectly drawn anatomically accurate"
-        )
+
+        sections = [
+            f"[STYLE] {base_style}, {MALE_BODY_REF_PAGE_STYLE}",
+            f"[LAYOUT] {MALE_BODY_REF_LAYOUT}",
+            f"[SUBJECT] {subject}, all drawings belong to the same single character",
+            f"[LEFT: FACE] {face_panel}",
+            f"[CENTER: FRONT BODY] {front_panel}",
+            f"[RIGHT: BACK BODY] {back_panel}",
+            f"[QUALITY] {MALE_BODY_REF_QUALITY}",
+        ]
+        full = "\n".join(s for s in sections if s)
+
+        return {
+            "body_parts": body_parts,
+            "expression": expression,
+            "anatomy": "",
+            "full_prompt": full,
+        }
+
+    layout = BODY_REF_LAYOUT.format(
+        torso_detail="breasts",
+        intimate_label="spread-leg",
+    )
+    breast_size = (
+        body_type_details.get("breast_size", "medium")
+        if body_type_details
+        else "medium"
+    )
+    nipple_size = (
+        body_type_details.get("nipple_size", "medium")
+        if body_type_details
+        else "medium"
+    )
+    butt_size = (
+        body_type_details.get("butt_size", "medium round")
+        if body_type_details
+        else "medium round"
+    )
+    vulva_type = (
+        body_type_details.get("vulva_type", "") if body_type_details else ""
+    )
+    rear_angled_panel = (
+        f"isolated nude rear view at an angle, "
+        f"bent forward back very arched sensuously, "
+        f"{butt_size} butt with natural curvature, low rear angle looking up, "
+        f"explicit detail, hands raised above head"
+    )
+    chest_panel = (
+        f"isolated nude female torso drawing from collarbone to hips, "
+        f"{breast_size} breasts with {nipple_size} nipples, "
+        f"natural breast shape and weight, defined collarbone, "
+        f"slight ab definition on toned flat stomach, navel visible, "
+        f"medium waist, front view"
+    )
+    butt_panel = (
+        f"isolated nude female butt study, rear view directly behind, "
+        f"bent forward sensuously with back arched and butt popped out toward viewer, "
+        f"{butt_size} butt with natural curvature, "
+        f"asshole and pussy visible from behind between spread cheeks, "
+        f"low rear angle looking up, explicit detail, hands spreading ass cheeks"
+    )
+    intimate_panel = (
+        f"isolated nude female intimate study from navel to mid-thigh, "
+        f"legs up and spread apart, "
+        f"{vulva_type} fully visible and detailed, "
+        f"front view, extremely detailed pussy, perfectly drawn anatomically accurate"
+        if vulva_type
+        else "isolated nude female intimate study from navel to mid-thigh, "
+        "legs up and spread apart, "
+        "tasteful outer labia fully visible and detailed, "
+        "front view, extremely detailed pussy, perfectly drawn anatomically accurate"
+    )
 
     face_panel = (
         f"isolated face and neck portrait drawing, "
         f"{expression}, three-quarter angle"
     )
+
+    if body_type_details:
+        anatomy = _build_nsfw_anatomy_line(body_type_details)
 
     sections = [
         f"[STYLE] {base_style}, {BODY_REF_PAGE_STYLE}",

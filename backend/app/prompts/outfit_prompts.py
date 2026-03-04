@@ -1,7 +1,9 @@
 from app.engine.fighter_config import (
     SKIMPINESS_LEVELS,
+    MALE_SKIMPINESS_LEVELS,
     ARCHETYPE_DESCRIPTIONS,
     ARCHETYPE_SUBTYPES,
+    ARCHETYPE_SUBTYPES_MALE,
     _build_body_shape_line,
     _build_nsfw_anatomy_line,
 )
@@ -29,7 +31,16 @@ def build_tier_prompt(
     outfit_options: dict | None = None,
     tech_level: str = "",
 ) -> str:
-    level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
+    gender = character_summary.get("gender", "female")
+    is_male = gender.lower() == "male"
+
+    if is_male:
+        if tier == "nsfw":
+            tier = "barely"
+        level = MALE_SKIMPINESS_LEVELS.get(skimpiness_level, MALE_SKIMPINESS_LEVELS[2])
+    else:
+        level = SKIMPINESS_LEVELS.get(skimpiness_level, SKIMPINESS_LEVELS[2])
+
     sig = character_summary.get("iconic_features", "")
     ring_name = character_summary.get("ring_name", "Unknown")
     body_parts = character_summary.get("image_prompt_body_parts", "")
@@ -55,8 +66,9 @@ def build_tier_prompt(
         if arch_desc:
             archetype_str += f" — {arch_desc}"
         if subtype:
+            subtype_source = ARCHETYPE_SUBTYPES_MALE if is_male else ARCHETYPE_SUBTYPES
             subtype_desc = ""
-            for st in ARCHETYPE_SUBTYPES.get(arch_key, []):
+            for st in subtype_source.get(arch_key, []):
                 if st["name"].lower() == subtype.lower():
                     subtype_desc = st["description"]
                     break
@@ -162,7 +174,7 @@ RULES:
 
 The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
-POSE: Also generate a short personality pose for this tier — suggestive, flirty, showing off the outfit and sex appeal. 5-10 words max.
+POSE: Also generate a short personality pose for this tier — {"intimidating, powerful, showing off raw physicality. 5-10 words max." if is_male else "suggestive, flirty, showing off the outfit and sex appeal. 5-10 words max."}
 
 Return ONLY valid JSON:
 {{

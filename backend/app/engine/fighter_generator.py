@@ -12,6 +12,7 @@ from app.engine.fighter_config import (
     ARCHETYPES_FEMALE,
     ARCHETYPES_MALE,
     SKIMPINESS_LEVELS,
+    MALE_SKIMPINESS_LEVELS,
     TECH_LEVELS,
     _roll_skimpiness,
     _roll_body_traits,
@@ -144,6 +145,19 @@ def generate_fighter(
     outfit_options_by_tier: dict | None = None,
     skimpiness_level: int | None = None,
 ) -> Fighter:
+    planned_gender = "female"
+    if roster_plan_entry:
+        planned_gender = roster_plan_entry.get("gender", "female")
+    if archetype and not planned_gender:
+        arch_key = (
+            f"The {archetype}"
+            if not archetype.startswith("The ")
+            else archetype
+        )
+        if arch_key in [a for a in ARCHETYPES_MALE]:
+            planned_gender = "male"
+    is_male = planned_gender.lower() == "male"
+
     if roster_plan_entry:
         blueprint_text = (
             "BLUEPRINT DIRECTIVE — you MUST follow this plan for the character:\n"
@@ -165,16 +179,18 @@ def generate_fighter(
 
     subtype_info = None
     if roster_plan_entry and roster_plan_entry.get("subtype"):
-        subtype_info = _find_subtype(archetype, roster_plan_entry["subtype"])
+        subtype_info = _find_subtype(
+            archetype, roster_plan_entry["subtype"], gender=planned_gender
+        )
     if subtype_info is None:
-        subtype_info = _roll_subtype(archetype)
+        subtype_info = _roll_subtype(archetype, gender=planned_gender)
 
     if subtype_info:
         blueprint_text += (
             f"\n\nSUBTYPE: {subtype_info['name']} — {subtype_info['description']}"
         )
 
-    body_traits = _roll_body_traits(archetype, subtype=subtype_info)
+    body_traits = _roll_body_traits(archetype, subtype=subtype_info, gender=planned_gender)
     body_directive = _build_body_directive(body_traits)
 
     supernatural_instruction = ""
@@ -217,6 +233,7 @@ def generate_fighter(
         min_total_stats=config.min_total_stats,
         max_total_stats=config.max_total_stats,
         subtype_info=subtype_info,
+        gender=planned_gender,
     )
 
     result = call_openrouter_json(
@@ -237,17 +254,32 @@ def generate_fighter(
     result["body_type_details"] = body_traits
     result["primary_archetype"] = archetype or ""
     result["subtype"] = subtype_info["name"] if subtype_info else ""
+    result["gender"] = gender
 
     tech_level = random.choice(TECH_LEVELS)
 
-    outfit_data = _generate_outfits(
-        config,
-        result,
-        skimpiness_level,
-        tiers=tiers,
-        outfit_options_by_tier=outfit_options_by_tier,
-        tech_level=tech_level,
-    )
+    if is_male:
+        effective_tiers = tiers or ["sfw", "barely"]
+        effective_tiers = [t for t in effective_tiers if t in ("sfw", "barely")]
+        if not effective_tiers:
+            effective_tiers = ["sfw", "barely"]
+        outfit_data = _generate_outfits(
+            config,
+            result,
+            skimpiness_level,
+            tiers=effective_tiers,
+            outfit_options_by_tier=None,
+            tech_level=tech_level,
+        )
+    else:
+        outfit_data = _generate_outfits(
+            config,
+            result,
+            skimpiness_level,
+            tiers=tiers,
+            outfit_options_by_tier=outfit_options_by_tier,
+            tech_level=tech_level,
+        )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})
 
@@ -263,6 +295,41 @@ def generate_fighter(
 
     lr = round(random.uniform(0.7, 1.4), 2)
     we = round(random.uniform(0.6, 1.3), 2)
+
+    barely_prompt = _build_charsheet_prompt(
+        body_parts,
+        clothing,
+        expression,
+        personality_pose=pose_barely,
+        tier="barely",
+        gender=gender,
+        skimpiness_level=skimpiness_level,
+        body_type_details=body_traits,
+        origin=origin,
+        subtype_info=subtype_info,
+        iconic_features=iconic_features,
+        age=result.get("age", 25),
+    )
+
+    if is_male:
+        nsfw_prompt = barely_prompt
+        ring_attire_nsfw = outfit_data.get("ring_attire", "")
+    else:
+        nsfw_prompt = _build_charsheet_prompt(
+            body_parts,
+            clothing_nsfw,
+            expression,
+            personality_pose=pose_nsfw,
+            tier="nsfw",
+            gender=gender,
+            skimpiness_level=skimpiness_level,
+            body_type_details=body_traits,
+            origin=origin,
+            subtype_info=subtype_info,
+            iconic_features=iconic_features,
+            age=result.get("age", 25),
+        )
+        ring_attire_nsfw = outfit_data.get("ring_attire_nsfw", "")
 
     return Fighter(
         id=fighter_id,
@@ -282,7 +349,7 @@ def generate_fighter(
         image_prompt_personality_pose=personality_pose,
         ring_attire=outfit_data.get("ring_attire", ""),
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
-        ring_attire_nsfw=outfit_data.get("ring_attire_nsfw", ""),
+        ring_attire_nsfw=ring_attire_nsfw,
         skimpiness_level=skimpiness_level,
         tech_level=tech_level,
         image_prompt_body_ref=build_body_reference_prompt(
@@ -294,20 +361,7 @@ def generate_fighter(
             subtype_info=subtype_info,
             age=result.get("age", 25),
         ),
-        image_prompt=_build_charsheet_prompt(
-            body_parts,
-            clothing,
-            expression,
-            personality_pose=pose_barely,
-            tier="barely",
-            gender=gender,
-            skimpiness_level=skimpiness_level,
-            body_type_details=body_traits,
-            origin=origin,
-            subtype_info=subtype_info,
-            iconic_features=iconic_features,
-            age=result.get("age", 25),
-        ),
+        image_prompt=barely_prompt,
         image_prompt_sfw=_build_charsheet_prompt(
             body_parts,
             clothing_sfw,
@@ -322,25 +376,12 @@ def generate_fighter(
             iconic_features=iconic_features,
             age=result.get("age", 25),
         ),
-        image_prompt_nsfw=_build_charsheet_prompt(
-            body_parts,
-            clothing_nsfw,
-            expression,
-            personality_pose=pose_nsfw,
-            tier="nsfw",
-            gender=gender,
-            skimpiness_level=skimpiness_level,
-            body_type_details=body_traits,
-            origin=origin,
-            subtype_info=subtype_info,
-            iconic_features=iconic_features,
-            age=result.get("age", 25),
-        ),
+        image_prompt_nsfw=nsfw_prompt,
         stats=stats,
         record=Record(),
         condition=Condition(),
         storyline_log=[],
-        outfit_suggestions=outfit_suggestions,
+        outfit_suggestions=outfit_suggestions if not is_male else {},
         body_type_details=body_traits,
         rivalries=[],
         last_fight_date=None,

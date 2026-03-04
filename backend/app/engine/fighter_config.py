@@ -147,6 +147,484 @@ ARCHETYPES_MALE = [
     "The Experiment",
 ]
 
+MALE_BODY_TRAIT_OPTIONS = {
+    "build_type": [
+        "lean and wiry",
+        "athletic and cut",
+        "thick and powerful",
+        "massive and hulking",
+    ],
+    "muscle_definition": [
+        "naturally lean",
+        "toned and defined",
+        "heavily muscled",
+        "freakishly jacked",
+    ],
+    "body_fat_pct": [
+        "shredded 8-12%",
+        "lean 12-15%",
+        "athletic 15-18%",
+        "thick 18-22%",
+    ],
+    "shoulder_width": ["narrow", "broad", "very broad", "impossibly wide"],
+    "chest_build": [
+        "flat and lean",
+        "defined pecs",
+        "barrel-chested",
+        "massive slabs",
+    ],
+    "waist": ["narrow v-taper", "medium", "thick core", "blocky powerlifter"],
+    "face_shape": [
+        "sharp angular",
+        "square jaw",
+        "broad and flat",
+        "gaunt hollow",
+        "rugged weathered",
+    ],
+    "eye_expression": [
+        "cold dead",
+        "predatory",
+        "calculating",
+        "wild unhinged",
+        "focused intense",
+    ],
+    "facial_hair": [
+        "clean-shaven",
+        "stubble",
+        "full beard",
+        "mustache",
+        "goatee",
+    ],
+}
+
+MALE_BODY_PROFILES = {
+    "Lean": {
+        "body_fat_pct": ["shredded 8-12%", "lean 12-15%"],
+        "muscle_definition": ["naturally lean", "toned and defined"],
+        "shoulder_width": ["narrow", "broad"],
+        "chest_build": ["flat and lean", "defined pecs"],
+        "build_type": ["lean and wiry"],
+        "waist": ["narrow v-taper", "medium"],
+    },
+    "Athletic": {
+        "body_fat_pct": ["lean 12-15%", "athletic 15-18%"],
+        "muscle_definition": ["toned and defined", "heavily muscled"],
+        "shoulder_width": ["broad", "very broad"],
+        "chest_build": ["defined pecs", "barrel-chested"],
+        "build_type": ["athletic and cut"],
+        "waist": ["narrow v-taper", "medium"],
+    },
+    "Muscular": {
+        "body_fat_pct": ["athletic 15-18%", "thick 18-22%"],
+        "muscle_definition": ["heavily muscled", "freakishly jacked"],
+        "shoulder_width": ["very broad", "impossibly wide"],
+        "chest_build": ["barrel-chested", "massive slabs"],
+        "build_type": ["thick and powerful"],
+        "waist": ["medium", "thick core"],
+    },
+    "Massive": {
+        "body_fat_pct": ["thick 18-22%", "athletic 15-18%"],
+        "muscle_definition": ["freakishly jacked", "heavily muscled"],
+        "shoulder_width": ["impossibly wide", "very broad"],
+        "chest_build": ["massive slabs", "barrel-chested"],
+        "build_type": ["massive and hulking"],
+        "waist": ["thick core", "blocky powerlifter"],
+    },
+}
+
+MALE_ARCHETYPE_BODY_PROFILE_WEIGHTS = {
+    "The Brute": {"Lean": 5, "Athletic": 15, "Muscular": 30, "Massive": 50},
+    "The Veteran": {"Lean": 20, "Athletic": 40, "Muscular": 30, "Massive": 10},
+    "The Monster": {"Lean": 0, "Athletic": 10, "Muscular": 30, "Massive": 60},
+    "The Technician": {"Lean": 35, "Athletic": 40, "Muscular": 20, "Massive": 5},
+    "The Wildcard": {"Lean": 30, "Athletic": 35, "Muscular": 25, "Massive": 10},
+    "The Mystic": {"Lean": 35, "Athletic": 35, "Muscular": 25, "Massive": 5},
+    "The Prodigy": {"Lean": 30, "Athletic": 45, "Muscular": 20, "Massive": 5},
+    "The Experiment": {"Lean": 10, "Athletic": 25, "Muscular": 40, "Massive": 25},
+}
+
+MALE_ARCHETYPE_HEIGHT_RANGES = {
+    "The Brute": (72, 78),
+    "The Veteran": (69, 75),
+    "The Monster": (74, 80),
+    "The Technician": (68, 74),
+    "The Wildcard": (68, 75),
+    "The Mystic": (69, 75),
+    "The Prodigy": (69, 74),
+    "The Experiment": (70, 77),
+}
+
+MALE_ARCHETYPE_BODY_WEIGHTS = {
+    "The Brute": {
+        "muscle_definition": {
+            "naturally lean": 5,
+            "toned and defined": 15,
+            "heavily muscled": 40,
+            "freakishly jacked": 40,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 5,
+            "lean 12-15%": 15,
+            "athletic 15-18%": 35,
+            "thick 18-22%": 45,
+        },
+        "shoulder_width": {
+            "narrow": 2,
+            "broad": 15,
+            "very broad": 40,
+            "impossibly wide": 43,
+        },
+        "chest_build": {
+            "flat and lean": 2,
+            "defined pecs": 13,
+            "barrel-chested": 40,
+            "massive slabs": 45,
+        },
+        "facial_hair": {
+            "clean-shaven": 10,
+            "stubble": 30,
+            "full beard": 35,
+            "mustache": 10,
+            "goatee": 15,
+        },
+        "eye_expression": {
+            "cold dead": 20,
+            "predatory": 35,
+            "calculating": 5,
+            "wild unhinged": 30,
+            "focused intense": 10,
+        },
+        "waist": {
+            "narrow v-taper": 5,
+            "medium": 20,
+            "thick core": 40,
+            "blocky powerlifter": 35,
+        },
+    },
+    "The Veteran": {
+        "muscle_definition": {
+            "naturally lean": 10,
+            "toned and defined": 40,
+            "heavily muscled": 40,
+            "freakishly jacked": 10,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 10,
+            "lean 12-15%": 35,
+            "athletic 15-18%": 40,
+            "thick 18-22%": 15,
+        },
+        "shoulder_width": {
+            "narrow": 5,
+            "broad": 40,
+            "very broad": 40,
+            "impossibly wide": 15,
+        },
+        "chest_build": {
+            "flat and lean": 5,
+            "defined pecs": 40,
+            "barrel-chested": 40,
+            "massive slabs": 15,
+        },
+        "facial_hair": {
+            "clean-shaven": 15,
+            "stubble": 35,
+            "full beard": 25,
+            "mustache": 15,
+            "goatee": 10,
+        },
+        "eye_expression": {
+            "cold dead": 15,
+            "predatory": 20,
+            "calculating": 35,
+            "wild unhinged": 5,
+            "focused intense": 25,
+        },
+        "waist": {
+            "narrow v-taper": 15,
+            "medium": 45,
+            "thick core": 30,
+            "blocky powerlifter": 10,
+        },
+    },
+    "The Monster": {
+        "muscle_definition": {
+            "naturally lean": 0,
+            "toned and defined": 5,
+            "heavily muscled": 35,
+            "freakishly jacked": 60,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 5,
+            "lean 12-15%": 10,
+            "athletic 15-18%": 30,
+            "thick 18-22%": 55,
+        },
+        "shoulder_width": {
+            "narrow": 0,
+            "broad": 5,
+            "very broad": 30,
+            "impossibly wide": 65,
+        },
+        "chest_build": {
+            "flat and lean": 0,
+            "defined pecs": 5,
+            "barrel-chested": 35,
+            "massive slabs": 60,
+        },
+        "facial_hair": {
+            "clean-shaven": 20,
+            "stubble": 20,
+            "full beard": 35,
+            "mustache": 10,
+            "goatee": 15,
+        },
+        "eye_expression": {
+            "cold dead": 30,
+            "predatory": 30,
+            "calculating": 5,
+            "wild unhinged": 30,
+            "focused intense": 5,
+        },
+        "waist": {
+            "narrow v-taper": 0,
+            "medium": 10,
+            "thick core": 40,
+            "blocky powerlifter": 50,
+        },
+    },
+    "The Technician": {
+        "muscle_definition": {
+            "naturally lean": 25,
+            "toned and defined": 45,
+            "heavily muscled": 25,
+            "freakishly jacked": 5,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 20,
+            "lean 12-15%": 45,
+            "athletic 15-18%": 30,
+            "thick 18-22%": 5,
+        },
+        "shoulder_width": {
+            "narrow": 20,
+            "broad": 45,
+            "very broad": 30,
+            "impossibly wide": 5,
+        },
+        "chest_build": {
+            "flat and lean": 20,
+            "defined pecs": 50,
+            "barrel-chested": 25,
+            "massive slabs": 5,
+        },
+        "facial_hair": {
+            "clean-shaven": 35,
+            "stubble": 30,
+            "full beard": 10,
+            "mustache": 10,
+            "goatee": 15,
+        },
+        "eye_expression": {
+            "cold dead": 10,
+            "predatory": 10,
+            "calculating": 45,
+            "wild unhinged": 5,
+            "focused intense": 30,
+        },
+        "waist": {
+            "narrow v-taper": 35,
+            "medium": 40,
+            "thick core": 20,
+            "blocky powerlifter": 5,
+        },
+    },
+    "The Wildcard": {
+        "muscle_definition": {
+            "naturally lean": 20,
+            "toned and defined": 35,
+            "heavily muscled": 30,
+            "freakishly jacked": 15,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 15,
+            "lean 12-15%": 30,
+            "athletic 15-18%": 35,
+            "thick 18-22%": 20,
+        },
+        "shoulder_width": {
+            "narrow": 15,
+            "broad": 35,
+            "very broad": 35,
+            "impossibly wide": 15,
+        },
+        "chest_build": {
+            "flat and lean": 15,
+            "defined pecs": 35,
+            "barrel-chested": 35,
+            "massive slabs": 15,
+        },
+        "facial_hair": {
+            "clean-shaven": 20,
+            "stubble": 25,
+            "full beard": 20,
+            "mustache": 15,
+            "goatee": 20,
+        },
+        "eye_expression": {
+            "cold dead": 10,
+            "predatory": 15,
+            "calculating": 10,
+            "wild unhinged": 45,
+            "focused intense": 20,
+        },
+        "waist": {
+            "narrow v-taper": 20,
+            "medium": 35,
+            "thick core": 30,
+            "blocky powerlifter": 15,
+        },
+    },
+    "The Mystic": {
+        "muscle_definition": {
+            "naturally lean": 30,
+            "toned and defined": 40,
+            "heavily muscled": 25,
+            "freakishly jacked": 5,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 25,
+            "lean 12-15%": 40,
+            "athletic 15-18%": 30,
+            "thick 18-22%": 5,
+        },
+        "shoulder_width": {
+            "narrow": 15,
+            "broad": 40,
+            "very broad": 35,
+            "impossibly wide": 10,
+        },
+        "chest_build": {
+            "flat and lean": 15,
+            "defined pecs": 45,
+            "barrel-chested": 30,
+            "massive slabs": 10,
+        },
+        "facial_hair": {
+            "clean-shaven": 25,
+            "stubble": 20,
+            "full beard": 30,
+            "mustache": 10,
+            "goatee": 15,
+        },
+        "eye_expression": {
+            "cold dead": 15,
+            "predatory": 10,
+            "calculating": 30,
+            "wild unhinged": 10,
+            "focused intense": 35,
+        },
+        "waist": {
+            "narrow v-taper": 30,
+            "medium": 40,
+            "thick core": 25,
+            "blocky powerlifter": 5,
+        },
+    },
+    "The Prodigy": {
+        "muscle_definition": {
+            "naturally lean": 20,
+            "toned and defined": 50,
+            "heavily muscled": 25,
+            "freakishly jacked": 5,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 20,
+            "lean 12-15%": 45,
+            "athletic 15-18%": 30,
+            "thick 18-22%": 5,
+        },
+        "shoulder_width": {
+            "narrow": 10,
+            "broad": 45,
+            "very broad": 35,
+            "impossibly wide": 10,
+        },
+        "chest_build": {
+            "flat and lean": 10,
+            "defined pecs": 50,
+            "barrel-chested": 30,
+            "massive slabs": 10,
+        },
+        "facial_hair": {
+            "clean-shaven": 40,
+            "stubble": 35,
+            "full beard": 5,
+            "mustache": 5,
+            "goatee": 15,
+        },
+        "eye_expression": {
+            "cold dead": 5,
+            "predatory": 20,
+            "calculating": 20,
+            "wild unhinged": 15,
+            "focused intense": 40,
+        },
+        "waist": {
+            "narrow v-taper": 35,
+            "medium": 40,
+            "thick core": 20,
+            "blocky powerlifter": 5,
+        },
+    },
+    "The Experiment": {
+        "muscle_definition": {
+            "naturally lean": 5,
+            "toned and defined": 20,
+            "heavily muscled": 40,
+            "freakishly jacked": 35,
+        },
+        "body_fat_pct": {
+            "shredded 8-12%": 15,
+            "lean 12-15%": 25,
+            "athletic 15-18%": 35,
+            "thick 18-22%": 25,
+        },
+        "shoulder_width": {
+            "narrow": 5,
+            "broad": 20,
+            "very broad": 40,
+            "impossibly wide": 35,
+        },
+        "chest_build": {
+            "flat and lean": 5,
+            "defined pecs": 20,
+            "barrel-chested": 40,
+            "massive slabs": 35,
+        },
+        "facial_hair": {
+            "clean-shaven": 30,
+            "stubble": 25,
+            "full beard": 15,
+            "mustache": 15,
+            "goatee": 15,
+        },
+        "eye_expression": {
+            "cold dead": 25,
+            "predatory": 20,
+            "calculating": 15,
+            "wild unhinged": 25,
+            "focused intense": 15,
+        },
+        "waist": {
+            "narrow v-taper": 10,
+            "medium": 25,
+            "thick core": 40,
+            "blocky powerlifter": 25,
+        },
+    },
+}
+
 BODY_TRAIT_OPTIONS = {
     "waist": ["narrow", "medium", "wide"],
     "abs_tone": [
@@ -1035,25 +1513,294 @@ ARCHETYPE_SUBTYPES = {
 }
 
 
-def _roll_subtype(archetype: str) -> dict | None:
+ARCHETYPE_SUBTYPES_MALE = {
+    "The Brute": [
+        {
+            "name": "Berserker",
+            "description": "Uncontrollable rage, fights like a cornered animal",
+            "body_profile_bias": {"Massive": +15, "Lean": -15},
+        },
+        {
+            "name": "Enforcer",
+            "description": "Calculated brutality, breaks bones on purpose",
+            "body_profile_bias": {"Muscular": +15, "Lean": -10},
+        },
+        {
+            "name": "Juggernaut",
+            "description": "Unstoppable forward pressure, walks through damage",
+            "body_profile_bias": {"Massive": +20, "Athletic": -15},
+        },
+        {
+            "name": "Brawler",
+            "description": "Street-fighting savagery, no technique just violence",
+            "body_profile_bias": {"Athletic": +10, "Muscular": +10, "Lean": -15},
+        },
+        {
+            "name": "Mauler",
+            "description": "Ground-and-pound specialist, smothering aggression",
+            "body_profile_bias": {"Muscular": +10, "Massive": +10, "Lean": -15},
+        },
+    ],
+    "The Veteran": [
+        {
+            "name": "Grizzled",
+            "description": "Decades of scars, fights on muscle memory alone",
+            "body_profile_bias": {"Athletic": +10, "Muscular": +10, "Lean": -15},
+        },
+        {
+            "name": "Tactician",
+            "description": "Reads opponents like books, always three moves ahead",
+            "body_profile_bias": {"Athletic": +15, "Massive": -10},
+        },
+        {
+            "name": "Warhorse",
+            "description": "Refuses to stay down, legendary toughness",
+            "body_profile_bias": {"Muscular": +15, "Lean": -10},
+        },
+        {
+            "name": "Mentor",
+            "description": "Old guard, still dangerous, teaches through pain",
+            "body_profile_bias": {"Athletic": +10, "Lean": +5, "Massive": -10},
+        },
+        {
+            "name": "Survivor",
+            "description": "Should have died a dozen times, too stubborn to quit",
+            "body_profile_bias": {"Lean": +15, "Massive": -15},
+        },
+    ],
+    "The Monster": [
+        {
+            "name": "Titan",
+            "description": "Godlike size, moves mountains",
+            "body_profile_bias": {"Massive": +20, "Lean": -20},
+        },
+        {
+            "name": "Behemoth",
+            "description": "Living siege engine, destroys everything in his path",
+            "body_profile_bias": {"Massive": +15, "Athletic": -10},
+        },
+        {
+            "name": "Aberration",
+            "description": "Something wrong with his proportions, uncanny and terrifying",
+            "body_profile_bias": {"Muscular": +15, "Athletic": -10},
+        },
+        {
+            "name": "Goliath",
+            "description": "Towering giant, makes other big men look small",
+            "body_profile_bias": {"Massive": +20, "Lean": -15},
+        },
+        {
+            "name": "Nightmare",
+            "description": "The thing you see in the dark, primal fear made flesh",
+            "body_profile_bias": {"Muscular": +10, "Massive": +10, "Lean": -15},
+        },
+    ],
+    "The Technician": [
+        {
+            "name": "Surgeon",
+            "description": "Dissects opponents with clinical precision",
+            "body_profile_bias": {"Lean": +15, "Massive": -15},
+        },
+        {
+            "name": "Analyst",
+            "description": "Studies film obsessively, knows every weakness",
+            "body_profile_bias": {"Athletic": +15, "Massive": -10},
+        },
+        {
+            "name": "Counter-Puncher",
+            "description": "Waits for mistakes then punishes them brutally",
+            "body_profile_bias": {"Athletic": +10, "Lean": +10, "Massive": -15},
+        },
+        {
+            "name": "Chessmaster",
+            "description": "Every move is a setup for the next three",
+            "body_profile_bias": {"Lean": +10, "Athletic": +10, "Massive": -15},
+        },
+        {
+            "name": "Pressure Fighter",
+            "description": "Relentless technical volume, drowns opponents in output",
+            "body_profile_bias": {"Athletic": +15, "Lean": -5},
+        },
+    ],
+    "The Wildcard": [
+        {
+            "name": "Lunatic",
+            "description": "Genuinely unhinged, nobody knows what he'll do next",
+            "body_profile_bias": {"Lean": +15, "Massive": -10},
+        },
+        {
+            "name": "Gambler",
+            "description": "Throws everything on one big moment",
+            "body_profile_bias": {"Athletic": +10, "Lean": +5, "Massive": -10},
+        },
+        {
+            "name": "Trickster",
+            "description": "Dirty tricks, misdirection, fights with his brain",
+            "body_profile_bias": {"Lean": +15, "Athletic": +5, "Massive": -15},
+        },
+        {
+            "name": "Anarchist",
+            "description": "Fights the rules, the ref, and the opponent simultaneously",
+            "body_profile_bias": {"Athletic": +10, "Muscular": +5, "Lean": -10},
+        },
+        {
+            "name": "Showman",
+            "description": "Every fight is a performance, lives for the crowd",
+            "body_profile_bias": {"Athletic": +15, "Lean": -5, "Massive": -5},
+        },
+    ],
+    "The Mystic": [
+        {
+            "name": "Monk",
+            "description": "Disciplined spiritual warrior, fights with inner peace",
+            "body_profile_bias": {"Lean": +15, "Athletic": +5, "Massive": -15},
+        },
+        {
+            "name": "Shaman",
+            "description": "Channels ancestral spirits, fights with otherworldly guidance",
+            "body_profile_bias": {"Athletic": +10, "Lean": +5, "Massive": -10},
+        },
+        {
+            "name": "Sage",
+            "description": "Ancient knowledge, sees the flow of combat",
+            "body_profile_bias": {"Lean": +15, "Massive": -15},
+        },
+        {
+            "name": "Prophet",
+            "description": "Fights with divine conviction, terrifying certainty",
+            "body_profile_bias": {"Athletic": +10, "Muscular": +5, "Lean": -10},
+        },
+        {
+            "name": "Ascetic",
+            "description": "Denied himself everything, forged in deprivation",
+            "body_profile_bias": {"Lean": +20, "Massive": -15},
+        },
+    ],
+    "The Prodigy": [
+        {
+            "name": "Phenom",
+            "description": "Natural athlete, explosive raw talent beyond his years",
+            "body_profile_bias": {"Athletic": +15, "Lean": +5, "Massive": -15},
+        },
+        {
+            "name": "Wunderkind",
+            "description": "Impossibly talented youth, makes veterans look slow",
+            "body_profile_bias": {"Lean": +10, "Athletic": +10, "Massive": -15},
+        },
+        {
+            "name": "Natural",
+            "description": "Born to fight, instinct over training",
+            "body_profile_bias": {"Athletic": +20, "Massive": -15},
+        },
+        {
+            "name": "Heir Apparent",
+            "description": "Next in a legendary bloodline, born with expectations",
+            "body_profile_bias": {"Athletic": +10, "Muscular": +5, "Lean": -10},
+        },
+        {
+            "name": "Prodigy Son",
+            "description": "Father was a legend, son might be better",
+            "body_profile_bias": {"Athletic": +15, "Massive": -10},
+        },
+    ],
+    "The Experiment": [
+        {
+            "name": "Cyborg",
+            "description": "Mechanical augmentation, part machine",
+            "body_profile_bias": {"Muscular": +15, "Lean": -10},
+        },
+        {
+            "name": "Subject Zero",
+            "description": "First successful test subject, unstable but powerful",
+            "body_profile_bias": {"Massive": +15, "Lean": -15},
+        },
+        {
+            "name": "Weapon X",
+            "description": "Military black project, built to kill",
+            "body_profile_bias": {"Muscular": +10, "Athletic": +5, "Lean": -10},
+        },
+        {
+            "name": "Lab Rat",
+            "description": "Escaped experimental facility, body permanently altered",
+            "body_profile_bias": {"Massive": +10, "Muscular": +10, "Athletic": -15},
+        },
+        {
+            "name": "Evolved",
+            "description": "Next stage of human development, something beyond",
+            "body_profile_bias": {"Athletic": +10, "Muscular": +10, "Lean": -15},
+        },
+    ],
+}
+
+MALE_SKIMPINESS_LEVELS = {
+    1: {
+        "sfw_label": "Battle Ready",
+        "sfw_skin_pct": "15-30",
+        "sfw_hard_rules": "Full coverage. Tactical and imposing. No bare chest required.",
+        "sfw_guidance": "Covered and dangerous — tactical gear, armor, jackets, full coverage combat attire. Think military, mercenary, or gladiator in full kit.",
+        "barely_label": "Stripped Down",
+        "barely_skin_pct": "40-55",
+        "barely_hard_rules": "Shirtless or open-chested. Pants/shorts must stay on. Scars and muscle definition should be visible.",
+        "barely_guidance": "Shirtless and imposing — bare chest, dog tags, wraps, combat pants. The body IS the intimidation.",
+    },
+    2: {
+        "sfw_label": "Combat Ready",
+        "sfw_skin_pct": "25-40",
+        "sfw_hard_rules": "No full nudity. Arms and some chest can show. Athletic and dangerous.",
+        "sfw_guidance": "Athletic — tank tops, open vests, sleeveless shirts, combat shorts. Muscular and ready to fight.",
+        "barely_label": "Bare-Knuckle",
+        "barely_skin_pct": "50-65",
+        "barely_hard_rules": "Shirtless. Pants/shorts/trunks stay on. Muscle and scars on full display.",
+        "barely_guidance": "Shirtless warrior — fight trunks, wraps, boots. Raw physicality on display.",
+    },
+    3: {
+        "sfw_label": "Aggressive",
+        "sfw_skin_pct": "35-50",
+        "sfw_hard_rules": "No full nudity. Confident skin exposure. Arms, chest hints, legs showing.",
+        "sfw_guidance": "Bold — cut-off shirts, open jackets, short shorts. Confident and dangerous.",
+        "barely_label": "Gladiator",
+        "barely_skin_pct": "55-70",
+        "barely_hard_rules": "Shirtless. Minimal bottoms acceptable — fight trunks, compression shorts, gladiator skirt. Muscle and scars visible.",
+        "barely_guidance": "Arena warrior — maximum muscle on display, minimal clothing, gladiatorial energy.",
+    },
+    4: {
+        "sfw_label": "Intimidating",
+        "sfw_skin_pct": "40-55",
+        "sfw_hard_rules": "No full nudity. Significant skin showing but still clothed. Imposing presence.",
+        "sfw_guidance": "Maximum intimidation while clothed — open vest, no shirt underneath, low-slung pants. Every scar visible.",
+        "barely_label": "Primal",
+        "barely_skin_pct": "65-80",
+        "barely_hard_rules": "Shirtless. Minimal coverage — fight trunks, loincloth, or compression shorts only. Primal warrior energy.",
+        "barely_guidance": "Primal — barely clothed, maximum muscle, tribal/warrior energy. The outfit is scars, tattoos, and attitude.",
+    },
+}
+
+
+def _get_subtypes_dict(gender: str = "female") -> dict:
+    if gender.lower() == "male":
+        return ARCHETYPE_SUBTYPES_MALE
+    return ARCHETYPE_SUBTYPES
+
+
+def _roll_subtype(archetype: str, gender: str = "female") -> dict | None:
     arch = (
         f"The {archetype}"
         if archetype and not archetype.startswith("The ")
         else archetype
     )
-    subtypes = ARCHETYPE_SUBTYPES.get(arch, [])
+    subtypes = _get_subtypes_dict(gender).get(arch, [])
     if not subtypes:
         return None
     return random.choice(subtypes)
 
 
-def _find_subtype(archetype: str, name: str) -> dict | None:
+def _find_subtype(archetype: str, name: str, gender: str = "female") -> dict | None:
     arch = (
         f"The {archetype}"
         if archetype and not archetype.startswith("The ")
         else archetype
     )
-    subtypes = ARCHETYPE_SUBTYPES.get(arch, [])
+    subtypes = _get_subtypes_dict(gender).get(arch, [])
     for st in subtypes:
         if st["name"].lower() == name.lower():
             return st
@@ -1061,12 +1808,17 @@ def _find_subtype(archetype: str, name: str) -> dict | None:
 
 
 def _weighted_choice(
-    category: str, archetype: str | None, allowed: list[str] | None = None
+    category: str,
+    archetype: str | None,
+    allowed: list[str] | None = None,
+    gender: str = "female",
 ) -> str:
-    options = allowed if allowed else BODY_TRAIT_OPTIONS[category]
+    trait_options = MALE_BODY_TRAIT_OPTIONS if gender.lower() == "male" else BODY_TRAIT_OPTIONS
+    body_weights = MALE_ARCHETYPE_BODY_WEIGHTS if gender.lower() == "male" else ARCHETYPE_BODY_WEIGHTS
+    options = allowed if allowed else trait_options[category]
     weights_dict = {}
-    if archetype and archetype in ARCHETYPE_BODY_WEIGHTS:
-        weights_dict = ARCHETYPE_BODY_WEIGHTS[archetype].get(category, {})
+    if archetype and archetype in body_weights:
+        weights_dict = body_weights[archetype].get(category, {})
     if weights_dict:
         weights = [weights_dict.get(opt, 1) for opt in options]
     else:
@@ -1120,8 +1872,52 @@ def _derive_weight(height_inches: int, traits: dict) -> int:
     return round(base)
 
 
-def _roll_body_profile(archetype: str | None, subtype_bias: dict | None = None) -> str:
-    profile_weights = dict(ARCHETYPE_BODY_PROFILE_WEIGHTS.get(archetype, {}))
+MALE_BODY_FAT_MULTIPLIERS = {
+    "shredded 8-12%": 0.92,
+    "lean 12-15%": 0.97,
+    "athletic 15-18%": 1.02,
+    "thick 18-22%": 1.10,
+}
+
+MALE_BUILD_WEIGHT_BONUS = {
+    "lean and wiry": -5,
+    "athletic and cut": 0,
+    "thick and powerful": 15,
+    "massive and hulking": 35,
+}
+
+MALE_WAIST_MULTIPLIERS = {
+    "narrow v-taper": 0.97,
+    "medium": 1.00,
+    "thick core": 1.04,
+    "blocky powerlifter": 1.08,
+}
+
+
+def _derive_male_weight(height_inches: int, traits: dict) -> int:
+    lean_mass = (height_inches - 60) * 5.0 + 140
+    bf_mult = MALE_BODY_FAT_MULTIPLIERS.get(traits.get("body_fat_pct", ""), 1.0)
+    waist_mult = MALE_WAIST_MULTIPLIERS.get(traits.get("waist", ""), 1.0)
+    base = lean_mass * bf_mult * waist_mult
+    base += MALE_BUILD_WEIGHT_BONUS.get(traits.get("build_type", ""), 0)
+    base += random.randint(-5, 5)
+    return round(base)
+
+
+def _roll_body_profile(
+    archetype: str | None,
+    subtype_bias: dict | None = None,
+    gender: str = "female",
+) -> str:
+    profile_weights_source = (
+        MALE_ARCHETYPE_BODY_PROFILE_WEIGHTS
+        if gender.lower() == "male"
+        else ARCHETYPE_BODY_PROFILE_WEIGHTS
+    )
+    profiles_source = (
+        MALE_BODY_PROFILES if gender.lower() == "male" else BODY_PROFILES
+    )
+    profile_weights = dict(profile_weights_source.get(archetype, {}))
     if profile_weights:
         if subtype_bias:
             for key, adj in subtype_bias.items():
@@ -1130,12 +1926,16 @@ def _roll_body_profile(archetype: str | None, subtype_bias: dict | None = None) 
         profiles = list(profile_weights.keys())
         weights = [profile_weights[p] for p in profiles]
     else:
-        profiles = list(BODY_PROFILES.keys())
+        profiles = list(profiles_source.keys())
         weights = [1] * len(profiles)
     return random.choices(profiles, weights=weights, k=1)[0]
 
 
-def _roll_body_traits(archetype: str | None, subtype: dict | None = None) -> dict:
+def _roll_body_traits(
+    archetype: str | None,
+    subtype: dict | None = None,
+    gender: str = "female",
+) -> dict:
     arch = (
         f"The {archetype}"
         if archetype and not archetype.startswith("The ")
@@ -1143,9 +1943,50 @@ def _roll_body_traits(archetype: str | None, subtype: dict | None = None) -> dic
     )
 
     subtype_bias = subtype.get("body_profile_bias") if subtype else None
-    profile = _roll_body_profile(arch, subtype_bias=subtype_bias)
-    allowed = BODY_PROFILES[profile]
+    is_male = gender.lower() == "male"
+    profile = _roll_body_profile(arch, subtype_bias=subtype_bias, gender=gender)
 
+    if is_male:
+        allowed = MALE_BODY_PROFILES[profile]
+        height_range = MALE_ARCHETYPE_HEIGHT_RANGES.get(arch, (69, 76))
+        height_inches = random.randint(height_range[0], height_range[1])
+
+        traits = {
+            "height_inches": height_inches,
+            "body_profile": profile,
+            "build_type": _weighted_choice(
+                "build_type", arch, allowed.get("build_type"), gender="male"
+            ),
+            "muscle_definition": _weighted_choice(
+                "muscle_definition", arch, allowed.get("muscle_definition"), gender="male"
+            ),
+            "body_fat_pct": _weighted_choice(
+                "body_fat_pct", arch, allowed.get("body_fat_pct"), gender="male"
+            ),
+            "shoulder_width": _weighted_choice(
+                "shoulder_width", arch, allowed.get("shoulder_width"), gender="male"
+            ),
+            "chest_build": _weighted_choice(
+                "chest_build", arch, allowed.get("chest_build"), gender="male"
+            ),
+            "waist": _weighted_choice(
+                "waist", arch, allowed.get("waist"), gender="male"
+            ),
+            "face_shape": _weighted_choice("face_shape", arch, gender="male"),
+            "eye_expression": _weighted_choice("eye_expression", arch, gender="male"),
+            "facial_hair": _weighted_choice("facial_hair", arch, gender="male"),
+        }
+
+        if subtype:
+            traits["subtype"] = subtype["name"]
+
+        weight_lbs = _derive_male_weight(height_inches, traits)
+        traits["height"] = _format_height(height_inches)
+        traits["weight"] = f"{weight_lbs} lbs"
+
+        return traits
+
+    allowed = BODY_PROFILES[profile]
     height_range = ARCHETYPE_HEIGHT_RANGES.get(arch, (59, 71))
     height_inches = random.randint(height_range[0], height_range[1])
 
@@ -1179,6 +2020,8 @@ def _roll_body_traits(archetype: str | None, subtype: dict | None = None) -> dic
 
 
 def _build_body_directive(traits: dict) -> str:
+    if "chest_build" in traits:
+        return _build_male_body_directive(traits)
     makeup_desc = MAKEUP_DESCRIPTIONS.get(
         traits["makeup_level"], traits["makeup_level"]
     )
@@ -1201,11 +2044,40 @@ def _build_body_directive(traits: dict) -> str:
     )
 
 
+def _build_male_body_directive(traits: dict) -> str:
+    return (
+        "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):\n"
+        f"- Build: {traits.get('body_profile', 'Athletic')} — {traits.get('build_type', 'athletic and cut')}\n"
+        f"- Height: {traits['height']}\n"
+        f"- Weight: {traits['weight']}\n"
+        f"- Muscle definition: {traits.get('muscle_definition', 'toned and defined')}\n"
+        f"- Shoulders: {traits.get('shoulder_width', 'broad')}\n"
+        f"- Chest: {traits.get('chest_build', 'defined pecs')}\n"
+        f"- Waist: {traits.get('waist', 'medium')}\n"
+        f"- Body fat: {traits.get('body_fat_pct', 'athletic 15-18%')}\n"
+        f"- Face: {traits.get('face_shape', 'square jaw')}, {traits.get('eye_expression', 'focused intense')} eyes\n"
+        f"- Facial hair: {traits.get('facial_hair', 'stubble')}\n"
+        "\nThe height and weight are EXACT — use these values directly.\n"
+        "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
+        "IMPORTANT: Interpret ALL traits through a DANGEROUS, IMPOSING lens. "
+        "Every combination should result in a threatening, confident character who looks like "
+        "someone you would cross the street to avoid."
+    )
+
+
 def _build_body_shape_line(traits: dict) -> str:
-    return f"{traits['breast_size']} breasts, " f"{traits['butt_size']} butt"
+    if "chest_build" in traits:
+        return f"{traits['chest_build']} chest, {traits.get('shoulder_width', 'broad')} shoulders"
+    return f"{traits['breast_size']} breasts, {traits['butt_size']} butt"
 
 
 def _build_nsfw_anatomy_line(traits: dict) -> str:
+    if "chest_build" in traits:
+        return (
+            f"{traits['chest_build']} chest, "
+            f"{traits.get('muscle_definition', 'toned and defined')} build, "
+            f"{traits.get('shoulder_width', 'broad')} shoulders"
+        )
     return (
         f"{traits['breast_size']} breasts, "
         f"{traits['nipple_size']} nipples, "

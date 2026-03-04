@@ -1,6 +1,6 @@
 import random
 
-from app.engine.fighter_config import ARCHETYPE_SUBTYPES
+from app.engine.fighter_config import ARCHETYPE_SUBTYPES, ARCHETYPE_SUBTYPES_MALE
 
 
 GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
@@ -296,6 +296,66 @@ FULL_CHARACTER_GUIDE = (
 )
 
 
+GUIDE_MALE_PHILOSOPHY = """## Male Character Design Philosophy
+
+### 1. Male Characters Are DANGEROUS — Always
+
+Every male fighter must look like a threat. Not pretty-boy models. Not gym selfie guys.
+These are men who radiate violence. The kind of face and build that makes a room go quiet
+when they walk in. Scarred, weathered, massive, lean and predatory, or unnaturally large.
+
+The design goal is INTIMIDATION and CONFIDENCE, not sex appeal.
+
+### 2. Physicality Tells the Story
+
+Male fighters are physically imposing — larger, heavier, and more powerful than the women.
+Their bodies are weapons: slabs of muscle, dense scarred frames, impossible wingspans,
+cauliflower ears, broken noses, hands like cinder blocks.
+
+Body types range from:
+- Lean and wiry predators (a knife wrapped in skin)
+- Athletic and cut machines (military precision, every muscle visible)
+- Thick and powerful brawlers (barrel-chested, dense, immovable)
+- Massive and hulking monsters (makes doorways look small)
+
+### 3. The Face Sells the Character
+
+Eyes matter most. Cold dead eyes. Predatory focus. Wild unhinged energy. Calculating patience.
+The expression should tell you exactly what kind of violence this man specializes in.
+
+Facial hair, scars, broken features, tattoos — these are the details that make male characters
+memorable. A twice-broken nose. A scar from ear to jaw. Knuckles like gravel.
+
+### 4. Outfits Serve Function and Intimidation
+
+Male outfits are about combat readiness and threat display:
+- Tactical gear, combat pants, boots, wraps
+- Bare-knuckle with hand wraps and tape
+- Military/mercenary aesthetic
+- Gladiatorial — leather, metal, chains
+- Traditional martial arts gi, hakama
+- Street fighting — torn jeans, bare feet, no shirt
+
+The outfit should make you think "this guy fights for real" not "this guy goes to the gym."
+
+### 5. Common Male Design Mistakes
+
+- Making them too clean or pretty. These are fighters, not models.
+- Generic MMA fighter look. Push into archetypes: the scarred veteran, the unhinged wildcard,
+  the silent assassin, the walking mountain.
+- Forgetting scars, damage, and wear. A male fighter's body tells the story of every fight
+  he's survived.
+- Making them one-dimensional brutes. Even the biggest monster needs a personality beyond "angry."
+"""
+
+FULL_MALE_CHARACTER_GUIDE = (
+    GUIDE_MALE_PHILOSOPHY
+    + GUIDE_CREATION_WORKFLOW
+    + GUIDE_VISUAL_DESIGN
+    + GUIDE_COMMON_MISTAKES
+)
+
+
 SYSTEM_PROMPT_ROSTER_PLANNER = (
     "You are a roster architect for a fantasy fighting league. "
     "Design an interconnected cast of compelling characters. "
@@ -308,14 +368,16 @@ SYSTEM_PROMPT_CHARACTER_DESIGNER = (
 )
 
 
-def _shuffled_archetype_names() -> str:
-    names = [k.replace("The ", "") for k in ARCHETYPE_SUBTYPES]
+def _shuffled_archetype_names(gender: str = "female") -> str:
+    source = ARCHETYPE_SUBTYPES_MALE if gender.lower() == "male" else ARCHETYPE_SUBTYPES
+    names = [k.replace("The ", "") for k in source]
     random.shuffle(names)
     return ", ".join(names)
 
 
-def _shuffled_subtype_lines() -> str:
-    items = list(ARCHETYPE_SUBTYPES.items())
+def _shuffled_subtype_lines(gender: str = "female") -> str:
+    source = ARCHETYPE_SUBTYPES_MALE if gender.lower() == "male" else ARCHETYPE_SUBTYPES
+    items = list(source.items())
     random.shuffle(items)
     lines = []
     for arch, subs in items:
@@ -382,6 +444,7 @@ def build_generate_fighter_prompt(
     min_total_stats: int,
     max_total_stats: int,
     subtype_info: dict | None = None,
+    gender: str = "female",
 ) -> str:
     subtype_directive = ""
     if subtype_info:
@@ -395,7 +458,39 @@ def build_generate_fighter_prompt(
             f"A {subtype_info['name']} should LOOK different from other subtypes of the same archetype."
         )
 
-    return f"""{FULL_CHARACTER_GUIDE}
+    guide = FULL_MALE_CHARACTER_GUIDE if gender.lower() == "male" else FULL_CHARACTER_GUIDE
+
+    if gender.lower() == "male":
+        stat_hints = (
+            "- Stats should reflect the archetype (Brute has high power/toughness, "
+            "Technician has high technique/speed, Monster has high power/toughness, "
+            "Veteran has balanced stats with high technique, Wildcard has high speed, "
+            "Mystic has high supernatural/technique, etc.)"
+        )
+        body_trait_hint = (
+            "MUST incorporate the rolled body traits (build type, muscle definition, "
+            "shoulder width, chest, face shape, eye expression, facial hair) naturally "
+            "into this description"
+        )
+        personality_example = (
+            "e.g. 'silent predator who breaks bones without changing expression'"
+        )
+    else:
+        stat_hints = (
+            "- Stats should reflect the archetype (Huntress has high speed, "
+            "Empress has high technique, Viper has high speed/technique, "
+            "Demon has high power/supernatural, Assassin has high speed/technique, "
+            "Nymph has high supernatural/speed, etc.)"
+        )
+        body_trait_hint = (
+            "MUST incorporate the rolled body traits (waist, abs, butt, face shape, "
+            "eyes, makeup) naturally into this description"
+        )
+        personality_example = (
+            "e.g. 'cold, calculating predator who enjoys breaking opponents slowly'"
+        )
+
+    return f"""{guide}
 
 Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing_roster_text}
 
@@ -410,7 +505,7 @@ STAT CONSTRAINTS:
 - 1 supernatural stat, rated 0-50 (0 if no supernatural abilities)
 - The 4 core stats MUST total between {min_total_stats} and {max_total_stats}
 - No fighter should be elite at everything — balance strengths with clear weaknesses
-- Stats should reflect the archetype (Huntress has high speed, Empress has high technique, Viper has high speed/technique, Demon has high power/supernatural, Assassin has high speed/technique, Nymph has high supernatural/speed, etc.)
+{stat_hints}
 
 ICONIC FEATURES:
 List 3-6 visual details that make this character instantly recognizable — the things a fan would
@@ -428,8 +523,8 @@ Return ONLY valid JSON with this exact structure:
   "build": "<body type description incorporating the rolled body traits above>",
   "distinguishing_features": "<scars, tattoos, unique physical traits>",
   "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
-  "personality": "<max 10 words — their vibe and attitude, e.g. 'cold, calculating predator who enjoys breaking opponents slowly'>",
-  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. MUST incorporate the rolled body traits (waist, abs, butt, face shape, eyes, makeup) naturally into this description>",
+  "personality": "<max 10 words — their vibe and attitude, {personality_example}>",
+  "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. {body_trait_hint}>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
   "stats": {{
