@@ -10,7 +10,7 @@ from app.services import data_manager
 from app.config import load_config
 
 
-def initialize_league(seasons=30, seed=42, verbose=False):
+def initialize_league(seasons=30, seed=42, verbose=False, tier_sizes=None):
     config = load_config()
     data_dir = config.data_dir
 
@@ -33,7 +33,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
     data_manager.ensure_data_dirs(config)
 
     print(f"Generating league and simulating {seasons} seasons (seed={seed})...")
-    sim = LeagueSimulator(seed=seed, verbose=verbose, total_seasons=seasons)
+    sim = LeagueSimulator(seed=seed, verbose=verbose, total_seasons=seasons, tier_sizes=tier_sizes)
     sim.generate_initial_roster()
 
     for s in range(seasons):
@@ -134,9 +134,20 @@ def main():
     parser.add_argument("--seasons", type=int, default=30, help="Number of seasons to pre-simulate")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--verbose", "-v", action="store_true", help="Print per-season details")
+    parser.add_argument("--apex", type=int, default=None, help="Number of fighters in Apex tier (default: 16)")
+    parser.add_argument("--contender", type=int, default=None, help="Number of fighters in Contender tier (default: 20)")
+    parser.add_argument("--underground", type=int, default=None, help="Number of fighters in Underground tier (default: 100)")
     args = parser.parse_args()
 
-    initialize_league(seasons=args.seasons, seed=args.seed, verbose=args.verbose)
+    tier_sizes = {}
+    if args.apex is not None:
+        tier_sizes["apex"] = args.apex
+    if args.contender is not None:
+        tier_sizes["contender"] = args.contender
+    if args.underground is not None:
+        tier_sizes["underground"] = args.underground
+
+    initialize_league(seasons=args.seasons, seed=args.seed, verbose=args.verbose, tier_sizes=tier_sizes or None)
 
 
 if __name__ == "__main__":

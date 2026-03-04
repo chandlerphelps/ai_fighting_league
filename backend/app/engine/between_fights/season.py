@@ -83,6 +83,15 @@ TIER_SIZES = {
 }
 
 
+def set_tier_sizes(apex: int = None, contender: int = None, underground: int = None):
+    if apex is not None:
+        TIER_SIZES["apex"] = apex
+    if contender is not None:
+        TIER_SIZES["contender"] = contender
+    if underground is not None:
+        TIER_SIZES["underground"] = underground
+
+
 def get_tier_event_config(tier: str) -> dict:
     return TIER_EVENT_CONFIG.get(tier, TIER_EVENT_CONFIG["underground"])
 

@@ -20,6 +20,7 @@ from app.engine.between_fights.season import (
     get_tier_event_config,
     get_fight_start_time,
     TIER_SIZES,
+    set_tier_sizes,
     is_fight_day,
     REGULAR_MONTHS,
     PROMOTION_MONTH,
@@ -44,11 +45,14 @@ SEASON_ENDING_RECOVERY = (90, 120)
 
 
 class LeagueSimulator:
-    def __init__(self, seed=42, verbose=False, total_seasons=30):
+    def __init__(self, seed=42, verbose=False, total_seasons=30, tier_sizes=None):
         self.rng = random.Random(seed)
         self.seed = seed
         self.verbose = verbose
         self.total_seasons = total_seasons
+
+        if tier_sizes:
+            set_tier_sizes(**tier_sizes)
 
         today = _date.today()
         base_year = today.year - total_seasons
@@ -560,10 +564,12 @@ class LeagueSimulator:
                 if sw > sl or sw >= 3:
                     protected_fighter_ids.add(fid)
 
+        apex_size = len([f for f in self.fighters.values() if f.get("tier") == "apex" and f.get("status") == "active"])
+        contender_size = len([f for f in self.fighters.values() if f.get("tier") == "contender" and f.get("status") == "active"])
         matchups = get_promotion_matchups(
             tier_rankings,
-            champ_contender_slots=4,
-            contender_underground_slots=6,
+            champ_contender_slots=min(4, max(1, apex_size // 2)),
+            contender_underground_slots=min(6, max(1, contender_size // 2)),
             protected_fighter_ids=protected_fighter_ids,
         )
         self.world_state["promotion_fights"] = matchups
@@ -877,9 +883,20 @@ def main():
     parser.add_argument("--seasons", type=int, default=20, help="Number of seasons to simulate")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--verbose", "-v", action="store_true", help="Print per-season details")
+    parser.add_argument("--apex", type=int, default=None, help="Number of fighters in Apex tier (default: 16)")
+    parser.add_argument("--contender", type=int, default=None, help="Number of fighters in Contender tier (default: 20)")
+    parser.add_argument("--underground", type=int, default=None, help="Number of fighters in Underground tier (default: 100)")
     args = parser.parse_args()
 
-    sim = LeagueSimulator(seed=args.seed, verbose=args.verbose, total_seasons=args.seasons)
+    tier_sizes = {}
+    if args.apex is not None:
+        tier_sizes["apex"] = args.apex
+    if args.contender is not None:
+        tier_sizes["contender"] = args.contender
+    if args.underground is not None:
+        tier_sizes["underground"] = args.underground
+
+    sim = LeagueSimulator(seed=args.seed, verbose=args.verbose, total_seasons=args.seasons, tier_sizes=tier_sizes or None)
     sim.generate_initial_roster()
 
     print(f"Simulating {args.seasons} seasons (seed={args.seed})...")
