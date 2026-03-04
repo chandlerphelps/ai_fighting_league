@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { colors, fonts, fontSizes, spacing, withAlpha } from '../design-system'
 import StatBar from '../components/StatBar'
-import type { Fighter } from '../types/fighter'
+import PlanView from '../components/PlanView'
+import StageFilter, { filterByStage, type StageTab } from '../components/StageFilter'
+import DirtyWarning from '../components/DirtyWarning'
+import type { Fighter, RosterPlan } from '../types/fighter'
 import { loadAllFighterFiles } from '../lib/data'
 import { fighterImagePath, moveImagePath } from '../lib/images'
 import {
@@ -16,6 +19,10 @@ import {
   pollUntilDone,
   fetchOutfitOptions,
   saveOutfitOptions,
+  fetchRosterPlan,
+  createRosterPlan,
+  advanceStage,
+  batchAdvance,
   type GenerateOptions,
   type TaskResponse,
   type OutfitOptions,
@@ -59,11 +66,22 @@ export default function RosterManager() {
   } | null>(null)
   const [imageVersion, setImageVersion] = useState(0)
   const [showOutfitOptions, setShowOutfitOptions] = useState(false)
+  const [plan, setPlan] = useState<RosterPlan | null>(null)
+  const [stageTab, setStageTab] = useState<StageTab>('all')
 
   useEffect(() => {
     const handleClick = () => setRegenMenuId(null)
     document.addEventListener('click', handleClick)
     return () => document.removeEventListener('click', handleClick)
+  }, [])
+
+  const loadPlan = useCallback(async () => {
+    try {
+      const p = await fetchRosterPlan()
+      setPlan(p)
+    } catch {
+      setPlan(null)
+    }
   }, [])
 
   const loadFighters = useCallback(async () => {
@@ -79,7 +97,7 @@ export default function RosterManager() {
     }
   }, [])
 
-  useEffect(() => { loadFighters() }, [loadFighters])
+  useEffect(() => { loadFighters(); loadPlan() }, [loadFighters, loadPlan])
 
   const handleTask = async (task: TaskResponse, activeTask: ActiveTask) => {
     setActiveTasks(prev => [...prev, activeTask])
@@ -91,10 +109,45 @@ export default function RosterManager() {
         setImageVersion(v => v + 1)
       }
       await loadFighters()
+      await loadPlan()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Task error')
     } finally {
       setActiveTasks(prev => prev.filter(t => t.taskId !== activeTask.taskId))
+    }
+  }
+
+  const handleCreatePlan = async (count: number) => {
+    try {
+      const task = await createRosterPlan(count, fighters.length > 0 ? 'addition' : 'initial')
+      handleTask(task, { type: 'plan', taskId: task.task_id, label: `Planning ${count} fighters...` })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Plan creation failed')
+    }
+  }
+
+  const handlePlanTask = async (task: TaskResponse, label: string) => {
+    handleTask(task, { type: 'plan-gen', taskId: task.task_id, label })
+  }
+
+  const handleAdvanceStage = async (fighterId: string) => {
+    try {
+      const task = await advanceStage(fighterId)
+      handleTask(task, { fighterId, type: 'advance', taskId: task.task_id, label: 'Advancing stage...' })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Advance failed')
+    }
+  }
+
+  const handleBatchAdvance = async (targetStage: number) => {
+    const prevStage = targetStage - 1
+    const eligible = fighters.filter(f => (f.generation_stage ?? 3) === prevStage)
+    if (eligible.length === 0) return
+    try {
+      const task = await batchAdvance(eligible.map(f => f.id), targetStage)
+      handleTask(task, { type: 'batch-advance', taskId: task.task_id, label: `Advancing ${eligible.length} fighters to Stage ${targetStage}...` })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Batch advance failed')
     }
   }
 
@@ -168,6 +221,10 @@ export default function RosterManager() {
       ring_attire_sfw: fighter.ring_attire_sfw,
       ring_attire_nsfw: fighter.ring_attire_nsfw,
       skimpiness_level: fighter.skimpiness_level,
+      primary_outfit_color: fighter.primary_outfit_color,
+      hair_style: fighter.hair_style,
+      hair_color: fighter.hair_color,
+      face_adornment: fighter.face_adornment,
       image_prompt: fighter.image_prompt ? { ...fighter.image_prompt } : undefined,
       image_prompt_sfw: fighter.image_prompt_sfw ? { ...fighter.image_prompt_sfw } : undefined,
       image_prompt_nsfw: fighter.image_prompt_nsfw ? { ...fighter.image_prompt_nsfw } : undefined,
@@ -222,6 +279,15 @@ export default function RosterManager() {
           >
             Outfit Options
           </button>
+          {!plan && (
+            <button
+              onClick={() => handleCreatePlan(8)}
+              disabled={globalTaskActive}
+              style={btnStyle(colors.face)}
+            >
+              Plan Roster
+            </button>
+          )}
           <button
             onClick={() => setShowGenerate(!showGenerate)}
             disabled={globalTaskActive}
@@ -327,6 +393,65 @@ export default function RosterManager() {
 
       {showGenerate && <GeneratePanel onGenerate={handleGenerate} onCancel={() => setShowGenerate(false)} />}
 
+      <StageFilter
+        fighters={fighters}
+        hasPlan={!!plan}
+        planCount={plan?.entries?.length ?? 0}
+        activeTab={stageTab}
+        onTabChange={setStageTab}
+      />
+
+      {stageTab === 'plan' && plan && (
+        <PlanView
+          plan={plan}
+          onPlanChange={() => { loadPlan(); loadFighters() }}
+          onTask={handlePlanTask}
+          onError={(msg) => setError(msg)}
+        />
+      )}
+
+      {(stageTab === 'stage1' || stageTab === 'stage2') && (
+        <div style={{
+          display: 'flex', gap: spacing.sm, marginBottom: spacing.md,
+          padding: `${spacing.sm} ${spacing.md}`,
+          backgroundColor: colors.surface, borderRadius: '6px',
+          border: `1px solid ${colors.border}`,
+        }}>
+          {stageTab === 'stage1' && (
+            <button
+              onClick={() => handleBatchAdvance(2)}
+              disabled={globalTaskActive}
+              style={{
+                padding: `${spacing.xs} ${spacing.md}`,
+                backgroundColor: withAlpha(colors.accent, 0.2),
+                border: `1px solid ${colors.accent}`,
+                borderRadius: '4px', color: colors.accent,
+                fontFamily: fonts.body, fontSize: fontSizes.sm,
+                cursor: globalTaskActive ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Advance All to Stage 2 (Generate Portraits)
+            </button>
+          )}
+          {stageTab === 'stage2' && (
+            <button
+              onClick={() => handleBatchAdvance(3)}
+              disabled={globalTaskActive}
+              style={{
+                padding: `${spacing.xs} ${spacing.md}`,
+                backgroundColor: withAlpha(colors.accent, 0.2),
+                border: `1px solid ${colors.accent}`,
+                borderRadius: '4px', color: colors.accent,
+                fontFamily: fonts.body, fontSize: fontSizes.sm,
+                cursor: globalTaskActive ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Advance All to Stage 3 (Full Images)
+            </button>
+          )}
+        </div>
+      )}
+
       {loading && fighters.length === 0 && (
         <div style={{
           textAlign: 'center',
@@ -352,12 +477,12 @@ export default function RosterManager() {
         </div>
       )}
 
-      <div style={{
+      {stageTab !== 'plan' && <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
         gap: spacing.lg,
       }}>
-        {fighters.map(fighter => {
+        {filterByStage(fighters, stageTab).map(fighter => {
           const isExpanded = expandedId === fighter.id
           const isEditing = editingId === fighter.id
           const busy = isTaskActive(fighter.id)
@@ -395,7 +520,7 @@ export default function RosterManager() {
                     if (!isEditing) setExpandedId(isExpanded ? null : fighter.id)
                   }}
                 >
-                  <FighterImage fighterId={fighter.id} ringName={fighter.ring_name} tier={globalTier} version={imageVersion} />
+                  <FighterImage fighterId={fighter.id} ringName={fighter.ring_name} tier={(fighter.generation_stage ?? 3) <= 2 ? 'portrait' : globalTier} version={imageVersion} />
                   <ImageOverlayButtons
                     onExpand={() => setLightbox({
                       fighterId: fighter.id,
@@ -436,16 +561,40 @@ export default function RosterManager() {
                         {fighter.origin}
                       </div>
                     </div>
-                    {fighter.skimpiness_level && (
-                      <span style={{
-                        fontSize: fontSizes.sm,
-                        fontFamily: fonts.body,
-                        color: colors.textDim,
-                      }}>
-                        {fighter.skimpiness_level}
-                      </span>
-                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+                      {(fighter.generation_stage ?? 3) < 3 && (
+                        <span style={{
+                          fontSize: fontSizes.xs,
+                          fontFamily: fonts.body,
+                          padding: `1px ${spacing.xs}`,
+                          backgroundColor: withAlpha(colors.rivalry, 0.15),
+                          border: `1px solid ${colors.rivalry}`,
+                          borderRadius: '3px',
+                          color: colors.rivalry,
+                        }}>
+                          S{fighter.generation_stage ?? 0}
+                        </span>
+                      )}
+                      {fighter.skimpiness_level && (
+                        <span style={{
+                          fontSize: fontSizes.sm,
+                          fontFamily: fonts.body,
+                          color: colors.textDim,
+                        }}>
+                          {fighter.skimpiness_level}
+                        </span>
+                      )}
+                    </div>
                   </div>
+                  {fighter.generation_dirty && fighter.generation_dirty.length > 0 && (
+                    <div style={{ padding: `0 ${spacing.sm} ${spacing.xs}` }}>
+                      <DirtyWarning
+                        dirty={fighter.generation_dirty}
+                        onRegenerateOutfits={() => handleRegenOutfits(fighter.id)}
+                        onRegenerateImages={() => handleRegenImages(fighter.id)}
+                      />
+                    </div>
+                  )}
                   {busy && (
                     <div style={{
                       position: 'absolute',
@@ -481,6 +630,19 @@ export default function RosterManager() {
                   >
                     View
                   </Link>
+                  {(fighter.generation_stage ?? 3) < 3 && (
+                    <button
+                      onClick={() => handleAdvanceStage(fighter.id)}
+                      disabled={busy}
+                      style={{
+                        ...actionBtn(colors.healthy),
+                        fontWeight: 'bold',
+                      }}
+                      title={`Advance to Stage ${(fighter.generation_stage ?? 0) + 1}`}
+                    >
+                      {(fighter.generation_stage ?? 0) === 1 ? 'Portrait' : 'Full Images'}
+                    </button>
+                  )}
                   <button
                     onClick={() => startEdit(fighter)}
                     disabled={busy}
@@ -633,7 +795,7 @@ export default function RosterManager() {
             </div>
           )
         })}
-      </div>
+      </div>}
 
       {lightbox && (
         <Lightbox
@@ -1296,6 +1458,29 @@ function EditPanel({
             <input value={data.personality || ''} onChange={e => updateField('personality', e.target.value)} style={inputStyle} />
           </Field>
         </div>
+      </div>
+
+      <h4 style={{
+        fontSize: fontSizes.sm,
+        fontFamily: fonts.body,
+        color: colors.textMuted,
+        margin: `${spacing.md} 0 ${spacing.sm} 0`,
+      }}>
+        Signature Visual Identity
+      </h4>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing.sm }}>
+        <Field label="Outfit Color">
+          <input value={data.primary_outfit_color || ''} onChange={e => updateField('primary_outfit_color', e.target.value)} style={inputStyle} />
+        </Field>
+        <Field label="Hair Style">
+          <input value={data.hair_style || ''} onChange={e => updateField('hair_style', e.target.value)} style={inputStyle} />
+        </Field>
+        <Field label="Hair Color">
+          <input value={data.hair_color || ''} onChange={e => updateField('hair_color', e.target.value)} style={inputStyle} />
+        </Field>
+        <Field label="Face Adornment">
+          <input value={data.face_adornment || ''} onChange={e => updateField('face_adornment', e.target.value)} style={inputStyle} />
+        </Field>
       </div>
 
       <h4 style={{

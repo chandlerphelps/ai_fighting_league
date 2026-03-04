@@ -104,6 +104,13 @@ class Fighter:
     ring_attire_nsfw: str = ""
     skimpiness_level: int = 2
     tech_level: str = ""
+    primary_outfit_color: str = ""
+    hair_style: str = ""
+    hair_color: str = ""
+    face_adornment: str = ""
+    generation_stage: int = 0
+    generation_dirty: list[str] = field(default_factory=list)
+    image_prompt_portrait: dict = field(default_factory=dict)
     image_prompt_body_ref: dict = field(default_factory=dict)
     image_prompt: dict = field(default_factory=dict)
     image_prompt_sfw: dict = field(default_factory=dict)
@@ -165,6 +172,13 @@ class Fighter:
             ring_attire_nsfw=d.get("ring_attire_nsfw", ""),
             skimpiness_level=d.get("skimpiness_level", 2),
             tech_level=d.get("tech_level", ""),
+            primary_outfit_color=d.get("primary_outfit_color", ""),
+            hair_style=d.get("hair_style", ""),
+            hair_color=d.get("hair_color", ""),
+            face_adornment=d.get("face_adornment", ""),
+            generation_stage=d.get("generation_stage", 0),
+            generation_dirty=d.get("generation_dirty", []),
+            image_prompt_portrait=d.get("image_prompt_portrait", {}),
             image_prompt_body_ref=d.get("image_prompt_body_ref", {}),
             image_prompt=d.get("image_prompt", {}),
             image_prompt_sfw=d.get("image_prompt_sfw", {}),

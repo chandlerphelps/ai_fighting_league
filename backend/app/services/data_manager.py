@@ -142,3 +142,32 @@ def save_world_state(world_state, config: Config = None):
 def load_world_state(config: Config = None) -> dict | None:
     data_dir = _get_data_dir(config)
     return _load_json(data_dir / "world_state.json")
+
+
+def save_roster_plan(plan: dict, config: Config = None):
+    data_dir = _get_data_dir(config)
+    _save_json(data_dir / "roster_plan.json", plan)
+
+
+def load_roster_plan(config: Config = None) -> dict | None:
+    data_dir = _get_data_dir(config)
+    return _load_json(data_dir / "roster_plan.json")
+
+
+def delete_roster_plan(config: Config = None):
+    data_dir = _get_data_dir(config)
+    path = data_dir / "roster_plan.json"
+    if path.exists():
+        path.unlink()
+
+
+def delete_fighter(fighter_id: str, config: Config = None) -> bool:
+    data_dir = _get_data_dir(config)
+    fighters_dir = data_dir / "fighters"
+    path = _find_fighter_path(fighters_dir, fighter_id)
+    if path:
+        path.unlink()
+        for img in fighters_dir.glob(f"{fighter_id}_*.png"):
+            img.unlink()
+        return True
+    return False

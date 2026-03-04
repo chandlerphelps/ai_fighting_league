@@ -1,4 +1,4 @@
-import type { Fighter } from '../types/fighter'
+import type { Fighter, RosterPlan, PlanEntry } from '../types/fighter'
 
 const API_BASE = '/api'
 
@@ -148,4 +148,70 @@ export async function fetchArchetypes(): Promise<{ female: string[]; male: strin
 
 export function fighterImageUrl(fighterId: string, tier: string): string {
   return `${API_BASE}/fighter-images/${fighterId}/${tier}`
+}
+
+export function fighterPortraitUrl(fighterId: string): string {
+  return `${API_BASE}/fighter-images/${fighterId}/portrait`
+}
+
+export async function fetchRosterPlan(): Promise<RosterPlan | null> {
+  return apiFetch<RosterPlan | null>('/roster-plan')
+}
+
+export async function createRosterPlan(count: number, mode: 'initial' | 'addition' = 'initial'): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>('/roster-plan', {
+    method: 'POST',
+    body: JSON.stringify({ count, mode }),
+  })
+}
+
+export async function deleteRosterPlan(): Promise<void> {
+  await apiFetch('/roster-plan', { method: 'DELETE' })
+}
+
+export async function updatePlanEntry(index: number, updates: Partial<PlanEntry>): Promise<PlanEntry> {
+  return apiFetch<PlanEntry>(`/roster-plan/entries/${index}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+  })
+}
+
+export async function deletePlanEntry(index: number): Promise<void> {
+  await apiFetch(`/roster-plan/entries/${index}`, { method: 'DELETE' })
+}
+
+export async function regeneratePlanEntry(index: number): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>(`/roster-plan/entries/${index}/regenerate`, {
+    method: 'POST',
+  })
+}
+
+export async function addPlanEntries(count: number): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>('/roster-plan/entries/add', {
+    method: 'POST',
+    body: JSON.stringify({ count }),
+  })
+}
+
+export async function generateFromPlan(): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>('/roster-plan/generate', {
+    method: 'POST',
+  })
+}
+
+export async function advanceStage(fighterId: string): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>(`/fighters/${fighterId}/advance-stage`, {
+    method: 'POST',
+  })
+}
+
+export async function batchAdvance(fighterIds: string[], targetStage: number): Promise<TaskResponse> {
+  return apiFetch<TaskResponse>('/fighters/batch-advance', {
+    method: 'POST',
+    body: JSON.stringify({ fighter_ids: fighterIds, target_stage: targetStage }),
+  })
+}
+
+export async function fetchPoolSummary(): Promise<{ summary: string; count: number }> {
+  return apiFetch('/pool-summary')
 }

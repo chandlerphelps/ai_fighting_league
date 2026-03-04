@@ -476,3 +476,76 @@ def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
     parts.append(tail)
 
     return ", ".join(p.strip().rstrip(",") for p in parts if p.strip())
+
+
+PORTRAIT_STYLE = (
+    "high quality illustration, single character portrait, upper body shot, "
+    "clean background, professional character art, detailed face and expression"
+)
+
+
+def build_portrait_prompt(
+    body_parts: str,
+    clothing_sfw: str,
+    expression: str,
+    gender: str = "female",
+    body_type_details: dict | None = None,
+    origin: str = "",
+    subtype_info: dict | None = None,
+    iconic_features: str = "",
+    hair_style: str = "",
+    hair_color: str = "",
+    face_adornment: str = "",
+    primary_outfit_color: str = "",
+    age: int = 0,
+) -> dict:
+    if not body_parts:
+        return {}
+
+    style = get_art_style(gender)
+
+    if body_type_details:
+        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
+
+    if subtype_info:
+        body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic"
+
+    character_desc = body_parts
+    if age:
+        character_desc = f"{character_desc}, {age} years old"
+    if origin:
+        character_desc = f"{character_desc}, from {origin}"
+
+    clothing_part = clothing_sfw or ""
+    if primary_outfit_color and clothing_part:
+        clothing_part = f"{primary_outfit_color} {clothing_part}"
+    if iconic_features:
+        clothing_part = f"{clothing_part}, {iconic_features}" if clothing_part else iconic_features
+
+    hair_desc = ""
+    if hair_style or hair_color:
+        hair_desc = f"{hair_style} {hair_color} hair".strip()
+
+    adornment_desc = ""
+    if face_adornment and face_adornment.lower() != "none":
+        adornment_desc = f"wearing {face_adornment}"
+
+    sections = [
+        f"[STYLE] {style}, {PORTRAIT_STYLE}",
+        f"[CHARACTER] {character_desc}",
+        f"[HAIR] {hair_desc}" if hair_desc else "",
+        f"[CLOTHING] {clothing_part}" if clothing_part else "",
+        f"[ADORNMENT] {adornment_desc}" if adornment_desc else "",
+        f"[EXPRESSION] {expression}" if expression else "",
+        f"[QUALITY] {get_art_style_tail(gender)}, portrait, upper body shot",
+    ]
+    full = "\n".join(s for s in sections if s)
+
+    return {
+        "body_parts": body_parts,
+        "clothing": clothing_part,
+        "expression": expression,
+        "hair": hair_desc,
+        "face_adornment": adornment_desc,
+        "full_prompt": full,
+    }

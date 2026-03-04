@@ -53,6 +53,40 @@ export interface TierRecord {
   draws: number
 }
 
+export interface PlanEntry {
+  ring_name: string
+  real_name?: string
+  gender: string
+  age?: number
+  origin?: string
+  primary_archetype: string
+  subtype?: string
+  has_supernatural: boolean
+  supernatural_type?: string
+  power_tier: string
+  concept_hook: string
+  alignment?: string
+  fighting_style_concept?: string
+  narrative_role?: string
+  rivalry_seeds?: string[]
+  media_archetype_inspiration?: string
+  skimpiness_weights?: number[]
+  primary_outfit_color: string
+  hair_style: string
+  hair_color: string
+  face_adornment: string
+  status: 'pending' | 'approved' | 'rejected' | 'generating'
+  fighter_id?: string | null
+}
+
+export interface RosterPlan {
+  plan_id: string
+  created_at: string
+  mode: 'initial' | 'addition'
+  pool_summary: string
+  entries: PlanEntry[]
+}
+
 export interface Fighter {
   id: string
   ring_name: string
@@ -72,6 +106,13 @@ export interface Fighter {
   ring_attire_sfw?: string
   ring_attire_nsfw?: string
   skimpiness_level?: number
+  primary_outfit_color?: string
+  hair_style?: string
+  hair_color?: string
+  face_adornment?: string
+  generation_stage?: number
+  generation_dirty?: string[]
+  image_prompt_portrait?: CharsheetPrompt
   image_prompt_body_ref?: CharsheetPrompt
   image_prompt?: CharsheetPrompt
   image_prompt_sfw?: CharsheetPrompt
@@ -92,6 +133,6 @@ export interface Fighter {
   peak_tier?: string
   career_season_count?: number
   seasons_in_current_tier?: number
-  tier_records?: Record<string, TierRecord>
+  tier_records?: { [key: string]: TierRecord }
   _available_images?: string[]
 }
