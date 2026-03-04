@@ -28,13 +28,31 @@ export interface BeltHistoryEntry {
   defenses: number
 }
 
+export interface SeasonChampion {
+  season: number
+  fighter_id: string
+  ring_name: string
+  defeated_id: string
+  defeated_name: string
+}
+
 export interface SeasonLog {
   season: number
+  champion_name: string
+  champion_id: string
   belt_holder_name: string
   belt_holder_id: string
   retirements: number
   new_fighters: number
   tier_counts: Record<string, number>
+}
+
+export interface ScheduledFight {
+  tier: string
+  fighter1_id: string
+  fighter1_name: string
+  fighter2_id: string
+  fighter2_name: string
 }
 
 export interface WorldState {
@@ -50,6 +68,7 @@ export interface WorldState {
   }
   belt_holder_id: string
   belt_history: BeltHistoryEntry[]
+  season_champions: SeasonChampion[]
   retired_fighter_ids: string[]
   active_injuries: Record<string, number>
   rivalry_graph: RivalryRecord[]
@@ -57,6 +76,7 @@ export interface WorldState {
   season_logs: SeasonLog[]
   promotion_fights: unknown[]
   title_fight: Record<string, string>
+  scheduled_fights: ScheduledFight[]
   rankings: string[]
   upcoming_events: string[]
   completed_events: string[]

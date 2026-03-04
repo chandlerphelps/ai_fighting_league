@@ -30,9 +30,9 @@ INJURY_TYPES_WINNER = ["minor bruising", "hand strain", "mild concussion"]
 INJURY_TYPES_LOSER_KO = ["concussion", "orbital fracture", "broken nose"]
 INJURY_TYPES_LOSER_OTHER = ["laceration", "bruised ribs", "hand fracture", "broken nose"]
 
-MINOR_RECOVERY = (5, 9)
-MODERATE_RECOVERY = (14, 28)
-SEVERE_RECOVERY = (42, 56)
+MINOR_RECOVERY = (2, 4)
+MODERATE_RECOVERY = (5, 10)
+SEVERE_RECOVERY = (14, 21)
 
 SEASON_ENDING_INJURY_TYPES = ["torn ACL", "fractured vertebra", "severe concussion syndrome", "shattered orbital"]
 CAREER_ENDING_INJURY_TYPES = ["spinal injury", "traumatic brain injury", "shattered knee"]
@@ -410,9 +410,9 @@ class LeagueSimulator:
         return match_record
 
     def _apply_injury(self, fighter, is_winner, method):
-        base_chance = 0.10 if is_winner else 0.40
+        base_chance = 0.05 if is_winner else 0.20
         if method in ("ko", "tko") and not is_winner:
-            base_chance += 0.15
+            base_chance += 0.10
 
         if self.rng.random() >= base_chance:
             return

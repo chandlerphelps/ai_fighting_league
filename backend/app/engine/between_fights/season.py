@@ -98,7 +98,8 @@ def process_end_of_season(
 
         fighter.pop("_season_record_at_injury", None)
         injuries = condition.get("injuries", [])
-        if any(i.get("severity") == "season_ending" for i in injuries):
+        has_career_ending = any(i.get("severity") == "career_ending" for i in injuries)
+        if not has_career_ending and condition.get("health_status") == "injured":
             fighter["condition"] = {
                 "health_status": "healthy",
                 "injuries": [],

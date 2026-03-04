@@ -49,10 +49,25 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
     _process_daily_training(fighters, rng)
 
     if month <= 7:
-        for tier in ["championship", "contender", "underground"]:
-            if day in EVENT_DAYS[tier]:
-                matches = _run_tier_event(fighters, ws, tier, rng)
-                day_result["matches"].extend(matches)
+        scheduled = ws.get("scheduled_fights", [])
+        if scheduled:
+            for sf in scheduled:
+                f1_id = sf["fighter1_id"]
+                f2_id = sf["fighter2_id"]
+                f1 = fighters.get(f1_id)
+                f2 = fighters.get(f2_id)
+                if (f1 and f2
+                    and f1.get("status") == "active" and f2.get("status") == "active"
+                    and f1.get("condition", {}).get("health_status") == "healthy"
+                    and f2.get("condition", {}).get("health_status") == "healthy"):
+                    match = _run_single_fight(fighters, ws, f1_id, f2_id, rng)
+                    day_result["matches"].append(match)
+            ws["scheduled_fights"] = []
+        else:
+            for tier in ["championship", "contender", "underground"]:
+                if day in EVENT_DAYS[tier]:
+                    matches = _run_tier_event(fighters, ws, tier, rng)
+                    day_result["matches"].extend(matches)
         day_result["phase"] = "regular"
 
     if month == 8:
@@ -67,6 +82,8 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
     ws["recent_matches"] = ws.get("recent_matches", [])[-200:]
 
     ws["last_daily_summary"] = _build_summary(day_result)
+
+    _schedule_next_day(fighters, ws)
 
     return day_result
 
@@ -101,6 +118,58 @@ def _process_daily_training(fighters: dict, rng):
         if fighter.get("status") != "active":
             continue
         process_daily_training(fighter, rng)
+
+
+def _schedule_next_day(fighters: dict, ws: dict):
+    next_month = ws["season_month"]
+    next_day = ws["season_day_in_month"]
+
+    if next_month > 7:
+        ws["scheduled_fights"] = []
+        return
+
+    seed_base = ws["season_number"] * 10000 + next_month * 100 + next_day
+    rng = random.Random(seed_base)
+
+    scheduled = []
+    for tier in ["championship", "contender", "underground"]:
+        if next_day not in EVENT_DAYS[tier]:
+            continue
+
+        config = get_tier_event_config(tier)
+        num_fights = rng.randint(config["fights_min"], config["fights_max"])
+
+        available = [
+            f for f in fighters.values()
+            if f.get("tier") == tier
+            and f.get("status") == "active"
+            and f.get("condition", {}).get("health_status") == "healthy"
+        ]
+
+        if len(available) < 2:
+            continue
+
+        rng.shuffle(available)
+        used = set()
+
+        for i in range(len(available)):
+            if len([s for s in scheduled if s["tier"] == tier]) >= num_fights:
+                break
+            for j in range(i + 1, len(available)):
+                if available[i]["id"] in used or available[j]["id"] in used:
+                    continue
+                scheduled.append({
+                    "tier": tier,
+                    "fighter1_id": available[i]["id"],
+                    "fighter1_name": available[i].get("ring_name", "?"),
+                    "fighter2_id": available[j]["id"],
+                    "fighter2_name": available[j].get("ring_name", "?"),
+                })
+                used.add(available[i]["id"])
+                used.add(available[j]["id"])
+                break
+
+    ws["scheduled_fights"] = scheduled
 
 
 def _run_tier_event(fighters: dict, ws: dict, tier: str, rng) -> list:
