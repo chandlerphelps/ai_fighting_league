@@ -22,7 +22,21 @@ export interface FightMoment {
   moment_number: number
   description: string
   attacker_id: string
+  defender_id: string
   action: string
+  defender_action: string
+  result: string
+  damage_dealt: number
+  tick_number: number
+  round_number: number
+  attacker_hp: number
+  attacker_stamina: number
+  attacker_mana: number
+  defender_hp: number
+  defender_stamina: number
+  defender_mana: number
+  attacker_emotions: Record<string, number>
+  defender_emotions: Record<string, number>
   image_prompt: string
   image_path: string
 }

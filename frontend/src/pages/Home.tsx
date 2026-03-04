@@ -481,6 +481,7 @@ function HeroFight({ match }: { match: MatchResult }) {
   const isTitle = match.is_title_fight
 
   return (
+    <Link to={matchUrl(match)} style={{ textDecoration: 'none', display: 'block' }}>
     <div style={{
       padding: spacing.lg,
       backgroundColor: colors.surface,
@@ -567,6 +568,7 @@ function HeroFight({ match }: { match: MatchResult }) {
         </span>
       </div>
     </div>
+    </Link>
   )
 }
 
@@ -846,51 +848,58 @@ function TieredMatchList({ matches }: { matches: MatchResult[] }) {
   )
 }
 
+function matchUrl(match: MatchResult): string {
+  return `/match/${match.fighter1_id}_${match.fighter2_id}_${match.date}`
+}
+
 function MatchRow({ match }: { match: MatchResult }) {
   const isF1Winner = match.winner_id === match.fighter1_id
   const timeStr = formatTime(match.start_time || '')
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'auto auto 1fr auto 1fr auto',
-      gap: spacing.sm,
-      alignItems: 'center',
-      padding: `${spacing.xs} ${spacing.sm}`,
-      backgroundColor: colors.surface,
-      borderRadius: '3px',
-      fontSize: fontSizes.sm,
-      borderLeft: match.is_title_fight ? `3px solid ${colors.accent}` : 'none',
-    }}>
-      <TierBadge tier={match.tier} size={14} />
-      <span style={{
-        color: colors.textDim,
-        fontSize: fontSizes.xs,
-        minWidth: '52px',
+    <Link to={matchUrl(match)} style={{ textDecoration: 'none' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'auto auto 1fr auto 1fr auto',
+        gap: spacing.sm,
+        alignItems: 'center',
+        padding: `${spacing.xs} ${spacing.sm}`,
+        backgroundColor: colors.surface,
+        borderRadius: '3px',
+        fontSize: fontSizes.sm,
+        borderLeft: match.is_title_fight ? `3px solid ${colors.accent}` : 'none',
+        cursor: 'pointer',
       }}>
-        {timeStr}
-      </span>
-      <span style={{
-        color: isF1Winner ? colors.win : colors.loss,
-        fontWeight: isF1Winner ? 'bold' : 'normal',
-        textAlign: 'right',
-      }}>
-        {match.fighter1_name}
-      </span>
-      <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
-      <span style={{
-        color: !isF1Winner ? colors.win : colors.loss,
-        fontWeight: !isF1Winner ? 'bold' : 'normal',
-      }}>
-        {match.fighter2_name}
-      </span>
-      <span style={{
-        color: methodColor(match.method),
-        fontSize: fontSizes.xs,
-        minWidth: '70px',
-        textAlign: 'right',
-      }}>
-        {match.method.toUpperCase()} R{match.round_ended}
-      </span>
-    </div>
+        <TierBadge tier={match.tier} size={14} />
+        <span style={{
+          color: colors.textDim,
+          fontSize: fontSizes.xs,
+          minWidth: '52px',
+        }}>
+          {timeStr}
+        </span>
+        <span style={{
+          color: isF1Winner ? colors.win : colors.loss,
+          fontWeight: isF1Winner ? 'bold' : 'normal',
+          textAlign: 'right',
+        }}>
+          {match.fighter1_name}
+        </span>
+        <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
+        <span style={{
+          color: !isF1Winner ? colors.win : colors.loss,
+          fontWeight: !isF1Winner ? 'bold' : 'normal',
+        }}>
+          {match.fighter2_name}
+        </span>
+        <span style={{
+          color: methodColor(match.method),
+          fontSize: fontSizes.xs,
+          minWidth: '70px',
+          textAlign: 'right',
+        }}>
+          {match.method.toUpperCase()} R{match.round_ended}
+        </span>
+      </div>
+    </Link>
   )
 }

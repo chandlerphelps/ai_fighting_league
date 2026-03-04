@@ -22,6 +22,10 @@ export interface MatchResult {
   is_title_fight?: boolean
 }
 
+export function matchKey(m: { fighter1_id: string; fighter2_id: string; date: string }): string {
+  return `${m.fighter1_id}_${m.fighter2_id}_${m.date}`
+}
+
 export interface BeltHistoryEntry {
   fighter_id: string
   won_date: string
