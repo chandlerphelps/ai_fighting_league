@@ -9,11 +9,18 @@ SEASON_MONTHS = [11, 12, 1, 2, 3, 4, 5, 6]
 REGULAR_MONTHS = [11, 12, 1, 2, 3, 4, 5]
 PROMOTION_MONTH = 6
 
-EVENT_DAYS = {
-    "championship": [10, 22],
-    "contender": [7, 15, 23],
-    "underground": [2, 6, 10, 14, 18, 22, 26],
+EVENT_INTERVAL = {
+    "championship": 10,
+    "contender": 6,
+    "underground": 1,
 }
+
+
+def is_fight_day(current: _date, season_number: int, tier: str) -> bool:
+    start = season_start_date(season_number)
+    days_since = (current - start).days
+    interval = EVENT_INTERVAL.get(tier, 1)
+    return days_since > 0 and days_since % interval == 0
 
 
 def season_start_year(season_number: int) -> int:
@@ -41,9 +48,9 @@ def days_remaining_in_season(current: _date, season_number: int) -> int:
     return max(0, (end - current).days)
 
 TIER_EVENT_CONFIG = {
-    "championship": {"events_per_month": 2, "fights_min": 3, "fights_max": 4},
-    "contender": {"events_per_month": 3, "fights_min": 3, "fights_max": 4},
-    "underground": {"events_per_month": 7, "fights_min": 5, "fights_max": 8},
+    "championship": {"events_per_month": 6, "fights_min": 2, "fights_max": 3},
+    "contender": {"events_per_month": 10, "fights_min": 2, "fights_max": 3},
+    "underground": {"events_per_month": 30, "fights_min": 4, "fights_max": 6},
 }
 
 TIER_SIZES = {

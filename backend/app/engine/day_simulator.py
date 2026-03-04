@@ -13,7 +13,7 @@ from app.engine.between_fights.league_tiers import (
 from app.engine.between_fights.season import (
     process_end_of_season,
     get_tier_event_config,
-    EVENT_DAYS,
+    is_fight_day,
     REGULAR_MONTHS,
     PROMOTION_MONTH,
     season_start_date,
@@ -87,7 +87,7 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
             ws["scheduled_fights"] = []
         else:
             for tier in ["championship", "contender", "underground"]:
-                if day_of_month in EVENT_DAYS[tier]:
+                if is_fight_day(today, season, tier):
                     matches = _run_tier_event(fighters, ws, tier, rng)
                     day_result["matches"].extend(matches)
         day_result["phase"] = "regular"
@@ -155,8 +155,9 @@ def _schedule_next_day(fighters: dict, ws: dict):
     rng = random.Random(seed_base)
 
     scheduled = []
+    season = ws["season_number"]
     for tier in ["championship", "contender", "underground"]:
-        if next_day not in EVENT_DAYS[tier]:
+        if not is_fight_day(next_date, season, tier):
             continue
 
         config = get_tier_event_config(tier)

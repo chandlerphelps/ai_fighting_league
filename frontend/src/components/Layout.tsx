@@ -2,9 +2,42 @@ import { type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { colors, fonts, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
+import type { MatchResult } from '../types/world_state'
 
 interface LayoutProps {
   children: ReactNode
+}
+
+const METHOD_COLORS: Record<string, string> = {
+  ko: colors.ko,
+  tko: colors.ko,
+  submission: colors.submission,
+  decision: colors.decision,
+}
+
+function TickerItem({ match }: { match: MatchResult }) {
+  const winnerName = match.winner_id === match.fighter1_id ? match.fighter1_name : match.fighter2_name
+  const loserName = match.winner_id === match.fighter1_id ? match.fighter2_name : match.fighter1_name
+  const methodCol = METHOD_COLORS[match.method] || colors.textMuted
+
+  return (
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: spacing.xs,
+      whiteSpace: 'nowrap',
+      padding: `0 ${spacing.md}`,
+      fontSize: fontSizes.xs,
+      borderRight: `1px solid ${colors.border}`,
+    }}>
+      <span style={{ color: colors.text, fontWeight: 'bold' }}>{winnerName}</span>
+      <span style={{ color: colors.textDim }}>def.</span>
+      <span style={{ color: colors.textMuted }}>{loserName}</span>
+      <span style={{ color: methodCol, fontWeight: 'bold' }}>
+        {match.method.toUpperCase()} R{match.round_ended}
+      </span>
+    </span>
+  )
 }
 
 export default function Layout({ children }: LayoutProps) {
@@ -17,8 +50,36 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/roster', label: 'Roster' },
   ]
 
+  const recentMatches = worldState?.recent_matches?.slice(0, 10) || []
+
   return (
     <div style={{ minHeight: '100vh', fontFamily: fonts.body }}>
+      {recentMatches.length > 0 && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          height: '28px',
+          backgroundColor: colors.background,
+          borderBottom: `1px solid ${colors.border}`,
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollbarWidth: 'none',
+        }}>
+          <span style={{
+            padding: `0 ${spacing.sm}`,
+            fontSize: fontSizes.xs,
+            color: colors.accent,
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            borderRight: `1px solid ${colors.border}`,
+          }}>
+            RESULTS
+          </span>
+          {recentMatches.map((m, i) => (
+            <TickerItem key={`${m.fighter1_id}-${m.fighter2_id}-${i}`} match={m} />
+          ))}
+        </div>
+      )}
       <nav style={{
         display: 'flex',
         alignItems: 'center',
@@ -64,7 +125,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </nav>
       <main style={{
-        maxWidth: '1200px',
+        maxWidth: '1400px',
         margin: '0 auto',
         padding: spacing.lg,
       }}>

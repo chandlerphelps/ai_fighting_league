@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
 import { simulateDay } from '../lib/data'
@@ -34,21 +35,21 @@ function parseDateKey(d: string): number {
   }
   const m = d.match(/^s(\d+)m(\d+)(?:d(\d+))?$/)
   if (!m) return 0
-  const season = parseInt(m[1])
-  const month = parseInt(m[2])
+  const season = parseInt(m[1] || '0')
+  const month = parseInt(m[2] || '0')
   const day = m[3] ? parseInt(m[3]) : 0
   return season * 10000 + month * 100 + day
 }
 
 function formatDateLabel(d: string): string {
   if (d.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    const [y, m, day] = d.split('-').map(Number)
-    return `${MONTH_NAMES[m]} ${day}, ${y}`
+    const parts = d.split('-').map(Number)
+    return `${MONTH_NAMES[parts[1] ?? 0]} ${parts[2]}, ${parts[0]}`
   }
   const m = d.match(/^s(\d+)m(\d+)(?:d(\d+))?$/)
   if (!m) return d
-  const season = m[1]
-  const month = m[2]
+  const season = m[1] ?? ''
+  const month = m[2] ?? ''
   const day = m[3]
   if (day) return `Season ${season} — Month ${month}, Day ${day}`
   return `Season ${season} — Month ${month}`
@@ -56,8 +57,8 @@ function formatDateLabel(d: string): string {
 
 function formatCurrentDate(dateStr: string): string {
   if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
-    const [y, m, day] = dateStr.split('-').map(Number)
-    return `${MONTH_NAMES[m]} ${day}, ${y}`
+    const parts = dateStr.split('-').map(Number)
+    return `${MONTH_NAMES[parts[1] ?? 0]} ${parts[2]}, ${parts[0]}`
   }
   return dateStr
 }
@@ -108,11 +109,67 @@ export default function Home() {
       }))
   }, [ws?.recent_matches])
 
+  const heroFight = useMemo(() => {
+    if (!ws?.recent_matches?.length) return null
+    const titleFight = ws.recent_matches.find(m => m.is_title_fight)
+    if (titleFight) return titleFight
+    const champFight = ws.recent_matches.find(m => m.tier === 'championship')
+    if (champFight) return champFight
+    return ws.recent_matches[0]
+  }, [ws?.recent_matches])
+
+  const headlines = useMemo(() => {
+    if (!ws) return []
+    const items: { text: string; color: string }[] = []
+    const titleFights = ws.recent_matches?.filter(m => m.is_title_fight) || []
+    for (const tf of titleFights) {
+      const winnerName = tf.winner_id === tf.fighter1_id ? tf.fighter1_name : tf.fighter2_name
+      items.push({
+        text: `${winnerName} wins championship title fight`,
+        color: colors.accent,
+      })
+    }
+    const kos = ws.recent_matches?.filter(m => m.method === 'ko' || m.method === 'tko') || []
+    for (const ko of kos.slice(0, 3)) {
+      const winnerName = ko.winner_id === ko.fighter1_id ? ko.fighter1_name : ko.fighter2_name
+      const loserName = ko.winner_id === ko.fighter1_id ? ko.fighter2_name : ko.fighter1_name
+      items.push({
+        text: `${winnerName} stops ${loserName} with ${ko.method.toUpperCase()} in round ${ko.round_ended}`,
+        color: colors.ko,
+      })
+    }
+    const subs = ws.recent_matches?.filter(m => m.method === 'submission') || []
+    for (const sub of subs.slice(0, 2)) {
+      const winnerName = sub.winner_id === sub.fighter1_id ? sub.fighter1_name : sub.fighter2_name
+      items.push({
+        text: `${winnerName} earns submission victory`,
+        color: colors.submission,
+      })
+    }
+    const hlMonth = ws.current_date ? parseInt(ws.current_date.split('-')[1] || '0') : ws.season_month
+    if (hlMonth === 6 || ws.promotion_fights?.length) {
+      items.push({
+        text: 'Promotion month — relegation matchups announced',
+        color: colors.rivalry,
+      })
+    }
+    if (ws.season_champions?.length) {
+      const lastChamp = ws.season_champions[ws.season_champions.length - 1]
+      if (lastChamp) {
+        items.push({
+          text: `Reigning champion: ${lastChamp.ring_name} (Season ${lastChamp.season})`,
+          color: colors.accentBright,
+        })
+      }
+    }
+    return items.slice(0, 8)
+  }, [ws])
+
   if (loading) return <div style={{ color: colors.textMuted, padding: spacing.lg }}>Loading...</div>
   if (error || !ws) return <div style={{ color: colors.injured, padding: spacing.lg }}>No league data. Run initialize_league first.</div>
 
   const latestChampion = ws.season_champions?.length
-    ? ws.season_champions[ws.season_champions.length - 1]
+    ? ws.season_champions[ws.season_champions.length - 1] ?? null
     : null
 
   const tierCounts = {
@@ -121,184 +178,448 @@ export default function Home() {
     underground: ws.tier_rankings?.underground?.length ?? 0,
   }
 
-  const currentMonth = ws.current_date ? parseInt(ws.current_date.split('-')[1]) : ws.season_month
+  const currentMonth = ws.current_date ? parseInt(ws.current_date.split('-')[1] || '0') : ws.season_month
+
+  const recentDays = matchesByDay.slice(0, 3)
+
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '200px 1fr 280px',
+      gap: spacing.lg,
+    }}>
+      <LeftSidebar
+        ws={ws}
+        latestChampion={latestChampion}
+        tierCounts={tierCounts}
+        currentMonth={currentMonth}
+        simulating={simulating}
+        multiSimulating={multiSimulating}
+        multiDayCount={multiDayCount}
+        setMultiDayCount={setMultiDayCount}
+        onSimulateDay={handleSimulateDay}
+        onSimulateMultiple={handleSimulateMultiple}
+      />
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg, minWidth: 0 }}>
+        {heroFight && <HeroFight match={heroFight} />}
+
+        {lastResult && lastResult.matches.length > 0 && (
+          <div>
+            <SectionHeader>Today's Results</SectionHeader>
+            <TieredMatchList matches={lastResult.matches} />
+            {lastResult.recoveries.length > 0 && (
+              <div style={{ marginTop: spacing.sm, color: colors.healthy, fontSize: fontSizes.sm }}>
+                Recovered: {lastResult.recoveries.map(r => r.fighter_name).join(', ')}
+              </div>
+            )}
+            {lastResult.season_end && (
+              <div style={{
+                marginTop: spacing.sm,
+                padding: spacing.sm,
+                backgroundColor: withAlpha(colors.accent, 0.1),
+                borderRadius: '4px',
+                color: colors.accent,
+                fontSize: fontSizes.sm,
+              }}>
+                Season ended — {lastResult.season_end.retirements} retirements, {lastResult.season_end.new_fighters} new fighters, {lastResult.season_end.backfill_promotions} promotions
+              </div>
+            )}
+          </div>
+        )}
+
+        <div>
+          <SectionHeader accent>AFL SCOREBOARD</SectionHeader>
+          {recentDays.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
+              {recentDays.map(day => (
+                <div key={day.date}>
+                  <div style={{
+                    color: colors.textMuted,
+                    fontSize: fontSizes.xs,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    marginBottom: spacing.sm,
+                    paddingBottom: spacing.xs,
+                    borderBottom: `1px solid ${colors.border}`,
+                  }}>
+                    {day.label}
+                  </div>
+                  <TieredMatchList matches={day.matches} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
+              No matches yet. Click "Next Day" to start the season.
+            </div>
+          )}
+        </div>
+
+        <UpcomingDay
+          month={currentMonth}
+          day={ws.season_day_in_month}
+          season={ws.season_number}
+          currentDate={ws.current_date}
+          promotionFights={ws.promotion_fights}
+          titleFight={ws.title_fight}
+          scheduledFights={ws.scheduled_fights}
+        />
+      </div>
+
+      <RightSidebar
+        headlines={headlines}
+        seasonLogs={ws.season_logs}
+      />
+    </div>
+  )
+}
+
+function LeftSidebar({ ws, latestChampion, tierCounts, currentMonth, simulating, multiSimulating, multiDayCount, setMultiDayCount, onSimulateDay, onSimulateMultiple }: {
+  ws: { season_number: number; current_date: string; season_month: number; season_day_in_month: number; promotion_fights: unknown[]; belt_holder_id: string }
+  latestChampion: { ring_name: string; season: number; defeated_name: string; fighter_id: string } | null
+  tierCounts: { championship: number; contender: number; underground: number }
+  currentMonth: number
+  simulating: boolean
+  multiSimulating: boolean
+  multiDayCount: number
+  setMultiDayCount: (n: number) => void
+  onSimulateDay: () => void
+  onSimulateMultiple: () => void
+}) {
   const monthLabel = currentMonth === 6 ? 'Promotion Month' :
     ws.promotion_fights?.length ? 'Promotions Announced' : formatCurrentDate(ws.current_date)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
         padding: spacing.md,
         backgroundColor: colors.surface,
         borderRadius: '6px',
         border: `1px solid ${colors.border}`,
       }}>
-        <div>
-          <div style={{ fontSize: fontSizes.xxl, color: colors.accent, fontWeight: 'bold' }}>
-            Season {ws.season_number}
-          </div>
-          <div style={{ fontSize: fontSizes.md, color: colors.textMuted, marginTop: spacing.xs }}>
-            {monthLabel}
-          </div>
+        <div style={{
+          fontSize: fontSizes.xs,
+          color: colors.textMuted,
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          marginBottom: spacing.sm,
+        }}>
+          Simulation
         </div>
-
-        <div style={{ display: 'flex', gap: spacing.sm, alignItems: 'center' }}>
+        <button
+          onClick={onSimulateDay}
+          disabled={simulating || multiSimulating}
+          style={{
+            width: '100%',
+            padding: `${spacing.sm} ${spacing.sm}`,
+            backgroundColor: simulating ? colors.surfaceLight : colors.accent,
+            color: simulating ? colors.textMuted : colors.background,
+            border: 'none',
+            borderRadius: '4px',
+            fontSize: fontSizes.sm,
+            fontWeight: 'bold',
+            cursor: simulating ? 'not-allowed' : 'pointer',
+            marginBottom: spacing.xs,
+          }}
+        >
+          {simulating ? 'Simulating...' : 'Next Day'}
+        </button>
+        <div style={{ display: 'flex', gap: spacing.xs }}>
+          <input
+            type="number"
+            min={1}
+            max={365}
+            value={multiDayCount}
+            onChange={e => setMultiDayCount(Math.max(1, Math.min(365, parseInt(e.target.value) || 1)))}
+            style={{
+              width: '45px',
+              padding: spacing.xs,
+              backgroundColor: colors.surfaceLight,
+              color: colors.text,
+              border: `1px solid ${colors.border}`,
+              borderRadius: '4px',
+              fontSize: fontSizes.xs,
+              textAlign: 'center',
+            }}
+          />
           <button
-            onClick={handleSimulateDay}
+            onClick={onSimulateMultiple}
             disabled={simulating || multiSimulating}
             style={{
-              padding: `${spacing.sm} ${spacing.lg}`,
-              backgroundColor: simulating ? colors.surfaceLight : colors.accent,
-              color: simulating ? colors.textMuted : colors.background,
-              border: 'none',
+              flex: 1,
+              padding: `${spacing.xs} ${spacing.xs}`,
+              backgroundColor: multiSimulating ? colors.surfaceLight : colors.surfaceHover,
+              color: multiSimulating ? colors.textMuted : colors.text,
+              border: `1px solid ${colors.border}`,
               borderRadius: '4px',
-              fontSize: fontSizes.md,
-              fontWeight: 'bold',
-              cursor: simulating ? 'not-allowed' : 'pointer',
+              fontSize: fontSizes.xs,
+              cursor: multiSimulating ? 'not-allowed' : 'pointer',
             }}
           >
-            {simulating ? 'Simulating...' : 'Next Day'}
+            {multiSimulating ? 'Simulating...' : `Skip ${multiDayCount}d`}
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-            <input
-              type="number"
-              min={1}
-              max={365}
-              value={multiDayCount}
-              onChange={e => setMultiDayCount(Math.max(1, Math.min(365, parseInt(e.target.value) || 1)))}
-              style={{
-                width: '50px',
-                padding: spacing.xs,
-                backgroundColor: colors.surfaceLight,
-                color: colors.text,
-                border: `1px solid ${colors.border}`,
-                borderRadius: '4px',
-                fontSize: fontSizes.sm,
-                textAlign: 'center',
-              }}
-            />
-            <button
-              onClick={handleSimulateMultiple}
-              disabled={simulating || multiSimulating}
-              style={{
-                padding: `${spacing.sm} ${spacing.md}`,
-                backgroundColor: multiSimulating ? colors.surfaceLight : colors.surfaceHover,
-                color: multiSimulating ? colors.textMuted : colors.text,
-                border: `1px solid ${colors.border}`,
-                borderRadius: '4px',
-                fontSize: fontSizes.sm,
-                cursor: multiSimulating ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {multiSimulating ? `Simulating...` : `Skip ${multiDayCount}d`}
-            </button>
-          </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: spacing.md }}>
-        <InfoCard label="Season Champion">
-          {latestChampion ? (
-            <div>
-              <div style={{ color: colors.accentBright, fontSize: fontSizes.md }}>
-                {latestChampion.ring_name}
-              </div>
-              <div style={{ color: colors.textMuted, fontSize: fontSizes.xs }}>
-                S{latestChampion.season} — def. {latestChampion.defeated_name}
-              </div>
-            </div>
-          ) : (
-            <div style={{ color: colors.textMuted, fontSize: fontSizes.md }}>TBD</div>
-          )}
-        </InfoCard>
-        {(['championship', 'contender', 'underground'] as const).map(tier => (
-          <InfoCard key={tier} label={TIER_LABELS[tier] || tier} value={`${tierCounts[tier]} fighters`} />
-        ))}
+      <div style={{
+        padding: spacing.md,
+        backgroundColor: colors.surface,
+        borderRadius: '6px',
+        border: `1px solid ${colors.border}`,
+      }}>
+        <div style={{
+          fontSize: fontSizes.xs,
+          color: colors.textMuted,
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          marginBottom: spacing.sm,
+        }}>
+          Season {ws.season_number}
+        </div>
+        <div style={{ color: colors.text, fontSize: fontSizes.sm, marginBottom: spacing.xs }}>
+          {monthLabel}
+        </div>
+        <div style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
+          Day {ws.season_day_in_month}
+        </div>
       </div>
 
-      <UpcomingDay
-        month={currentMonth}
-        day={ws.season_day_in_month}
-        season={ws.season_number}
-        currentDate={ws.current_date}
-        promotionFights={ws.promotion_fights}
-        titleFight={ws.title_fight}
-        scheduledFights={ws.scheduled_fights}
-      />
-
-      {lastResult && lastResult.matches.length > 0 && (
-        <div>
-          <SectionHeader>Today's Results</SectionHeader>
-          <TieredMatchList matches={lastResult.matches} />
-          {lastResult.recoveries.length > 0 && (
-            <div style={{ marginTop: spacing.sm, color: colors.healthy, fontSize: fontSizes.sm }}>
-              Recovered: {lastResult.recoveries.map(r => r.fighter_name).join(', ')}
-            </div>
-          )}
-          {lastResult.season_end && (
-            <div style={{
-              marginTop: spacing.sm,
-              padding: spacing.sm,
-              backgroundColor: withAlpha(colors.accent, 0.1),
-              borderRadius: '4px',
-              color: colors.accent,
+      <div style={{
+        padding: spacing.md,
+        backgroundColor: colors.surface,
+        borderRadius: '6px',
+        border: `1px solid ${colors.border}`,
+      }}>
+        <div style={{
+          fontSize: fontSizes.xs,
+          color: colors.textMuted,
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          marginBottom: spacing.sm,
+        }}>
+          Champion
+        </div>
+        {latestChampion ? (
+          <div>
+            <Link to={`/fighter/${latestChampion.fighter_id}`} style={{
+              color: colors.accentBright,
               fontSize: fontSizes.sm,
+              fontWeight: 'bold',
             }}>
-              Season ended — {lastResult.season_end.retirements} retirements, {lastResult.season_end.new_fighters} new fighters, {lastResult.season_end.backfill_promotions} promotions
+              {latestChampion.ring_name}
+            </Link>
+            <div style={{ color: colors.textDim, fontSize: fontSizes.xs, marginTop: '2px' }}>
+              S{latestChampion.season} — def. {latestChampion.defeated_name}
             </div>
-          )}
-        </div>
-      )}
-
-      <div>
-        <SectionHeader>Recent Results</SectionHeader>
-        {matchesByDay.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
-            {matchesByDay.map(day => (
-              <div key={day.date}>
-                <div style={{
-                  color: colors.textMuted,
-                  fontSize: fontSizes.xs,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  marginBottom: spacing.sm,
-                  paddingBottom: spacing.xs,
-                  borderBottom: `1px solid ${colors.border}`,
-                }}>
-                  {day.label}
-                </div>
-                <TieredMatchList matches={day.matches} />
-              </div>
-            ))}
           </div>
         ) : (
-          <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>No matches yet. Click "Next Day" to start the season.</div>
+          <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>TBD</div>
         )}
       </div>
 
-      {ws.season_logs && ws.season_logs.length > 0 && (
-        <div>
-          <SectionHeader>Season History</SectionHeader>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: spacing.sm,
+      <div style={{
+        padding: spacing.md,
+        backgroundColor: colors.surface,
+        borderRadius: '6px',
+        border: `1px solid ${colors.border}`,
+      }}>
+        <div style={{
+          fontSize: fontSizes.xs,
+          color: colors.textMuted,
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          marginBottom: spacing.sm,
+        }}>
+          League
+        </div>
+        {(['championship', 'contender', 'underground'] as const).map(tier => (
+          <div key={tier} style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: `2px 0`,
+            fontSize: fontSizes.xs,
           }}>
-            {ws.season_logs.slice(-10).reverse().map(log => (
-              <div key={log.season} style={{
-                padding: spacing.sm,
-                backgroundColor: colors.surface,
-                borderRadius: '4px',
-                border: `1px solid ${colors.border}`,
+            <span style={{ color: tier === 'championship' ? colors.accent : colors.textMuted }}>
+              {TIER_LABELS[tier]}
+            </span>
+            <span style={{ color: colors.text }}>{tierCounts[tier]}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function HeroFight({ match }: { match: MatchResult }) {
+  const isF1Winner = match.winner_id === match.fighter1_id
+  const winnerName = isF1Winner ? match.fighter1_name : match.fighter2_name
+  const loserName = isF1Winner ? match.fighter2_name : match.fighter1_name
+  const isTitle = match.is_title_fight
+
+  return (
+    <div style={{
+      padding: spacing.lg,
+      backgroundColor: colors.surface,
+      borderRadius: '6px',
+      border: `2px solid ${isTitle ? colors.accent : colors.border}`,
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {isTitle && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: `linear-gradient(90deg, ${colors.accentDim}, ${colors.accent}, ${colors.accentBright}, ${colors.accent}, ${colors.accentDim})`,
+        }} />
+      )}
+      <div style={{
+        fontSize: fontSizes.xs,
+        color: isTitle ? colors.accent : colors.textMuted,
+        textTransform: 'uppercase',
+        letterSpacing: '0.1em',
+        marginBottom: spacing.sm,
+        fontWeight: 'bold',
+      }}>
+        {isTitle ? 'Title Fight' : 'Featured Fight'} — {TIER_LABELS[match.tier] || match.tier}
+      </div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: spacing.lg,
+      }}>
+        <div style={{ textAlign: 'right', flex: 1 }}>
+          <div style={{
+            fontSize: fontSizes.xxl,
+            fontWeight: 'bold',
+            color: isF1Winner ? colors.win : colors.loss,
+          }}>
+            {match.fighter1_name}
+          </div>
+          <div style={{ fontSize: fontSizes.xs, color: colors.textDim }}>
+            {isF1Winner ? 'WINNER' : ''}
+          </div>
+        </div>
+        <div style={{
+          fontSize: fontSizes.md,
+          color: colors.textDim,
+          padding: `${spacing.xs} ${spacing.sm}`,
+        }}>
+          vs
+        </div>
+        <div style={{ textAlign: 'left', flex: 1 }}>
+          <div style={{
+            fontSize: fontSizes.xxl,
+            fontWeight: 'bold',
+            color: !isF1Winner ? colors.win : colors.loss,
+          }}>
+            {match.fighter2_name}
+          </div>
+          <div style={{ fontSize: fontSizes.xs, color: colors.textDim }}>
+            {!isF1Winner ? 'WINNER' : ''}
+          </div>
+        </div>
+      </div>
+      <div style={{
+        textAlign: 'center',
+        marginTop: spacing.md,
+        fontSize: fontSizes.sm,
+      }}>
+        <span style={{ fontWeight: 'bold', color: colors.text }}>{winnerName}</span>
+        <span style={{ color: colors.textDim }}> def. </span>
+        <span style={{ color: colors.textMuted }}>{loserName}</span>
+        <span style={{ color: colors.textDim }}> — </span>
+        <span style={{ color: methodColor(match.method), fontWeight: 'bold' }}>
+          {match.method.toUpperCase()} R{match.round_ended}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function RightSidebar({ headlines, seasonLogs }: {
+  headlines: { text: string; color: string }[]
+  seasonLogs: { season: number; champion_name: string; champion_id: string; retirements: number; new_fighters: number }[]
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
+      {headlines.length > 0 && (
+        <div style={{
+          padding: spacing.md,
+          backgroundColor: colors.surface,
+          borderRadius: '6px',
+          border: `1px solid ${colors.border}`,
+        }}>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.textMuted,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            marginBottom: spacing.sm,
+            fontWeight: 'bold',
+          }}>
+            Top Headlines
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs }}>
+            {headlines.map((h, i) => (
+              <div key={i} style={{
+                padding: `${spacing.xs} ${spacing.sm}`,
+                borderLeft: `3px solid ${h.color}`,
+                fontSize: fontSizes.xs,
+                color: colors.text,
+                backgroundColor: withAlpha(h.color, 0.05),
+                borderRadius: '0 3px 3px 0',
               }}>
-                <div style={{ color: colors.textMuted, fontSize: fontSizes.xs }}>Season {log.season}</div>
-                <div style={{ color: colors.accent, fontSize: fontSizes.sm }}>{log.champion_name || 'No champion'}</div>
-                <div style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
-                  {log.retirements} retired / {log.new_fighters} new
-                </div>
+                {h.text}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {seasonLogs && seasonLogs.length > 0 && (
+        <div style={{
+          padding: spacing.md,
+          backgroundColor: colors.surface,
+          borderRadius: '6px',
+          border: `1px solid ${colors.border}`,
+        }}>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.textMuted,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            marginBottom: spacing.sm,
+            fontWeight: 'bold',
+          }}>
+            Season History
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs }}>
+            {seasonLogs.slice(-6).reverse().map(log => (
+              <div key={log.season} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: `${spacing.xs} 0`,
+                borderBottom: `1px solid ${colors.border}`,
+                fontSize: fontSizes.xs,
+              }}>
+                <span style={{ color: colors.textDim }}>S{log.season}</span>
+                {log.champion_id ? (
+                  <Link to={`/fighter/${log.champion_id}`} style={{
+                    color: colors.accent,
+                    fontWeight: 'bold',
+                  }}>
+                    {log.champion_name || 'No champion'}
+                  </Link>
+                ) : (
+                  <span style={{ color: colors.textMuted }}>{log.champion_name || 'No champion'}</span>
+                )}
               </div>
             ))}
           </div>
@@ -308,7 +629,7 @@ export default function Home() {
   )
 }
 
-function UpcomingDay({ month, day, season, currentDate, promotionFights, titleFight, scheduledFights }: {
+function UpcomingDay({ month, currentDate, promotionFights, titleFight, scheduledFights }: {
   month: number
   day: number
   season: number
@@ -369,7 +690,7 @@ function UpcomingDay({ month, day, season, currentDate, promotionFights, titleFi
   const grouped: Record<string, ScheduledFight[]> = {}
   for (const f of fights) {
     if (!grouped[f.tier]) grouped[f.tier] = []
-    grouped[f.tier].push(f)
+    grouped[f.tier]!.push(f)
   }
   const sortedTiers = Object.keys(grouped).sort(
     (a, b) => TIER_ORDER.indexOf(a) - TIER_ORDER.indexOf(b)
@@ -405,7 +726,7 @@ function UpcomingDay({ month, day, season, currentDate, promotionFights, titleFi
               {TIER_LABELS[tier] || tier}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              {grouped[tier].map((f, i) => (
+              {(grouped[tier] || []).map((f, i) => (
                 <div key={i} style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr auto 1fr',
@@ -429,29 +750,17 @@ function UpcomingDay({ month, day, season, currentDate, promotionFights, titleFi
   )
 }
 
-function InfoCard({ label, value, children }: { label: string; value?: string; children?: React.ReactNode }) {
-  return (
-    <div style={{
-      padding: spacing.md,
-      backgroundColor: colors.surface,
-      borderRadius: '6px',
-      border: `1px solid ${colors.border}`,
-    }}>
-      <div style={{ color: colors.textMuted, fontSize: fontSizes.xs, marginBottom: spacing.xs }}>{label}</div>
-      {children || <div style={{ color: colors.text, fontSize: fontSizes.md }}>{value}</div>}
-    </div>
-  )
-}
-
-function SectionHeader({ children }: { children: React.ReactNode }) {
+function SectionHeader({ children, accent }: { children: React.ReactNode; accent?: boolean }) {
   return (
     <div style={{
       fontSize: fontSizes.lg,
-      color: colors.text,
+      color: accent ? colors.accent : colors.text,
       fontWeight: 'bold',
       marginBottom: spacing.sm,
       paddingBottom: spacing.xs,
-      borderBottom: `1px solid ${colors.border}`,
+      borderBottom: `2px solid ${accent ? colors.accent : colors.border}`,
+      textTransform: accent ? 'uppercase' : undefined,
+      letterSpacing: accent ? '0.05em' : undefined,
     }}>
       {children}
     </div>

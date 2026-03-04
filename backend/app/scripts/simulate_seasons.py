@@ -19,7 +19,7 @@ from app.engine.between_fights.season import (
     process_end_of_season,
     get_tier_event_config,
     TIER_SIZES,
-    EVENT_DAYS,
+    is_fight_day,
     REGULAR_MONTHS,
     PROMOTION_MONTH,
     SEASON_MONTHS,
@@ -239,7 +239,7 @@ class LeagueSimulator:
 
             if month in REGULAR_MONTHS:
                 for tier in ["championship", "contender", "underground"]:
-                    if day_of_month in EVENT_DAYS[tier]:
+                    if is_fight_day(current, season_num, tier):
                         self._run_tier_event(tier)
 
             current += timedelta(days=1)
