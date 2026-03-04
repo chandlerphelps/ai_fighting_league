@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field, asdict
+from datetime import date as _date
 
 
 @dataclass
@@ -50,8 +51,19 @@ class WorldState:
     @classmethod
     def from_dict(cls, d: dict) -> "WorldState":
         rivalry_graph = [RivalryRecord.from_dict(r) for r in d.get("rivalry_graph", [])]
+
+        current_date = d.get("current_date", "")
+        season_number = d.get("season_number", 1)
+        if not current_date:
+            start_year = 2024 + season_number - 1
+            current_date = _date(start_year, 11, 1).isoformat()
+
+        parsed = _date.fromisoformat(current_date)
+        season_month = parsed.month
+        season_day_in_month = parsed.day
+
         return cls(
-            current_date=d.get("current_date", ""),
+            current_date=current_date,
             day_number=d.get("day_number", 0),
             rankings=d.get("rankings", []),
             upcoming_events=d.get("upcoming_events", []),
@@ -60,9 +72,9 @@ class WorldState:
             rivalry_graph=rivalry_graph,
             last_daily_summary=d.get("last_daily_summary", ""),
             event_counter=d.get("event_counter", 0),
-            season_number=d.get("season_number", 1),
-            season_month=d.get("season_month", d.get("season_week", 1)),
-            season_day_in_month=d.get("season_day_in_month", d.get("season_day_in_week", 1)),
+            season_number=season_number,
+            season_month=season_month,
+            season_day_in_month=season_day_in_month,
             tier_rankings=d.get("tier_rankings", {
                 "championship": [],
                 "contender": [],

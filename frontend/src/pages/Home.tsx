@@ -23,7 +23,15 @@ function methodColor(method: string): string {
   return METHOD_COLORS[method] || colors.textMuted
 }
 
+const MONTH_NAMES = [
+  '', 'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
 function parseDateKey(d: string): number {
+  if (d.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return parseInt(d.replace(/-/g, ''))
+  }
   const m = d.match(/^s(\d+)m(\d+)(?:d(\d+))?$/)
   if (!m) return 0
   const season = parseInt(m[1])
@@ -33,6 +41,10 @@ function parseDateKey(d: string): number {
 }
 
 function formatDateLabel(d: string): string {
+  if (d.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    const [y, m, day] = d.split('-').map(Number)
+    return `${MONTH_NAMES[m]} ${day}, ${y}`
+  }
   const m = d.match(/^s(\d+)m(\d+)(?:d(\d+))?$/)
   if (!m) return d
   const season = m[1]
@@ -40,6 +52,14 @@ function formatDateLabel(d: string): string {
   const day = m[3]
   if (day) return `Season ${season} — Month ${month}, Day ${day}`
   return `Season ${season} — Month ${month}`
+}
+
+function formatCurrentDate(dateStr: string): string {
+  if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    const [y, m, day] = dateStr.split('-').map(Number)
+    return `${MONTH_NAMES[m]} ${day}, ${y}`
+  }
+  return dateStr
 }
 
 export default function Home() {
@@ -101,8 +121,9 @@ export default function Home() {
     underground: ws.tier_rankings?.underground?.length ?? 0,
   }
 
-  const monthLabel = ws.season_month === 8 ? 'Promotion Month' :
-    ws.promotion_fights?.length ? 'Promotions Announced' : `Month ${ws.season_month}`
+  const currentMonth = ws.current_date ? parseInt(ws.current_date.split('-')[1]) : ws.season_month
+  const monthLabel = currentMonth === 6 ? 'Promotion Month' :
+    ws.promotion_fights?.length ? 'Promotions Announced' : formatCurrentDate(ws.current_date)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
@@ -120,7 +141,7 @@ export default function Home() {
             Season {ws.season_number}
           </div>
           <div style={{ fontSize: fontSizes.md, color: colors.textMuted, marginTop: spacing.xs }}>
-            {monthLabel} — Day {ws.season_day_in_month}
+            {monthLabel}
           </div>
         </div>
 
@@ -199,9 +220,10 @@ export default function Home() {
       </div>
 
       <UpcomingDay
-        month={ws.season_month}
+        month={currentMonth}
         day={ws.season_day_in_month}
         season={ws.season_number}
+        currentDate={ws.current_date}
         promotionFights={ws.promotion_fights}
         titleFight={ws.title_fight}
         scheduledFights={ws.scheduled_fights}
@@ -286,15 +308,16 @@ export default function Home() {
   )
 }
 
-function UpcomingDay({ month, day, season, promotionFights, titleFight, scheduledFights }: {
+function UpcomingDay({ month, day, season, currentDate, promotionFights, titleFight, scheduledFights }: {
   month: number
   day: number
   season: number
+  currentDate: string
   promotionFights: unknown[]
   titleFight: Record<string, string>
   scheduledFights: ScheduledFight[]
 }) {
-  const isPromotionMonth = month === 8
+  const isPromotionMonth = month === 6
   const fights = scheduledFights || []
 
   if (isPromotionMonth) {
@@ -367,7 +390,7 @@ function UpcomingDay({ month, day, season, promotionFights, titleFight, schedule
         letterSpacing: '0.05em',
         marginBottom: spacing.sm,
       }}>
-        Coming Up — S{season} M{month} D{day}
+        Coming Up — {formatCurrentDate(currentDate)}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.sm }}>
         {sortedTiers.map(tier => (

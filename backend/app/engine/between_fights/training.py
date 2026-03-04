@@ -1,9 +1,9 @@
 import random as _random
 
 TRAINING_RATES = {
-    "championship": 0.15,
-    "contender": 0.12,
-    "underground": 0.10,
+    "championship": 0.035,
+    "contender": 0.028,
+    "underground": 0.023,
 }
 
 FIGHT_CAMP_BOOSTS = {
@@ -16,7 +16,7 @@ CORE_STATS = ["power", "speed", "technique", "toughness"]
 TRAINABLE_STATS = CORE_STATS + ["supernatural"]
 
 STAT_CAP = 95
-OVERTRAINING_THRESHOLD = 21
+OVERTRAINING_THRESHOLD = 90
 OVERTRAINING_INJURY_CHANCE = 0.05
 
 

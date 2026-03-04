@@ -88,6 +88,7 @@ export interface DaySimulationResult {
   season: number
   month: number
   day: number
+  date: string
   matches: MatchResult[]
   recoveries: { fighter_id: string; fighter_name: string }[]
   phase: string

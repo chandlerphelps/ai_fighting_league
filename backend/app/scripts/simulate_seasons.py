@@ -1,8 +1,10 @@
 import argparse
+import calendar
 import random
 import hashlib
 import sys
 from collections import defaultdict
+from datetime import date as _date, timedelta
 
 from app.engine.combat.simulator import simulate_combat
 from app.engine.between_fights.training import process_daily_training, apply_fight_camp_boost
@@ -17,14 +19,14 @@ from app.engine.between_fights.season import (
     process_end_of_season,
     get_tier_event_config,
     TIER_SIZES,
+    EVENT_DAYS,
+    REGULAR_MONTHS,
+    PROMOTION_MONTH,
+    SEASON_MONTHS,
+    season_start_date,
+    season_end_date,
+    days_remaining_in_season,
 )
-
-
-EVENT_DAYS = {
-    "championship": [3, 6],
-    "contender": [2, 4, 7],
-    "underground": [1, 2, 3, 4, 5, 6, 7],
-}
 
 INJURY_TYPES_WINNER = ["minor bruising", "hand strain", "mild concussion"]
 INJURY_TYPES_LOSER_KO = ["concussion", "orbital fracture", "broken nose"]
@@ -51,7 +53,8 @@ class LeagueSimulator:
         self.fighter_counter = 0
         self.world_state = {
             "season_number": 1,
-            "season_month": 1,
+            "current_date": season_start_date(1).isoformat(),
+            "season_month": 11,
             "season_day_in_month": 1,
             "tier_rankings": {"championship": [], "contender": [], "underground": []},
             "belt_holder_id": "",
@@ -201,6 +204,14 @@ class LeagueSimulator:
         stats["supernatural"] = 0
         return stats
 
+    def _current_date(self) -> _date:
+        return _date.fromisoformat(self.world_state["current_date"])
+
+    def _sync_date(self, d: _date):
+        self.world_state["current_date"] = d.isoformat()
+        self.world_state["season_month"] = d.month
+        self.world_state["season_day_in_month"] = d.day
+
     def simulate_season(self):
         season_num = self.world_state["season_number"]
         self.season_matches = []
@@ -213,16 +224,28 @@ class LeagueSimulator:
             print(f"{'='*60}")
             self._print_tier_rosters()
 
-        for month in range(1, 9):
-            self.world_state["season_month"] = month
+        start = season_start_date(season_num)
+        end = season_end_date(season_num)
+        self._sync_date(start)
 
-            if month <= 6:
-                self._simulate_regular_month(month)
-            elif month == 7:
-                self._simulate_regular_month(month)
-                self._prepare_promotion_month()
-            elif month == 8:
-                self._simulate_promotion_month()
+        current = start
+        while current <= end:
+            self._sync_date(current)
+            month = current.month
+            day_of_month = current.day
+
+            self._process_daily_recovery()
+            self._process_daily_training_all()
+
+            if month in REGULAR_MONTHS:
+                for tier in ["championship", "contender", "underground"]:
+                    if day_of_month in EVENT_DAYS[tier]:
+                        self._run_tier_event(tier)
+
+            current += timedelta(days=1)
+
+        self._prepare_promotion_month()
+        self._simulate_promotion_month()
 
         season_summary = process_end_of_season(
             self.fighters,
@@ -260,14 +283,7 @@ class LeagueSimulator:
         return season_summary
 
     def _simulate_regular_month(self, month):
-        for day in range(1, 8):
-            self.world_state["season_day_in_month"] = day
-            self._process_daily_recovery()
-            self._process_daily_training_all()
-
-            for tier in ["championship", "contender", "underground"]:
-                if day in EVENT_DAYS[tier]:
-                    self._run_tier_event(tier)
+        pass
 
     def _process_daily_recovery(self):
         for fid, fighter in self.fighters.items():
@@ -403,7 +419,7 @@ class LeagueSimulator:
                 "method": method,
                 "round_ended": final_round,
             },
-            "date": f"s{season}m{month}",
+            "date": self.world_state["current_date"],
         }
         self.season_matches.append(match_record)
 
@@ -466,8 +482,8 @@ class LeagueSimulator:
         season_end_chance = max(0, 0.02 + 0.005 * (age - 28)) * ko_multiplier
         if self.rng.random() < season_end_chance:
             injury_type = self.rng.choice(SEASON_ENDING_INJURY_TYPES)
-            month = self.world_state.get("season_month", 1)
-            remaining_days = max(1, (8 - month) * 7)
+            remaining_days = days_remaining_in_season(self._current_date(), self.world_state["season_number"])
+            remaining_days = max(1, remaining_days)
             recovery = max(self.rng.randint(*SEASON_ENDING_RECOVERY), remaining_days)
             fighter["condition"] = {
                 "health_status": "injured",
@@ -484,7 +500,7 @@ class LeagueSimulator:
                 "fighter_id": fighter["id"],
                 "ring_name": fighter.get("ring_name", ""),
                 "injury_type": injury_type,
-                "month": month,
+                "date": self.world_state["current_date"],
             })
 
     def _prepare_promotion_month(self):
@@ -534,7 +550,7 @@ class LeagueSimulator:
             }
 
         if self.verbose:
-            print(f"\n  --- Month 7: Promotion/Relegation Announced ---")
+            print(f"\n  --- Promotion/Relegation Announced ---")
             for m in matchups:
                 upper = self.fighters.get(m["upper_fighter_id"], {}).get("ring_name", "?")
                 lower = self.fighters.get(m["lower_fighter_id"], {}).get("ring_name", "?")
@@ -546,11 +562,6 @@ class LeagueSimulator:
                 print(f"    TITLE FIGHT: {champ} (C) vs {challenger}")
 
     def _simulate_promotion_month(self):
-        for day in range(1, 8):
-            self.world_state["season_day_in_month"] = day
-            self._process_daily_recovery()
-            self._process_daily_training_all()
-
         promotion_results = []
         for matchup in self.world_state.get("promotion_fights", []):
             upper_id = matchup["upper_fighter_id"]
@@ -578,7 +589,7 @@ class LeagueSimulator:
         changes = apply_promotion_results(self.fighters, promotion_results)
 
         if self.verbose:
-            print(f"\n  --- Month 8: Promotion/Relegation Results ---")
+            print(f"\n  --- Promotion/Relegation Results ---")
             for change in changes:
                 fname = self.fighters.get(change["fighter_id"], {}).get("ring_name", "?")
                 print(f"    {fname}: {change['action']} -> {change['tier']}")
@@ -661,7 +672,7 @@ class LeagueSimulator:
         if self.season_ending_injuries:
             print(f"  Season-Ending Injuries: {len(self.season_ending_injuries)}")
             for sei in self.season_ending_injuries:
-                print(f"    {sei['ring_name']:20s} {sei['injury_type']} (month {sei['month']})")
+                print(f"    {sei['ring_name']:20s} {sei['injury_type']} ({sei.get('date', '?')})")
 
         if summary.get("retirements"):
             print(f"  Retirements:")

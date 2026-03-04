@@ -1,7 +1,44 @@
 import random as _random
+from datetime import date as _date
 
 from .retirement import check_retirement, apply_aging, update_promotion_desperation, generate_replacement_fighter
 from .league_tiers import calculate_tier_rankings, TIER_ORDER
+
+SEASON_START_MONTH = 11
+SEASON_MONTHS = [11, 12, 1, 2, 3, 4, 5, 6]
+REGULAR_MONTHS = [11, 12, 1, 2, 3, 4, 5]
+PROMOTION_MONTH = 6
+
+EVENT_DAYS = {
+    "championship": [10, 22],
+    "contender": [7, 15, 23],
+    "underground": [2, 6, 10, 14, 18, 22, 26],
+}
+
+
+def season_start_year(season_number: int) -> int:
+    return 2024 + season_number - 1
+
+
+def season_start_date(season_number: int) -> _date:
+    return _date(season_start_year(season_number), SEASON_START_MONTH, 1)
+
+
+def season_end_date(season_number: int) -> _date:
+    return _date(season_start_year(season_number) + 1, 6, 30)
+
+
+def is_promotion_month(month: int) -> bool:
+    return month == PROMOTION_MONTH
+
+
+def is_regular_month(month: int) -> bool:
+    return month in REGULAR_MONTHS
+
+
+def days_remaining_in_season(current: _date, season_number: int) -> int:
+    end = season_end_date(season_number)
+    return max(0, (end - current).days)
 
 TIER_EVENT_CONFIG = {
     "championship": {"events_per_month": 2, "fights_min": 3, "fights_max": 4},
@@ -109,7 +146,8 @@ def process_end_of_season(
             }
 
     ws["season_number"] = season + 1
-    ws["season_month"] = 1
+    ws["current_date"] = season_start_date(season + 1).isoformat()
+    ws["season_month"] = SEASON_START_MONTH
     ws["season_day_in_month"] = 1
 
     summary["tier_counts_after"] = _count_tiers(fighters)

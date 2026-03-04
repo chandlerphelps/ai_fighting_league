@@ -87,7 +87,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
         })
 
     ws = {
-        "current_date": "2026-03-03",
+        "current_date": sim.world_state.get("current_date", ""),
         "day_number": sim.world_state.get("day_number", 0),
         "season_number": sim.world_state["season_number"],
         "season_month": sim.world_state["season_month"],
@@ -113,7 +113,7 @@ def initialize_league(seasons=30, seed=42, verbose=False):
     }
 
     data_manager.save_world_state(ws, config)
-    print(f"  Saved world_state.json (Season {ws['season_number']}, Month {ws['season_month']})")
+    print(f"  Saved world_state.json (Season {ws['season_number']}, {ws['current_date']})")
 
     champions = ws.get("season_champions", [])
     latest_champ = champions[-1] if champions else None

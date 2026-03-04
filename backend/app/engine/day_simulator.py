@@ -1,5 +1,6 @@
 import hashlib
 import random
+from datetime import date as _date, timedelta
 
 from app.engine.combat.simulator import simulate_combat
 from app.engine.between_fights.training import process_daily_training, apply_fight_camp_boost
@@ -12,9 +13,14 @@ from app.engine.between_fights.league_tiers import (
 from app.engine.between_fights.season import (
     process_end_of_season,
     get_tier_event_config,
+    EVENT_DAYS,
+    REGULAR_MONTHS,
+    PROMOTION_MONTH,
+    season_start_date,
+    season_end_date,
+    days_remaining_in_season,
 )
 from app.scripts.simulate_seasons import (
-    EVENT_DAYS,
     INJURY_TYPES_WINNER,
     INJURY_TYPES_LOSER_KO,
     INJURY_TYPES_LOSER_OTHER,
@@ -28,18 +34,34 @@ from app.scripts.simulate_seasons import (
 from app.engine.between_fights.retirement import CORE_STATS
 
 
+def _current_date(ws: dict) -> _date:
+    date_str = ws.get("current_date", "")
+    if date_str:
+        return _date.fromisoformat(date_str)
+    season = ws.get("season_number", 1)
+    return season_start_date(season)
+
+
+def _sync_date_fields(ws: dict, d: _date):
+    ws["current_date"] = d.isoformat()
+    ws["season_month"] = d.month
+    ws["season_day_in_month"] = d.day
+
+
 def simulate_one_day(fighters: dict, ws: dict) -> dict:
     season = ws["season_number"]
-    month = ws["season_month"]
-    day = ws["season_day_in_month"]
+    today = _current_date(ws)
+    month = today.month
+    day_of_month = today.day
 
-    seed_base = season * 10000 + month * 100 + day
+    seed_base = today.toordinal()
     rng = random.Random(seed_base)
 
     day_result = {
         "season": season,
         "month": month,
-        "day": day,
+        "day": day_of_month,
+        "date": today.isoformat(),
         "matches": [],
         "recoveries": [],
         "phase": "regular",
@@ -48,7 +70,7 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
     _process_daily_recovery(fighters, day_result)
     _process_daily_training(fighters, rng)
 
-    if month <= 7:
+    if month in REGULAR_MONTHS:
         scheduled = ws.get("scheduled_fights", [])
         if scheduled:
             for sf in scheduled:
@@ -65,12 +87,12 @@ def simulate_one_day(fighters: dict, ws: dict) -> dict:
             ws["scheduled_fights"] = []
         else:
             for tier in ["championship", "contender", "underground"]:
-                if day in EVENT_DAYS[tier]:
+                if day_of_month in EVENT_DAYS[tier]:
                     matches = _run_tier_event(fighters, ws, tier, rng)
                     day_result["matches"].extend(matches)
         day_result["phase"] = "regular"
 
-    if month == 8:
+    if month == PROMOTION_MONTH:
         day_result["phase"] = "promotion_month"
 
     _advance_calendar(fighters, ws, rng, day_result)
@@ -121,14 +143,15 @@ def _process_daily_training(fighters: dict, rng):
 
 
 def _schedule_next_day(fighters: dict, ws: dict):
-    next_month = ws["season_month"]
-    next_day = ws["season_day_in_month"]
+    next_date = _current_date(ws)
+    next_month = next_date.month
+    next_day = next_date.day
 
-    if next_month > 7:
+    if next_month not in REGULAR_MONTHS:
         ws["scheduled_fights"] = []
         return
 
-    seed_base = ws["season_number"] * 10000 + next_month * 100 + next_day
+    seed_base = next_date.toordinal()
     rng = random.Random(seed_base)
 
     scheduled = []
@@ -221,10 +244,9 @@ def _run_single_fight(fighters: dict, ws: dict, f1_id: str, f2_id: str, rng) -> 
     f2_data = dict(f2)
     f2_data["stats"] = f2_boosted
 
-    season = ws["season_number"]
-    month = ws["season_month"]
-    day = ws["season_day_in_month"]
-    seed_str = f"{f1_id}:{f2_id}:{season}:{month}:{day}"
+    today = _current_date(ws)
+    date_str = today.isoformat()
+    seed_str = f"{f1_id}:{f2_id}:{date_str}"
     seed = int(hashlib.sha256(seed_str.encode()).hexdigest()[:8], 16)
 
     result = simulate_combat(f1_data, f2_data, seed=seed)
@@ -266,7 +288,6 @@ def _run_single_fight(fighters: dict, ws: dict, f1_id: str, f2_id: str, rng) -> 
     if loser.get("status") == "retired":
         ws.setdefault("retired_fighter_ids", []).append(loser_id)
 
-    date_str = f"s{season}m{month}d{day}"
     return {
         "fighter1_id": f1_id,
         "fighter1_name": f1.get("ring_name", f1_id),
@@ -336,9 +357,9 @@ def _apply_injury(fighter: dict, ws: dict, rng, is_winner: bool, method: str):
     season_end_chance = max(0, 0.02 + 0.005 * (age - 28)) * ko_multiplier
     if rng.random() < season_end_chance:
         injury_type = rng.choice(SEASON_ENDING_INJURY_TYPES)
-        month = ws.get("season_month", 1)
-        remaining_days = max(1, (8 - month) * 7)
-        recovery = max(rng.randint(*SEASON_ENDING_RECOVERY), remaining_days)
+        today = _current_date(ws)
+        remaining = days_remaining_in_season(today, ws["season_number"])
+        recovery = max(rng.randint(*SEASON_ENDING_RECOVERY), remaining)
         fighter["condition"] = {
             "health_status": "injured",
             "injuries": [{"type": injury_type, "severity": "season_ending", "recovery_days_remaining": recovery}],
@@ -353,65 +374,65 @@ def _apply_injury(fighter: dict, ws: dict, rng, is_winner: bool, method: str):
 
 
 def _advance_calendar(fighters: dict, ws: dict, rng, day_result: dict):
-    day = ws["season_day_in_month"]
-    month = ws["season_month"]
+    today = _current_date(ws)
     season = ws["season_number"]
+    tomorrow = today + timedelta(days=1)
 
-    day += 1
-    if day > 7:
-        day = 1
+    end = season_end_date(season)
+    old_month = today.month
 
-        if month == 7:
-            _prepare_promotions(fighters, ws)
-            month = 8
-            day_result["phase"] = "promotions_announced"
-        elif month == 8:
-            _run_promotions(fighters, ws, rng, day_result)
-            _run_title_fight(fighters, ws, rng, day_result)
+    if tomorrow > end:
+        _prepare_promotions(fighters, ws)
+        day_result["phase"] = "promotions_announced"
 
-            used_names = {f.get("ring_name", "") for f in fighters.values()}
-            fighter_counter = max(
-                (int(fid.split("-")[1]) for fid in fighters if fid.startswith("sim-")),
-                default=0,
-            )
-            season_summary = process_end_of_season(fighters, ws, fighter_counter, rng, used_names)
-            day_result["season_end"] = {
-                "retirements": len(season_summary.get("retirements", [])),
-                "new_fighters": len(season_summary.get("new_fighters", [])),
-                "backfill_promotions": len(season_summary.get("backfill_promotions", [])),
-            }
+        _run_promotions(fighters, ws, rng, day_result)
+        _run_title_fight(fighters, ws, rng, day_result)
 
-            for nf_info in season_summary.get("new_fighters", []):
-                fid = nf_info["fighter_id"]
-                if fid in fighters:
-                    continue
-            day_result["phase"] = "season_end"
+        used_names = {f.get("ring_name", "") for f in fighters.values()}
+        fighter_counter = max(
+            (int(fid.split("-")[1]) for fid in fighters if fid.startswith("sim-")),
+            default=0,
+        )
+        season_summary = process_end_of_season(fighters, ws, fighter_counter, rng, used_names)
+        day_result["season_end"] = {
+            "retirements": len(season_summary.get("retirements", [])),
+            "new_fighters": len(season_summary.get("new_fighters", [])),
+            "backfill_promotions": len(season_summary.get("backfill_promotions", [])),
+        }
 
-            champions = ws.get("season_champions", [])
-            season_champ = next((c for c in champions if c["season"] == season), None)
-            ws.setdefault("season_logs", []).append({
-                "season": season,
-                "champion_name": season_champ["ring_name"] if season_champ else "None",
-                "champion_id": season_champ["fighter_id"] if season_champ else "",
-                "belt_holder_name": fighters.get(ws.get("belt_holder_id", ""), {}).get("ring_name", "VACANT"),
-                "belt_holder_id": ws.get("belt_holder_id", ""),
-                "retirements": len(season_summary.get("retirements", [])),
-                "new_fighters": len(season_summary.get("new_fighters", [])),
-                "tier_counts": season_summary.get("tier_counts_after", {}),
-            })
-            return
-        else:
-            month += 1
+        for nf_info in season_summary.get("new_fighters", []):
+            fid = nf_info["fighter_id"]
+            if fid in fighters:
+                continue
+        day_result["phase"] = "season_end"
 
-    ws["season_day_in_month"] = day
-    ws["season_month"] = month
+        champions = ws.get("season_champions", [])
+        season_champ = next((c for c in champions if c["season"] == season), None)
+        ws.setdefault("season_logs", []).append({
+            "season": season,
+            "champion_name": season_champ["ring_name"] if season_champ else "None",
+            "champion_id": season_champ["fighter_id"] if season_champ else "",
+            "belt_holder_name": fighters.get(ws.get("belt_holder_id", ""), {}).get("ring_name", "VACANT"),
+            "belt_holder_id": ws.get("belt_holder_id", ""),
+            "retirements": len(season_summary.get("retirements", [])),
+            "new_fighters": len(season_summary.get("new_fighters", [])),
+            "tier_counts": season_summary.get("tier_counts_after", {}),
+        })
+        return
+
+    if tomorrow.month == PROMOTION_MONTH and old_month != PROMOTION_MONTH:
+        _prepare_promotions(fighters, ws)
+        day_result["phase"] = "promotions_announced"
+
+    _sync_date_fields(ws, tomorrow)
 
 
 def _prepare_promotions(fighters: dict, ws: dict):
     active = [f for f in fighters.values() if f.get("status") == "active"]
+    season_start = season_start_date(ws["season_number"]).isoformat()
     season_matches = []
     for m in ws.get("recent_matches", []):
-        if m.get("date", "").startswith(f"s{ws['season_number']}"):
+        if m.get("date", "") >= season_start:
             season_matches.append({
                 "fighter1_id": m.get("fighter1_id"),
                 "fighter2_id": m.get("fighter2_id"),
@@ -532,9 +553,10 @@ def _run_title_fight(fighters: dict, ws: dict, rng, day_result: dict):
 
 def _recalculate_rankings(fighters: dict, ws: dict):
     active = [f for f in fighters.values() if f.get("status") == "active"]
+    season_start = season_start_date(ws["season_number"]).isoformat()
     season_matches = []
     for m in ws.get("recent_matches", []):
-        if m.get("date", "").startswith(f"s{ws['season_number']}"):
+        if m.get("date", "") >= season_start:
             season_matches.append({
                 "fighter1_id": m.get("fighter1_id"),
                 "fighter2_id": m.get("fighter2_id"),
@@ -553,7 +575,7 @@ def _recalculate_rankings(fighters: dict, ws: dict):
 
 
 def _build_summary(day_result: dict) -> str:
-    parts = [f"Season {day_result['season']}, Month {day_result['month']}, Day {day_result['day']}"]
+    parts = [f"Season {day_result['season']}, {day_result.get('date', '')}"]
     if day_result["matches"]:
         parts.append(f"{len(day_result['matches'])} matches fought")
     if day_result["recoveries"]:

@@ -59,7 +59,7 @@ export default function Layout({ children }: LayoutProps) {
         </div>
         {worldState && (
           <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
-            S{worldState.season_number} M{worldState.season_month} D{worldState.season_day_in_month}
+            S{worldState.season_number} — {worldState.current_date || `M${worldState.season_month} D${worldState.season_day_in_month}`}
           </div>
         )}
       </nav>
