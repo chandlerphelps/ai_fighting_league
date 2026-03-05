@@ -186,10 +186,10 @@ export async function regeneratePlanEntry(index: number): Promise<TaskResponse> 
   })
 }
 
-export async function addPlanEntries(count: number): Promise<TaskResponse> {
+export async function addPlanEntries(count: number, gender_mix: string = 'female'): Promise<TaskResponse> {
   return apiFetch<TaskResponse>('/roster-plan/entries/add', {
     method: 'POST',
-    body: JSON.stringify({ count }),
+    body: JSON.stringify({ count, gender_mix }),
   })
 }
 

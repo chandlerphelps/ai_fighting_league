@@ -100,11 +100,15 @@ def _rebuild_prompts(fighter: dict):
     clothing_nsfw = fighter.get("ring_attire_nsfw", "") or fighter.get("image_prompt_nsfw", {}).get("clothing", "")
 
     age = fighter.get("age", 0)
+    origin = fighter.get("origin", "")
+    body_type_details = fighter.get("body_type_details")
     primary_outfit_color = fighter.get("primary_outfit_color", "")
     fighter["image_prompt_sfw"] = _build_charsheet_prompt(
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
         gender=gender, skimpiness_level=skimpiness,
+        body_type_details=body_type_details,
+        origin=origin,
         subtype_info=subtype_info,
         iconic_features=iconic_features,
         age=age,
@@ -114,6 +118,8 @@ def _rebuild_prompts(fighter: dict):
         body_parts, clothing_barely, expression,
         personality_pose=personality_pose, tier="barely",
         gender=gender, skimpiness_level=skimpiness,
+        body_type_details=body_type_details,
+        origin=origin,
         subtype_info=subtype_info,
         iconic_features=iconic_features,
         age=age,
@@ -125,6 +131,8 @@ def _rebuild_prompts(fighter: dict):
             body_parts, clothing_nsfw, expression,
             personality_pose=personality_pose, tier="nsfw",
             gender=gender, skimpiness_level=skimpiness,
+            body_type_details=body_type_details,
+            origin=origin,
             subtype_info=subtype_info,
             iconic_features=iconic_features,
             age=age,
@@ -449,6 +457,8 @@ def regenerate_outfits(fighter_id: str):
         pose_nsfw = outfit_data.get("image_prompt_pose_nsfw", "") or personality_pose
 
         age = existing.get("age", 0)
+        origin = existing.get("origin", "")
+        body_type_details = existing.get("body_type_details")
         primary_outfit_color = existing.get("primary_outfit_color", "")
         if not tiers or "sfw" in tiers:
             existing["ring_attire_sfw"] = outfit_data.get("ring_attire_sfw", existing.get("ring_attire_sfw", ""))
@@ -456,6 +466,8 @@ def regenerate_outfits(fighter_id: str):
                 body_parts, clothing_sfw, expression,
                 personality_pose=pose_sfw, tier="sfw",
                 gender=gender, skimpiness_level=skimpiness_level,
+                body_type_details=body_type_details,
+                origin=origin,
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
                 age=age,
@@ -467,6 +479,8 @@ def regenerate_outfits(fighter_id: str):
                 body_parts, clothing, expression,
                 personality_pose=pose_barely, tier="barely",
                 gender=gender, skimpiness_level=skimpiness_level,
+                body_type_details=body_type_details,
+                origin=origin,
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
                 age=age,
@@ -480,6 +494,8 @@ def regenerate_outfits(fighter_id: str):
                     body_parts, clothing_nsfw, expression,
                     personality_pose=pose_nsfw, tier="nsfw",
                     gender=gender, skimpiness_level=skimpiness_level,
+                    body_type_details=body_type_details,
+                    origin=origin,
                     subtype_info=subtype_info,
                     iconic_features=iconic_features,
                     age=age,
@@ -812,6 +828,7 @@ def add_plan_entries():
 
     body = request.json or {}
     count = body.get("count", 1)
+    gender_mix = body.get("gender_mix", "female")
     task_id = f"addplan_{uuid.uuid4().hex[:8]}"
 
     def do_add():
@@ -828,6 +845,7 @@ def add_plan_entries():
                 for f in existing_on_disk
             ],
             pool_summary=pool_summary,
+            gender_mix=gender_mix,
         )
         for entry in new_entries:
             entry["status"] = "pending"

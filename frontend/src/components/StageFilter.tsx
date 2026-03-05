@@ -5,23 +5,22 @@ export type StageTab = 'all' | 'plan' | 'stage1' | 'stage2' | 'stage3'
 
 interface Props {
   fighters: Fighter[]
-  hasPlan: boolean
   planCount: number
   activeTab: StageTab
   onTabChange: (tab: StageTab) => void
 }
 
-export default function StageFilter({ fighters, hasPlan, planCount, activeTab, onTabChange }: Props) {
+export default function StageFilter({ fighters, planCount, activeTab, onTabChange }: Props) {
   const stage1 = fighters.filter(f => (f.generation_stage ?? 3) === 1).length
   const stage2 = fighters.filter(f => (f.generation_stage ?? 3) === 2).length
   const stage3 = fighters.filter(f => (f.generation_stage ?? 3) >= 3 || f.generation_stage === undefined).length
 
   const tabs: { key: StageTab; label: string; count: number; show: boolean }[] = [
     { key: 'all', label: 'All', count: fighters.length, show: true },
-    { key: 'plan', label: 'Plan', count: planCount, show: hasPlan },
+    { key: 'plan', label: 'Plan', count: planCount, show: true },
     { key: 'stage1', label: 'Stage 1: JSON', count: stage1, show: stage1 > 0 },
     { key: 'stage2', label: 'Stage 2: Portrait', count: stage2, show: stage2 > 0 },
-    { key: 'stage3', label: 'Stage 3: Ready', count: stage3, show: stage3 > 0 || (!hasPlan && stage1 === 0 && stage2 === 0) },
+    { key: 'stage3', label: 'Stage 3: Ready', count: stage3, show: stage3 > 0 || (stage1 === 0 && stage2 === 0) },
   ]
 
   return (

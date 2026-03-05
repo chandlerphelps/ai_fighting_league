@@ -1,176 +1,90 @@
 {
-  "plan_id": "rp_0e666418",
+  "plan_id": "rp_19e21655",
   "created_at": "2026-03-04",
   "mode": "addition",
-  "pool_summary": "CURRENT ROSTER: 1 fighters\nGender: female: 1\n\nArchetype Distribution:\n  The Assassin: 0\n  The Brute: 0\n  The Demon: 0\n  The Doll: 0\n  The Empress: 0\n  The Experiment: 0\n  The Huntress: 0\n  The Monster: 0\n  The Mystic: 0\n  The Nymph: 0\n  The Prodigy: 0\n  The Siren: 0\n  The Technician: 0\n  The Veteran: 0\n  The Viper: 0\n  The Wildcard: 0\n  The Witch: 0\n  MISSING: The Assassin, The Brute, The Demon, The Doll, The Empress, The Experiment, The Huntress, The Monster, The Mystic, The Nymph, The Prodigy, The Siren, The Technician, The Veteran, The Viper, The Wildcard, The Witch\n\nGeographic Spread:\n  Other: 1\n  UNDERREPRESENTED: East Asia, Southeast Asia, South Asia, Central Asia, Middle East, Eastern Europe, Western Europe, Scandinavia, North America, Central America, South America, Africa, Oceania\n\nAge Distribution: 23-27: 1\n\n--- SIGNATURE VISUAL IDENTITY REGISTRY (DO NOT DUPLICATE) ---\n\nOutfit Colors Already Taken:\n  pale moonlight silver (1x)\n\nHair Style+Color Combos Already Taken:\n  long flowing waves soft pink ombre fading to white (1x)\n\nFace Adornments Already Taken:\n  ornate demonic half-mask covering left eye (1x)",
+  "pool_summary": "CURRENT ROSTER: 6 fighters\nGender: male: 3, female: 3\n\nArchetype Distribution:\n  The Assassin: 0\n  The Brute: 0\n  The Demon: 0\n  The Doll: 0\n  The Empress: 0\n  The Experiment: 0\n  The Huntress: 0\n  The Monster: 0\n  The Mystic: 0\n  The Nymph: 0\n  The Prodigy: 0\n  The Siren: 0\n  The Technician: 0\n  The Veteran: 0\n  The Viper: 0\n  The Wildcard: 0\n  The Witch: 0\n  MISSING: The Assassin, The Brute, The Demon, The Doll, The Empress, The Experiment, The Huntress, The Monster, The Mystic, The Nymph, The Prodigy, The Siren, The Technician, The Veteran, The Viper, The Wildcard, The Witch\n\nGeographic Spread:\n  North America: 1\n  Western Europe: 1\n  Other: 1\n  Africa: 1\n  Eastern Europe: 1\n  East Asia: 1\n  UNDERREPRESENTED: Southeast Asia, South Asia, Central Asia, Middle East, Scandinavia, Central America, South America, Oceania\n\nAge Distribution: 18-22: 1, 23-27: 2, 28-32: 2, 33+: 1\n\n--- SIGNATURE VISUAL IDENTITY REGISTRY (DO NOT DUPLICATE) ---\n\nOutfit Colors Already Taken:\n  desert tan (1x)\n  clinical white (1x)\n  ocean teal (1x)\n  mystical purple (1x)\n  blood crimson (1x)\n  shadow black (1x)\n\nHair Style+Color Combos Already Taken:\n  crew cut gray (1x)\n  cropped short silver (1x)\n  long flowing curls auburn (1x)\n  flowing waves midnight black (1x)\n  shaved head bald (1x)\n  straight long bob jet black (1x)\n\nFace Adornments Already Taken:\n  prominent scar across left cheek (1x)\n  tactical glasses (1x)\n  intricate gold henna tattoos (1x)",
   "entries": [
     {
-      "concept_hook": "A Greek opera singer whose lethal hypnotic voice was forged through a forbidden pact with an ancient sea deity, using song to shatter minds and bend opponents to her will.",
-      "ring_name": "Siren's Song",
-      "gender": "female",
-      "age": 24,
-      "origin": "Athens, Greece",
-      "primary_archetype": "Siren",
-      "subtype": "Enchantress",
-      "has_supernatural": true,
-      "power_tier": "contender",
-      "rivalry_seeds": [
-        "Iron Maiden",
-        "The Surgeon"
-      ],
-      "media_archetype_inspiration": "Classic Greek mythology meets femme fatale seductress from film noir",
-      "skimpiness_weights": [
-        10,
-        20,
-        30,
-        40
-      ],
-      "primary_outfit_color": "ocean teal",
-      "hair_style": "long flowing curls",
-      "hair_color": "auburn",
-      "face_adornment": "none",
-      "status": "generated",
-      "fighter_id": "f_a80bf327"
-    },
-    {
-      "concept_hook": "A Russian underground fight club champion whose brute strength and pain tolerance are legendary\u2014he's never lost a street fight and rarely remembers them due to the concussions.",
-      "ring_name": "Iron Maiden",
+      "concept_hook": "A former circus strongman turned illegal underground fighter who uses his freakishly elongated limbs and uncanny flexibility to defeat opponents who expect him to be slow and predictable.",
+      "ring_name": "The Puppetmaster",
       "gender": "male",
-      "age": 29,
-      "origin": "St. Petersburg, Russia",
-      "primary_archetype": "Brute",
-      "subtype": "Brawler",
-      "has_supernatural": false,
-      "power_tier": "contender",
-      "rivalry_seeds": [
-        "Siren's Song",
-        "Nightshade"
-      ],
-      "media_archetype_inspiration": "Russian bear-fighter archetype from Eastern European fight lore, brutal and unstoppable",
-      "skimpiness_weights": [
-        30,
-        40,
-        20,
-        10
-      ],
-      "primary_outfit_color": "blood crimson",
-      "hair_style": "shaved head",
-      "hair_color": "bald",
-      "face_adornment": "none",
-      "status": "generated",
-      "fighter_id": "f_dea5581a"
-    },
-    {
-      "concept_hook": "A Japanese ghost of the shadows\u2014a former ninja clan assassin who abandoned her masters when she discovered they'd been selling her sisters into servitude.",
-      "ring_name": "Nightshade",
-      "gender": "female",
-      "age": 21,
-      "origin": "Kyoto, Japan",
-      "primary_archetype": "Assassin",
-      "subtype": "Phantom",
+      "age": 28,
+      "origin": "Bangkok, Thailand",
+      "primary_archetype": "Monster",
+      "subtype": "Aberration",
       "has_supernatural": false,
       "power_tier": "gatekeeper",
-      "rivalry_seeds": [
-        "Iron Maiden",
-        "The Surgeon"
-      ],
-      "media_archetype_inspiration": "Classic female ninja from Japanese media, stealthy and lethal",
+      "narrative_role": "The reluctant monster \u2014 a gentle man forced into violence to pay his sister's medical debts, whose unnatural proportions make others assume he's a mindless brute, when he's actually a strategic manipulator who turns his body into a weapon",
+      "rivalry_seeds": [],
+      "media_archetype_inspiration": "Draws from the Elephant Man narrative with circus strongman aesthetics and stretches limbs like a praying mantis",
       "skimpiness_weights": [
         15,
         35,
         35,
         15
       ],
-      "primary_outfit_color": "shadow black",
-      "hair_style": "straight long bob",
-      "hair_color": "jet black",
+      "primary_outfit_color": "electric violet",
+      "hair_style": "shaved head with extended eyebrows",
+      "hair_color": "none",
       "face_adornment": "none",
       "status": "generated",
-      "fighter_id": "f_ead4e196"
+      "fighter_id": "f_55c84c6e"
     },
     {
-      "concept_hook": "A German combat analyst and precision striker who fights like a chess grandmaster\u2014every movement calculated, every opponent dissected before the first punch lands.",
-      "ring_name": "The Surgeon",
-      "gender": "male",
-      "age": 31,
-      "origin": "Berlin, Germany",
-      "primary_archetype": "Technician",
-      "subtype": "Surgeon",
-      "has_supernatural": false,
-      "power_tier": "contender",
-      "rivalry_seeds": [
-        "Siren's Song",
-        "Nightshade"
-      ],
-      "media_archetype_inspiration": "Calculated intellectual fighter archetype from combat sports cinema",
-      "skimpiness_weights": [
-        25,
-        45,
-        20,
-        10
-      ],
-      "primary_outfit_color": "clinical white",
-      "hair_style": "cropped short",
-      "hair_color": "silver",
-      "face_adornment": "tactical glasses",
-      "status": "generated",
-      "fighter_id": "f_92fb8035"
-    },
-    {
-      "concept_hook": "A Moroccan oracle cursed with visions of death who uses her prophetic gifts to dominate opponents\u2014her opponents always see their own demise in her crystalline eyes before she strikes.",
-      "ring_name": "The Oracle",
+      "concept_hook": "A deadly South Asian poison master who uses exotic toxins and psychological manipulation to dismantle opponents from the inside out",
+      "ring_name": "KALA SARI",
       "gender": "female",
-      "age": 26,
-      "origin": "Marrakech, Morocco",
-      "primary_archetype": "Witch",
-      "subtype": "Oracle",
-      "has_supernatural": true,
+      "age": 24,
+      "origin": "Mumbai, India",
+      "primary_archetype": "Viper",
+      "subtype": "Poisoner",
+      "has_supernatural": false,
       "power_tier": "contender",
+      "narrative_role": "The scheming strategist who makes opponents question their own resolve before she ever touches them",
       "rivalry_seeds": [
-        "Old Thunder",
-        "Siren's Song"
+        "SOL BLANCO"
       ],
-      "media_archetype_inspiration": "Mystical seer from Middle Eastern folklore meets tarot card fortune teller",
+      "media_archetype_inspiration": "Poison ivy from DC meets classic Bollywood femme fatale",
       "skimpiness_weights": [
-        5,
-        25,
+        10,
+        35,
         40,
-        30
+        15
       ],
-      "primary_outfit_color": "mystical purple",
-      "hair_style": "flowing waves",
-      "hair_color": "midnight black",
-      "face_adornment": "intricate gold henna tattoos",
+      "primary_outfit_color": "emerald green with gold filigree",
+      "hair_style": "twin braids draped over shoulders",
+      "hair_color": "electric violet with golden tips",
+      "face_adornment": "serpentine face chain with ruby eyes",
       "status": "generated",
-      "fighter_id": "f_adca4a5b"
+      "fighter_id": "f_bfd1acd8"
     },
     {
-      "concept_hook": "A grizzled American mercenary who fought in three continents before his fortieth birthday\u2014now he trains fighters and occasionally steps into the ring to remind young lions why experience matters.",
-      "ring_name": "Old Thunder",
+      "concept_hook": "A young Mexican prodigy with preternatural reflexes who fights with bullfighting-inspired showmanship and devastating precision",
+      "ring_name": "SOL BLANCO",
       "gender": "male",
-      "age": 42,
-      "origin": "Texas, USA",
-      "primary_archetype": "Veteran",
-      "subtype": "Grizzled",
+      "age": 21,
+      "origin": "Guadalajara, Mexico",
+      "primary_archetype": "Prodigy",
+      "subtype": "Phen om",
       "has_supernatural": false,
-      "power_tier": "gatekeeper",
+      "power_tier": "prospect",
+      "narrative_role": "The arrogant rising star who underestimates cunning opponents and learns painful lessons about hubris",
       "rivalry_seeds": [
-        "The Oracle",
-        "Iron Maiden"
+        "KALA SARI"
       ],
-      "media_archetype_inspiration": "Battle-worn mentor archetype from Western and war cinema",
+      "media_archetype_inspiration": "Young Miguel Rojo from Bloodrayne meets cocky martial arts movie protagonist",
       "skimpiness_weights": [
+        20,
+        45,
         30,
-        35,
-        25,
-        10
+        5
       ],
-      "primary_outfit_color": "desert tan",
-      "hair_style": "crew cut",
-      "hair_color": "gray",
-      "face_adornment": "prominent scar across left cheek",
+      "primary_outfit_color": "burning orange",
+      "hair_style": "messy undercut with shaved sides",
+      "hair_color": "ink black with bronze highlights",
+      "face_adornment": "bull-skull bandana mask",
       "status": "generated",
-      "fighter_id": "f_67986dd6"
+      "fighter_id": "f_f5e4a29d"
     }
   ]
 }

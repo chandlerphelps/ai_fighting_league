@@ -6,6 +6,7 @@ import {
   deletePlanEntry,
   regeneratePlanEntry,
   addPlanEntries,
+  createRosterPlan,
   generateFromPlan,
   deleteRosterPlan,
   pollUntilDone,
@@ -13,31 +14,36 @@ import {
 } from '../lib/api'
 
 interface Props {
-  plan: RosterPlan
+  plan: RosterPlan | null
+  hasFighters: boolean
   onPlanChange: () => void
   onTask: (task: TaskResponse, label: string) => void
   onError: (msg: string) => void
 }
 
-export default function PlanView({ plan, onPlanChange, onTask, onError }: Props) {
+export default function PlanView({ plan, hasFighters, onPlanChange, onTask, onError }: Props) {
   const [editIndex, setEditIndex] = useState<number | null>(null)
   const [editData, setEditData] = useState<Partial<PlanEntry>>({})
   const [busy, setBusy] = useState(false)
-  const [addCount, setAddCount] = useState(4)
+  const [addCount, setAddCount] = useState(8)
+  const [genderMix, setGenderMix] = useState<'female' | 'male' | 'mixed'>('female')
 
-  const entries = plan.entries || []
-  const approvedCount = entries.filter(e => e.status === 'approved').length
-  const pendingCount = entries.filter(e => e.status === 'pending').length
+  const allEntries = plan?.entries || []
+  const visibleEntries = allEntries
+    .map((entry, originalIndex) => ({ entry, originalIndex }))
+    .filter(({ entry }) => !entry.fighter_id)
+  const approvedCount = visibleEntries.filter(({ entry }) => entry.status === 'approved').length
+  const pendingCount = visibleEntries.filter(({ entry }) => entry.status === 'pending').length
 
-  const startEdit = (index: number) => {
-    setEditIndex(index)
-    setEditData({ ...entries[index] })
+  const startEdit = (visibleIdx: number) => {
+    setEditIndex(visibleIdx)
+    setEditData({ ...visibleEntries[visibleIdx].entry })
   }
 
   const saveEdit = async () => {
     if (editIndex === null) return
     try {
-      await updatePlanEntry(editIndex, editData)
+      await updatePlanEntry(visibleEntries[editIndex].originalIndex, editData)
       setEditIndex(null)
       setEditData({})
       onPlanChange()
@@ -46,9 +52,9 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
     }
   }
 
-  const handleApprove = async (index: number) => {
+  const handleApprove = async (visibleIdx: number) => {
     try {
-      await updatePlanEntry(index, { status: 'approved' })
+      await updatePlanEntry(visibleEntries[visibleIdx].originalIndex, { status: 'approved' })
       onPlanChange()
     } catch (err) {
       onError(err instanceof Error ? err.message : 'Approve failed')
@@ -57,9 +63,9 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
 
   const handleApproveAll = async () => {
     try {
-      for (let i = 0; i < entries.length; i++) {
-        if (entries[i]?.status === 'pending') {
-          await updatePlanEntry(i, { status: 'approved' })
+      for (const { entry, originalIndex } of visibleEntries) {
+        if (entry.status === 'pending') {
+          await updatePlanEntry(originalIndex, { status: 'approved' })
         }
       }
       onPlanChange()
@@ -68,19 +74,19 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
     }
   }
 
-  const handleReject = async (index: number) => {
+  const handleReject = async (visibleIdx: number) => {
     try {
-      await deletePlanEntry(index)
+      await deletePlanEntry(visibleEntries[visibleIdx].originalIndex)
       onPlanChange()
     } catch (err) {
       onError(err instanceof Error ? err.message : 'Delete failed')
     }
   }
 
-  const handleReroll = async (index: number) => {
+  const handleReroll = async (visibleIdx: number) => {
     setBusy(true)
     try {
-      const task = await regeneratePlanEntry(index)
+      const task = await regeneratePlanEntry(visibleEntries[visibleIdx].originalIndex)
       await pollUntilDone(task.task_id)
       onPlanChange()
     } catch (err) {
@@ -90,10 +96,15 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
     }
   }
 
-  const handleAddMore = async () => {
+  const handleAdd = async () => {
     setBusy(true)
     try {
-      const task = await addPlanEntries(addCount)
+      let task: TaskResponse
+      if (!plan) {
+        task = await createRosterPlan(addCount, hasFighters ? 'addition' : 'initial', genderMix)
+      } else {
+        task = await addPlanEntries(addCount, genderMix)
+      }
       await pollUntilDone(task.task_id)
       onPlanChange()
     } catch (err) {
@@ -141,6 +152,95 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
     cursor: disabled ? 'not-allowed' : 'pointer',
   })
 
+  const addControls = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+      <input
+        type="number"
+        min={1}
+        max={200}
+        value={addCount}
+        onChange={e => setAddCount(Math.max(1, parseInt(e.target.value) || 1))}
+        style={{
+          width: '52px',
+          padding: spacing.xs,
+          backgroundColor: colors.surfaceLight,
+          border: `1px solid ${colors.border}`,
+          borderRadius: '4px',
+          color: colors.text,
+          fontFamily: fonts.body,
+          fontSize: fontSizes.xs,
+          textAlign: 'center',
+        }}
+      />
+      <select
+        value={genderMix}
+        onChange={e => setGenderMix(e.target.value as 'female' | 'male' | 'mixed')}
+        style={{
+          padding: spacing.xs,
+          backgroundColor: colors.surfaceLight,
+          border: `1px solid ${colors.border}`,
+          borderRadius: '4px',
+          color: colors.text,
+          fontFamily: fonts.body,
+          fontSize: fontSizes.xs,
+        }}
+      >
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="mixed">Mixed</option>
+      </select>
+      <button onClick={handleAdd} disabled={busy} style={btn(colors.accent, busy)}>
+        + Add
+      </button>
+    </div>
+  )
+
+  if (!plan || visibleEntries.length === 0) {
+    return (
+      <div style={{ marginBottom: spacing.xl }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: `${spacing.sm} ${spacing.md}`,
+          backgroundColor: colors.surface,
+          borderRadius: '6px',
+          border: `1px solid ${colors.border}`,
+        }}>
+          <span style={{ color: colors.accent, fontFamily: fonts.heading, fontSize: fontSizes.lg }}>
+            Roster Plan
+          </span>
+          {addControls}
+        </div>
+        {!busy && (
+          <div style={{
+            textAlign: 'center',
+            padding: spacing.xxl,
+            color: colors.textMuted,
+            border: `1px dashed ${colors.border}`,
+            borderRadius: '8px',
+            fontFamily: fonts.body,
+            marginTop: spacing.md,
+          }}>
+            <div style={{ fontSize: fontSizes.lg, marginBottom: spacing.sm }}>No plan entries</div>
+            <div style={{ fontSize: fontSizes.sm }}>Use + Add above to plan new fighters</div>
+          </div>
+        )}
+        {busy && (
+          <div style={{
+            textAlign: 'center',
+            padding: spacing.xxl,
+            color: colors.accent,
+            fontFamily: fonts.body,
+            marginTop: spacing.md,
+          }}>
+            Planning fighters...
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div style={{ marginBottom: spacing.xl }}>
       <div style={{
@@ -158,36 +258,14 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
             Roster Plan
           </span>
           <span style={{ color: colors.textMuted, fontFamily: fonts.body, fontSize: fontSizes.sm }}>
-            {entries.length} entries ({approvedCount} approved, {pendingCount} pending)
+            {visibleEntries.length} entries ({approvedCount} approved, {pendingCount} pending)
           </span>
         </div>
-        <div style={{ display: 'flex', gap: spacing.sm }}>
+        <div style={{ display: 'flex', gap: spacing.sm, flexWrap: 'wrap' }}>
           <button onClick={handleApproveAll} disabled={busy || pendingCount === 0} style={btn(colors.healthy, busy || pendingCount === 0)}>
             Approve All
           </button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-            <input
-              type="number"
-              min={1}
-              max={200}
-              value={addCount}
-              onChange={e => setAddCount(Math.max(1, parseInt(e.target.value) || 1))}
-              style={{
-                width: '52px',
-                padding: spacing.xs,
-                backgroundColor: colors.surfaceLight,
-                border: `1px solid ${colors.border}`,
-                borderRadius: '4px',
-                color: colors.text,
-                fontFamily: fonts.body,
-                fontSize: fontSizes.xs,
-                textAlign: 'center',
-              }}
-            />
-            <button onClick={handleAddMore} disabled={busy} style={btn(colors.accent, busy)}>
-              + Add More
-            </button>
-          </div>
+          {addControls}
           <button onClick={handleGenerate} disabled={busy || approvedCount === 0} style={btn(colors.accentBright, busy || approvedCount === 0)}>
             Generate Approved (Stage 1)
           </button>
@@ -221,7 +299,7 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
         gap: spacing.md,
       }}>
-        {entries.map((entry, index) => {
+        {visibleEntries.map(({ entry }, index) => {
           const isEditing = editIndex === index
 
           return (

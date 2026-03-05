@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { colors, fonts, fontSizes, spacing, withAlpha } from '../design-system'
 import StatBar from '../components/StatBar'
+import TierBadge from '../components/TierBadge'
 import PlanView from '../components/PlanView'
 import StageFilter, { filterByStage, type StageTab } from '../components/StageFilter'
 import DirtyWarning from '../components/DirtyWarning'
@@ -20,7 +21,6 @@ import {
   fetchOutfitOptions,
   saveOutfitOptions,
   fetchRosterPlan,
-  createRosterPlan,
   advanceStage,
   batchAdvance,
   fetchArchetypes,
@@ -69,8 +69,6 @@ export default function RosterManager() {
   const [imageVersion, setImageVersion] = useState(0)
   const [showOutfitOptions, setShowOutfitOptions] = useState(false)
   const [plan, setPlan] = useState<RosterPlan | null>(null)
-  const [planCount, setPlanCount] = useState(8)
-  const [planGenderMix, setPlanGenderMix] = useState<'female' | 'male' | 'mixed'>('female')
   const [stageTab, setStageTab] = useState<StageTab>('all')
 
   useEffect(() => {
@@ -118,15 +116,6 @@ export default function RosterManager() {
       setError(err instanceof Error ? err.message : 'Task error')
     } finally {
       setActiveTasks(prev => prev.filter(t => t.taskId !== activeTask.taskId))
-    }
-  }
-
-  const handleCreatePlan = async (count: number) => {
-    try {
-      const task = await createRosterPlan(count, fighters.length > 0 ? 'addition' : 'initial', planGenderMix)
-      handleTask(task, { type: 'plan', taskId: task.task_id, label: `Planning ${count} fighters...` })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Plan creation failed')
     }
   }
 
@@ -283,52 +272,6 @@ export default function RosterManager() {
           >
             Outfit Options
           </button>
-          {!plan && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-              <input
-                type="number"
-                min={1}
-                max={200}
-                value={planCount}
-                onChange={e => setPlanCount(Math.max(1, parseInt(e.target.value) || 1))}
-                style={{
-                  width: '52px',
-                  padding: spacing.xs,
-                  backgroundColor: colors.surfaceLight,
-                  border: `1px solid ${colors.border}`,
-                  borderRadius: '4px',
-                  color: colors.text,
-                  fontFamily: fonts.body,
-                  fontSize: fontSizes.sm,
-                  textAlign: 'center',
-                }}
-              />
-              <select
-                value={planGenderMix}
-                onChange={e => setPlanGenderMix(e.target.value as 'female' | 'male' | 'mixed')}
-                style={{
-                  padding: spacing.xs,
-                  backgroundColor: colors.surfaceLight,
-                  border: `1px solid ${colors.border}`,
-                  borderRadius: '4px',
-                  color: colors.text,
-                  fontFamily: fonts.body,
-                  fontSize: fontSizes.sm,
-                }}
-              >
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="mixed">Mixed</option>
-              </select>
-              <button
-                onClick={() => handleCreatePlan(planCount)}
-                disabled={globalTaskActive}
-                style={btnStyle(colors.face)}
-              >
-                Plan Roster
-              </button>
-            </div>
-          )}
           <button
             onClick={() => setShowGenerate(!showGenerate)}
             disabled={globalTaskActive}
@@ -436,15 +379,15 @@ export default function RosterManager() {
 
       <StageFilter
         fighters={fighters}
-        hasPlan={!!plan}
-        planCount={plan?.entries?.length ?? 0}
+        planCount={plan?.entries?.filter(e => !e.fighter_id)?.length ?? 0}
         activeTab={stageTab}
         onTabChange={setStageTab}
       />
 
-      {stageTab === 'plan' && plan && (
+      {stageTab === 'plan' && (
         <PlanView
           plan={plan}
+          hasFighters={fighters.length > 0}
           onPlanChange={() => { loadPlan(); loadFighters() }}
           onTask={handlePlanTask}
           onError={(msg) => setError(msg)}
@@ -598,7 +541,21 @@ export default function RosterManager() {
                         fontFamily: fonts.body,
                         color: colors.textMuted,
                         marginTop: '2px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: spacing.xs,
                       }}>
+                        {fighter.tier && (
+                          <span style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '3px',
+                          }}>
+                            <TierBadge tier={fighter.tier} size={12} />
+                            <span style={{ textTransform: 'capitalize' }}>{fighter.tier}</span>
+                          </span>
+                        )}
+                        {fighter.tier && fighter.origin && <span style={{ color: colors.textDim }}>·</span>}
                         {fighter.origin}
                       </div>
                     </div>

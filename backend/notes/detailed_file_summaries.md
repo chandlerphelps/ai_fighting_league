@@ -43,6 +43,7 @@ Comprehensive documentation of backend code.
 40. [app/scripts/simulate_seasons.py](#appscriptssimulate_seasons)
 41. [app/scripts/initialize_league.py](#appscriptsinitialize_league)
 42. [app/engine/day_simulator.py](#appengineday_simulator)
+43. [app/engine/pool_summarizer.py](#appenginepool_summarizer)
 
 ---
 
@@ -58,32 +59,45 @@ Artefacts
 
 ## app/api.py
 File: app/api.py
-File Length: 608 lines
-Purpose: Flask REST API for roster management, world state access, and day simulation. CRUD fighters, generate/regenerate characters/outfits/images, manage outfit options, serve fighter images, poll async tasks.
+File Length: 1221 lines
+Purpose: Flask REST API for roster management, world state access, day simulation, and 3-stage roster initialization pipeline. CRUD fighters, generate/regenerate characters/outfits/images, manage outfit options, roster plan CRUD with AI planning, multi-stage generation (JSON->portrait->charsheets), serve fighter images, poll async tasks.
 
 Artefacts
 - PROMPT_RELEVANT_FIELDS - set of fields that trigger prompt rebuild on update
+- FIELD_DEPENDENCIES - maps fighter fields to downstream invalidation targets (outfits, image_prompts, images)
 - _get_subtype_info(fighter) - lookup subtype info from archetype/subtype fields
-- _rebuild_prompts(fighter) - reconstructs all 3 tier image_prompt dicts from current fighter data
+- _rebuild_prompts(fighter) - reconstructs all 3 tier image_prompt dicts + body_ref from current fighter data; gender-aware (male nsfw = barely)
 - _run_in_background(task_id, fn) - runs function in daemon thread, stores result in tasks dict
-- _fighter_image_paths(fighter_id, ring_name) - returns dict of tier->Path for existing images
-- _build_outfit_options_for_fighter(skimpiness_level) - loads and filters outfit options per tier
+- _fighter_image_paths(fighter_id, ring_name) - returns dict of tier->Path for existing images (sfw, barely, nsfw, portrait)
+- _build_outfit_options_for_fighter(skimpiness_level, archetype, subtype) - loads and filters outfit options per tier with exotic support
 
 Endpoints
 - GET /api/fighters - list all fighters with available image tiers
 - GET /api/fighters/<id> - single fighter with available images
-- PUT /api/fighters/<id> - update fighter fields, auto-rebuilds prompts if needed
+- PUT /api/fighters/<id> - update fighter fields, auto-rebuilds prompts if needed, tracks generation_dirty invalidation
 - DELETE /api/fighters/<id> - delete fighter and all associated files
 - POST /api/fighters/generate - async: generate new fighter from archetype/plan
 - POST /api/fighters/<id>/regenerate-character - async: regenerate character preserving record/storyline
 - POST /api/fighters/<id>/regenerate-outfits - async: regenerate outfits for specified tiers
 - POST /api/fighters/<id>/regenerate-images - async: regenerate charsheet images for specified tiers
 - POST /api/fighters/<id>/regenerate-move-image - async: regenerate single move image using charsheet as reference
+- POST /api/fighters/<id>/advance-stage - async: advance fighter through generation stages (1->2: portrait, 2->3: full charsheets)
+- POST /api/fighters/batch-advance - async: advance multiple fighters to a target stage (2 or 3)
 - GET /api/tasks/<id> - poll async task status
 - GET /api/archetypes - list female and male archetypes
 - GET /api/fighter-images/<id>/<tier> - serve fighter charsheet image
+- GET /api/fighter-images/<id>/portrait - serve fighter portrait image
 - GET /api/outfit-options - get outfit options JSON
 - PUT /api/outfit-options - save outfit options JSON
+- GET /api/roster-plan - get current roster plan (auto-migrates legacy list format)
+- POST /api/roster-plan - async: create new roster plan via AI with pool summary and gender_mix
+- DELETE /api/roster-plan - delete pending entries from roster plan
+- PUT /api/roster-plan/entries/<index> - update single plan entry
+- DELETE /api/roster-plan/entries/<index> - remove single plan entry
+- POST /api/roster-plan/entries/<index>/regenerate - async: reroll single plan entry via AI
+- POST /api/roster-plan/entries/add - async: add more entries to existing plan via AI
+- POST /api/roster-plan/generate - async: generate fighters from approved plan entries (stage 1 only)
+- GET /api/pool-summary - get current fighter pool summary with stats
 - GET /api/world-state - returns full world_state JSON
 - POST /api/simulate-day - loads active fighters and world_state, calls simulate_one_day, saves all fighters and world_state, returns day_result
 
@@ -313,13 +327,14 @@ Artefacts
 
 ## app/engine/fighter_generator.py
 File: app/engine/fighter_generator.py
-File Length: 390 lines
-Purpose: Orchestration for AI fighter creation. Rolls subtypes, body profiles, generates outfits in parallel with tech level, builds body reference and charsheet image prompts.
+File Length: 472 lines
+Purpose: Orchestration for AI fighter creation. Rolls subtypes, body profiles, generates outfits in parallel with tech level, builds body reference and charsheet image prompts. Supports gender-aware generation (male fighters get sfw/barely tiers only, nsfw=barely).
 
 Artefacts
-- plan_roster(config, roster_size, existing_fighters) - builds existing roster text (including subtypes), calls build_plan_roster_prompt(), calls OpenRouter
-- _generate_outfits(config, character_summary, skimpiness_level, tiers, outfit_options_by_tier, tech_level) - parallel tier outfit generation using build_tier_prompt() with tech_level
-- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ...) - full pipeline: rolls subtype, body traits, character JSON, tech_level, outfits, image prompts; generates learning_rate (0.7-1.4) and work_ethic (0.6-1.3), returns Fighter
+- plan_roster(config, roster_size, existing_fighters, pool_summary, gender_mix) - builds existing roster text from pool_summary or fighter list, calls build_plan_roster_prompt() with gender_mix, calls OpenRouter (minimax model)
+- _generate_outfits(config, character_summary, skimpiness_level, tiers, outfit_options_by_tier, tech_level) - parallel tier outfit generation using build_tier_prompt() with tech_level; collects outfit_suggestions per tier
+- generate_fighter_json_only(config, archetype, ...) - generates fighter with skip_image_prompts=True, sets generation_stage=1, copies signature visual identity fields from roster_plan_entry (primary_outfit_color, hair_style, hair_color, face_adornment)
+- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ..., skip_image_prompts) - full pipeline: rolls subtype, body traits, character JSON, tech_level, outfits, image prompts; generates learning_rate (0.7-1.4) and work_ethic (0.6-1.3); gender-aware (male: sfw/barely tiers only, nsfw=barely), returns Fighter
 - _extract_stats(data, has_supernatural, config) - clamps stat values to config bounds
 - _normalize_core_stats(stats, config) - scales core stats to target range if out of bounds
 
@@ -397,16 +412,17 @@ Artefacts
 
 ## app/prompts/fighter_prompts.py
 File: app/prompts/fighter_prompts.py
-File Length: 442 lines
-Purpose: Character design guide constants and fighter creation prompt builders. Includes archetype/subtype system integration.
+File Length: 585 lines
+Purpose: Character design guide constants and fighter creation prompt builders. Includes archetype/subtype system integration and gender-aware guides (separate male philosophy).
 
 Artefacts
 - GUIDE_CORE_PHILOSOPHY / GUIDE_VISUAL_DESIGN / GUIDE_CREATION_WORKFLOW / GUIDE_COMMON_MISTAKES / FULL_CHARACTER_GUIDE - design philosophy text; GUIDE_CREATION_WORKFLOW lists all 11 female + 8 male archetypes with subtypes
+- GUIDE_MALE_PHILOSOPHY / FULL_MALE_CHARACTER_GUIDE - male-specific design philosophy emphasizing danger, intimidation, and physicality
 - SYSTEM_PROMPT_ROSTER_PLANNER / SYSTEM_PROMPT_CHARACTER_DESIGNER - system prompts
-- _shuffled_archetype_names() - returns comma-separated archetype names in random order (for prompt variety)
-- _shuffled_subtype_lines() - returns formatted subtype list per archetype in random order
-- build_plan_roster_prompt(roster_size, existing_roster_text) - roster planning prompt with shuffled archetypes/subtypes, requires subtype selection
-- build_generate_fighter_prompt(archetype_text, existing_roster_text, blueprint_text, body_directive, supernatural_instruction, min_total_stats, max_total_stats, subtype_info) - fighter generation prompt with subtype identity directive
+- _shuffled_archetype_names(gender) - returns comma-separated archetype names in random order, gender-aware source selection
+- _shuffled_subtype_lines(gender) - returns formatted subtype list per archetype in random order, gender-aware
+- build_plan_roster_prompt(roster_size, existing_roster_text, gender_mix) - roster planning prompt with gender_mix support ("female", "male", "mixed"); includes signature visual identity fields (primary_outfit_color, hair_style, hair_color, face_adornment), skimpiness_weights, and subtype selection
+- build_generate_fighter_prompt(archetype_text, existing_roster_text, blueprint_text, body_directive, supernatural_instruction, min_total_stats, max_total_stats, subtype_info, gender) - fighter generation prompt with gender-aware guide/stat hints/body trait hints, subtype identity directive, iconic features requirement
 
 ---
 
@@ -455,27 +471,32 @@ Artefacts
 
 ## app/prompts/image_builders.py
 File: app/prompts/image_builders.py
-File Length: 424 lines
-Purpose: Image prompt assembly for charsheet images (Grok API), body reference sheets, and move action images. Not LLM prompts.
+File Length: 552 lines
+Purpose: Image prompt assembly for charsheet images (Grok API), body reference sheets, portraits, and move action images. Not LLM prompts. Gender-aware with separate male body ref layout (3-panel vs 5-panel).
 
 Artefacts
 - CHARSHEET_LAYOUT - character reference sheet turnaround prompt template (3 views)
 - _charsheet_style_base/style/tail(gender, tier, skimpiness_level) - charsheet art style with NSFW nudity prefixes when needed
-- _build_charsheet_prompt(body_parts, clothing, expression, personality_pose, tier, gender, skimpiness_level, body_type_details, origin, subtype_info, iconic_features, age) - assembles full charsheet image prompt dict with subtype aesthetic, iconic features, and age integration
+- _enrich_body_parts(body_parts, body_type_details, subtype_info) - enriches body_parts with body shape line and subtype aesthetic
+- _build_clothing_part(clothing, iconic_features, primary_outfit_color, tier, skimpiness_level) - builds clothing description with iconic features and primary color for SFW tier
+- _build_character_desc(body_parts, clothing_part, age, origin) - builds character description string
+- _build_charsheet_prompt(body_parts, clothing, expression, personality_pose, tier, gender, skimpiness_level, body_type_details, origin, subtype_info, iconic_features, age, primary_outfit_color) - assembles full charsheet image prompt dict with subtype aesthetic, iconic features, age, and primary color integration
 - BODY_REF_STYLE_BASE / BODY_REF_STYLE_FEMALE / BODY_REF_STYLE_MALE - painterly anatomy study style strings
-- BODY_REF_PAGE_STYLE - anatomy study page layout description (5 isolated body part drawings)
-- BODY_REF_LAYOUT - template string with {torso_detail} and {intimate_label} format slots for gendered 5-panel layout
-- BODY_REF_QUALITY - quality descriptors for body reference images
-- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info, age) - assembles 5-panel body reference prompt with subtype aesthetic and age
+- BODY_REF_PAGE_STYLE / MALE_BODY_REF_PAGE_STYLE - anatomy study page layouts (5-panel female, 3-panel male)
+- BODY_REF_LAYOUT / MALE_BODY_REF_LAYOUT - layout templates (female: face/rear-angled/chest/butt/intimate; male: face/front-body/back-body)
+- BODY_REF_QUALITY / MALE_BODY_REF_QUALITY - quality descriptors
+- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info, age) - assembles gender-aware body reference prompt (5-panel female, 3-panel male in underwear)
 - _nsfw_prefix/tail(gender, skimpiness_level) - NSFW prefix/tail for move images
 - build_move_image_prompt(fighter, move, tier) - assembles move action image prompt string
+- PORTRAIT_STYLE - upper body portrait style constants
+- build_portrait_prompt(body_parts, clothing_sfw, expression, gender, body_type_details, origin, subtype_info, iconic_features, primary_outfit_color, age) - assembles portrait image prompt dict for stage 2 generation
 
 ---
 
 ## app/models/fighter.py
 File: app/models/fighter.py
-File Length: 198 lines
-Purpose: Fighter data model with nested Stats, Record, Injury, Condition, and Move dataclasses. Includes league season tracking fields.
+File Length: 216 lines
+Purpose: Fighter data model with nested Stats, Record, Injury, Condition, and Move dataclasses. Includes league season tracking fields and 3-stage generation pipeline fields.
 
 Artefacts
 - Stats - power, speed, technique, toughness, supernatural; core_total()
@@ -483,7 +504,7 @@ Artefacts
 - Injury - type, severity, recovery_days_remaining
 - Condition - health_status, injuries list, recovery_days_remaining, morale, momentum
 - Move - name, description, stat_affinity
-- Fighter - full fighter profile: identity, physical, attire (3 tiers), image_prompt dicts, stats, record, condition, moves, storyline_log, rivalries, league fields (tier, status, training_focus, training_days_accumulated, training_streak, seasons_in_current_tier, career_season_count, peak_tier, promotion_desperation, season_wins, season_losses, consecutive_losses, consecutive_wins, learning_rate, work_ethic, tier_records)
+- Fighter - full fighter profile: identity, physical, attire (3 tiers), image_prompt dicts (sfw, barely, nsfw, body_ref, portrait), stats, record, condition, moves, storyline_log, rivalries, signature visual identity (primary_outfit_color, hair_style, hair_color, face_adornment), generation pipeline (generation_stage 0-3, generation_dirty list), league fields (tier, status, training_focus, training_days_accumulated, training_streak, seasons_in_current_tier, career_season_count, peak_tier, promotion_desperation, season_wins, season_losses, consecutive_losses, consecutive_wins, learning_rate, work_ethic, tier_records)
 
 ---
 
@@ -524,15 +545,21 @@ Artefacts
 
 ## app/services/data_manager.py
 File: app/services/data_manager.py
-File Length: 144 lines
-Purpose: JSON file CRUD for all data entities (fighters, matches, events, world_state) in the /data/ directory.
+File Length: 173 lines
+Purpose: JSON file CRUD for all data entities (fighters, matches, events, world_state, roster_plan) in the /data/ directory.
 
 Artefacts
+- _slugify(name) - lowercase alphanumeric slug
+- _get_data_dir(config) - resolves data directory from config or defaults to project root /data/
 - ensure_data_dirs(config) - creates fighters/matches/events subdirectories
-- save_fighter(fighter, config) / load_fighter(fighter_id, config) / load_all_fighters(config) - fighter CRUD with slugified filenames
+- _save_json(path, data) / _load_json(path) - generic JSON serialization with dataclass support
+- _fighter_filename(fighter_id, ring_name) / _find_fighter_path(fighters_dir, fighter_id) - fighter file naming and lookup
+- save_fighter(fighter, config) / load_fighter(fighter_id, config) / load_all_fighters(config) - fighter CRUD with slugified filenames, handles rename by cleaning old file
 - save_match(match, config) / load_match(match_id, config) / load_all_matches(config) - match CRUD
 - save_event(event, config) / load_event(event_id, config) / load_all_events(config) - event CRUD
 - save_world_state(world_state, config) / load_world_state(config) - world_state CRUD
+- save_roster_plan(plan, config) / load_roster_plan(config) / delete_roster_plan(config) - roster plan CRUD
+- delete_fighter(fighter_id, config) - deletes fighter JSON and associated PNG images
 
 ---
 
@@ -550,28 +577,29 @@ Artefacts
 
 ## app/services/grok_image.py
 File: app/services/grok_image.py
-File Length: 250 lines
-Purpose: Grok (x.ai) image generation and editing API client. Generates body reference image first, then uses it as reference input for tier charsheets via edit_image.
+File Length: 256 lines
+Purpose: Grok (x.ai) image generation and editing API client. Generates body reference image first, then uses it as reference input for tier charsheets via edit_image. Gender-aware tier defaults (male: sfw/barely only).
 
 Artefacts
 - MAX_RETRIES = 5
 - TIER_PROMPT_KEYS - maps tier names ("sfw","barely","nsfw") to fighter prompt dict keys
+- _slugify(name) - lowercase alphanumeric slug for filenames
 - _encode_image(path) - base64-encode image file with MIME type detection
 - generate_image(prompt, config, aspect_ratio, resolution, n) - calls Grok image generation API with retries, returns URL list
 - edit_image(prompt, image_paths, config, ...) - calls Grok image edit API with base64-encoded reference images
 - download_image(url, save_path) - downloads image URL to disk
-- generate_charsheet_images(fighter, config, output_dir, tiers) - generates body_ref image at 1:1 first, then uses it as reference for each tier charsheet via edit_image in parallel (falls back to generate_image if no body_ref)
+- generate_charsheet_images(fighter, config, output_dir, tiers) - generates body_ref image at 1:1 first (or reuses existing), then uses it as reference for each tier charsheet via edit_image in parallel (falls back to generate_image if no body_ref); default tiers gender-aware (male: sfw/barely)
 
 ---
 
 ## app/scripts/generate_roster.py
 File: app/scripts/generate_roster.py
-File Length: 191 lines
-Purpose: Two-phase roster generation script: plan roster via AI, then generate fighters from plan with optional image generation.
+File Length: 227 lines
+Purpose: Two-phase roster generation script: plan roster via AI, then generate fighters from plan with optional image generation. Saves roster plan as structured JSON.
 
 Artefacts
-- plan_roster_cmd() - calls plan_roster (passes existing fighters including subtypes), saves roster_plan.json, prints summary
-- generate_from_plan(generate_images, tiers, count) - reads roster_plan.json, generates each fighter via generate_fighter with skimpiness and outfit options, optionally generates charsheet images, initializes WorldState
+- plan_roster_cmd() - calls plan_roster (passes existing fighters including subtypes/build/personality), saves roster_plan.json as structured dict with plan_id/created_at/mode/entries including signature visual identity defaults
+- generate_from_plan(generate_images, tiers, count) - reads roster_plan.json (handles both dict and list formats), generates each fighter via generate_fighter with skimpiness, exotic outfit options, and archetype/subtype filtering; initializes or updates WorldState
 - generate_roster(generate_images, tiers, count) - runs both phases sequentially
 - CLI: --plan, --generate, --images, --tiers [sfw barely nsfw], -n/--count
 
@@ -641,3 +669,16 @@ Artefacts
 - _run_title_fight(fighters, ws, rng, day_result) - runs title fight with eligibility fallbacks, updates belt_holder/belt_history/season_champions
 - _recalculate_rankings(fighters, ws) - recalculates tier rankings from season matches, builds flat rankings list
 - _build_summary(day_result) - returns one-line text summary of the day
+
+---
+
+## app/engine/pool_summarizer.py
+File: app/engine/pool_summarizer.py
+File Length: 126 lines
+Purpose: Generates a text summary of the existing fighter pool for AI roster planning prompts. Analyzes archetype distribution, geographic spread, age brackets, and signature visual identity registry to prevent duplicates.
+
+Artefacts
+- REGION_MAP - dict mapping 13 geographic regions to lists of country keywords
+- _classify_region(origin) - classifies a fighter's origin string into a region via keyword matching
+- _age_bracket(age) - returns age bracket string (18-22, 23-27, 28-32, 33+)
+- summarize_fighter_pool(fighters, for_display) - generates comprehensive pool summary text: total count, gender counts, archetype distribution (with missing archetypes highlighted), geographic spread (with underrepresented regions), age distribution, signature visual identity registry (outfit colors, hair style+color combos, face adornments); when for_display=True also lists individual fighters with archetype/subtype/origin and signature details

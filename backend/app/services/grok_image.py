@@ -139,11 +139,12 @@ def generate_charsheet_images(
     output_dir: Path,
     tiers: list[str] | None = None,
 ) -> dict[str, Path]:
+    gender = (
+        fighter.gender if hasattr(fighter, "gender") else fighter.get("gender", "female")
+    )
+    is_male = gender.lower() == "male"
     if tiers is None:
-        gender = (
-            fighter.gender if hasattr(fighter, "gender") else fighter.get("gender", "female")
-        )
-        if gender.lower() == "male":
+        if is_male:
             tiers = ["sfw", "barely"]
         else:
             tiers = ["sfw", "barely", "nsfw"]
@@ -223,7 +224,8 @@ def generate_charsheet_images(
             filename = f"{base}_{tier}.png"
             save_path = output_dir / filename
             print(f"    Generating {tier} charsheet...")
-            if body_ref_path:
+            use_body_ref = body_ref_path and not is_male
+            if use_body_ref:
                 urls = edit_image(
                     prompt=prompt,
                     image_paths=[body_ref_path],
