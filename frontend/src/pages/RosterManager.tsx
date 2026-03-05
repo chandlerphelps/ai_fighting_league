@@ -36,9 +36,10 @@ type ActiveTask = {
   label: string
 }
 
-type Tier = 'sfw' | 'barely' | 'nsfw' | 'body_ref'
+type Tier = 'portrait' | 'sfw' | 'barely' | 'nsfw' | 'body_ref'
 
 const TIERS: { key: Tier; label: string }[] = [
+  { key: 'portrait', label: 'PORTRAIT' },
   { key: 'sfw', label: 'SFW' },
   { key: 'barely', label: 'BARELY' },
   { key: 'nsfw', label: 'NSFW' },
@@ -55,7 +56,7 @@ export default function RosterManager() {
   const [showGenerate, setShowGenerate] = useState(false)
   const [activeTasks, setActiveTasks] = useState<ActiveTask[]>([])
   const [regenMenuId, setRegenMenuId] = useState<string | null>(null)
-  const [globalTier, setGlobalTier] = useState<Tier>('sfw')
+  const [globalTier, setGlobalTier] = useState<Tier>('portrait')
   const [movesViewId, setMovesViewId] = useState<string | null>(null)
   const [lightbox, setLightbox] = useState<{
     fighterId: string
@@ -1761,7 +1762,7 @@ function Lightbox({ fighterId, ringName, initialTier, label, imageVersion, onRed
   onClose: () => void
 }) {
   const [activeTier, setActiveTier] = useState<Tier>(initialTier)
-  const tierKeys: Tier[] = ['sfw', 'barely', 'nsfw', 'body_ref']
+  const tierKeys: Tier[] = ['portrait', 'sfw', 'barely', 'nsfw', 'body_ref']
 
   const cycleTier = useCallback((dir: 1 | -1) => {
     setActiveTier(prev => {

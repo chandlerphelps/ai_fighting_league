@@ -79,8 +79,16 @@ def _get_subtype_info(fighter: dict) -> dict | None:
 
 
 def _rebuild_prompts(fighter: dict):
-    body_parts = fighter.get("image_prompt", {}).get("body_parts", "")
-    expression = fighter.get("image_prompt", {}).get("expression", "")
+    body_parts = fighter.get("image_prompt_body_parts", "")
+    if not body_parts:
+        body_parts = fighter.get("image_prompt", {}).get("body_parts", "")
+    if not body_parts:
+        body_parts = fighter.get("image_prompt_sfw", {}).get("body_parts", "")
+    expression = fighter.get("image_prompt_expression", "")
+    if not expression:
+        expression = fighter.get("image_prompt", {}).get("expression", "")
+    if not expression:
+        expression = fighter.get("image_prompt_sfw", {}).get("expression", "")
     personality_pose = fighter.get("image_prompt_personality_pose", "")
     gender = fighter.get("gender", "female")
     skimpiness = fighter.get("skimpiness_level", 2)
@@ -116,6 +124,15 @@ def _rebuild_prompts(fighter: dict):
         iconic_features=iconic_features,
         age=age,
     )
+    if not fighter.get("image_prompt_body_ref", {}).get("full_prompt"):
+        fighter["image_prompt_body_ref"] = build_body_reference_prompt(
+            body_parts, expression,
+            gender=gender,
+            body_type_details=fighter.get("body_type_details"),
+            origin=fighter.get("origin", ""),
+            subtype_info=subtype_info,
+            age=age,
+        )
 
 
 def _run_in_background(task_id: str, fn, *args, **kwargs):
@@ -478,7 +495,11 @@ def regenerate_images(fighter_id: str):
     task_id = f"img_{uuid.uuid4().hex[:8]}"
 
     def do_regenerate():
-        fighter = Fighter.from_dict(existing)
+        fighter_data = data_manager.load_fighter(fighter_id, config)
+        if not fighter_data.get("image_prompt_sfw", {}).get("full_prompt"):
+            _rebuild_prompts(fighter_data)
+            data_manager.save_fighter(fighter_data, config)
+        fighter = Fighter.from_dict(fighter_data)
         fighters_dir = config.data_dir / "fighters"
         saved = generate_charsheet_images(fighter, config, fighters_dir, tiers=tiers)
         return {tier: str(path) for tier, path in saved.items()}
