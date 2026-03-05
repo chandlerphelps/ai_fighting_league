@@ -625,6 +625,18 @@ def get_roster_plan():
     plan = data_manager.load_roster_plan(config)
     if not plan:
         return jsonify(None)
+    if isinstance(plan, list):
+        plan = {
+            "plan_id": f"rp_legacy",
+            "created_at": str(__import__("datetime").date.today()),
+            "mode": "initial",
+            "pool_summary": "",
+            "entries": [
+                {**entry, "status": entry.get("status", "pending"), "fighter_id": entry.get("fighter_id"), "primary_outfit_color": entry.get("primary_outfit_color", ""), "hair_style": entry.get("hair_style", ""), "hair_color": entry.get("hair_color", ""), "face_adornment": entry.get("face_adornment", "")}
+                for entry in plan
+            ],
+        }
+        data_manager.save_roster_plan(plan, config)
     return jsonify(plan)
 
 
@@ -875,6 +887,12 @@ def generate_from_plan():
 
             generated.append(fighter.to_dict())
 
+        plan["entries"] = [e for e in plan["entries"] if e.get("fighter_id") is None]
+        if plan["entries"]:
+            data_manager.save_roster_plan(plan, config)
+        else:
+            data_manager.delete_roster_plan(config)
+
         return {"generated_count": len(generated), "fighter_ids": [f["id"] for f in generated]}
 
     _run_in_background(task_id, do_generate)
@@ -883,6 +901,13 @@ def generate_from_plan():
 
 @app.delete("/api/roster-plan")
 def delete_roster_plan():
+    plan = data_manager.load_roster_plan(config)
+    if plan and isinstance(plan, dict):
+        remaining = [e for e in plan.get("entries", []) if e.get("fighter_id") is not None]
+        if remaining:
+            plan["entries"] = remaining
+            data_manager.save_roster_plan(plan, config)
+            return jsonify({"deleted": "pending_only", "remaining": len(remaining)})
     data_manager.delete_roster_plan(config)
     return jsonify({"deleted": True})
 
@@ -908,10 +933,14 @@ def advance_stage(fighter_id: str):
         stage = fighter_data.get("generation_stage", 0)
 
         if stage == 1:
-            body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+            body_parts = fighter_data.get("image_prompt_body_parts", "")
+            if not body_parts:
+                body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
             if not body_parts:
                 body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
-            expression = fighter_data.get("image_prompt", {}).get("expression", "")
+            expression = fighter_data.get("image_prompt_expression", "")
+            if not expression:
+                expression = fighter_data.get("image_prompt", {}).get("expression", "")
             if not expression:
                 expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
             clothing_sfw = fighter_data.get("ring_attire_sfw", "")
@@ -963,10 +992,14 @@ def advance_stage(fighter_id: str):
             fighter = Fighter.from_dict(fighter_data)
 
             if not fighter.image_prompt_body_ref:
-                body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+                body_parts = fighter_data.get("image_prompt_body_parts", "")
+                if not body_parts:
+                    body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
                 if not body_parts:
                     body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
-                expression = fighter_data.get("image_prompt", {}).get("expression", "")
+                expression = fighter_data.get("image_prompt_expression", "")
+                if not expression:
+                    expression = fighter_data.get("image_prompt", {}).get("expression", "")
                 if not expression:
                     expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
                 subtype_info = _get_subtype_info(fighter_data)

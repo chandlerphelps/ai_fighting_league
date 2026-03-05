@@ -30,16 +30,33 @@ def plan_roster_cmd():
     ] or None
 
     print(f"Planning roster of {config.roster_size} fighters...")
-    roster_plan = plan_roster(config, roster_size=config.roster_size, existing_fighters=existing_fighters)
+    entries = plan_roster(config, roster_size=config.roster_size, existing_fighters=existing_fighters)
+
+    for entry in entries:
+        entry.setdefault("status", "pending")
+        entry.setdefault("fighter_id", None)
+        entry.setdefault("primary_outfit_color", "")
+        entry.setdefault("hair_style", "")
+        entry.setdefault("hair_color", "")
+        entry.setdefault("face_adornment", "")
+
+    import uuid as _uuid
+    roster_plan = {
+        "plan_id": f"rp_{_uuid.uuid4().hex[:8]}",
+        "created_at": str(date.today()),
+        "mode": "initial",
+        "pool_summary": "",
+        "entries": entries,
+    }
 
     plan_path = config.data_dir / "roster_plan.json"
     with open(plan_path, "w") as f:
         json.dump(roster_plan, f, indent=2)
 
     print(f"\nRoster plan saved to {plan_path}")
-    print(f"  Fighters planned: {len(roster_plan)}")
+    print(f"  Fighters planned: {len(entries)}")
     print()
-    for i, entry in enumerate(roster_plan):
+    for i, entry in enumerate(entries):
         supernatural_tag = f" [{entry.get('supernatural_type', '')}]" if entry.get("has_supernatural") else ""
         print(
             f"  {i + 1}. {entry.get('ring_name', '?')} — {entry.get('gender', '?')}, "
@@ -68,7 +85,9 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
         return
 
     with open(plan_path) as f:
-        roster_plan = json.load(f)
+        raw = json.load(f)
+
+    roster_plan = raw.get("entries", raw) if isinstance(raw, dict) else raw
 
     if count is not None:
         roster_plan = roster_plan[:count]

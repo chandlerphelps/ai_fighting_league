@@ -23,6 +23,7 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
   const [editIndex, setEditIndex] = useState<number | null>(null)
   const [editData, setEditData] = useState<Partial<PlanEntry>>({})
   const [busy, setBusy] = useState(false)
+  const [addCount, setAddCount] = useState(4)
 
   const entries = plan.entries || []
   const approvedCount = entries.filter(e => e.status === 'approved').length
@@ -92,7 +93,7 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
   const handleAddMore = async () => {
     setBusy(true)
     try {
-      const task = await addPlanEntries(4)
+      const task = await addPlanEntries(addCount)
       await pollUntilDone(task.task_id)
       onPlanChange()
     } catch (err) {
@@ -164,14 +165,34 @@ export default function PlanView({ plan, onPlanChange, onTask, onError }: Props)
           <button onClick={handleApproveAll} disabled={busy || pendingCount === 0} style={btn(colors.healthy, busy || pendingCount === 0)}>
             Approve All
           </button>
-          <button onClick={handleAddMore} disabled={busy} style={btn(colors.accent, busy)}>
-            + Add More
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+            <input
+              type="number"
+              min={1}
+              max={200}
+              value={addCount}
+              onChange={e => setAddCount(Math.max(1, parseInt(e.target.value) || 1))}
+              style={{
+                width: '52px',
+                padding: spacing.xs,
+                backgroundColor: colors.surfaceLight,
+                border: `1px solid ${colors.border}`,
+                borderRadius: '4px',
+                color: colors.text,
+                fontFamily: fonts.body,
+                fontSize: fontSizes.xs,
+                textAlign: 'center',
+              }}
+            />
+            <button onClick={handleAddMore} disabled={busy} style={btn(colors.accent, busy)}>
+              + Add More
+            </button>
+          </div>
           <button onClick={handleGenerate} disabled={busy || approvedCount === 0} style={btn(colors.accentBright, busy || approvedCount === 0)}>
             Generate Approved (Stage 1)
           </button>
-          <button onClick={handleDeletePlan} disabled={busy} style={btn(colors.injured, busy)}>
-            Discard Plan
+          <button onClick={handleDeletePlan} disabled={busy || pendingCount === 0} style={btn(colors.injured, busy || pendingCount === 0)}>
+            Discard Pending ({pendingCount})
           </button>
         </div>
       </div>

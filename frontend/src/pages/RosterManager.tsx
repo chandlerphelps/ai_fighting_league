@@ -67,6 +67,7 @@ export default function RosterManager() {
   const [imageVersion, setImageVersion] = useState(0)
   const [showOutfitOptions, setShowOutfitOptions] = useState(false)
   const [plan, setPlan] = useState<RosterPlan | null>(null)
+  const [planCount, setPlanCount] = useState(8)
   const [stageTab, setStageTab] = useState<StageTab>('all')
 
   useEffect(() => {
@@ -280,13 +281,33 @@ export default function RosterManager() {
             Outfit Options
           </button>
           {!plan && (
-            <button
-              onClick={() => handleCreatePlan(8)}
-              disabled={globalTaskActive}
-              style={btnStyle(colors.face)}
-            >
-              Plan Roster
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+              <input
+                type="number"
+                min={1}
+                max={200}
+                value={planCount}
+                onChange={e => setPlanCount(Math.max(1, parseInt(e.target.value) || 1))}
+                style={{
+                  width: '52px',
+                  padding: spacing.xs,
+                  backgroundColor: colors.surfaceLight,
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: '4px',
+                  color: colors.text,
+                  fontFamily: fonts.body,
+                  fontSize: fontSizes.sm,
+                  textAlign: 'center',
+                }}
+              />
+              <button
+                onClick={() => handleCreatePlan(planCount)}
+                disabled={globalTaskActive}
+                style={btnStyle(colors.face)}
+              >
+                Plan Roster
+              </button>
+            </div>
           )}
           <button
             onClick={() => setShowGenerate(!showGenerate)}

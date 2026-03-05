@@ -1,186 +1,64 @@
-[
-  {
-    "concept_hook": "A cybernetically-enhanced prodigy who fights with deadly precision while broadcasting her fights as immersive entertainment for millions of obsessed fans.",
-    "ring_name": "Neon Pulse",
-    "gender": "female",
-    "age": 22,
-    "origin": "Los Angeles, USA",
-    "primary_archetype": "Prodigy",
-    "subtype": "Virtuoso",
-    "has_supernatural": false,
-    "power_tier": "contender",
-    "narrative_role": "The face of the league \u2014 celebrity fighter who weaponizes fame and social media presence",
-    "rivalry_seeds": [
-      "Cobra Coral",
-      "Kagero"
-    ],
-    "media_archetype_inspiration": "Twitch streamer celebrity fighter (Lara Croft meets Pokimane)",
-    "skimpiness_weights": [
-      10,
-      30,
-      40,
-      20
-    ]
-  },
-  {
-    "concept_hook": "A former death row inmate transformed into a living weapon through illegal gene-splicing, now hunting the corporation that made her.",
-    "ring_name": "X-07",
-    "gender": "female",
-    "age": 26,
-    "origin": "Nevada, USA",
-    "primary_archetype": "Experiment",
-    "subtype": "Chimera",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "The monster the league created \u2014 tragic figure seeking revenge against her makers",
-    "rivalry_seeds": [
-      "Iron Monarch",
-      "Redclaw"
-    ],
-    "media_archetype_inspiration": "Alita: Battle Angel meets Y: The Last Man",
-    "skimpiness_weights": [
-      5,
-      25,
-      45,
-      25
-    ]
-  },
-  {
-    "concept_hook": "A cold, calculating assassin who kills with elegant precision and considers every fight a business transaction.",
-    "ring_name": "Silvershroud",
-    "gender": "female",
-    "age": 28,
-    "origin": "Milan, Italy",
-    "primary_archetype": "Assassin",
-    "subtype": "Silencer",
-    "has_supernatural": false,
-    "power_tier": "gatekeeper",
-    "narrative_role": "The professional \u2014 emotionless mercenary who sees the league as just another contract",
-    "rivalry_seeds": [
-      "Kagero",
-      "Wraithbane"
-    ],
-    "media_archetype_inspiration": "Hitwoman archetype (Nikita meets Black Widow)",
-    "skimpiness_weights": [
-      15,
-      35,
-      35,
-      15
-    ]
-  },
-  {
-    "concept_hook": "A possessed woman inhabited by a demon who bargains for souls through deadly games of chance she always wins.",
-    "ring_name": "Vespera",
-    "gender": "female",
-    "age": 24,
-    "origin": "Madrid, Spain",
-    "primary_archetype": "Demon",
-    "subtype": "Infernal",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "The gambler \u2014 offers doomed bargains, plays with souls, genuinely enjoys her dark work",
-    "rivalry_seeds": [
-      "Wraithbane",
-      "Cobra Coral"
-    ],
-    "media_archetype_inspiration": "Deal with the Devil archetype (Labyrinth's Jareth meets Carmilla)",
-    "skimpiness_weights": [
-      10,
-      25,
-      40,
-      25
-    ]
-  },
-  {
-    "concept_hook": "A free-spirited nature spirit bound to a human form who fights with wild, unpredictable animalistic grace.",
-    "ring_name": "Thornweaver",
-    "gender": "female",
-    "age": 21,
-    "origin": "Galicia, Spain",
-    "primary_archetype": "Nymph",
-    "subtype": "Dryad",
-    "has_supernatural": true,
-    "power_tier": "prospect",
-    "narrative_role": "The wild card \u2014 innocent but dangerous, doesn't fully understand human cruelty",
-    "rivalry_seeds": [
-      "Dollhouse",
-      "Redclaw"
-    ],
-    "media_archetype_inspiration": "Nature spirit fighter (Megan Fox in TMNT meets Poison Ivy)",
-    "skimpiness_weights": [
-      5,
-      20,
-      45,
-      30
-    ]
-  },
-  {
-    "concept_hook": "A disgraced MMA champion rebuilt with experimental combat drugs who fights while slowly poisoning herself.",
-    "ring_name": "Blitzcrush",
-    "gender": "female",
-    "age": 31,
-    "origin": "Manchester, England",
-    "primary_archetype": "Experiment",
-    "subtype": "Prototype",
-    "has_supernatural": false,
-    "power_tier": "gatekeeper",
-    "narrative_role": "The desperate veteran \u2014 once great, now clinging to glory through dangerous enhancement",
-    "rivalry_seeds": [
-      "Iron Monarch",
-      "Neon Pulse"
-    ],
-    "media_archetype_inspiration": "Rogue fighter (Ronda Rousey meets Bane)",
-    "skimpiness_weights": [
-      20,
-      40,
-      30,
-      10
-    ]
-  },
-  {
-    "concept_hook": "A surgically-altered illusionist who uses mirrors, lights, and psychological manipulation to make opponents fight ghosts of themselves.",
-    "ring_name": "Prism Echo",
-    "gender": "female",
-    "age": 25,
-    "origin": "Las Vegas, USA",
-    "primary_archetype": "Siren",
-    "subtype": "Muse",
-    "has_supernatural": true,
-    "power_tier": "contender",
-    "narrative_role": "The trickster \u2014 fights dirty with misdirection, genuinely loves humiliating opponents",
-    "rivalry_seeds": [
-      "Cobra Coral",
-      "Silvershroud"
-    ],
-    "media_archetype_inspiration": "Illusionist performer (Zatanna meets Mystique)",
-    "skimpiness_weights": [
-      10,
-      30,
-      35,
-      25
-    ]
-  },
-  {
-    "concept_hook": "A former child prodigy violinist turned electromagnetic warfare specialist who fights with sound frequencies that shatter minds.",
-    "ring_name": "Sonata",
-    "gender": "female",
-    "age": 23,
-    "origin": "Vienna, Austria",
-    "primary_archetype": "Prodigy",
-    "subtype": "Savant",
-    "has_supernatural": false,
-    "power_tier": "contender",
-    "narrative_role": "The genius \u2014 calculates every fight like a symphony, devastated when outplayed",
-    "rivalry_seeds": [
-      "Neon Pulse",
-      "Vespera"
-    ],
-    "media_archetype_inspiration": "Musical weapon (Jean Grey meets Violet Baudelaire)",
-    "skimpiness_weights": [
-      15,
-      40,
-      35,
-      10
-    ]
-  }
-]
+{
+  "plan_id": "rp_d19f40e8",
+  "created_at": "2026-03-04",
+  "mode": "initial",
+  "pool_summary": "",
+  "entries": [
+    {
+      "concept_hook": "A calculating poison master who seduces information from targets before eliminating them with undetectable toxins",
+      "ring_name": "Viper's Sting",
+      "gender": "female",
+      "age": 22,
+      "origin": "Rio de Janeiro, Brazil",
+      "primary_archetype": "Viper",
+      "subtype": "Blackmailer",
+      "has_supernatural": false,
+      "power_tier": "prospect",
+      "rivalry_seeds": [
+        "The Unmaker",
+        "Witch of the Weeping Moon"
+      ],
+      "media_archetype_inspiration": "Poison Ivy from Batman meets Brazilian crime drama queenpin",
+      "skimpiness_weights": [
+        10,
+        30,
+        40,
+        20
+      ],
+      "primary_outfit_color": "obsidian black",
+      "hair_style": "twin braids",
+      "hair_color": "dark brown with gold streaks",
+      "face_adornment": "viper mask with glowing green eyes",
+      "status": "pending",
+      "fighter_id": null
+    },
+    {
+      "concept_hook": "An enigmatic oracle who sees combat outcomes before they happen, using ancient divination to predict and counter every strike",
+      "ring_name": "Witch of the Weeping Moon",
+      "gender": "female",
+      "age": 28,
+      "origin": "Bucharest, Romania",
+      "primary_archetype": "Witch",
+      "subtype": "Oracle",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "rivalry_seeds": [
+        "Siren's Wail",
+        "Viper's Sting"
+      ],
+      "media_archetype_inspiration": "Raven from Teen Titans meets Eastern European folklore witch",
+      "skimpiness_weights": [
+        15,
+        35,
+        35,
+        15
+      ],
+      "primary_outfit_color": "emerald green",
+      "hair_style": "slicked back ponytail",
+      "hair_color": "silver",
+      "face_adornment": "crescent moon tiara with small gemstones",
+      "status": "pending",
+      "fighter_id": null
+    }
+  ]
+}

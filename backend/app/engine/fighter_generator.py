@@ -400,6 +400,8 @@ def generate_fighter(
         distinguishing_features=result.get("distinguishing_features", ""),
         iconic_features=result.get("iconic_features", ""),
         personality=result.get("personality", ""),
+        image_prompt_body_parts=body_parts,
+        image_prompt_expression=expression,
         image_prompt_personality_pose=personality_pose,
         ring_attire=outfit_data.get("ring_attire", ""),
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
