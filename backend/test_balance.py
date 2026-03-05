@@ -6,20 +6,78 @@ from collections import defaultdict
 
 sys.path.insert(0, os.path.dirname(__file__))
 
+from app.config import Config
 from app.engine.combat.simulator import simulate_combat
-from app.engine.between_fights.retirement import generate_replacement_fighter
+from app.engine.fighter_config import (
+    generate_archetype_stats,
+    ARCHETYPES_MALE,
+    ARCHETYPES_FEMALE,
+)
 
 
-def generate_roster(n_per_gender, rng, used_names):
+def make_fighter(fighter_id, gender, archetype, config, rng, used_names):
+    has_supernatural = rng.random() < 0.3
+
+    stats = generate_archetype_stats(
+        archetype, gender, config,
+        has_supernatural=has_supernatural, rng=rng,
+    )
+
+    for _ in range(100):
+        ring_name = f"{gender[0].upper()}-{fighter_id:04d}"
+        if ring_name not in used_names:
+            break
+    used_names.add(ring_name)
+
+    focus = rng.choice(["power", "speed", "technique", "toughness"])
+
+    return {
+        "id": f"bal-{fighter_id:04d}",
+        "ring_name": ring_name,
+        "real_name": ring_name,
+        "age": rng.randint(18, 30),
+        "gender": gender,
+        "primary_archetype": archetype,
+        "stats": stats,
+        "record": {"wins": 0, "losses": 0, "draws": 0, "kos": 0, "submissions": 0},
+        "condition": {"health_status": "healthy", "injuries": [], "recovery_days_remaining": 0, "morale": "neutral", "momentum": "neutral"},
+        "tier": "underground",
+        "status": "active",
+        "training_focus": focus,
+        "training_days_accumulated": 0.0,
+        "training_streak": 0,
+        "seasons_in_current_tier": 0,
+        "career_season_count": 0,
+        "peak_tier": "underground",
+        "promotion_desperation": 0.0,
+        "season_wins": 0,
+        "season_losses": 0,
+        "consecutive_losses": 0,
+        "consecutive_wins": 0,
+        "learning_rate": round(rng.uniform(0.7, 1.4), 2),
+        "work_ethic": round(rng.uniform(0.6, 1.3), 2),
+        "tier_records": {},
+        "last_fight_date": None,
+        "rivalries": [],
+        "storyline_log": [],
+        "moves": [],
+        "_entered_season": 1,
+        "_entered_age": 20,
+    }
+
+
+def generate_roster(n_per_gender, config, rng, used_names):
     males = []
     females = []
     counter = 0
     for _ in range(n_per_gender):
         counter += 1
-        males.append(generate_replacement_fighter(counter, 1, rng, used_names, gender_override="male"))
+        arch = rng.choice(ARCHETYPES_MALE)
+        males.append(make_fighter(counter, "male", arch, config, rng, used_names))
     for _ in range(n_per_gender):
         counter += 1
-        females.append(generate_replacement_fighter(counter, 1, rng, used_names, gender_override="female"))
+        arch = rng.choice(ARCHETYPES_FEMALE)
+        females.append(make_fighter(counter, "female", arch, config, rng, used_names))
     return males, females
 
 
@@ -28,7 +86,11 @@ def stat_summary(fighters):
     for f in fighters:
         for stat, val in f["stats"].items():
             totals[stat].append(val)
-    return {stat: sum(vals) / len(vals) for stat, vals in totals.items()}
+    lines = {}
+    for stat in totals:
+        vals = totals[stat]
+        lines[stat] = sum(vals) / len(vals)
+    return lines
 
 
 def run_balance_test(males, females, rng):
@@ -116,11 +178,16 @@ def main():
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
+    config = Config()
     rng = _random.Random(args.seed)
     used_names = set()
 
     print(f"Generating {args.per_gender} fighters per gender (seed={args.seed})...")
-    males, females = generate_roster(args.per_gender, rng, used_names)
+    print(f"  Core total range: {config.min_total_stats}-{config.max_total_stats}")
+    print(f"  Female scale: 0.82x core total")
+    print(f"  Female guile: 25-50, Male guile: 0-15")
+    print(f"  Female supernatural: 10-40, Male supernatural: 0-20")
+    males, females = generate_roster(args.per_gender, config, rng, used_names)
 
     male_stats = stat_summary(males)
     female_stats = stat_summary(females)
