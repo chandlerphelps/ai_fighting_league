@@ -140,7 +140,13 @@ def generate_charsheet_images(
     tiers: list[str] | None = None,
 ) -> dict[str, Path]:
     if tiers is None:
-        tiers = ["sfw", "barely", "nsfw"]
+        gender = (
+            fighter.gender if hasattr(fighter, "gender") else fighter.get("gender", "female")
+        )
+        if gender.lower() == "male":
+            tiers = ["sfw", "barely"]
+        else:
+            tiers = ["sfw", "barely", "nsfw"]
 
     fighter_id = fighter.id if hasattr(fighter, "id") else fighter["id"]
     ring_name = (

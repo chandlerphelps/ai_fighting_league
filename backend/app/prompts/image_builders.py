@@ -69,36 +69,25 @@ def _charsheet_tail(
     return tail_base
 
 
-def _build_charsheet_prompt(
+def _enrich_body_parts(
     body_parts: str,
-    clothing: str,
-    expression: str,
-    personality_pose: str = "",
-    tier: str = "barely",
-    gender: str = "female",
-    skimpiness_level: int = 4,
     body_type_details: dict | None = None,
-    origin: str = "",
     subtype_info: dict | None = None,
-    iconic_features: str = "",
-    age: int = 0,
-) -> dict:
-    if not body_parts:
-        return {}
-
-    anatomy = ""
+) -> str:
     if body_type_details:
         body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
-        if tier == "nsfw":
-            anatomy = _build_nsfw_anatomy_line(body_type_details)
-
     if subtype_info:
         body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
+    return body_parts
 
-    style = _charsheet_style(gender, tier, skimpiness_level)
 
-    pose_base = personality_pose or "dynamic signature pose"
-
+def _build_clothing_part(
+    clothing: str,
+    iconic_features: str = "",
+    primary_outfit_color: str = "",
+    tier: str = "sfw",
+    skimpiness_level: int = 4,
+) -> str:
     if tier == "nsfw":
         if skimpiness_level == 1:
             clothing_part = (
@@ -112,6 +101,8 @@ def _build_charsheet_prompt(
                 if clothing
                 else "completely naked"
             )
+    elif tier == "sfw" and primary_outfit_color and clothing:
+        clothing_part = f"{primary_outfit_color} {clothing}"
     else:
         clothing_part = clothing
 
@@ -119,7 +110,15 @@ def _build_charsheet_prompt(
         clothing_part = f"{clothing_part}, {iconic_features}"
     elif iconic_features:
         clothing_part = iconic_features
+    return clothing_part
 
+
+def _build_character_desc(
+    body_parts: str,
+    clothing_part: str = "",
+    age: int = 0,
+    origin: str = "",
+) -> str:
     character_desc = body_parts
     if age:
         character_desc = f"{character_desc}, {age} years old"
@@ -127,6 +126,41 @@ def _build_charsheet_prompt(
         character_desc = f"{character_desc}, {clothing_part}"
     if origin:
         character_desc = f"{character_desc}, from {origin}"
+    return character_desc
+
+
+def _build_charsheet_prompt(
+    body_parts: str,
+    clothing: str,
+    expression: str,
+    personality_pose: str = "",
+    tier: str = "barely",
+    gender: str = "female",
+    skimpiness_level: int = 4,
+    body_type_details: dict | None = None,
+    origin: str = "",
+    subtype_info: dict | None = None,
+    iconic_features: str = "",
+    age: int = 0,
+    primary_outfit_color: str = "",
+) -> dict:
+    if not body_parts:
+        return {}
+
+    anatomy = ""
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
+    if body_type_details and tier == "nsfw":
+        anatomy = _build_nsfw_anatomy_line(body_type_details)
+
+    style = _charsheet_style(gender, tier, skimpiness_level)
+
+    pose_base = personality_pose or "dynamic signature pose"
+
+    clothing_part = _build_clothing_part(
+        clothing, iconic_features, primary_outfit_color, tier, skimpiness_level,
+    )
+
+    character_desc = _build_character_desc(body_parts, clothing_part, age, origin)
 
     front_view = "front slightly angled view standing tall"
     center_pose = f"center personality pose: {pose_base}"
@@ -269,19 +303,11 @@ def build_body_reference_prompt(
 
     is_male = gender.lower() == "male"
     anatomy = ""
-    if body_type_details:
-        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
-        if not is_male:
-            anatomy = _build_nsfw_anatomy_line(body_type_details)
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
+    if body_type_details and not is_male:
+        anatomy = _build_nsfw_anatomy_line(body_type_details)
 
-    if subtype_info:
-        body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
-
-    subject = body_parts
-    if age:
-        subject = f"{subject}, {age} years old"
-    if origin:
-        subject = f"{subject}, from {origin}"
+    subject = _build_character_desc(body_parts, age=age, origin=origin)
 
     base_style = BODY_REF_STYLE_MALE if is_male else BODY_REF_STYLE_FEMALE
 
@@ -493,9 +519,6 @@ def build_portrait_prompt(
     origin: str = "",
     subtype_info: dict | None = None,
     iconic_features: str = "",
-    hair_style: str = "",
-    hair_color: str = "",
-    face_adornment: str = "",
     primary_outfit_color: str = "",
     age: int = 0,
 ) -> dict:
@@ -504,38 +527,17 @@ def build_portrait_prompt(
 
     style = get_art_style(gender)
 
-    if body_type_details:
-        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
 
-    if subtype_info:
-        body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic"
+    clothing_part = _build_clothing_part(
+        clothing_sfw, iconic_features, primary_outfit_color, tier="sfw",
+    )
 
-    character_desc = body_parts
-    if age:
-        character_desc = f"{character_desc}, {age} years old"
-    if origin:
-        character_desc = f"{character_desc}, from {origin}"
-
-    clothing_part = clothing_sfw or ""
-    if primary_outfit_color and clothing_part:
-        clothing_part = f"{primary_outfit_color} {clothing_part}"
-    if iconic_features:
-        clothing_part = f"{clothing_part}, {iconic_features}" if clothing_part else iconic_features
-
-    hair_desc = ""
-    if hair_style or hair_color:
-        hair_desc = f"{hair_style} {hair_color} hair".strip()
-
-    adornment_desc = ""
-    if face_adornment and face_adornment.lower() != "none":
-        adornment_desc = f"wearing {face_adornment}"
+    character_desc = _build_character_desc(body_parts, clothing_part, age, origin)
 
     sections = [
         f"[STYLE] {style}, {PORTRAIT_STYLE}",
         f"[CHARACTER] {character_desc}",
-        f"[HAIR] {hair_desc}" if hair_desc else "",
-        f"[CLOTHING] {clothing_part}" if clothing_part else "",
-        f"[ADORNMENT] {adornment_desc}" if adornment_desc else "",
         f"[EXPRESSION] {expression}" if expression else "",
         f"[QUALITY] {get_art_style_tail(gender)}, portrait, upper body shot",
     ]
@@ -545,7 +547,6 @@ def build_portrait_prompt(
         "body_parts": body_parts,
         "clothing": clothing_part,
         "expression": expression,
-        "hair": hair_desc,
-        "face_adornment": adornment_desc,
+        "character_desc": character_desc,
         "full_prompt": full,
     }

@@ -158,10 +158,10 @@ export async function fetchRosterPlan(): Promise<RosterPlan | null> {
   return apiFetch<RosterPlan | null>('/roster-plan')
 }
 
-export async function createRosterPlan(count: number, mode: 'initial' | 'addition' = 'initial'): Promise<TaskResponse> {
+export async function createRosterPlan(count: number, mode: 'initial' | 'addition' = 'initial', gender_mix: string = 'female'): Promise<TaskResponse> {
   return apiFetch<TaskResponse>('/roster-plan', {
     method: 'POST',
-    body: JSON.stringify({ count, mode }),
+    body: JSON.stringify({ count, mode, gender_mix }),
   })
 }
 

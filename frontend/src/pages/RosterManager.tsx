@@ -23,6 +23,7 @@ import {
   createRosterPlan,
   advanceStage,
   batchAdvance,
+  fetchArchetypes,
   type GenerateOptions,
   type TaskResponse,
   type OutfitOptions,
@@ -69,6 +70,7 @@ export default function RosterManager() {
   const [showOutfitOptions, setShowOutfitOptions] = useState(false)
   const [plan, setPlan] = useState<RosterPlan | null>(null)
   const [planCount, setPlanCount] = useState(8)
+  const [planGenderMix, setPlanGenderMix] = useState<'female' | 'male' | 'mixed'>('female')
   const [stageTab, setStageTab] = useState<StageTab>('all')
 
   useEffect(() => {
@@ -121,7 +123,7 @@ export default function RosterManager() {
 
   const handleCreatePlan = async (count: number) => {
     try {
-      const task = await createRosterPlan(count, fighters.length > 0 ? 'addition' : 'initial')
+      const task = await createRosterPlan(count, fighters.length > 0 ? 'addition' : 'initial', planGenderMix)
       handleTask(task, { type: 'plan', taskId: task.task_id, label: `Planning ${count} fighters...` })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Plan creation failed')
@@ -301,6 +303,23 @@ export default function RosterManager() {
                   textAlign: 'center',
                 }}
               />
+              <select
+                value={planGenderMix}
+                onChange={e => setPlanGenderMix(e.target.value as 'female' | 'male' | 'mixed')}
+                style={{
+                  padding: spacing.xs,
+                  backgroundColor: colors.surfaceLight,
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: '4px',
+                  color: colors.text,
+                  fontFamily: fonts.body,
+                  fontSize: fontSizes.sm,
+                }}
+              >
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="mixed">Mixed</option>
+              </select>
               <button
                 onClick={() => handleCreatePlan(planCount)}
                 disabled={globalTaskActive}
@@ -1327,15 +1346,21 @@ function OutfitOptionsPanel({ onClose }: { onClose: () => void }) {
 
 function GeneratePanel({ onGenerate, onCancel }: { onGenerate: (o: GenerateOptions) => void; onCancel: () => void }) {
   const [archetype, setArchetype] = useState('')
+  const [gender, setGender] = useState<'female' | 'male'>('female')
   const [hasSupernatural, setHasSupernatural] = useState(false)
   const [conceptHook, setConceptHook] = useState('')
   const [ringName, setRingName] = useState('')
   const [origin, setOrigin] = useState('')
+  const [archetypeMap, setArchetypeMap] = useState<{ female: string[]; male: string[] }>({
+    female: ['The Siren', 'The Witch', 'The Viper', 'The Prodigy', 'The Doll', 'The Huntress', 'The Empress', 'The Experiment'],
+    male: ['The Brute', 'The Veteran', 'The Monster', 'The Technician', 'The Wildcard', 'The Mystic', 'The Prodigy', 'The Experiment'],
+  })
 
-  const archetypes = [
-    '', 'The Siren', 'The Witch', 'The Viper', 'The Prodigy',
-    'The Doll', 'The Huntress', 'The Empress', 'The Experiment',
-  ]
+  useEffect(() => {
+    fetchArchetypes().then(setArchetypeMap).catch(() => {})
+  }, [])
+
+  const archetypes = ['', ...archetypeMap[gender]]
 
   return (
     <div style={{
@@ -1354,6 +1379,29 @@ function GeneratePanel({ onGenerate, onCancel }: { onGenerate: (o: GenerateOptio
         Generate New Fighter
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing.md }}>
+        <Field label="Gender">
+          <div style={{ display: 'flex', gap: spacing.sm }}>
+            {(['female', 'male'] as const).map(g => (
+              <button
+                key={g}
+                onClick={() => { setGender(g); setArchetype('') }}
+                style={{
+                  padding: `${spacing.xs} ${spacing.md}`,
+                  backgroundColor: gender === g ? withAlpha(colors.accent, 0.25) : 'transparent',
+                  border: `1px solid ${gender === g ? colors.accent : withAlpha(colors.textDim, 0.3)}`,
+                  borderRadius: '4px',
+                  color: gender === g ? colors.accent : colors.textMuted,
+                  fontFamily: fonts.body,
+                  fontSize: fontSizes.sm,
+                  cursor: 'pointer',
+                  textTransform: 'capitalize',
+                }}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
+        </Field>
         <Field label="Archetype">
           <select
             value={archetype}
@@ -1396,6 +1444,7 @@ function GeneratePanel({ onGenerate, onCancel }: { onGenerate: (o: GenerateOptio
             has_supernatural: hasSupernatural,
             concept_hook: conceptHook || undefined,
             ring_name: ringName || undefined,
+            gender,
             origin: origin || undefined,
           })}
           style={btnStyle(colors.accent)}

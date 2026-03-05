@@ -74,7 +74,7 @@ def _get_subtype_info(fighter: dict) -> dict | None:
     archetype = fighter.get("primary_archetype", "")
     subtype_name = fighter.get("subtype", "")
     if archetype and subtype_name:
-        return _find_subtype(archetype, subtype_name)
+        return _find_subtype(archetype, subtype_name, gender=fighter.get("gender", "female"))
     return None
 
 
@@ -100,6 +100,7 @@ def _rebuild_prompts(fighter: dict):
     clothing_nsfw = fighter.get("ring_attire_nsfw", "") or fighter.get("image_prompt_nsfw", {}).get("clothing", "")
 
     age = fighter.get("age", 0)
+    primary_outfit_color = fighter.get("primary_outfit_color", "")
     fighter["image_prompt_sfw"] = _build_charsheet_prompt(
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
@@ -107,6 +108,7 @@ def _rebuild_prompts(fighter: dict):
         subtype_info=subtype_info,
         iconic_features=iconic_features,
         age=age,
+        primary_outfit_color=primary_outfit_color,
     )
     fighter["image_prompt"] = _build_charsheet_prompt(
         body_parts, clothing_barely, expression,
@@ -116,14 +118,17 @@ def _rebuild_prompts(fighter: dict):
         iconic_features=iconic_features,
         age=age,
     )
-    fighter["image_prompt_nsfw"] = _build_charsheet_prompt(
-        body_parts, clothing_nsfw, expression,
-        personality_pose=personality_pose, tier="nsfw",
-        gender=gender, skimpiness_level=skimpiness,
-        subtype_info=subtype_info,
-        iconic_features=iconic_features,
-        age=age,
-    )
+    if gender.lower() == "male":
+        fighter["image_prompt_nsfw"] = fighter["image_prompt"]
+    else:
+        fighter["image_prompt_nsfw"] = _build_charsheet_prompt(
+            body_parts, clothing_nsfw, expression,
+            personality_pose=personality_pose, tier="nsfw",
+            gender=gender, skimpiness_level=skimpiness,
+            subtype_info=subtype_info,
+            iconic_features=iconic_features,
+            age=age,
+        )
     if not fighter.get("image_prompt_body_ref", {}).get("full_prompt"):
         fighter["image_prompt_body_ref"] = build_body_reference_prompt(
             body_parts, expression,
@@ -444,6 +449,7 @@ def regenerate_outfits(fighter_id: str):
         pose_nsfw = outfit_data.get("image_prompt_pose_nsfw", "") or personality_pose
 
         age = existing.get("age", 0)
+        primary_outfit_color = existing.get("primary_outfit_color", "")
         if not tiers or "sfw" in tiers:
             existing["ring_attire_sfw"] = outfit_data.get("ring_attire_sfw", existing.get("ring_attire_sfw", ""))
             existing["image_prompt_sfw"] = _build_charsheet_prompt(
@@ -453,6 +459,7 @@ def regenerate_outfits(fighter_id: str):
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
                 age=age,
+                primary_outfit_color=primary_outfit_color,
             )
         if not tiers or "barely" in tiers:
             existing["ring_attire"] = outfit_data.get("ring_attire", existing.get("ring_attire", ""))
@@ -466,14 +473,17 @@ def regenerate_outfits(fighter_id: str):
             )
         if not tiers or "nsfw" in tiers:
             existing["ring_attire_nsfw"] = outfit_data.get("ring_attire_nsfw", existing.get("ring_attire_nsfw", ""))
-            existing["image_prompt_nsfw"] = _build_charsheet_prompt(
-                body_parts, clothing_nsfw, expression,
-                personality_pose=pose_nsfw, tier="nsfw",
-                gender=gender, skimpiness_level=skimpiness_level,
-                subtype_info=subtype_info,
-                iconic_features=iconic_features,
-                age=age,
-            )
+            if gender.lower() == "male":
+                existing["image_prompt_nsfw"] = existing.get("image_prompt", {})
+            else:
+                existing["image_prompt_nsfw"] = _build_charsheet_prompt(
+                    body_parts, clothing_nsfw, expression,
+                    personality_pose=pose_nsfw, tier="nsfw",
+                    gender=gender, skimpiness_level=skimpiness_level,
+                    subtype_info=subtype_info,
+                    iconic_features=iconic_features,
+                    age=age,
+                )
 
         existing["skimpiness_level"] = skimpiness_level
         data_manager.save_fighter(existing, config)
@@ -666,6 +676,7 @@ def create_roster_plan():
     body = request.json or {}
     count = body.get("count", 8)
     mode = body.get("mode", "initial")
+    gender_mix = body.get("gender_mix", "female")
 
     existing_on_disk = data_manager.load_all_fighters(config)
     pool_summary = summarize_fighter_pool(existing_on_disk) if existing_on_disk else ""
@@ -691,6 +702,7 @@ def create_roster_plan():
             roster_size=count,
             existing_fighters=existing_summaries,
             pool_summary=pool_summary,
+            gender_mix=gender_mix,
         )
 
         for entry in entries:
@@ -892,7 +904,7 @@ def generate_from_plan():
                     ws["rankings"].append(fighter.id)
                     data_manager.save_world_state(ws, config)
 
-            entry["status"] = "approved"
+            entry["status"] = "generated"
             entry["fighter_id"] = fighter.id
             data_manager.save_roster_plan(plan, config)
 
@@ -908,7 +920,7 @@ def generate_from_plan():
 
             generated.append(fighter.to_dict())
 
-        plan["entries"] = [e for e in plan["entries"] if e.get("fighter_id") is None]
+        plan["entries"] = [e for e in plan["entries"] if e.get("status") == "generated" or (e.get("status") in ("pending", "approved") and e.get("fighter_id") is None)]
         if plan["entries"]:
             data_manager.save_roster_plan(plan, config)
         else:
@@ -977,9 +989,6 @@ def advance_stage(fighter_id: str):
                 origin=fighter_data.get("origin", ""),
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
-                hair_style=fighter_data.get("hair_style", ""),
-                hair_color=fighter_data.get("hair_color", ""),
-                face_adornment=fighter_data.get("face_adornment", ""),
                 primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
                 age=age,
             )
@@ -1084,10 +1093,14 @@ def batch_advance():
                 steps.append(2)
 
             for step_from in steps:
-                body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+                body_parts = fighter_data.get("image_prompt_body_parts", "")
+                if not body_parts:
+                    body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
                 if not body_parts:
                     body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
-                expression = fighter_data.get("image_prompt", {}).get("expression", "")
+                expression = fighter_data.get("image_prompt_expression", "")
+                if not expression:
+                    expression = fighter_data.get("image_prompt", {}).get("expression", "")
                 if not expression:
                     expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
 
@@ -1102,9 +1115,6 @@ def batch_advance():
                         origin=fighter_data.get("origin", ""),
                         subtype_info=subtype_info,
                         iconic_features=fighter_data.get("iconic_features", ""),
-                        hair_style=fighter_data.get("hair_style", ""),
-                        hair_color=fighter_data.get("hair_color", ""),
-                        face_adornment=fighter_data.get("face_adornment", ""),
                         primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
                         age=fighter_data.get("age", 0),
                     )

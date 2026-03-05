@@ -55,7 +55,7 @@ from app.prompts.image_builders import (
 
 def plan_roster(
     config: Config, roster_size: int = 8, existing_fighters: list[dict] = None,
-    pool_summary: str = "",
+    pool_summary: str = "", gender_mix: str = "female",
 ) -> list[dict]:
     existing_roster_text = ""
     if pool_summary:
@@ -67,7 +67,7 @@ def plan_roster(
     elif existing_fighters:
         existing_roster_text = "\n\n" + summarize_fighter_pool(existing_fighters, for_display=True)
 
-    prompt = build_plan_roster_prompt(roster_size, existing_roster_text)
+    prompt = build_plan_roster_prompt(roster_size, existing_roster_text, gender_mix=gender_mix)
 
     result = call_openrouter_json(
         prompt,
@@ -283,12 +283,13 @@ def generate_fighter(
         effective_tiers = [t for t in effective_tiers if t in ("sfw", "barely")]
         if not effective_tiers:
             effective_tiers = ["sfw", "barely"]
+        male_outfit_opts = {t: outfit_options_by_tier[t] for t in effective_tiers if outfit_options_by_tier and t in outfit_options_by_tier} or None
         outfit_data = _generate_outfits(
             config,
             result,
             skimpiness_level,
             tiers=effective_tiers,
-            outfit_options_by_tier=None,
+            outfit_options_by_tier=male_outfit_opts,
             tech_level=tech_level,
         )
     else:
@@ -326,6 +327,10 @@ def generate_fighter(
     sfw_prompt = {}
     nsfw_prompt = {}
 
+    primary_outfit_color = ""
+    if roster_plan_entry:
+        primary_outfit_color = roster_plan_entry.get("primary_outfit_color", "")
+
     if not skip_image_prompts:
         barely_prompt = _build_charsheet_prompt(
             body_parts,
@@ -355,6 +360,7 @@ def generate_fighter(
             subtype_info=subtype_info,
             iconic_features=iconic_features,
             age=result.get("age", 25),
+            primary_outfit_color=primary_outfit_color,
         )
 
         body_ref_prompt = build_body_reference_prompt(

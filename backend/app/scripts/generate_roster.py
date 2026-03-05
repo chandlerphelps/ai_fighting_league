@@ -176,21 +176,27 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
         if i < len(roster_plan) - 1:
             time.sleep(1)
 
-    random.shuffle(fighter_ids)
-
-    start_date = date.today().isoformat()
-    world_state = WorldState(
-        current_date=start_date,
-        day_number=0,
-        rankings=fighter_ids,
-        upcoming_events=[],
-        completed_events=[],
-        active_injuries={},
-        rivalry_graph=[],
-        last_daily_summary="League initialized. Let the fights begin.",
-        event_counter=0,
-    )
-    data_manager.save_world_state(world_state, config)
+    existing_ws = data_manager.load_world_state(config)
+    if existing_ws:
+        for fid in fighter_ids:
+            if fid not in existing_ws.get("rankings", []):
+                existing_ws["rankings"].append(fid)
+        data_manager.save_world_state(existing_ws, config)
+    else:
+        random.shuffle(fighter_ids)
+        start_date = date.today().isoformat()
+        world_state = WorldState(
+            current_date=start_date,
+            day_number=0,
+            rankings=fighter_ids,
+            upcoming_events=[],
+            completed_events=[],
+            active_injuries={},
+            rivalry_graph=[],
+            last_daily_summary="League initialized. Let the fights begin.",
+            event_counter=0,
+        )
+        data_manager.save_world_state(world_state, config)
 
     print(f"\nRoster generation complete!")
     print(f"  Fighters created: {len(fighter_ids)}")

@@ -388,13 +388,50 @@ def _shuffled_subtype_lines(gender: str = "female") -> str:
     return "\n".join(lines)
 
 
-def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "") -> str:
-    archetype_list = _shuffled_archetype_names()
-    subtype_block = _shuffled_subtype_lines()
+def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "", gender_mix: str = "female") -> str:
+    if gender_mix == "mixed":
+        female_archetype_list = _shuffled_archetype_names("female")
+        male_archetype_list = _shuffled_archetype_names("male")
+        female_subtype_block = _shuffled_subtype_lines("female")
+        male_subtype_block = _shuffled_subtype_lines("male")
+        archetype_line = (
+            f"- Archetypes: use a mix of FEMALE archetypes ({female_archetype_list}) "
+            f"and MALE archetypes ({male_archetype_list})"
+        )
+        gender_constraint = (
+            "- Gender: include BOTH male and female fighters in this roster\n"
+            "- Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs\n"
+            "- Male fighters should be physically imposing, dangerous, intimidating"
+        )
+        archetype_json_line = (
+            f'"primary_archetype": "<from female archetypes: {female_archetype_list} OR male archetypes: {male_archetype_list}>"'
+        )
+        subtype_block = f"FEMALE SUBTYPES:\n{female_subtype_block}\n\nMALE SUBTYPES:\n{male_subtype_block}"
+        guide = GUIDE_CORE_PHILOSOPHY + "\n" + GUIDE_MALE_PHILOSOPHY
+    elif gender_mix == "male":
+        archetype_list = _shuffled_archetype_names("male")
+        subtype_block = _shuffled_subtype_lines("male")
+        archetype_line = f"- Archetypes: cover at least 5 different primary archetypes from the MALE list: {archetype_list}"
+        gender_constraint = (
+            "- Gender: ALL fighters must be male\n"
+            "- Male fighters should be physically imposing, dangerous, intimidating"
+        )
+        archetype_json_line = f'"primary_archetype": "<from the male archetypes: {archetype_list}>"'
+        guide = GUIDE_MALE_PHILOSOPHY
+    else:
+        archetype_list = _shuffled_archetype_names()
+        subtype_block = _shuffled_subtype_lines()
+        archetype_line = f"- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: {archetype_list}"
+        gender_constraint = (
+            "- Gender: ALL fighters must be female\n"
+            "- Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs"
+        )
+        archetype_json_line = f'"primary_archetype": "<from the female archetypes: {archetype_list}>"'
+        guide = GUIDE_CORE_PHILOSOPHY
 
     return f"""{existing_roster_text}
 
-{GUIDE_CORE_PHILOSOPHY}
+{guide}
 
 {GUIDE_COMMON_MISTAKES}
 
@@ -403,11 +440,10 @@ Design all {roster_size} fighters as an interconnected ensemble — they should 
 a cast, not a random collection.
 
 ROSTER BALANCE CONSTRAINTS:
-- Gender: ALL fighters must be female
-- Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs
+{gender_constraint}
 - Supernatural: at least 2 fighters should have NO supernatural abilities
 - Geography: at least 4 different countries/regions represented
-- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: {archetype_list}
+{archetype_line}
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
 - Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean slightly toward the skimpier side — most fighters should center around levels 2-3. A Siren might weight heavily toward 3-4, a Prodigy toward 2-3, an Empress toward 2-3. The 4 weights must sum to 100.
@@ -428,7 +464,7 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "gender": "<male|female>",
     "age": <18-34>,
     "origin": "<specific city/region, country>",
-    "primary_archetype": "<from the female archetypes: {archetype_list}>",
+    {archetype_json_line},
     "subtype": "<REQUIRED — pick from the SUBTYPES list below for the chosen primary_archetype>",
     "has_supernatural": <true|false>,
     "power_tier": "<prospect|gatekeeper|contender|champion>",
