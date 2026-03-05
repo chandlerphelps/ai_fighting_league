@@ -459,7 +459,7 @@ export default function RosterManager() {
                     if (!isEditing) setExpandedId(isExpanded ? null : fighter.id)
                   }}
                 >
-                  <FighterImage fighterId={fighter.id} ringName={fighter.ring_name} tier={(fighter.generation_stage ?? 3) <= 2 ? 'portrait' : globalTier} version={imageVersion} />
+                  <FighterImage fighterId={fighter.id} ringName={fighter.ring_name} tier={(fighter.generation_stage ?? 3) <= 2 && !['portrait', 'headshot', 'body_ref'].includes(globalTier) ? 'portrait' : globalTier} version={imageVersion} />
                   <ImageOverlayButtons
                     onExpand={() => setLightbox({
                       fighterId: fighter.id,
