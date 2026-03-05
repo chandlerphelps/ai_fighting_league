@@ -12,7 +12,7 @@ def calculate_hit_chance(
 ) -> float:
     att_mods = apply_emotional_modifiers(attacker)
 
-    technique_factor = 0.7 + 0.3 * (attacker.technique / 95.0)
+    technique_factor = 0.7 + 0.3 * (attacker.technique / 100.0)
     stamina_factor = 0.8 + 0.2 * (attacker.stamina / attacker.max_stamina)
     combo_accuracy = 1.0 + min(0.1, attacker.combo_counter * 0.02)
 
@@ -27,7 +27,7 @@ def calculate_hit_chance(
     def_mods = apply_emotional_modifiers(defender)
     evasion = (
         0.05
-        + 0.15 * (defender.speed / 95.0)
+        + 0.15 * (defender.speed / 100.0)
         * (defender.stamina / defender.max_stamina)
         * def_mods["evasion_mult"]
     )
@@ -43,7 +43,7 @@ def calculate_block_chance(
     defender: FighterCombatState,
 ) -> float:
     def_mods = apply_emotional_modifiers(defender)
-    base_block = 0.3 * (defender.technique / 95.0) * move.block_modifier
+    base_block = 0.3 * (defender.technique / 100.0) * move.block_modifier
     guard_factor = defender.guard / defender.max_guard if defender.max_guard > 0 else 0.5
     return base_block * guard_factor * def_mods["block_mult"]
 
@@ -64,7 +64,7 @@ def calculate_damage(
 
     for stat_name, weight in move.stat_scaling.items():
         stat_val = getattr(attacker, stat_name, 50)
-        scaling_total += (0.5 + 0.5 * stat_val / 95.0) * (weight / max(scaling_weight_sum, 0.01))
+        scaling_total += (0.5 + 0.5 * stat_val / 100.0) * (weight / max(scaling_weight_sum, 0.01))
 
     if not move.stat_scaling:
         scaling_total = 1.0
@@ -74,9 +74,12 @@ def calculate_damage(
 
     raw *= scaling_total * stamina_factor * att_mods["damage_mult"] * combo_bonus * 0.45
 
-    reduction = 0.10 + 0.25 * (defender.toughness / 95.0)
+    reduction = 0.10 + 0.25 * (defender.toughness / 100.0)
     if defender.guard > 20:
         reduction += 0.05 * (defender.guard / defender.max_guard if defender.max_guard > 0 else 0)
+
+    guile_bypass = 0.15 * (attacker.guile / 100.0)
+    reduction *= (1.0 - guile_bypass)
 
     return max(1.0, raw * (1.0 - reduction))
 
@@ -110,9 +113,10 @@ def resolve_attack(
     full_damage = calculate_damage(move, attacker, defender)
 
     if is_slipping:
-        slip_success = 0.3 + 0.4 * (defender.speed / 95.0) * (defender.stamina / defender.max_stamina)
+        slip_success = 0.3 + 0.4 * (defender.speed / 100.0) * (defender.stamina / defender.max_stamina)
+        slip_success += 0.12 * (defender.guile / 100.0)
         if rng.random() < slip_success:
-            counter_chance = 0.15 + 0.15 * (defender.technique / 95.0)
+            counter_chance = 0.15 + 0.15 * (defender.technique / 100.0)
             if rng.random() < counter_chance:
                 return TickOutcome.COUNTER, 0.0
             return TickOutcome.DODGED, 0.0
@@ -128,7 +132,7 @@ def resolve_attack(
     if roll < hit_chance:
         return TickOutcome.HIT, full_damage
 
-    counter_window = 0.05 + 0.10 * (defender.technique / 95.0)
+    counter_window = 0.05 + 0.10 * (defender.technique / 100.0) + 0.06 * (defender.guile / 100.0)
     if not is_defending and rng.random() < counter_window:
         return TickOutcome.COUNTER, 0.0
 
@@ -141,6 +145,7 @@ def apply_damage(
     move: MoveDefinition,
     outcome: TickOutcome,
     rng: _random.Random,
+    attacker: FighterCombatState | None = None,
 ):
     defender.hp -= damage
     defender.accumulated_damage += damage
@@ -153,6 +158,10 @@ def apply_damage(
         if outcome == TickOutcome.BLOCKED:
             stamina_hit *= 0.5
         defender.stamina = max(0.0, defender.stamina - stamina_hit)
+
+    if attacker and outcome == TickOutcome.HIT and attacker.guile > 0:
+        guile_drain = 2.0 * (attacker.guile / 100.0)
+        defender.stamina = max(0.0, defender.stamina - guile_drain)
 
     if outcome == TickOutcome.HIT and move.stun_chance > 0:
         stun_roll = rng.random()

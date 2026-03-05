@@ -4,6 +4,7 @@ export interface Stats {
   technique: number
   toughness: number
   supernatural: number
+  guile: number
 }
 
 export interface Record {

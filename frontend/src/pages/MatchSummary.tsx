@@ -32,7 +32,7 @@ const TIER_LABELS: Record<string, string> = {
   underground: 'Underground',
 }
 
-const STAT_NAMES = ['power', 'speed', 'technique', 'toughness', 'supernatural'] as const
+const STAT_NAMES = ['power', 'speed', 'technique', 'toughness', 'supernatural', 'guile'] as const
 
 function formatTime(time24: string): string {
   if (!time24) return ''

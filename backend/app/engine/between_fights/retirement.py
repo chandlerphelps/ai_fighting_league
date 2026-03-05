@@ -2,7 +2,7 @@ import random as _random
 
 CORE_STATS = ["power", "speed", "technique", "toughness"]
 STAT_MIN = 15
-STAT_CAP = 95
+STAT_CAP = 100
 
 TIER_ORDER = {"underground": 0, "contender": 1, "apex": 2}
 
@@ -133,7 +133,24 @@ def update_promotion_desperation(fighter: dict) -> dict:
     return fighter
 
 
-def generate_replacement_fighter(fighter_id_counter: int, season: int, rng: _random.Random = None, used_names: set = None) -> dict:
+GENDER_STAT_BIAS = {
+    "male": {"power": 15, "speed": 0, "technique": 0, "toughness": 5},
+    "female": {"power": -5, "speed": 5, "technique": 5, "toughness": 0},
+}
+
+GENDER_SECONDARY_RANGES = {
+    "male": {"supernatural": (0, 20), "guile": (0, 25)},
+    "female": {"supernatural": (0, 40), "guile": (15, 50)},
+}
+
+
+def generate_replacement_fighter(
+    fighter_id_counter: int,
+    season: int,
+    rng: _random.Random = None,
+    used_names: set = None,
+    gender_override: str = None,
+) -> dict:
     if rng is None:
         rng = _random.Random()
     if used_names is None:
@@ -143,8 +160,17 @@ def generate_replacement_fighter(fighter_id_counter: int, season: int, rng: _ran
     ages = [18, 19, 20, 21, 22]
     age = rng.choices(ages, weights=age_weights, k=1)[0]
 
-    target_total = rng.randint(120, 240)
-    stats = _distribute_stats(target_total, rng)
+    gender = gender_override or rng.choice(["female", "male"])
+    bias = GENDER_STAT_BIAS.get(gender, {})
+    secondary_ranges = GENDER_SECONDARY_RANGES.get(gender, {"supernatural": (0, 20), "guile": (0, 25)})
+
+    target_total = rng.randint(80, 180)
+    stats = _distribute_stats(target_total, rng, bias=bias)
+
+    sup_lo, sup_hi = secondary_ranges["supernatural"]
+    guile_lo, guile_hi = secondary_ranges["guile"]
+    stats["supernatural"] = rng.randint(sup_lo, sup_hi)
+    stats["guile"] = rng.randint(guile_lo, guile_hi)
 
     for _ in range(100):
         prefix = rng.choice(PREFIXES) if rng.random() < 0.4 else ""
@@ -162,7 +188,7 @@ def generate_replacement_fighter(fighter_id_counter: int, season: int, rng: _ran
         "ring_name": ring_name,
         "real_name": ring_name,
         "age": age,
-        "gender": rng.choice(["female", "male"]),
+        "gender": gender,
         "primary_archetype": "",
         "stats": stats,
         "record": {"wins": 0, "losses": 0, "draws": 0, "kos": 0, "submissions": 0},
@@ -192,8 +218,11 @@ def generate_replacement_fighter(fighter_id_counter: int, season: int, rng: _ran
     }
 
 
-def _distribute_stats(target_total: int, rng: _random.Random) -> dict:
+def _distribute_stats(target_total: int, rng: _random.Random, bias: dict = None) -> dict:
     raw = [rng.randint(25, 60) for _ in CORE_STATS]
+    if bias:
+        for i, stat_name in enumerate(CORE_STATS):
+            raw[i] = max(1, raw[i] + bias.get(stat_name, 0))
     raw_total = sum(raw)
     scaled = [max(STAT_MIN, min(STAT_CAP, round(v * target_total / raw_total))) for v in raw]
 
@@ -211,4 +240,5 @@ def _distribute_stats(target_total: int, rng: _random.Random) -> dict:
     for i, stat_name in enumerate(CORE_STATS):
         stats[stat_name] = scaled[i]
     stats["supernatural"] = 0
+    stats["guile"] = 0
     return stats

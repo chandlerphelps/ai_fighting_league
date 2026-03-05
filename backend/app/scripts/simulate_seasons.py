@@ -220,6 +220,7 @@ class LeagueSimulator:
         for i, s in enumerate(CORE_STATS):
             stats[s] = scaled[i]
         stats["supernatural"] = 0
+        stats["guile"] = 0
         return stats
 
     def _current_date(self) -> _date:

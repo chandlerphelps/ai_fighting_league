@@ -13,9 +13,9 @@ FIGHT_CAMP_BOOSTS = {
 }
 
 CORE_STATS = ["power", "speed", "technique", "toughness"]
-TRAINABLE_STATS = CORE_STATS + ["supernatural"]
+TRAINABLE_STATS = CORE_STATS + ["supernatural", "guile"]
 
-STAT_CAP = 95
+STAT_CAP = 100
 OVERTRAINING_THRESHOLD = 90
 OVERTRAINING_INJURY_CHANCE = 0.05
 

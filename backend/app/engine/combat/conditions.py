@@ -6,31 +6,34 @@ def composure_dampening(state: FighterCombatState) -> float:
 
 
 def update_emotions_on_hit(
-    attacker: FighterCombatState, defender: FighterCombatState, damage: float
+    attacker: FighterCombatState, defender: FighterCombatState, damage: float,
+    attacker_guile: int = 0,
 ):
     dampening_a = composure_dampening(attacker)
     dampening_d = composure_dampening(defender)
+
+    guile_psych = 1.0 + 0.25 * (attacker_guile / 100.0)
 
     confidence_gain = min(8.0, damage * 0.3) * dampening_a
     attacker.emotional_state.confidence += confidence_gain
     attacker.emotional_state.focus += 2.0 * dampening_a
     attacker.emotional_state.fear = max(0.0, attacker.emotional_state.fear - 3.0)
 
-    rage_gain = min(10.0, damage * 0.4) * dampening_d
+    rage_gain = min(10.0, damage * 0.4) * dampening_d * guile_psych
     defender.emotional_state.rage += rage_gain
 
     hp_pct = defender.hp / defender.max_hp
     if hp_pct < 0.4:
-        defender.emotional_state.fear += (5.0 + damage * 0.2) * dampening_d
+        defender.emotional_state.fear += (5.0 + damage * 0.2) * dampening_d * guile_psych
     elif hp_pct < 0.6:
-        defender.emotional_state.fear += 2.0 * dampening_d
+        defender.emotional_state.fear += 2.0 * dampening_d * guile_psych
 
     if damage > 15.0:
-        defender.emotional_state.fear += 3.0 * dampening_d
-        defender.emotional_state.confidence -= 4.0 * dampening_d
-        defender.emotional_state.focus -= 3.0 * dampening_d
+        defender.emotional_state.fear += 3.0 * dampening_d * guile_psych
+        defender.emotional_state.confidence -= 4.0 * dampening_d * guile_psych
+        defender.emotional_state.focus -= 3.0 * dampening_d * guile_psych
 
-    defender.emotional_state.confidence -= min(5.0, damage * 0.2) * dampening_d
+    defender.emotional_state.confidence -= min(5.0, damage * 0.2) * dampening_d * guile_psych
 
     attacker.emotional_state.clamp()
     defender.emotional_state.clamp()
@@ -56,12 +59,14 @@ def update_emotions_on_block(
 
 
 def update_emotions_on_counter(
-    attacker: FighterCombatState, defender: FighterCombatState
+    attacker: FighterCombatState, defender: FighterCombatState,
+    counter_guile: int = 0,
 ):
     dampening_a = composure_dampening(attacker)
     dampening_d = composure_dampening(defender)
-    attacker.emotional_state.confidence -= 5.0 * dampening_a
-    attacker.emotional_state.fear += 3.0 * dampening_a
+    guile_psych = 1.0 + 0.25 * (counter_guile / 100.0)
+    attacker.emotional_state.confidence -= 5.0 * dampening_a * guile_psych
+    attacker.emotional_state.fear += 3.0 * dampening_a * guile_psych
     defender.emotional_state.confidence += 6.0 * dampening_d
     defender.emotional_state.focus += 3.0 * dampening_d
     attacker.emotional_state.clamp()
@@ -104,7 +109,7 @@ def update_mana(state: FighterCombatState):
     if state.emotional_state.fear > 60:
         gain += 2.0
 
-    gain *= (0.5 + 0.5 * state.supernatural / 50.0)
+    gain *= (0.5 + 0.5 * state.supernatural / 100.0)
 
     state.mana = min(state.max_mana, state.mana + gain)
 

@@ -467,12 +467,15 @@ def _extract_stats(data: dict, has_supernatural: bool, config: Config) -> Stats:
             0, min(config.supernatural_cap, int(data.get("supernatural", 0)))
         )
 
+    guile = max(0, min(config.guile_cap, int(data.get("guile", 0))))
+
     return Stats(
         power=power,
         speed=speed,
         technique=technique,
         toughness=toughness,
         supernatural=supernatural,
+        guile=guile,
     )
 
 

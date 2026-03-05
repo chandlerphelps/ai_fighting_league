@@ -165,6 +165,14 @@ class WeightedStrategy(FightStrategy):
         if own.technique >= 70 and move.accuracy >= 0.7:
             return 1.3
 
+        if own.guile >= 30:
+            if move.stamina_damage > 0:
+                return 1.4
+            if move.id in ("slip", "clinch_entry"):
+                return 1.3
+            if move.speed >= 8 and move.base_damage > 20:
+                return 0.7
+
         return 1.0
 
     def _positional_score(

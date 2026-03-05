@@ -44,8 +44,8 @@ def resolve_single_attack(
     apply_attacker_costs(attacker, att_move, outcome)
 
     if outcome == TickOutcome.HIT:
-        apply_damage(defender, damage, att_move, outcome, rng)
-        update_emotions_on_hit(attacker, defender, damage)
+        apply_damage(defender, damage, att_move, outcome, rng, attacker=attacker)
+        update_emotions_on_hit(attacker, defender, damage, attacker_guile=attacker.guile)
         attacker.combo_counter += 1
 
         if att_move.position_change is not None:
@@ -53,14 +53,14 @@ def resolve_single_attack(
             defender.position = att_move.position_change
 
     elif outcome == TickOutcome.BLOCKED:
-        apply_damage(defender, damage, att_move, outcome, rng)
+        apply_damage(defender, damage, att_move, outcome, rng, attacker=attacker)
         update_emotions_on_block(attacker, defender)
         attacker.combo_counter = 0
 
     elif outcome == TickOutcome.COUNTER:
         counter_damage = calculate_damage(att_move, defender, attacker) * 0.7
-        apply_damage(attacker, counter_damage, att_move, outcome, rng)
-        update_emotions_on_counter(attacker, defender)
+        apply_damage(attacker, counter_damage, att_move, outcome, rng, attacker=defender)
+        update_emotions_on_counter(attacker, defender, counter_guile=defender.guile)
         attacker.combo_counter = 0
         defender.combo_counter += 1
         damage = counter_damage

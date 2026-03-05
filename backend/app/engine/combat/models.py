@@ -77,6 +77,7 @@ class FighterCombatState:
     technique: int = 50
     toughness: int = 50
     supernatural: int = 0
+    guile: int = 0
 
     def snapshot(self) -> dict:
         return {
@@ -103,6 +104,7 @@ class FighterCombatState:
         technique = stats.get("technique", 50)
         toughness = stats.get("toughness", 50)
         supernatural = stats.get("supernatural", 0)
+        guile = stats.get("guile", 0)
 
         max_hp = 80.0 + toughness * 0.7
         max_stamina = 80.0 + (speed + toughness) * 0.3
@@ -151,6 +153,7 @@ class FighterCombatState:
             technique=technique,
             toughness=toughness,
             supernatural=supernatural,
+            guile=guile,
         )
 
 

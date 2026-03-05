@@ -26,7 +26,7 @@ def print_header(f1, f2):
     print(f"  {f1['ring_name']:>25}   vs   {f2['ring_name']:<25}")
     print("=" * 70)
     print(f"  {'':>25}          {'':>25}")
-    for stat in ["power", "speed", "technique", "toughness", "supernatural"]:
+    for stat in ["power", "speed", "technique", "toughness", "supernatural", "guile"]:
         v1, v2 = s1.get(stat, 0), s2.get(stat, 0)
         marker1 = " <" if v1 > v2 else ""
         marker2 = "< " if v2 > v1 else ""
@@ -96,7 +96,7 @@ def main():
     print("\nAvailable fighters:")
     for i, f in enumerate(fighters):
         s = f["stats"]
-        print(f"  [{i}] {f['ring_name']:<20} pow={s['power']:>2} spd={s['speed']:>2} tech={s['technique']:>2} tough={s['toughness']:>2} sup={s['supernatural']:>2}")
+        print(f"  [{i}] {f['ring_name']:<20} pow={s['power']:>2} spd={s['speed']:>2} tech={s['technique']:>2} tough={s['toughness']:>2} sup={s.get('supernatural',0):>2} gui={s.get('guile',0):>2}")
 
     print()
     if len(sys.argv) >= 3:

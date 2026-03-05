@@ -518,7 +518,8 @@ def build_generate_fighter_prompt(
             "- Stats should reflect the archetype (Brute has high power/toughness, "
             "Technician has high technique/speed, Monster has high power/toughness, "
             "Veteran has balanced stats with high technique, Wildcard has high speed, "
-            "Mystic has high supernatural/technique, etc.)"
+            "Mystic has high supernatural/technique, etc.)\n"
+            "- Males tend to have lower guile (0-25 typical)"
         )
         body_trait_hint = (
             "MUST incorporate the rolled body traits (build type, muscle definition, "
@@ -530,10 +531,11 @@ def build_generate_fighter_prompt(
         )
     else:
         stat_hints = (
-            "- Stats should reflect the archetype (Huntress has high speed, "
-            "Empress has high technique, Viper has high speed/technique, "
-            "Demon has high power/supernatural, Assassin has high speed/technique, "
-            "Nymph has high supernatural/speed, etc.)"
+            "- Stats should reflect the archetype (Huntress has high speed/guile, "
+            "Empress has high technique/guile, Viper has high speed/technique/guile, "
+            "Demon has high power/supernatural, Assassin has high speed/technique/guile, "
+            "Nymph has high supernatural/speed/guile, etc.)\n"
+            "- Females tend to have higher guile (15-50 typical) — cunning, distraction, dirty tricks, psychological warfare"
         )
         body_trait_hint = (
             "MUST incorporate the rolled body traits (waist, abs, butt, face shape, "
@@ -554,8 +556,9 @@ Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing
 {supernatural_instruction}
 
 STAT CONSTRAINTS:
-- 4 core stats (power, speed, technique, toughness), each rated 15-95
-- 1 supernatural stat, rated 0-50 (0 if no supernatural abilities)
+- 4 core stats (power, speed, technique, toughness), each rated 0-100
+- 1 supernatural stat, rated 0-100 (0 if no supernatural abilities)
+- 1 guile stat, rated 0-100 (cunning, distraction, dirty tricks, psychological warfare)
 - The 4 core stats MUST total between {min_total_stats} and {max_total_stats}
 - No fighter should be elite at everything — balance strengths with clear weaknesses
 {stat_hints}
@@ -581,10 +584,11 @@ Return ONLY valid JSON with this exact structure:
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
   "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
   "stats": {{
-    "power": <15-95>,
-    "speed": <15-95>,
-    "technique": <15-95>,
-    "toughness": <15-95>,
-    "supernatural": <0-50>
+    "power": <0-100>,
+    "speed": <0-100>,
+    "technique": <0-100>,
+    "toughness": <0-100>,
+    "supernatural": <0-100>,
+    "guile": <0-100>
   }}
 }}"""

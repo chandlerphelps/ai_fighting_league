@@ -9,6 +9,7 @@ class Stats:
     technique: int = 50
     toughness: int = 50
     supernatural: int = 0
+    guile: int = 0
 
     def core_total(self) -> int:
         return self.power + self.speed + self.technique + self.toughness

@@ -22,8 +22,9 @@ class Config:
     min_total_stats: int = 120
     max_total_stats: int = 340
     stat_min: int = 15
-    stat_max: int = 95
-    supernatural_cap: int = 50
+    stat_max: int = 100
+    supernatural_cap: int = 100
+    guile_cap: int = 100
 
     minor_recovery: tuple = (5, 9)
     moderate_recovery: tuple = (14, 28)
