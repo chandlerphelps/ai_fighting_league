@@ -184,9 +184,9 @@ def main():
 
     print(f"Generating {args.per_gender} fighters per gender (seed={args.seed})...")
     print(f"  Core total range: {config.min_total_stats}-{config.max_total_stats}")
-    print(f"  Female scale: 0.82x core total")
-    print(f"  Female guile: 25-50, Male guile: 0-15")
-    print(f"  Female supernatural: 10-40, Male supernatural: 0-20")
+    print(f"  Male flat bonus: power +8-15, toughness +5-10")
+    print(f"  Female guile: 40-100, Male guile: 0-15")
+    print(f"  Female supernatural: 20-100, Male supernatural: 0-20")
     males, females = generate_roster(args.per_gender, config, rng, used_names)
 
     male_stats = stat_summary(males)

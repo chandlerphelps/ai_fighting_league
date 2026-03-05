@@ -2230,19 +2230,19 @@ ARCHETYPE_STAT_WEIGHTS = {
     "The Mystic":     {"power": 20, "speed": 20, "technique": 25, "toughness": 20},
 }
 
-GENDER_CORE_TOTAL_SCALE = {
-    "male": 1.0,
-    "female": 0.82,
+GENDER_FLAT_BONUS = {
+    "male":   {"power": 15, "toughness": 10},
+    "female": {"power": 0,  "toughness": 0},
 }
 
 GENDER_GUILE_RANGE = {
-    "male": (0, 15),
-    "female": (25, 50),
+    "male":   (0, 15),
+    "female": (40, 100),
 }
 
 GENDER_SUPERNATURAL_RANGE = {
-    "male": (0, 20),
-    "female": (10, 40),
+    "male":   (0, 20),
+    "female": (20, 100),
 }
 
 
@@ -2260,9 +2260,7 @@ def generate_archetype_stats(
     if not profile:
         profile = ARCHETYPE_STAT_WEIGHTS["The Prodigy"]
 
-    base_total = rng.randint(config.min_total_stats, config.max_total_stats)
-    scale = GENDER_CORE_TOTAL_SCALE.get(gender.lower(), 1.0)
-    core_total = max(config.min_total_stats, round(base_total * scale))
+    core_total = rng.randint(config.min_total_stats, config.max_total_stats)
 
     weights = {}
     for stat in ("power", "speed", "technique", "toughness"):
@@ -2285,13 +2283,18 @@ def generate_archetype_stats(
             stats[key] -= 1
             diff += 1
 
-    guile_lo, guile_hi = GENDER_GUILE_RANGE.get(gender.lower(), (0, 25))
+    bonus = GENDER_FLAT_BONUS.get(gender.lower(), {})
+    for stat, val in bonus.items():
+        if val:
+            stats[stat] = min(config.stat_max, stats[stat] + rng.randint(val // 2, val))
+
+    guile_lo, guile_hi = GENDER_GUILE_RANGE.get(gender.lower(), (0, 15))
     stats["guile"] = rng.randint(guile_lo, guile_hi)
 
     sup_lo, sup_hi = GENDER_SUPERNATURAL_RANGE.get(gender.lower(), (0, 20))
     if has_supernatural:
         sup_lo = max(sup_lo, 20)
-        sup_hi = max(sup_hi, 50)
+        sup_hi = max(sup_hi, 100)
     else:
         sup_lo = 0
         sup_hi = 0
