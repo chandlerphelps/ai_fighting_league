@@ -514,6 +514,13 @@ PORTRAIT_STYLE = (
     "clean background, professional character art, detailed face and expression"
 )
 
+HEADSHOT_STYLE = (
+    "high quality illustration, tight close-up headshot, face fills the frame, "
+    "dramatic dark moody background with subtle gradient, cinematic lighting from the side, "
+    "fighting game character select screen, intense stare toward viewer, "
+    "sharp focus on face, shallow depth of field, professional character art"
+)
+
 
 def build_portrait_prompt(
     body_parts: str,
@@ -551,6 +558,43 @@ def build_portrait_prompt(
     return {
         "body_parts": body_parts,
         "clothing": clothing_part,
+        "expression": expression,
+        "character_desc": character_desc,
+        "full_prompt": full,
+    }
+
+
+def build_headshot_prompt(
+    body_parts: str,
+    expression: str,
+    gender: str = "female",
+    body_type_details: dict | None = None,
+    origin: str = "",
+    subtype_info: dict | None = None,
+    iconic_features: str = "",
+    age: int = 0,
+) -> dict:
+    if not body_parts:
+        return {}
+
+    style = get_art_style(gender)
+
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
+
+    character_desc = _build_character_desc(body_parts, age=age, origin=origin)
+    iconic_part = f", {iconic_features}" if iconic_features else ""
+
+    sections = [
+        f"[STYLE] {style}, {HEADSHOT_STYLE}",
+        f"[CHARACTER] {character_desc}{iconic_part}, close-up headshot filling the frame",
+        f"[EXPRESSION] {expression}, intense fighting spirit" if expression else "",
+        f"[BACKGROUND] dark moody background, deep shadows, subtle dark gradient, cinematic",
+        f"[QUALITY] {get_art_style_tail(gender)}, headshot, face close-up, character select screen",
+    ]
+    full = "\n".join(s for s in sections if s)
+
+    return {
+        "body_parts": body_parts,
         "expression": expression,
         "character_desc": character_desc,
         "full_prompt": full,

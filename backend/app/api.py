@@ -28,7 +28,7 @@ from app.services import data_manager
 from app.services.grok_image import generate_charsheet_images
 from app.engine.move_generator import build_move_image_prompt, _slugify as move_slugify
 from app.services.grok_image import edit_image, download_image
-from app.prompts.image_builders import build_portrait_prompt, build_body_reference_prompt
+from app.prompts.image_builders import build_portrait_prompt, build_body_reference_prompt, build_headshot_prompt
 
 app = Flask(__name__)
 CORS(app)
@@ -147,6 +147,15 @@ def _rebuild_prompts(fighter: dict):
             age=age,
             iconic_features=iconic_features,
         )
+    fighter["image_prompt_headshot"] = build_headshot_prompt(
+        body_parts, expression,
+        gender=gender,
+        body_type_details=body_type_details,
+        origin=origin,
+        subtype_info=subtype_info,
+        iconic_features=iconic_features,
+        age=age,
+    )
 
 
 def _run_in_background(task_id: str, fn, *args, **kwargs):
@@ -1083,6 +1092,42 @@ def advance_stage(fighter_id: str):
             if urls:
                 dl_img(urls[0], save_path)
 
+            headshot_prompt = build_headshot_prompt(
+                body_parts, expression,
+                gender=gender,
+                body_type_details=fighter_data.get("body_type_details"),
+                origin=fighter_data.get("origin", ""),
+                subtype_info=subtype_info,
+                iconic_features=iconic_features,
+                age=age,
+            )
+            fighter_data["image_prompt_headshot"] = headshot_prompt
+            headshot_full = headshot_prompt.get("full_prompt", "")
+            headshot_path = fighters_dir / f"{base}_headshot.png"
+
+            if headshot_full and body_ref_path.exists():
+                print(f"    Generating headshot from body reference...")
+                urls = edit_image(
+                    prompt=headshot_full,
+                    image_paths=[body_ref_path],
+                    config=config,
+                    aspect_ratio="1:1",
+                    resolution="2k",
+                    n=1,
+                )
+            elif headshot_full:
+                urls = generate_image(
+                    prompt=headshot_full,
+                    config=config,
+                    aspect_ratio="1:1",
+                    resolution="2k",
+                    n=1,
+                )
+            else:
+                urls = []
+            if urls:
+                dl_img(urls[0], headshot_path)
+
             fighter_data["generation_stage"] = 2
             fighter_data["generation_dirty"] = [
                 d for d in fighter_data.get("generation_dirty", []) if d != "images"
@@ -1262,6 +1307,42 @@ def batch_advance():
                         urls = []
                     if urls:
                         dl_img(urls[0], save_path)
+
+                    headshot_prompt = build_headshot_prompt(
+                        body_parts, expression,
+                        gender=gender,
+                        body_type_details=fighter_data.get("body_type_details"),
+                        origin=fighter_data.get("origin", ""),
+                        subtype_info=subtype_info,
+                        iconic_features=fighter_data.get("iconic_features", ""),
+                        age=fighter_data.get("age", 0),
+                    )
+                    fighter_data["image_prompt_headshot"] = headshot_prompt
+                    headshot_full = headshot_prompt.get("full_prompt", "")
+                    headshot_path = fighters_dir / f"{base}_headshot.png"
+
+                    if headshot_full and body_ref_path.exists():
+                        print(f"    Generating headshot from body reference for {fid}...")
+                        urls = edit_image(
+                            prompt=headshot_full,
+                            image_paths=[body_ref_path],
+                            config=config,
+                            aspect_ratio="1:1",
+                            resolution="2k",
+                            n=1,
+                        )
+                    elif headshot_full:
+                        urls = generate_image(
+                            prompt=headshot_full,
+                            config=config,
+                            aspect_ratio="1:1",
+                            resolution="2k",
+                            n=1,
+                        )
+                    else:
+                        urls = []
+                    if urls:
+                        dl_img(urls[0], headshot_path)
                     fighter_data["generation_stage"] = 2
 
                 elif step_from == 2:
@@ -1311,6 +1392,24 @@ def get_fighter_portrait(fighter_id: str):
         return jsonify({"error": "No portrait image found"}), 404
 
     return send_file(portrait_path, mimetype="image/png")
+
+
+@app.get("/api/fighter-images/<fighter_id>/headshot")
+def get_fighter_headshot(fighter_id: str):
+    fighter = data_manager.load_fighter(fighter_id, config)
+    if not fighter:
+        return jsonify({"error": "Fighter not found"}), 404
+
+    from app.services.grok_image import _slugify as img_slugify
+    fighters_dir = config.data_dir / "fighters"
+    slug = img_slugify(fighter.get("ring_name", ""))
+    base = f"{fighter_id}_{slug}" if slug else fighter_id
+    headshot_path = fighters_dir / f"{base}_headshot.png"
+
+    if not headshot_path.exists():
+        return jsonify({"error": "No headshot image found"}), 404
+
+    return send_file(headshot_path, mimetype="image/png")
 
 
 @app.get("/api/pool-summary")

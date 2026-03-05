@@ -113,6 +113,7 @@ export interface Fighter {
   generation_stage?: number
   generation_dirty?: string[]
   image_prompt_portrait?: CharsheetPrompt
+  image_prompt_headshot?: CharsheetPrompt
   image_prompt_body_ref?: CharsheetPrompt
   image_prompt?: CharsheetPrompt
   image_prompt_sfw?: CharsheetPrompt

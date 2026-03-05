@@ -30,10 +30,11 @@ type ActiveTask = {
   label: string
 }
 
-type Tier = 'portrait' | 'sfw' | 'barely' | 'nsfw' | 'body_ref'
+type Tier = 'portrait' | 'headshot' | 'sfw' | 'barely' | 'nsfw' | 'body_ref'
 
 const TIERS: { key: Tier; label: string }[] = [
   { key: 'portrait', label: 'PORTRAIT' },
+  { key: 'headshot', label: 'HEADSHOT' },
   { key: 'sfw', label: 'SFW' },
   { key: 'barely', label: 'BARELY' },
   { key: 'nsfw', label: 'NSFW' },

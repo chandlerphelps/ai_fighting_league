@@ -113,6 +113,7 @@ class Fighter:
     generation_stage: int = 0
     generation_dirty: list[str] = field(default_factory=list)
     image_prompt_portrait: dict = field(default_factory=dict)
+    image_prompt_headshot: dict = field(default_factory=dict)
     image_prompt_body_ref: dict = field(default_factory=dict)
     image_prompt: dict = field(default_factory=dict)
     image_prompt_sfw: dict = field(default_factory=dict)
@@ -183,6 +184,7 @@ class Fighter:
             generation_stage=d.get("generation_stage", 0),
             generation_dirty=d.get("generation_dirty", []),
             image_prompt_portrait=d.get("image_prompt_portrait", {}),
+            image_prompt_headshot=d.get("image_prompt_headshot", {}),
             image_prompt_body_ref=d.get("image_prompt_body_ref", {}),
             image_prompt=d.get("image_prompt", {}),
             image_prompt_sfw=d.get("image_prompt_sfw", {}),
