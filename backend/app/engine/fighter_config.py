@@ -2211,33 +2211,38 @@ def classify_hair_color(raw: str) -> str:
 
 
 ARCHETYPE_STAT_WEIGHTS = {
-    "The Siren":      {"power": 15, "speed": 25, "technique": 30, "toughness": 15, "guile": (30, 50), "supernatural": (0, 15)},
-    "The Witch":      {"power": 15, "speed": 20, "technique": 25, "toughness": 15, "guile": (20, 40), "supernatural": (25, 50)},
-    "The Viper":      {"power": 20, "speed": 30, "technique": 25, "toughness": 15, "guile": (35, 50), "supernatural": (0, 10)},
-    "The Prodigy":    {"power": 20, "speed": 30, "technique": 30, "toughness": 20, "guile": (5, 25),  "supernatural": (0, 10)},
-    "The Doll":       {"power": 15, "speed": 25, "technique": 25, "toughness": 15, "guile": (35, 50), "supernatural": (0, 20)},
-    "The Huntress":   {"power": 25, "speed": 35, "technique": 20, "toughness": 20, "guile": (10, 30), "supernatural": (0, 10)},
-    "The Empress":    {"power": 20, "speed": 20, "technique": 30, "toughness": 20, "guile": (30, 50), "supernatural": (0, 15)},
-    "The Experiment": {"power": 30, "speed": 20, "technique": 25, "toughness": 30, "guile": (5, 20),  "supernatural": (10, 35)},
-    "The Demon":      {"power": 30, "speed": 20, "technique": 20, "toughness": 20, "guile": (15, 35), "supernatural": (30, 50)},
-    "The Assassin":   {"power": 20, "speed": 35, "technique": 30, "toughness": 15, "guile": (25, 45), "supernatural": (0, 10)},
-    "The Nymph":      {"power": 15, "speed": 30, "technique": 20, "toughness": 15, "guile": (20, 40), "supernatural": (25, 45)},
-    "The Brute":      {"power": 35, "speed": 15, "technique": 15, "toughness": 30, "guile": (0, 15),  "supernatural": (0, 10)},
-    "The Veteran":    {"power": 25, "speed": 20, "technique": 30, "toughness": 25, "guile": (10, 30), "supernatural": (0, 10)},
-    "The Monster":    {"power": 35, "speed": 15, "technique": 15, "toughness": 35, "guile": (0, 10),  "supernatural": (0, 15)},
-    "The Technician": {"power": 20, "speed": 25, "technique": 35, "toughness": 20, "guile": (10, 25), "supernatural": (0, 10)},
-    "The Wildcard":   {"power": 25, "speed": 30, "technique": 20, "toughness": 20, "guile": (15, 35), "supernatural": (0, 20)},
-    "The Mystic":     {"power": 20, "speed": 20, "technique": 25, "toughness": 20, "guile": (10, 25), "supernatural": (30, 50)},
+    "The Siren":      {"power": 15, "speed": 25, "technique": 30, "toughness": 15},
+    "The Witch":      {"power": 15, "speed": 20, "technique": 25, "toughness": 15},
+    "The Viper":      {"power": 20, "speed": 30, "technique": 25, "toughness": 15},
+    "The Prodigy":    {"power": 20, "speed": 30, "technique": 30, "toughness": 20},
+    "The Doll":       {"power": 15, "speed": 25, "technique": 25, "toughness": 15},
+    "The Huntress":   {"power": 25, "speed": 35, "technique": 20, "toughness": 20},
+    "The Empress":    {"power": 20, "speed": 20, "technique": 30, "toughness": 20},
+    "The Experiment": {"power": 30, "speed": 20, "technique": 25, "toughness": 30},
+    "The Demon":      {"power": 30, "speed": 20, "technique": 20, "toughness": 20},
+    "The Assassin":   {"power": 20, "speed": 35, "technique": 30, "toughness": 15},
+    "The Nymph":      {"power": 15, "speed": 30, "technique": 20, "toughness": 15},
+    "The Brute":      {"power": 35, "speed": 15, "technique": 15, "toughness": 30},
+    "The Veteran":    {"power": 25, "speed": 20, "technique": 30, "toughness": 25},
+    "The Monster":    {"power": 35, "speed": 15, "technique": 15, "toughness": 35},
+    "The Technician": {"power": 20, "speed": 25, "technique": 35, "toughness": 20},
+    "The Wildcard":   {"power": 25, "speed": 30, "technique": 20, "toughness": 20},
+    "The Mystic":     {"power": 20, "speed": 20, "technique": 25, "toughness": 20},
 }
 
-GENDER_CORE_BIAS = {
-    "male":   {"power": 10, "speed": -5, "technique": -5, "toughness": 5},
-    "female": {"power": -5, "speed": 5, "technique": 5, "toughness": -5},
+GENDER_CORE_TOTAL_SCALE = {
+    "male": 1.0,
+    "female": 0.82,
 }
 
-GENDER_GUILE_SHIFT = {
-    "male": -10,
-    "female": 10,
+GENDER_GUILE_RANGE = {
+    "male": (0, 15),
+    "female": (25, 50),
+}
+
+GENDER_SUPERNATURAL_RANGE = {
+    "male": (0, 20),
+    "female": (10, 40),
 }
 
 
@@ -2255,13 +2260,13 @@ def generate_archetype_stats(
     if not profile:
         profile = ARCHETYPE_STAT_WEIGHTS["The Prodigy"]
 
-    core_total = rng.randint(config.min_total_stats, config.max_total_stats)
+    base_total = rng.randint(config.min_total_stats, config.max_total_stats)
+    scale = GENDER_CORE_TOTAL_SCALE.get(gender.lower(), 1.0)
+    core_total = max(config.min_total_stats, round(base_total * scale))
 
-    bias = GENDER_CORE_BIAS.get(gender.lower(), {})
     weights = {}
     for stat in ("power", "speed", "technique", "toughness"):
-        base_w = profile[stat] + bias.get(stat, 0)
-        weights[stat] = max(5, base_w + rng.randint(-5, 5))
+        weights[stat] = max(5, profile[stat] + rng.randint(-5, 5))
 
     weight_total = sum(weights.values())
     stats = {}
@@ -2280,16 +2285,13 @@ def generate_archetype_stats(
             stats[key] -= 1
             diff += 1
 
-    guile_lo, guile_hi = profile["guile"]
-    guile_shift = GENDER_GUILE_SHIFT.get(gender.lower(), 0)
-    guile_lo = max(0, guile_lo + guile_shift)
-    guile_hi = min(config.guile_cap, guile_hi + guile_shift)
+    guile_lo, guile_hi = GENDER_GUILE_RANGE.get(gender.lower(), (0, 25))
     stats["guile"] = rng.randint(guile_lo, guile_hi)
 
-    sup_lo, sup_hi = profile["supernatural"]
+    sup_lo, sup_hi = GENDER_SUPERNATURAL_RANGE.get(gender.lower(), (0, 20))
     if has_supernatural:
         sup_lo = max(sup_lo, 20)
-        sup_hi = max(sup_hi, 40)
+        sup_hi = max(sup_hi, 50)
     else:
         sup_lo = 0
         sup_hi = 0
