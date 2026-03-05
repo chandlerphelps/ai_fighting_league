@@ -297,6 +297,7 @@ def build_body_reference_prompt(
     origin: str = "",
     subtype_info: dict | None = None,
     age: int = 0,
+    iconic_features: str = "",
 ) -> dict:
     if not body_parts:
         return {}
@@ -328,26 +329,28 @@ def build_body_reference_prompt(
             else "broad"
         )
 
+        iconic_part = f", {iconic_features}" if iconic_features else ""
         face_panel = (
             f"isolated face and neck portrait drawing, "
-            f"{expression}, three-quarter angle, masculine features"
+            f"{expression}, three-quarter angle, masculine features{iconic_part}"
         )
         front_panel = (
             f"isolated full-body front view in fitted boxer briefs, "
             f"standing tall, {chest_build} chest, {muscle_def} physique, "
             f"{shoulder_width} shoulders, imposing stance, "
-            f"detailed muscle definition visible, front view"
+            f"detailed muscle definition visible, front view{iconic_part}"
         )
         back_panel = (
             f"isolated full-body rear view in fitted boxer briefs, "
             f"standing tall, {shoulder_width} shoulders, muscular back, "
-            f"{muscle_def} physique, rear view"
+            f"{muscle_def} physique, rear view{iconic_part}"
         )
 
+        subject_iconic = f", {iconic_features}" if iconic_features else ""
         sections = [
             f"[STYLE] {base_style}, {MALE_BODY_REF_PAGE_STYLE}",
             f"[LAYOUT] {MALE_BODY_REF_LAYOUT}",
-            f"[SUBJECT] {subject}, all drawings belong to the same single character",
+            f"[SUBJECT] {subject}{subject_iconic}, all drawings belong to the same single character",
             f"[LEFT: FACE] {face_panel}",
             f"[CENTER: FRONT BODY] {front_panel}",
             f"[RIGHT: BACK BODY] {back_panel}",
@@ -416,18 +419,20 @@ def build_body_reference_prompt(
         "front view, extremely detailed pussy, perfectly drawn anatomically accurate"
     )
 
+    iconic_part = f", {iconic_features}" if iconic_features else ""
     face_panel = (
         f"isolated face and neck portrait drawing, "
-        f"{expression}, three-quarter angle"
+        f"{expression}, three-quarter angle{iconic_part}"
     )
 
     if body_type_details:
         anatomy = _build_nsfw_anatomy_line(body_type_details)
 
+    subject_iconic = f", {iconic_features}" if iconic_features else ""
     sections = [
         f"[STYLE] {base_style}, {BODY_REF_PAGE_STYLE}",
         f"[LAYOUT] {layout}",
-        f"[SUBJECT] {subject}, all body parts belong to the same single character",
+        f"[SUBJECT] {subject}{subject_iconic}, all body parts belong to the same single character",
         f"[TOP-LEFT: FACE] {face_panel}",
         f"[TOP-CENTER: REAR ANGLED VIEW] {rear_angled_panel}",
         f"[TOP-RIGHT: CHEST AND TORSO] {chest_panel}",

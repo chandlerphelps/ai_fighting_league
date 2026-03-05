@@ -371,6 +371,7 @@ def generate_fighter(
             origin=origin,
             subtype_info=subtype_info,
             age=result.get("age", 25),
+            iconic_features=iconic_features,
         )
 
         if is_male:

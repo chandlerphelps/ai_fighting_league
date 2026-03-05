@@ -145,6 +145,7 @@ def _rebuild_prompts(fighter: dict):
             origin=fighter.get("origin", ""),
             subtype_info=subtype_info,
             age=age,
+            iconic_features=iconic_features,
         )
 
 
@@ -1021,6 +1022,7 @@ def advance_stage(fighter_id: str):
                     origin=fighter_data.get("origin", ""),
                     subtype_info=subtype_info,
                     age=age,
+                    iconic_features=iconic_features,
                 )
 
             from app.services.grok_image import generate_image, download_image as dl_img, _slugify as img_slugify
@@ -1111,6 +1113,7 @@ def advance_stage(fighter_id: str):
                     origin=fighter.origin,
                     subtype_info=subtype_info,
                     age=fighter.age,
+                    iconic_features=fighter_data.get("iconic_features", ""),
                 )
 
             if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
@@ -1199,6 +1202,7 @@ def batch_advance():
                             origin=fighter_data.get("origin", ""),
                             subtype_info=subtype_info,
                             age=fighter_data.get("age", 0),
+                            iconic_features=fighter_data.get("iconic_features", ""),
                         )
 
                     from app.services.grok_image import generate_image, download_image as dl_img, _slugify as img_slugify
@@ -1271,6 +1275,7 @@ def batch_advance():
                             origin=fighter.origin,
                             subtype_info=subtype_info,
                             age=fighter.age,
+                            iconic_features=fighter_data.get("iconic_features", ""),
                         )
                     if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
                         _rebuild_prompts(fighter_data)
