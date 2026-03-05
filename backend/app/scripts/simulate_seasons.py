@@ -8,7 +8,7 @@ from datetime import date as _date, timedelta
 
 from app.engine.combat.simulator import simulate_combat
 from app.engine.between_fights.training import process_daily_training, apply_fight_camp_boost
-from app.engine.between_fights.retirement import generate_replacement_fighter, CORE_STATS, STAT_MIN, STAT_CAP
+from app.engine.between_fights.retirement import generate_replacement_fighter, CORE_STATS, STAT_MIN, STAT_CAP, GENDER_STAT_BIAS, GENDER_SECONDARY_RANGES
 from app.engine.between_fights.league_tiers import (
     calculate_tier_rankings,
     get_promotion_matchups,
@@ -136,8 +136,15 @@ class LeagueSimulator:
 
     def _make_fighter(self, counter, tier, age_range, stat_range, career_seasons_range, tier_seasons_range):
         age = self.rng.randint(*age_range)
+        gender = self.rng.choice(["female", "male"])
+        bias = GENDER_STAT_BIAS.get(gender, {})
         target_total = self.rng.randint(*stat_range)
-        stats = self._distribute_stats(target_total)
+        stats = self._distribute_stats(target_total, bias=bias)
+        secondary_ranges = GENDER_SECONDARY_RANGES.get(gender, {"supernatural": (0, 20), "guile": (0, 25)})
+        sup_lo, sup_hi = secondary_ranges["supernatural"]
+        guile_lo, guile_hi = secondary_ranges["guile"]
+        stats["supernatural"] = self.rng.randint(sup_lo, sup_hi)
+        stats["guile"] = self.rng.randint(guile_lo, guile_hi)
         career_seasons = self.rng.randint(*career_seasons_range)
         tier_seasons = self.rng.randint(*tier_seasons_range)
 
@@ -174,7 +181,7 @@ class LeagueSimulator:
             "ring_name": ring_name,
             "real_name": ring_name,
             "age": age,
-            "gender": self.rng.choice(["female", "male"]),
+            "gender": gender,
             "primary_archetype": "",
             "stats": stats,
             "record": {"wins": wins, "losses": losses, "draws": 0, "kos": self.rng.randint(0, wins // 2 + 1), "submissions": self.rng.randint(0, wins // 3 + 1)},
@@ -203,8 +210,11 @@ class LeagueSimulator:
             "_entered_age": age - career_seasons,
         }
 
-    def _distribute_stats(self, target_total):
+    def _distribute_stats(self, target_total, bias=None):
         raw = [self.rng.randint(25, 70) for _ in CORE_STATS]
+        if bias:
+            for i, stat_name in enumerate(CORE_STATS):
+                raw[i] = max(1, raw[i] + bias.get(stat_name, 0))
         raw_total = sum(raw)
         scaled = [max(STAT_MIN, min(STAT_CAP, round(v * target_total / raw_total))) for v in raw]
         diff = target_total - sum(scaled)
