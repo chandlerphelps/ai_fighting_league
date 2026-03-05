@@ -1013,19 +1013,71 @@ def advance_stage(fighter_id: str):
 
             fighter_data["image_prompt_portrait"] = portrait_prompt
 
+            if not fighter_data.get("image_prompt_body_ref"):
+                fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
+                    body_parts, expression,
+                    gender=gender,
+                    body_type_details=fighter_data.get("body_type_details"),
+                    origin=fighter_data.get("origin", ""),
+                    subtype_info=subtype_info,
+                    age=age,
+                )
+
             from app.services.grok_image import generate_image, download_image as dl_img, _slugify as img_slugify
             fighters_dir = config.data_dir / "fighters"
             slug = img_slugify(fighter_data.get("ring_name", ""))
             base = f"{fighter_id}_{slug}" if slug else fighter_id
-            save_path = fighters_dir / f"{base}_portrait.png"
 
-            urls = generate_image(
-                prompt=portrait_prompt.get("full_prompt", ""),
-                config=config,
-                aspect_ratio="1:1",
-                resolution="2k",
-                n=1,
-            )
+            body_ref_prompt = fighter_data.get("image_prompt_body_ref", {}).get("full_prompt", "")
+            body_ref_path = fighters_dir / f"{base}_body_ref.png"
+            is_male = gender.lower() == "male"
+
+            if body_ref_prompt:
+                print(f"    Generating body reference image...")
+                female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
+                if not is_male and female_ref.exists():
+                    urls = edit_image(
+                        prompt=body_ref_prompt,
+                        image_paths=[female_ref],
+                        config=config,
+                        aspect_ratio="1:1",
+                        resolution="2k",
+                        n=1,
+                    )
+                else:
+                    urls = generate_image(
+                        prompt=body_ref_prompt,
+                        config=config,
+                        aspect_ratio="1:1",
+                        resolution="2k",
+                        n=1,
+                    )
+                if urls:
+                    dl_img(urls[0], body_ref_path)
+
+            save_path = fighters_dir / f"{base}_portrait.png"
+            portrait_full = portrait_prompt.get("full_prompt", "")
+
+            if portrait_full and body_ref_path.exists():
+                print(f"    Generating portrait from body reference...")
+                urls = edit_image(
+                    prompt=portrait_full,
+                    image_paths=[body_ref_path],
+                    config=config,
+                    aspect_ratio="1:1",
+                    resolution="2k",
+                    n=1,
+                )
+            elif portrait_full:
+                urls = generate_image(
+                    prompt=portrait_full,
+                    config=config,
+                    aspect_ratio="1:1",
+                    resolution="2k",
+                    n=1,
+                )
+            else:
+                urls = []
             if urls:
                 dl_img(urls[0], save_path)
 
@@ -1123,12 +1175,13 @@ def batch_advance():
                     expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
 
                 if step_from == 1:
+                    gender = fighter_data.get("gender", "female")
                     subtype_info = _get_subtype_info(fighter_data)
                     portrait_prompt = build_portrait_prompt(
                         body_parts,
                         fighter_data.get("ring_attire_sfw", ""),
                         expression,
-                        gender=fighter_data.get("gender", "female"),
+                        gender=gender,
                         body_type_details=fighter_data.get("body_type_details"),
                         origin=fighter_data.get("origin", ""),
                         subtype_info=subtype_info,
@@ -1138,15 +1191,71 @@ def batch_advance():
                     )
                     fighter_data["image_prompt_portrait"] = portrait_prompt
 
+                    if not fighter_data.get("image_prompt_body_ref"):
+                        fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
+                            body_parts, expression,
+                            gender=gender,
+                            body_type_details=fighter_data.get("body_type_details"),
+                            origin=fighter_data.get("origin", ""),
+                            subtype_info=subtype_info,
+                            age=fighter_data.get("age", 0),
+                        )
+
                     from app.services.grok_image import generate_image, download_image as dl_img, _slugify as img_slugify
                     fighters_dir = config.data_dir / "fighters"
                     slug = img_slugify(fighter_data.get("ring_name", ""))
                     base = f"{fid}_{slug}" if slug else fid
+                    is_male = gender.lower() == "male"
+
+                    body_ref_prompt = fighter_data.get("image_prompt_body_ref", {}).get("full_prompt", "")
+                    body_ref_path = fighters_dir / f"{base}_body_ref.png"
+
+                    if body_ref_prompt:
+                        print(f"    Generating body reference image for {fid}...")
+                        female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
+                        if not is_male and female_ref.exists():
+                            urls = edit_image(
+                                prompt=body_ref_prompt,
+                                image_paths=[female_ref],
+                                config=config,
+                                aspect_ratio="1:1",
+                                resolution="2k",
+                                n=1,
+                            )
+                        else:
+                            urls = generate_image(
+                                prompt=body_ref_prompt,
+                                config=config,
+                                aspect_ratio="1:1",
+                                resolution="2k",
+                                n=1,
+                            )
+                        if urls:
+                            dl_img(urls[0], body_ref_path)
+
                     save_path = fighters_dir / f"{base}_portrait.png"
-                    urls = generate_image(
-                        prompt=portrait_prompt.get("full_prompt", ""),
-                        config=config, aspect_ratio="1:1", resolution="2k", n=1,
-                    )
+                    portrait_full = portrait_prompt.get("full_prompt", "")
+
+                    if portrait_full and body_ref_path.exists():
+                        print(f"    Generating portrait from body reference for {fid}...")
+                        urls = edit_image(
+                            prompt=portrait_full,
+                            image_paths=[body_ref_path],
+                            config=config,
+                            aspect_ratio="1:1",
+                            resolution="2k",
+                            n=1,
+                        )
+                    elif portrait_full:
+                        urls = generate_image(
+                            prompt=portrait_full,
+                            config=config,
+                            aspect_ratio="1:1",
+                            resolution="2k",
+                            n=1,
+                        )
+                    else:
+                        urls = []
                     if urls:
                         dl_img(urls[0], save_path)
                     fighter_data["generation_stage"] = 2
