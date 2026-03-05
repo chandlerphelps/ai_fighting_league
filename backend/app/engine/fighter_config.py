@@ -634,7 +634,7 @@ BODY_TRAIT_OPTIONS = {
         "ripped and shredded",
     ],
     "body_fat_pct": ["lean 12-16%", "athletic 17-20%", "fit 21-24%", "soft 25-30%"],
-    "butt_size": ["small tight", "medium round", "large full", "very large prominent"],
+    "butt_size": ["tiny tight", "medium round", "large thick", "very large prominent"],
     "face_shape": [
         "sharp angular",
         "soft round",
@@ -650,7 +650,7 @@ BODY_TRAIT_OPTIONS = {
         "cat-like",
     ],
     "makeup_level": ["bare-faced", "light", "moderate", "heavy"],
-    "breast_size": ["barely there", "small perky", "medium", "large", "very large"],
+    "breast_size": ["tiny flat-chested", "small perky", "medium", "large heavy", "massive oversized"],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
     "vulva_type": [
         "tucked pussy, small labia",
@@ -665,8 +665,8 @@ BODY_PROFILES = {
         "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
         "abs_tone": ["slight definition", "toned and defined"],
         "waist": ["narrow"],
-        "breast_size": ["barely there", "small perky", "medium"],
-        "butt_size": ["small tight", "medium round"],
+        "breast_size": ["tiny flat-chested", "small perky", "medium"],
+        "butt_size": ["tiny tight", "medium round"],
     },
     "Slim": {
         "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
@@ -676,15 +676,15 @@ BODY_PROFILES = {
             "toned and defined",
         ],
         "waist": ["narrow", "medium"],
-        "breast_size": ["barely there", "small perky", "medium"],
-        "butt_size": ["small tight", "medium round"],
+        "breast_size": ["tiny flat-chested", "small perky", "medium"],
+        "butt_size": ["tiny tight", "medium round"],
     },
     "Athletic": {
         "body_fat_pct": ["lean 12-16%", "athletic 17-20%"],
         "abs_tone": ["toned and defined", "ripped and shredded"],
         "waist": ["narrow", "medium"],
-        "breast_size": ["small perky", "medium", "large"],
-        "butt_size": ["medium round", "large full"],
+        "breast_size": ["small perky", "medium", "large heavy"],
+        "butt_size": ["medium round", "large thick"],
     },
     "Curvy": {
         "body_fat_pct": ["athletic 17-20%", "fit 21-24%"],
@@ -694,8 +694,8 @@ BODY_PROFILES = {
             "toned and defined",
         ],
         "waist": ["narrow", "medium"],
-        "breast_size": ["medium", "large", "very large"],
-        "butt_size": ["medium round", "large full", "very large prominent"],
+        "breast_size": ["medium", "large heavy", "massive oversized"],
+        "butt_size": ["medium round", "large thick", "very large prominent"],
     },
 }
 
@@ -737,11 +737,11 @@ ARCHETYPE_HEIGHT_RANGES = {
 ARCHETYPE_BODY_WEIGHTS = {
     "The Siren": {
         "breast_size": {
-            "barely there": 2,
+            "tiny flat-chested": 2,
             "small perky": 7,
             "medium": 23,
-            "large": 50,
-            "very large": 18,
+            "large heavy": 50,
+            "massive oversized": 18,
         },
         "body_fat_pct": {
             "lean 12-16%": 5,
@@ -762,20 +762,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 18,
+            "tiny tight": 18,
             "medium round": 43,
-            "large full": 33,
+            "large thick": 33,
             "very large prominent": 6,
         },
         "waist": {"narrow": 40, "medium": 45, "wide": 15},
     },
     "The Witch": {
         "breast_size": {
-            "barely there": 9,
+            "tiny flat-chested": 9,
             "small perky": 22,
             "medium": 34,
-            "large": 27,
-            "very large": 8,
+            "large heavy": 27,
+            "massive oversized": 8,
         },
         "body_fat_pct": {
             "lean 12-16%": 11,
@@ -796,20 +796,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 22,
+            "tiny tight": 22,
             "medium round": 42,
-            "large full": 32,
+            "large thick": 32,
             "very large prominent": 4,
         },
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
     },
     "The Viper": {
         "breast_size": {
-            "barely there": 10,
+            "tiny flat-chested": 10,
             "small perky": 26,
             "medium": 38,
-            "large": 23,
-            "very large": 3,
+            "large heavy": 23,
+            "massive oversized": 3,
         },
         "body_fat_pct": {
             "lean 12-16%": 16,
@@ -830,20 +830,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 10,
         },
         "butt_size": {
-            "small tight": 26,
+            "tiny tight": 26,
             "medium round": 47,
-            "large full": 25,
+            "large thick": 25,
             "very large prominent": 2,
         },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
     },
     "The Prodigy": {
         "breast_size": {
-            "barely there": 15,
+            "tiny flat-chested": 15,
             "small perky": 33,
             "medium": 33,
-            "large": 17,
-            "very large": 2,
+            "large heavy": 17,
+            "massive oversized": 2,
         },
         "body_fat_pct": {
             "lean 12-16%": 21,
@@ -864,20 +864,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 12,
         },
         "butt_size": {
-            "small tight": 36,
+            "tiny tight": 36,
             "medium round": 41,
-            "large full": 21,
+            "large thick": 21,
             "very large prominent": 2,
         },
         "waist": {"narrow": 45, "medium": 45, "wide": 10},
     },
     "The Doll": {
         "breast_size": {
-            "barely there": 12,
+            "tiny flat-chested": 12,
             "small perky": 29,
             "medium": 31,
-            "large": 23,
-            "very large": 5,
+            "large heavy": 23,
+            "massive oversized": 5,
         },
         "body_fat_pct": {
             "lean 12-16%": 11,
@@ -898,20 +898,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 22,
+            "tiny tight": 22,
             "medium round": 42,
-            "large full": 32,
+            "large thick": 32,
             "very large prominent": 4,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
     },
     "The Huntress": {
         "breast_size": {
-            "barely there": 8,
+            "tiny flat-chested": 8,
             "small perky": 21,
             "medium": 38,
-            "large": 28,
-            "very large": 5,
+            "large heavy": 28,
+            "massive oversized": 5,
         },
         "body_fat_pct": {
             "lean 12-16%": 19,
@@ -932,20 +932,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 15,
         },
         "butt_size": {
-            "small tight": 27,
+            "tiny tight": 27,
             "medium round": 42,
-            "large full": 27,
+            "large thick": 27,
             "very large prominent": 4,
         },
         "waist": {"narrow": 35, "medium": 50, "wide": 15},
     },
     "The Empress": {
         "breast_size": {
-            "barely there": 2,
+            "tiny flat-chested": 2,
             "small perky": 7,
             "medium": 26,
-            "large": 47,
-            "very large": 18,
+            "large heavy": 47,
+            "massive oversized": 18,
         },
         "body_fat_pct": {
             "lean 12-16%": 6,
@@ -966,20 +966,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 2,
         },
         "butt_size": {
-            "small tight": 18,
+            "tiny tight": 18,
             "medium round": 43,
-            "large full": 33,
+            "large thick": 33,
             "very large prominent": 6,
         },
         "waist": {"narrow": 25, "medium": 45, "wide": 30},
     },
     "The Experiment": {
         "breast_size": {
-            "barely there": 8,
+            "tiny flat-chested": 8,
             "small perky": 20,
             "medium": 30,
-            "large": 30,
-            "very large": 12,
+            "large heavy": 30,
+            "massive oversized": 12,
         },
         "body_fat_pct": {
             "lean 12-16%": 14,
@@ -1000,20 +1000,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 12,
         },
         "butt_size": {
-            "small tight": 28,
+            "tiny tight": 28,
             "medium round": 42,
-            "large full": 22,
+            "large thick": 22,
             "very large prominent": 8,
         },
         "waist": {"narrow": 30, "medium": 45, "wide": 25},
     },
     "The Demon": {
         "breast_size": {
-            "barely there": 4,
+            "tiny flat-chested": 4,
             "small perky": 10,
             "medium": 24,
-            "large": 44,
-            "very large": 18,
+            "large heavy": 44,
+            "massive oversized": 18,
         },
         "body_fat_pct": {
             "lean 12-16%": 8,
@@ -1034,20 +1034,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 5,
         },
         "butt_size": {
-            "small tight": 9,
+            "tiny tight": 9,
             "medium round": 31,
-            "large full": 48,
+            "large thick": 48,
             "very large prominent": 12,
         },
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
     },
     "The Assassin": {
         "breast_size": {
-            "barely there": 15,
+            "tiny flat-chested": 15,
             "small perky": 35,
             "medium": 33,
-            "large": 15,
-            "very large": 2,
+            "large heavy": 15,
+            "massive oversized": 2,
         },
         "body_fat_pct": {
             "lean 12-16%": 35,
@@ -1068,20 +1068,20 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 30,
         },
         "butt_size": {
-            "small tight": 31,
+            "tiny tight": 31,
             "medium round": 44,
-            "large full": 23,
+            "large thick": 23,
             "very large prominent": 2,
         },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
     },
     "The Nymph": {
         "breast_size": {
-            "barely there": 10,
+            "tiny flat-chested": 10,
             "small perky": 31,
             "medium": 36,
-            "large": 19,
-            "very large": 4,
+            "large heavy": 19,
+            "massive oversized": 4,
         },
         "body_fat_pct": {
             "lean 12-16%": 12,
@@ -1102,9 +1102,9 @@ ARCHETYPE_BODY_WEIGHTS = {
             "ripped and shredded": 5,
         },
         "butt_size": {
-            "small tight": 17,
+            "tiny tight": 17,
             "medium round": 43,
-            "large full": 35,
+            "large thick": 35,
             "very large prominent": 5,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
@@ -1840,17 +1840,17 @@ BODY_FAT_MULTIPLIERS = {
 }
 
 BREAST_WEIGHT_LBS = {
-    "barely there": 0,
+    "tiny flat-chested": 0,
     "small perky": 1,
     "medium": 3,
-    "large": 6,
-    "very large": 10,
+    "large heavy": 6,
+    "massive oversized": 10,
 }
 
 BUTT_WEIGHT_LBS = {
-    "small tight": 0,
+    "tiny tight": 0,
     "medium round": 2,
-    "large full": 5,
+    "large thick": 5,
     "very large prominent": 9,
 }
 
@@ -2065,25 +2065,49 @@ def _build_male_body_directive(traits: dict) -> str:
     )
 
 
+def _height_adjective(inches: int) -> str:
+    if inches <= 61:
+        return "petite"
+    if inches <= 64:
+        return "short"
+    if inches <= 67:
+        return "average height"
+    return "tall"
+
+
 def _build_body_shape_line(traits: dict, tier: str = "") -> str:
     if "chest_build" in traits:
         return f"{traits['chest_build']} chest, {traits.get('shoulder_width', 'broad')} shoulders"
-    covered = " (covered)" if tier == "sfw" else ""
-    return f"{traits['breast_size']} breasts{covered}, {traits['butt_size']} butt"
+    if tier == "sfw":
+        covered = " (covered)"
+    elif tier == "barely":
+        covered = " (barely covered)"
+    else:
+        covered = ""
+    height_inches = traits.get("height_inches")
+    if height_inches:
+        feet = height_inches // 12
+        remaining = height_inches % 12
+        adj = _height_adjective(height_inches)
+        height_part = f"{adj} {feet}'{remaining}\", "
+    else:
+        height_part = ""
+    return f"{height_part}{traits['breast_size']} breasts{covered}, {traits['butt_size']} butt"
 
 
-def _build_nsfw_anatomy_line(traits: dict) -> str:
+def _build_nsfw_anatomy_line(traits: dict, tier: str = "nsfw") -> str:
     if "chest_build" in traits:
         return (
             f"{traits['chest_build']} chest, "
             f"{traits.get('muscle_definition', 'toned and defined')} build, "
             f"{traits.get('shoulder_width', 'broad')} shoulders"
         )
+    barely = " (barely covered)" if tier == "barely" else ""
     return (
-        f"{traits['breast_size']} breasts, "
-        f"{traits['nipple_size']} nipples, "
+        f"{traits['breast_size']} breasts{barely}, "
+        f"{traits['nipple_size']} nipples{barely}, "
         f"{traits['butt_size']} butt, "
-        f"{traits['vulva_type']}"
+        f"{traits['vulva_type']}{barely}"
     )
 
 
@@ -2145,6 +2169,45 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
 }
+
+
+OUTFIT_COLOR_PALETTE = [
+    "Crimson Red", "Royal Blue", "Midnight Black", "Pure White", "Emerald Green",
+    "Gold", "Silver", "Deep Purple", "Hot Pink", "Orange", "Teal", "Burgundy",
+    "Navy Blue", "Forest Green", "Copper", "Lavender", "Scarlet", "Ice Blue",
+    "Charcoal", "Rose", "Bronze", "Jade", "Ivory", "Electric Yellow",
+]
+
+HAIR_COLOR_BUCKETS = [
+    "Black", "Brown", "Blonde", "Red/Auburn", "White/Silver",
+    "Blue", "Pink", "Green", "Purple", "Multicolor",
+]
+
+_HAIR_BUCKET_KEYWORDS = {
+    "Black": ["black", "jet black", "raven", "ebony", "onyx", "dark black"],
+    "Brown": ["brown", "brunette", "chestnut", "chocolate", "mocha", "mahogany", "walnut", "coffee", "hazel", "caramel", "tawny"],
+    "Blonde": ["blonde", "blond", "golden", "platinum", "honey", "sandy", "ash blonde", "strawberry blonde", "flaxen", "wheat", "champagne", "butter"],
+    "Red/Auburn": ["red", "auburn", "ginger", "copper", "crimson", "scarlet", "rust", "fire", "flame", "cherry", "ruby", "vermillion", "cinnamon"],
+    "White/Silver": ["white", "silver", "grey", "gray", "platinum white", "snow", "frost", "ice", "steel", "pearl", "ivory"],
+    "Blue": ["blue", "navy", "cerulean", "cobalt", "azure", "sapphire", "teal", "cyan", "indigo"],
+    "Pink": ["pink", "magenta", "fuchsia", "rose", "bubblegum", "coral", "salmon", "hot pink"],
+    "Green": ["green", "emerald", "lime", "olive", "mint", "jade", "forest", "sage", "teal green"],
+    "Purple": ["purple", "violet", "lavender", "lilac", "plum", "amethyst", "mauve", "orchid"],
+    "Multicolor": ["multicolor", "rainbow", "ombre", "gradient", "streaks", "highlights", "tips", "two-tone", "split"],
+}
+
+
+def classify_hair_color(raw: str) -> str:
+    if not raw:
+        return ""
+    lower = raw.lower().strip()
+    for bucket, keywords in _HAIR_BUCKET_KEYWORDS.items():
+        for kw in keywords:
+            if kw in lower:
+                if bucket == "White/Silver" and ("platinum blonde" in lower or "strawberry" in lower):
+                    continue
+                return bucket
+    return "Brown"
 
 
 def _roll_skimpiness(weights: list[int] | None) -> int:

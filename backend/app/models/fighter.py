@@ -109,6 +109,7 @@ class Fighter:
     primary_outfit_color: str = ""
     hair_style: str = ""
     hair_color: str = ""
+    hair_color_bucket: str = ""
     face_adornment: str = ""
     generation_stage: int = 0
     generation_dirty: list[str] = field(default_factory=list)
@@ -180,6 +181,7 @@ class Fighter:
             primary_outfit_color=d.get("primary_outfit_color", ""),
             hair_style=d.get("hair_style", ""),
             hair_color=d.get("hair_color", ""),
+            hair_color_bucket=d.get("hair_color_bucket", ""),
             face_adornment=d.get("face_adornment", ""),
             generation_stage=d.get("generation_stage", 0),
             generation_dirty=d.get("generation_dirty", []),

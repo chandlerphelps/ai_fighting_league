@@ -128,6 +128,46 @@
       {
         "name": "extreme low-cut wrap top",
         "skimpiness_level": "4"
+      },
+      {
+        "name": "fitted compression top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted long-sleeve shirt",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted high-neck top",
+        "skimpiness_level": "1"
+      },
+      {
+        "name": "form-fitting top",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "form-fitting long-sleeve top",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "form-fitting turtleneck",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "form-fitting vest",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight top",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight long-sleeve shirt",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight high-neck top",
+        "skimpiness_level": "3-4"
       }
     ],
     "bottoms": [
@@ -222,6 +262,30 @@
       {
         "name": "barely-there hot pants",
         "skimpiness_level": "3-4"
+      },
+      {
+        "name": "fitted pants",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted tights",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "form-fitting pants",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "form-fitting tights",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight pants",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight tights",
+        "skimpiness_level": "3-4"
       }
     ],
     "one_pieces": [
@@ -296,6 +360,38 @@
       {
         "name": "extreme high-cut bodysuit with deep plunge and sideboob",
         "skimpiness_level": "4"
+      },
+      {
+        "name": "fitted bodysuit",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted jumpsuit",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted full-body suit",
+        "skimpiness_level": "1"
+      },
+      {
+        "name": "form-fitting bodysuit",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "form-fitting jumpsuit",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight bodysuit",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight jumpsuit",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight full-body suit",
+        "skimpiness_level": "3-4"
       }
     ]
   },

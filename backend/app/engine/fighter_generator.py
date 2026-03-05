@@ -26,6 +26,7 @@ from app.engine.fighter_config import (
     filter_outfit_options,
     load_exotic_outfit_options,
     filter_exotic_for_fighter,
+    classify_hair_color,
 )
 from app.prompts.fighter_prompts import (
     GUIDE_CORE_PHILOSOPHY,
@@ -151,6 +152,9 @@ def generate_fighter_json_only(
         fighter.hair_style = roster_plan_entry.get("hair_style", "")
         fighter.hair_color = roster_plan_entry.get("hair_color", "")
         fighter.face_adornment = roster_plan_entry.get("face_adornment", "")
+        fighter.hair_color_bucket = roster_plan_entry.get("hair_color_bucket", "") or classify_hair_color(fighter.hair_color)
+    if not fighter.hair_color_bucket:
+        fighter.hair_color_bucket = classify_hair_color(fighter.hair_color)
     return fighter
 
 
@@ -345,6 +349,7 @@ def generate_fighter(
             subtype_info=subtype_info,
             iconic_features=iconic_features,
             age=result.get("age", 25),
+            primary_outfit_color=primary_outfit_color,
         )
 
         sfw_prompt = _build_charsheet_prompt(
@@ -390,7 +395,17 @@ def generate_fighter(
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
                 age=result.get("age", 25),
+                primary_outfit_color=primary_outfit_color,
             )
+
+    hair_color = result.get("hair_color", "")
+    if roster_plan_entry:
+        hair_color = roster_plan_entry.get("hair_color", "") or hair_color
+    hair_color_bucket = ""
+    if roster_plan_entry:
+        hair_color_bucket = roster_plan_entry.get("hair_color_bucket", "")
+    if not hair_color_bucket:
+        hair_color_bucket = classify_hair_color(hair_color)
 
     return Fighter(
         id=fighter_id,
@@ -415,6 +430,9 @@ def generate_fighter(
         ring_attire_nsfw=ring_attire_nsfw,
         skimpiness_level=skimpiness_level,
         tech_level=tech_level,
+        primary_outfit_color=primary_outfit_color,
+        hair_color=hair_color,
+        hair_color_bucket=hair_color_bucket,
         image_prompt_body_ref=body_ref_prompt,
         image_prompt=barely_prompt,
         image_prompt_sfw=sfw_prompt,

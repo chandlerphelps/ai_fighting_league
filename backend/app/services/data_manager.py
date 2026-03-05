@@ -36,8 +36,11 @@ def _save_json(path: Path, data):
 def _load_json(path: Path) -> dict | None:
     if not path.exists():
         return None
-    with open(path) as f:
-        return json.load(f)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, ValueError):
+        return None
 
 
 def _fighter_filename(fighter_id: str, ring_name: str = "") -> str:

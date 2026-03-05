@@ -124,6 +124,15 @@ export default function RosterManager() {
     }
   }
 
+  const handleFullAdvance = async (fighterId: string) => {
+    try {
+      const task = await batchAdvance([fighterId], 3)
+      handleTask(task, { fighterId, type: 'batch-advance', taskId: task.task_id, label: 'Full advance to Stage 3...' })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Full advance failed')
+    }
+  }
+
   const handleBatchAdvance = async (targetStage: number) => {
     const prevStage = targetStage - 1
     const eligible = fighters.filter(f => (f.generation_stage ?? 3) === prevStage)
@@ -594,6 +603,19 @@ export default function RosterManager() {
                       title={`Advance to Stage ${(fighter.generation_stage ?? 0) + 1}`}
                     >
                       {(fighter.generation_stage ?? 0) === 1 ? 'Portrait' : 'Full Images'}
+                    </button>
+                  )}
+                  {(fighter.generation_stage ?? 3) < 2 && (
+                    <button
+                      onClick={() => handleFullAdvance(fighter.id)}
+                      disabled={busy}
+                      style={{
+                        ...actionBtn(colors.accent),
+                        fontWeight: 'bold',
+                      }}
+                      title="Advance through all stages to Stage 3"
+                    >
+                      Full Advance
                     </button>
                   )}
                   <button

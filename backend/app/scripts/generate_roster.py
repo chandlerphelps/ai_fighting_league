@@ -38,6 +38,7 @@ def plan_roster_cmd():
         entry.setdefault("primary_outfit_color", "")
         entry.setdefault("hair_style", "")
         entry.setdefault("hair_color", "")
+        entry.setdefault("hair_color_bucket", "")
         entry.setdefault("face_adornment", "")
 
     import uuid as _uuid

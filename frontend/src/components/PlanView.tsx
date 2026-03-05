@@ -114,10 +114,13 @@ export default function PlanView({ plan, hasFighters, onPlanChange, onTask, onEr
     }
   }
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (targetStage: number = 1) => {
     try {
-      const task = await generateFromPlan()
-      onTask(task, `Generating ${approvedCount} fighters (Stage 1)...`)
+      const label = targetStage >= 3
+        ? `Generating ${approvedCount} fighters (Full → Stage 3)...`
+        : `Generating ${approvedCount} fighters (Stage 1)...`
+      const task = await generateFromPlan(targetStage)
+      onTask(task, label)
     } catch (err) {
       onError(err instanceof Error ? err.message : 'Generate failed')
     }
@@ -266,8 +269,11 @@ export default function PlanView({ plan, hasFighters, onPlanChange, onTask, onEr
             Approve All
           </button>
           {addControls}
-          <button onClick={handleGenerate} disabled={busy || approvedCount === 0} style={btn(colors.accentBright, busy || approvedCount === 0)}>
-            Generate Approved (Stage 1)
+          <button onClick={() => handleGenerate(1)} disabled={busy || approvedCount === 0} style={btn(colors.accentBright, busy || approvedCount === 0)}>
+            Generate (Stage 1)
+          </button>
+          <button onClick={() => handleGenerate(3)} disabled={busy || approvedCount === 0} style={btn(colors.healthy, busy || approvedCount === 0)}>
+            Generate (Full)
           </button>
           <button onClick={handleDeletePlan} disabled={busy || pendingCount === 0} style={btn(colors.injured, busy || pendingCount === 0)}>
             Discard Pending ({pendingCount})

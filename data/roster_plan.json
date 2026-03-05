@@ -1,90 +1,298 @@
 {
-  "plan_id": "rp_19e21655",
-  "created_at": "2026-03-04",
+  "plan_id": "rp_aa09785e",
+  "created_at": "2026-03-05",
   "mode": "addition",
-  "pool_summary": "CURRENT ROSTER: 6 fighters\nGender: male: 3, female: 3\n\nArchetype Distribution:\n  The Assassin: 0\n  The Brute: 0\n  The Demon: 0\n  The Doll: 0\n  The Empress: 0\n  The Experiment: 0\n  The Huntress: 0\n  The Monster: 0\n  The Mystic: 0\n  The Nymph: 0\n  The Prodigy: 0\n  The Siren: 0\n  The Technician: 0\n  The Veteran: 0\n  The Viper: 0\n  The Wildcard: 0\n  The Witch: 0\n  MISSING: The Assassin, The Brute, The Demon, The Doll, The Empress, The Experiment, The Huntress, The Monster, The Mystic, The Nymph, The Prodigy, The Siren, The Technician, The Veteran, The Viper, The Wildcard, The Witch\n\nGeographic Spread:\n  North America: 1\n  Western Europe: 1\n  Other: 1\n  Africa: 1\n  Eastern Europe: 1\n  East Asia: 1\n  UNDERREPRESENTED: Southeast Asia, South Asia, Central Asia, Middle East, Scandinavia, Central America, South America, Oceania\n\nAge Distribution: 18-22: 1, 23-27: 2, 28-32: 2, 33+: 1\n\n--- SIGNATURE VISUAL IDENTITY REGISTRY (DO NOT DUPLICATE) ---\n\nOutfit Colors Already Taken:\n  desert tan (1x)\n  clinical white (1x)\n  ocean teal (1x)\n  mystical purple (1x)\n  blood crimson (1x)\n  shadow black (1x)\n\nHair Style+Color Combos Already Taken:\n  crew cut gray (1x)\n  cropped short silver (1x)\n  long flowing curls auburn (1x)\n  flowing waves midnight black (1x)\n  shaved head bald (1x)\n  straight long bob jet black (1x)\n\nFace Adornments Already Taken:\n  prominent scar across left cheek (1x)\n  tactical glasses (1x)\n  intricate gold henna tattoos (1x)",
+  "pool_summary": "CURRENT ROSTER: 8 fighters\nGender: female: 6, male: 2\n\nArchetype Distribution:\n  The Assassin: 0\n  The Brute: 0\n  The Demon: 0\n  The Doll: 0\n  The Empress: 0\n  The Experiment: 0\n  The Huntress: 0\n  The Monster: 0\n  The Mystic: 0\n  The Nymph: 0\n  The Prodigy: 0\n  The Siren: 0\n  The Technician: 0\n  The Veteran: 0\n  The Viper: 0\n  The Wildcard: 0\n  The Witch: 0\n  MISSING: The Assassin, The Brute, The Demon, The Doll, The Empress, The Experiment, The Huntress, The Monster, The Mystic, The Nymph, The Prodigy, The Siren, The Technician, The Veteran, The Viper, The Wildcard, The Witch\n\nGeographic Spread:\n  East Asia: 2\n  Eastern Europe: 2\n  Oceania: 1\n  South America: 1\n  Western Europe: 1\n  Southeast Asia: 1\n  UNDERREPRESENTED: South Asia, Central Asia, Middle East, Scandinavia, North America, Central America, Africa\n\nAge Distribution: 18-22: 4, 23-27: 2, 28-32: 1, 33+: 1\n\n--- SIGNATURE VISUAL IDENTITY REGISTRY (DO NOT DUPLICATE) ---\n\nOutfit Colors Already Taken:\n  crimson red (1x)\n  teal and white (1x)\n  champagne gold (1x)\n  deep crimson (1x)\n  midnight black (1x)\n  emerald green (1x)\n  steel gray (1x)\n  deep violet (1x)\n\nAvailable Palette Colors: Royal Blue, Pure White, Gold, Silver, Deep Purple, Hot Pink, Orange, Teal, Burgundy, Navy Blue, Forest Green, Copper, Lavender, Scarlet, Ice Blue, Charcoal, Rose, Bronze, Jade, Ivory, Electric Yellow\n\nHair Color Buckets:\n  Black: 2\n  Brown: 2\n  Blonde: 2\n  Red/Auburn: 0\n  White/Silver: 1\n  Blue: 0\n  Pink: 0\n  Green: 0\n  Purple: 0\n  Multicolor: 1\n\nHair Style+Bucket Combos Already Taken:\n  long flowing waves [Blonde] (2x)\n  slicked back ponytail [Black] (1x)\n  wet-look long bob [Multicolor] (1x)\n  long flowing waves [Black] (1x)\n  long straight [White/Silver] (1x)\n  short cropped [Brown] (1x)\n  shaved head [Brown] (1x)\n\nFace Adornments Already Taken:\n  oni half-mask (2x)\n  facial scars from ear to jaw (1x)",
   "entries": [
     {
-      "concept_hook": "A former circus strongman turned illegal underground fighter who uses his freakishly elongated limbs and uncanny flexibility to defeat opponents who expect him to be slow and predictable.",
-      "ring_name": "The Puppetmaster",
+      "concept_hook": "A former opera singer whose lethal vocal harmonics can shatter bone and mind, using her voice as both weapon and weaponized seduction.",
+      "ring_name": "Carmine",
+      "gender": "female",
+      "age": 26,
+      "origin": "Seville, Spain",
+      "primary_archetype": "Siren",
+      "subtype": "Chanteuse",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "narrative_role": "The seductress who weaponizes beauty and sound, manipulating opponents psychologically before destroying them",
+      "rivalry_seeds": [
+        "Krov",
+        "Sombra"
+      ],
+      "media_archetype_inspiration": "Deadly vocalist from supernatural thriller films, femme fatale from classic noir",
+      "skimpiness_weights": [
+        5,
+        20,
+        50,
+        25
+      ],
+      "primary_outfit_color": "deep crimson",
+      "hair_style": "long flowing waves",
+      "hair_color": "jet black",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_5108b7ef"
+    },
+    {
+      "concept_hook": "A Russian hardman whose brutal striking power comes from raw physicality and combat experience\u2014no powers, just violence refined over decades.",
+      "ring_name": "Krov",
       "gender": "male",
-      "age": 28,
-      "origin": "Bangkok, Thailand",
-      "primary_archetype": "Monster",
-      "subtype": "Aberration",
+      "age": 34,
+      "origin": "Murmansk, Russia",
+      "primary_archetype": "Brute",
+      "subtype": "Berserker",
       "has_supernatural": false,
-      "power_tier": "gatekeeper",
-      "narrative_role": "The reluctant monster \u2014 a gentle man forced into violence to pay his sister's medical debts, whose unnatural proportions make others assume he's a mindless brute, when he's actually a strategic manipulator who turns his body into a weapon",
-      "rivalry_seeds": [],
-      "media_archetype_inspiration": "Draws from the Elephant Man narrative with circus strongman aesthetics and stretches limbs like a praying mantis",
+      "power_tier": "contender",
+      "narrative_role": "The physically imposing force who represents raw masculine power, a wall others must find ways around",
+      "rivalry_seeds": [
+        "Carmine",
+        "Sombra"
+      ],
+      "media_archetype_inspiration": "Russian fight club monster, brutal bouncer from action cinema",
+      "skimpiness_weights": [
+        25,
+        40,
+        25,
+        10
+      ],
+      "primary_outfit_color": "steel gray",
+      "hair_style": "shaved head",
+      "hair_color": "bald",
+      "face_adornment": "facial scars from ear to jaw",
+      "status": "generated",
+      "fighter_id": "f_a84f7343"
+    },
+    {
+      "concept_hook": "A Japanese shadow operative who manipulates darkness itself, striking from nowhere and vanishing before retaliation\u2014a ghost with a blade.",
+      "ring_name": "Sombra",
+      "gender": "female",
+      "age": 22,
+      "origin": "Kyoto, Japan",
+      "primary_archetype": "Assassin",
+      "subtype": "Shadow",
+      "has_supernatural": true,
+      "power_tier": "prospect",
+      "narrative_role": "The mysterious newcomer whose supernatural shadow techniques make her unpredictable and terrifying",
+      "rivalry_seeds": [
+        "Krov",
+        "Phurong"
+      ],
+      "media_archetype_inspiration": "Ninja from modern anime, supernatural assassin from video games",
       "skimpiness_weights": [
         15,
         35,
         35,
         15
       ],
-      "primary_outfit_color": "electric violet",
-      "hair_style": "shaved head with extended eyebrows",
-      "hair_color": "none",
-      "face_adornment": "none",
+      "primary_outfit_color": "midnight black",
+      "hair_style": "long straight",
+      "hair_color": "silver",
+      "face_adornment": "oni half-mask",
       "status": "generated",
-      "fighter_id": "f_55c84c6e"
+      "fighter_id": "f_82aa62bb"
     },
     {
-      "concept_hook": "A deadly South Asian poison master who uses exotic toxins and psychological manipulation to dismantle opponents from the inside out",
-      "ring_name": "KALA SARI",
+      "concept_hook": "A Thai fighter whose mastery of Muay Thai and mystical chi manipulation makes him a precise, calculated killer who fights like a dance.",
+      "ring_name": "Phurong",
+      "gender": "male",
+      "age": 28,
+      "origin": "Chiang Mai, Thailand",
+      "primary_archetype": "Mystic",
+      "subtype": "Monk",
+      "has_supernatural": true,
+      "power_tier": "gatekeeper",
+      "narrative_role": "The spiritual counter to brute force, using precision and mystical energy to defeat larger opponents",
+      "rivalry_seeds": [
+        "Krov",
+        "Sombra"
+      ],
+      "media_archetype_inspiration": "Monk warrior from martial arts films, mystical fighter from fantasy anime",
+      "skimpiness_weights": [
+        20,
+        45,
+        25,
+        10
+      ],
+      "primary_outfit_color": "emerald green",
+      "hair_style": "short cropped",
+      "hair_color": "dark brown",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_a74546fb"
+    },
+    {
+      "concept_hook": "A deadly Japanese assassin who relies on pure human training, reflexes, and precision rather than any supernatural gifts\u2014death delivered with surgical perfection.",
+      "ring_name": "Kasumi",
+      "gender": "female",
+      "age": 22,
+      "origin": "Tokyo, Japan",
+      "primary_archetype": "Assassin",
+      "subtype": "Phantom",
+      "has_supernatural": false,
+      "power_tier": "contender",
+      "rivalry_seeds": [
+        "Natasha"
+      ],
+      "narrative_role": "The human pinnacle\u2014proof that mortal skill can match any supernatural advantage. Her rivalry with Natasha represents order vs chaos, discipline vs seduction.",
+      "media_archetype_inspiration": "Classic anime assassin (Cblade from Noir, Femio from Kill la Kill) meets real-world ninjutsu aesthetics",
+      "skimpiness_weights": [
+        15,
+        35,
+        35,
+        15
+      ],
+      "primary_outfit_color": "crimson red",
+      "hair_style": "slicked back ponytail",
+      "hair_color": "jet black",
+      "face_adornment": "oni half-mask",
+      "status": "generated",
+      "fighter_id": "f_33cf8785"
+    },
+    {
+      "concept_hook": "A Russian seductress whose supernatural allure is less magical gift than calculated weapon\u2014every gesture, every glance is engineered to destabilize opponents.",
+      "ring_name": "Natasha",
+      "gender": "female",
+      "age": 24,
+      "origin": "Moscow, Russia",
+      "primary_archetype": "Siren",
+      "subtype": "Temptress",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "rivalry_seeds": [
+        "Kasumi"
+      ],
+      "narrative_role": "The destabilizer\u2014her power lies in making opponents question their own resolve. Her rivalry with Kasumi is personal: she wants to prove that charm conquers all, even perfect discipline.",
+      "media_archetype_inspiration": "Cold War femme fatale meets supernatural seductress (Black Widow, Mystique's seduction scenes)",
+      "skimpiness_weights": [
+        5,
+        20,
+        45,
+        30
+      ],
+      "primary_outfit_color": "deep violet",
+      "hair_style": "long flowing waves",
+      "hair_color": "platinum blonde",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_f2ec0402"
+    },
+    {
+      "concept_hook": "A\u5f71\u5b50\u523a\u5ba2 from Mumbai trained in the ancient art of Thuggee, using seduction and poison to lure prey before delivering the killing strike.",
+      "ring_name": "Kali's Kiss",
       "gender": "female",
       "age": 24,
       "origin": "Mumbai, India",
+      "primary_archetype": "Assassin",
+      "subtype": "Shadow",
+      "has_supernatural": false,
+      "power_tier": "contender",
+      "narrative_role": "The deadly seductress who weaponizes beauty and patience\u2014kills with a smile and a kiss goodbye",
+      "rivalry_seeds": [
+        "Crimson Viper",
+        "Nightshade"
+      ],
+      "media_archetype_inspiration": "Poison Ivy meets Black Widow\u2014femme fatale assassin using toxins and charm",
+      "skimpiness_weights": [
+        10,
+        30,
+        40,
+        20
+      ],
+      "primary_outfit_color": "electric blue",
+      "hair_style": "short ponytail",
+      "hair_color": "dark brown",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_2b32bcbe"
+    },
+    {
+      "concept_hook": "An Australian surf champion turned ring siren whose hypnotic voice and aquatic grace drown opponents in delusion before they realize they've already lost.",
+      "ring_name": "Coral Siren",
+      "gender": "female",
+      "age": 21,
+      "origin": "Gold Coast, Australia",
+      "primary_archetype": "Siren",
+      "subtype": "Temptress",
+      "has_supernatural": false,
+      "power_tier": "prospect",
+      "narrative_role": "The deceptive rookie who uses misdirection and psychological warfare\u2014looks like a beach girl, fights like a predator",
+      "rivalry_seeds": [
+        "Kali's Kiss",
+        "Iron Lotus"
+      ],
+      "media_archetype_inspiration": "Bayonetta's flair meets a competitive swimmer\u2014glamour and grace as weapons",
+      "skimpiness_weights": [
+        5,
+        25,
+        45,
+        25
+      ],
+      "primary_outfit_color": "teal and white",
+      "hair_style": "wet-look long bob",
+      "hair_color": "aquamarine highlights",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_44803a9a"
+    },
+    {
+      "concept_hook": "A legendary Iranian poison master and former Savak operative who weaponizes fear, reputation, and lethal toxins\u2014her very name makes opponents hesitate.",
+      "ring_name": "Black Widow",
+      "gender": "female",
+      "age": 28,
+      "origin": "Tehran, Iran",
       "primary_archetype": "Viper",
       "subtype": "Poisoner",
       "has_supernatural": false,
       "power_tier": "contender",
-      "narrative_role": "The scheming strategist who makes opponents question their own resolve before she ever touches them",
+      "narrative_role": "The psychological warfare specialist who makes opponents scared to even touch her\u2014fear is her primary weapon",
       "rivalry_seeds": [
-        "SOL BLANCO"
+        "Nightshade",
+        "Valkyrie"
       ],
-      "media_archetype_inspiration": "Poison ivy from DC meets classic Bollywood femme fatale",
+      "media_archetype_inspiration": "female Bond villain crossed with classic femme fatale\u2014think Flora Montez from Killer Instinct meets a Cold War spy thriller",
       "skimpiness_weights": [
         10,
-        35,
+        30,
         40,
-        15
+        20
       ],
-      "primary_outfit_color": "emerald green with gold filigree",
-      "hair_style": "twin braids draped over shoulders",
-      "hair_color": "electric violet with golden tips",
-      "face_adornment": "serpentine face chain with ruby eyes",
+      "primary_outfit_color": "Crimson Red",
+      "hair_style": "long flowing waves",
+      "hair_color": "jet black with deep burgundy highlights",
+      "hair_color_bucket": "Black",
+      "face_adornment": "none",
       "status": "generated",
-      "fighter_id": "f_bfd1acd8"
+      "fighter_id": "f_20979c18"
     },
     {
-      "concept_hook": "A young Mexican prodigy with preternatural reflexes who fights with bullfighting-inspired showmanship and devastating precision",
-      "ring_name": "SOL BLANCO",
-      "gender": "male",
-      "age": 21,
-      "origin": "Guadalajara, Mexico",
-      "primary_archetype": "Prodigy",
-      "subtype": "Phen om",
+      "concept_hook": "A young Swedish cyborg prodigy whose experimental neural interfaces allow her to predict and counter opponent movements before they happen.",
+      "ring_name": "Synapse",
+      "gender": "female",
+      "age": 19,
+      "origin": "Stockholm, Sweden",
+      "primary_archetype": "Experiment",
+      "subtype": "Cyborg",
       "has_supernatural": false,
       "power_tier": "prospect",
-      "narrative_role": "The arrogant rising star who underestimates cunning opponents and learns painful lessons about hubris",
+      "narrative_role": "The breakout tech wonderkid\u2014fresh, cocky, and terrifyingly adaptive with every fight",
       "rivalry_seeds": [
-        "KALA SARI"
+        "Black Widow",
+        "Genesis"
       ],
-      "media_archetype_inspiration": "Young Miguel Rojo from Bloodrayne meets cocky martial arts movie protagonist",
+      "media_archetype_inspiration": "anime hacker fighter meets cyberpunk brawler\u2014think Motoko Kusanagi meets a fighting game shoto character",
       "skimpiness_weights": [
         20,
-        45,
+        40,
         30,
-        5
+        10
       ],
-      "primary_outfit_color": "burning orange",
-      "hair_style": "messy undercut with shaved sides",
-      "hair_color": "ink black with bronze highlights",
-      "face_adornment": "bull-skull bandana mask",
+      "primary_outfit_color": "Electric Yellow",
+      "hair_style": "asymmetrical bob with shaved\u5de6\u4fa7",
+      "hair_color": "platinum silver with neon yellow streaks at tips",
+      "hair_color_bucket": "White/Silver",
+      "face_adornment": "none",
       "status": "generated",
-      "fighter_id": "f_f5e4a29d"
+      "fighter_id": "f_3bcbed43"
     }
   ]
 }

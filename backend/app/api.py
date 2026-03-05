@@ -123,6 +123,7 @@ def _rebuild_prompts(fighter: dict):
         subtype_info=subtype_info,
         iconic_features=iconic_features,
         age=age,
+        primary_outfit_color=primary_outfit_color,
     )
     if gender.lower() == "male":
         fighter["image_prompt_nsfw"] = fighter["image_prompt"]
@@ -136,6 +137,7 @@ def _rebuild_prompts(fighter: dict):
             subtype_info=subtype_info,
             iconic_features=iconic_features,
             age=age,
+            primary_outfit_color=primary_outfit_color,
         )
     if not fighter.get("image_prompt_body_ref", {}).get("full_prompt"):
         fighter["image_prompt_body_ref"] = build_body_reference_prompt(
@@ -572,6 +574,7 @@ def regenerate_outfits(fighter_id: str):
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
                 age=age,
+                primary_outfit_color=primary_outfit_color,
             )
         if not tiers or "nsfw" in tiers:
             existing["ring_attire_nsfw"] = outfit_data.get("ring_attire_nsfw", existing.get("ring_attire_nsfw", ""))
@@ -587,6 +590,7 @@ def regenerate_outfits(fighter_id: str):
                     subtype_info=subtype_info,
                     iconic_features=iconic_features,
                     age=age,
+                    primary_outfit_color=primary_outfit_color,
                 )
 
         existing["skimpiness_level"] = skimpiness_level
@@ -767,7 +771,7 @@ def get_roster_plan():
             "mode": "initial",
             "pool_summary": "",
             "entries": [
-                {**entry, "status": entry.get("status", "pending"), "fighter_id": entry.get("fighter_id"), "primary_outfit_color": entry.get("primary_outfit_color", ""), "hair_style": entry.get("hair_style", ""), "hair_color": entry.get("hair_color", ""), "face_adornment": entry.get("face_adornment", "")}
+                {**entry, "status": entry.get("status", "pending"), "fighter_id": entry.get("fighter_id"), "primary_outfit_color": entry.get("primary_outfit_color", ""), "hair_style": entry.get("hair_style", ""), "hair_color": entry.get("hair_color", ""), "hair_color_bucket": entry.get("hair_color_bucket", ""), "face_adornment": entry.get("face_adornment", "")}
                 for entry in plan
             ],
         }
@@ -815,6 +819,7 @@ def create_roster_plan():
             entry.setdefault("primary_outfit_color", "")
             entry.setdefault("hair_style", "")
             entry.setdefault("hair_color", "")
+            entry.setdefault("hair_color_bucket", "")
             entry.setdefault("face_adornment", "")
 
         plan = {
@@ -878,9 +883,7 @@ def regenerate_plan_entry(index: int):
 
     def do_regen():
         existing_on_disk = data_manager.load_all_fighters(config)
-        pool_summary = plan.get("pool_summary", "")
-        if not pool_summary and existing_on_disk:
-            pool_summary = summarize_fighter_pool(existing_on_disk)
+        pool_summary = summarize_fighter_pool(existing_on_disk) if existing_on_disk else ""
 
         new_entries = plan_roster(
             config, roster_size=1,
@@ -898,8 +901,10 @@ def regenerate_plan_entry(index: int):
             new_entry.setdefault("primary_outfit_color", "")
             new_entry.setdefault("hair_style", "")
             new_entry.setdefault("hair_color", "")
+            new_entry.setdefault("hair_color_bucket", "")
             new_entry.setdefault("face_adornment", "")
             entries[index] = new_entry
+            plan["pool_summary"] = pool_summary
             data_manager.save_roster_plan(plan, config)
             return new_entry
         return entries[index]
@@ -912,7 +917,13 @@ def regenerate_plan_entry(index: int):
 def add_plan_entries():
     plan = data_manager.load_roster_plan(config)
     if not plan:
-        return jsonify({"error": "No roster plan found"}), 404
+        plan = {
+            "plan_id": f"rp_{uuid.uuid4().hex[:8]}",
+            "created_at": str(__import__("datetime").date.today()),
+            "mode": "add",
+            "pool_summary": "",
+            "entries": [],
+        }
 
     body = request.json or {}
     count = body.get("count", 1)
@@ -921,9 +932,7 @@ def add_plan_entries():
 
     def do_add():
         existing_on_disk = data_manager.load_all_fighters(config)
-        pool_summary = plan.get("pool_summary", "")
-        if not pool_summary and existing_on_disk:
-            pool_summary = summarize_fighter_pool(existing_on_disk)
+        pool_summary = summarize_fighter_pool(existing_on_disk) if existing_on_disk else ""
 
         new_entries = plan_roster(
             config, roster_size=count,
@@ -941,8 +950,10 @@ def add_plan_entries():
             entry.setdefault("primary_outfit_color", "")
             entry.setdefault("hair_style", "")
             entry.setdefault("hair_color", "")
+            entry.setdefault("hair_color_bucket", "")
             entry.setdefault("face_adornment", "")
         plan["entries"].extend(new_entries)
+        plan["pool_summary"] = pool_summary
         data_manager.save_roster_plan(plan, config)
         return new_entries
 
@@ -962,6 +973,9 @@ def generate_from_plan():
     ]
     if not approved:
         return jsonify({"error": "No approved entries to generate"}), 400
+
+    body = request.json or {}
+    target_stage = body.get("target_stage", 1)
 
     task_id = f"genbatch_{uuid.uuid4().hex[:8]}"
 
@@ -1032,7 +1046,20 @@ def generate_from_plan():
         else:
             data_manager.delete_roster_plan(config)
 
-        return {"generated_count": len(generated), "fighter_ids": [f["id"] for f in generated]}
+        fighter_ids = [f["id"] for f in generated]
+
+        if target_stage >= 2 and fighter_ids:
+            max_parallel = min(len(fighter_ids), 4)
+            with ThreadPoolExecutor(max_workers=max_parallel) as pool:
+                futures = {pool.submit(_advance_to_stage, fid, target_stage): fid for fid in fighter_ids}
+                for future in as_completed(futures):
+                    try:
+                        future.result()
+                    except Exception as e:
+                        fid = futures[future]
+                        print(f"    Error advancing {fid}: {e}")
+
+        return {"generated_count": len(generated), "fighter_ids": fighter_ids}
 
     _run_in_background(task_id, do_generate)
     return jsonify({"task_id": task_id, "status": "running"}), 202
@@ -1176,6 +1203,103 @@ def advance_stage(fighter_id: str):
     return jsonify({"task_id": task_id, "status": "running"}), 202
 
 
+def _advance_to_stage(fid, target_stage):
+    fighter_data = data_manager.load_fighter(fid, config)
+    if not fighter_data:
+        return fid, {"error": "not found"}
+
+    current = fighter_data.get("generation_stage", 0)
+    if current >= target_stage:
+        return fid, {"status": "already_at_stage", "stage": current}
+
+    steps = []
+    if current < 2 and target_stage >= 2:
+        steps.append(1)
+    if current < 3 and target_stage >= 3:
+        steps.append(2)
+
+    for step_from in steps:
+        body_parts = fighter_data.get("image_prompt_body_parts", "")
+        if not body_parts:
+            body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+        if not body_parts:
+            body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
+        expression = fighter_data.get("image_prompt_expression", "")
+        if not expression:
+            expression = fighter_data.get("image_prompt", {}).get("expression", "")
+        if not expression:
+            expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
+
+        if step_from == 1:
+            gender = fighter_data.get("gender", "female")
+            subtype_info = _get_subtype_info(fighter_data)
+            portrait_prompt = build_portrait_prompt(
+                body_parts,
+                fighter_data.get("ring_attire_sfw", ""),
+                expression,
+                gender=gender,
+                body_type_details=fighter_data.get("body_type_details"),
+                origin=fighter_data.get("origin", ""),
+                subtype_info=subtype_info,
+                iconic_features=fighter_data.get("iconic_features", ""),
+                primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
+                age=fighter_data.get("age", 0),
+            )
+            fighter_data["image_prompt_portrait"] = portrait_prompt
+
+            if not fighter_data.get("image_prompt_body_ref"):
+                fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
+                    body_parts, expression,
+                    gender=gender,
+                    body_type_details=fighter_data.get("body_type_details"),
+                    origin=fighter_data.get("origin", ""),
+                    subtype_info=subtype_info,
+                    age=fighter_data.get("age", 0),
+                    iconic_features=fighter_data.get("iconic_features", ""),
+                )
+
+            headshot_prompt = build_headshot_prompt(
+                body_parts, expression,
+                gender=gender,
+                body_type_details=fighter_data.get("body_type_details"),
+                origin=fighter_data.get("origin", ""),
+                subtype_info=subtype_info,
+                iconic_features=fighter_data.get("iconic_features", ""),
+                age=fighter_data.get("age", 0),
+            )
+            fighter_data["image_prompt_headshot"] = headshot_prompt
+
+            fighters_dir = config.data_dir / "fighters"
+            _generate_stage1_images(fighter_data, config, fighters_dir)
+            fighter_data["generation_stage"] = 2
+
+        elif step_from == 2:
+            fighter = Fighter.from_dict(fighter_data)
+            if not fighter.image_prompt_body_ref:
+                subtype_info = _get_subtype_info(fighter_data)
+                fighter.image_prompt_body_ref = build_body_reference_prompt(
+                    body_parts, expression,
+                    gender=fighter.gender,
+                    body_type_details=fighter_data.get("body_type_details"),
+                    origin=fighter.origin,
+                    subtype_info=subtype_info,
+                    age=fighter.age,
+                    iconic_features=fighter_data.get("iconic_features", ""),
+                )
+            if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
+                _rebuild_prompts(fighter_data)
+                fighter = Fighter.from_dict(fighter_data)
+            fighters_dir = config.data_dir / "fighters"
+            generate_charsheet_images(fighter, config, fighters_dir)
+            fighter_data = fighter.to_dict()
+            fighter_data["generation_stage"] = 3
+            fighter_data["generation_dirty"] = []
+
+        data_manager.save_fighter(fighter_data, config)
+
+    return fid, {"status": "advanced", "stage": fighter_data.get("generation_stage", 0)}
+
+
 @app.post("/api/fighters/batch-advance")
 def batch_advance():
     body = request.json or {}
@@ -1189,107 +1313,11 @@ def batch_advance():
 
     task_id = f"batch_{uuid.uuid4().hex[:8]}"
 
-    def _advance_one_fighter(fid):
-        fighter_data = data_manager.load_fighter(fid, config)
-        if not fighter_data:
-            return fid, {"error": "not found"}
-
-        current = fighter_data.get("generation_stage", 0)
-        if current >= target_stage:
-            return fid, {"status": "already_at_stage", "stage": current}
-
-        steps = []
-        if current < 2 and target_stage >= 2:
-            steps.append(1)
-        if current < 3 and target_stage >= 3:
-            steps.append(2)
-
-        for step_from in steps:
-            body_parts = fighter_data.get("image_prompt_body_parts", "")
-            if not body_parts:
-                body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
-            if not body_parts:
-                body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
-            expression = fighter_data.get("image_prompt_expression", "")
-            if not expression:
-                expression = fighter_data.get("image_prompt", {}).get("expression", "")
-            if not expression:
-                expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
-
-            if step_from == 1:
-                gender = fighter_data.get("gender", "female")
-                subtype_info = _get_subtype_info(fighter_data)
-                portrait_prompt = build_portrait_prompt(
-                    body_parts,
-                    fighter_data.get("ring_attire_sfw", ""),
-                    expression,
-                    gender=gender,
-                    body_type_details=fighter_data.get("body_type_details"),
-                    origin=fighter_data.get("origin", ""),
-                    subtype_info=subtype_info,
-                    iconic_features=fighter_data.get("iconic_features", ""),
-                    primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
-                    age=fighter_data.get("age", 0),
-                )
-                fighter_data["image_prompt_portrait"] = portrait_prompt
-
-                if not fighter_data.get("image_prompt_body_ref"):
-                    fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
-                        body_parts, expression,
-                        gender=gender,
-                        body_type_details=fighter_data.get("body_type_details"),
-                        origin=fighter_data.get("origin", ""),
-                        subtype_info=subtype_info,
-                        age=fighter_data.get("age", 0),
-                        iconic_features=fighter_data.get("iconic_features", ""),
-                    )
-
-                headshot_prompt = build_headshot_prompt(
-                    body_parts, expression,
-                    gender=gender,
-                    body_type_details=fighter_data.get("body_type_details"),
-                    origin=fighter_data.get("origin", ""),
-                    subtype_info=subtype_info,
-                    iconic_features=fighter_data.get("iconic_features", ""),
-                    age=fighter_data.get("age", 0),
-                )
-                fighter_data["image_prompt_headshot"] = headshot_prompt
-
-                fighters_dir = config.data_dir / "fighters"
-                _generate_stage1_images(fighter_data, config, fighters_dir)
-                fighter_data["generation_stage"] = 2
-
-            elif step_from == 2:
-                fighter = Fighter.from_dict(fighter_data)
-                if not fighter.image_prompt_body_ref:
-                    subtype_info = _get_subtype_info(fighter_data)
-                    fighter.image_prompt_body_ref = build_body_reference_prompt(
-                        body_parts, expression,
-                        gender=fighter.gender,
-                        body_type_details=fighter_data.get("body_type_details"),
-                        origin=fighter.origin,
-                        subtype_info=subtype_info,
-                        age=fighter.age,
-                        iconic_features=fighter_data.get("iconic_features", ""),
-                    )
-                if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
-                    _rebuild_prompts(fighter_data)
-                    fighter = Fighter.from_dict(fighter_data)
-                fighters_dir = config.data_dir / "fighters"
-                generate_charsheet_images(fighter, config, fighters_dir)
-                fighter_data = fighter.to_dict()
-                fighter_data["generation_stage"] = 3
-                fighter_data["generation_dirty"] = []
-
-            data_manager.save_fighter(fighter_data, config)
-
-        return fid, {"status": "advanced", "stage": fighter_data.get("generation_stage", 0)}
-
     def do_batch():
         results = {}
         max_parallel = min(len(fighter_ids), 4)
         with ThreadPoolExecutor(max_workers=max_parallel) as pool:
-            futures = {pool.submit(_advance_one_fighter, fid): fid for fid in fighter_ids}
+            futures = {pool.submit(_advance_to_stage, fid, target_stage): fid for fid in fighter_ids}
             for future in as_completed(futures):
                 try:
                     fid, result = future.result()

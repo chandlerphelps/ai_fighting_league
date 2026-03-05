@@ -193,9 +193,10 @@ export async function addPlanEntries(count: number, gender_mix: string = 'female
   })
 }
 
-export async function generateFromPlan(): Promise<TaskResponse> {
+export async function generateFromPlan(targetStage: number = 1): Promise<TaskResponse> {
   return apiFetch<TaskResponse>('/roster-plan/generate', {
     method: 'POST',
+    body: JSON.stringify({ target_stage: targetStage }),
   })
 }
 

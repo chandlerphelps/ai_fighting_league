@@ -3,6 +3,9 @@ from collections import Counter
 from app.engine.fighter_config import (
     ARCHETYPES_FEMALE,
     ARCHETYPES_MALE,
+    OUTFIT_COLOR_PALETTE,
+    HAIR_COLOR_BUCKETS,
+    classify_hair_color,
 )
 
 REGION_MAP = {
@@ -54,8 +57,13 @@ def summarize_fighter_pool(fighters: list[dict], for_display: bool = False) -> s
     age_counts = Counter(_age_bracket(f.get("age", 25)) for f in fighters)
 
     outfit_colors = Counter(f.get("primary_outfit_color", "") for f in fighters if f.get("primary_outfit_color"))
+    hair_buckets = Counter()
+    for f in fighters:
+        bucket = f.get("hair_color_bucket", "") or classify_hair_color(f.get("hair_color", ""))
+        if bucket:
+            hair_buckets[bucket] += 1
     hair_combos = Counter(
-        f"{f.get('hair_style', '')} {f.get('hair_color', '')}".strip()
+        f"{f.get('hair_style', '')} [{f.get('hair_color_bucket', '') or classify_hair_color(f.get('hair_color', ''))}]".strip()
         for f in fighters
         if f.get("hair_style") or f.get("hair_color")
     )
@@ -92,9 +100,19 @@ def summarize_fighter_pool(fighters: list[dict], for_display: bool = False) -> s
         lines.append("\nOutfit Colors Already Taken:")
         for color, count in outfit_colors.most_common():
             lines.append(f"  {color} ({count}x)")
+        taken_lower = {c.lower() for c in outfit_colors}
+        available = [c for c in OUTFIT_COLOR_PALETTE if c.lower() not in taken_lower]
+        if available:
+            lines.append(f"\nAvailable Palette Colors: {', '.join(available)}")
+
+    if hair_buckets:
+        lines.append("\nHair Color Buckets:")
+        for bucket in HAIR_COLOR_BUCKETS:
+            count = hair_buckets.get(bucket, 0)
+            lines.append(f"  {bucket}: {count}")
 
     if hair_combos:
-        lines.append("\nHair Style+Color Combos Already Taken:")
+        lines.append("\nHair Style+Bucket Combos Already Taken:")
         for combo, count in hair_combos.most_common():
             lines.append(f"  {combo} ({count}x)")
 
@@ -113,7 +131,8 @@ def summarize_fighter_pool(fighters: list[dict], for_display: bool = False) -> s
             if f.get("primary_outfit_color"):
                 sig_parts.append(f"color:{f['primary_outfit_color']}")
             if f.get("hair_style") or f.get("hair_color"):
-                sig_parts.append(f"hair:{f.get('hair_style', '')} {f.get('hair_color', '')}".strip())
+                bucket = f.get("hair_color_bucket", "") or classify_hair_color(f.get("hair_color", ""))
+                sig_parts.append(f"hair:{f.get('hair_style', '')} [{bucket}]".strip())
             if f.get("face_adornment") and f.get("face_adornment") != "none":
                 sig_parts.append(f"face:{f['face_adornment']}")
             sig = f" [{', '.join(sig_parts)}]" if sig_parts else ""

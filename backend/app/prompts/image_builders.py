@@ -5,13 +5,12 @@ from app.services.grok_image import TIER_PROMPT_KEYS
 
 CHARSHEET_LAYOUT = (
     "character model sheet, character reference sheet, "
-    "three full-body views of the exact same character side by side: "
-    "front-facing slightly angled view on the left, "
-    "personality pose in the center, "
+    "two full-body views of the exact same character side by side: "
+    "front-facing view on the left, "
     "rear view on the right, "
-    "consistent outfit across all three views, "
+    "consistent outfit across both views, "
     "full body head to toe visible in each panel, "
-    "plain flat color background, organized reference sheet layout"
+    "dark background, organized reference sheet layout"
 )
 
 
@@ -46,25 +45,25 @@ def _charsheet_tail(
 ) -> str:
     tail_base = (
         get_art_style_tail(gender)
-        + ", character reference sheet, three consistent views"
+        + ", character reference sheet, two consistent views"
     )
     if tier == "nsfw":
         if gender.lower() == "male":
             return (
                 get_art_style_tail(gender) + ", "
                 "explicit full frontal male nudity, completely naked, muscular physique fully visible, "
-                "character reference sheet, three consistent views"
+                "character reference sheet, two consistent views"
             )
         if skimpiness_level == 1:
             return (
                 get_art_style_tail(gender) + ", "
                 "topless female nudity, bare breasts visible, "
-                "character reference sheet, three consistent views"
+                "character reference sheet, two consistent views"
             )
         return (
             get_art_style_tail(gender) + ", "
             "explicit full frontal female nudity, completely naked, bare breasts and perfectly drawn bare pussy visible, "
-            "character reference sheet, three consistent views"
+            "character reference sheet, two consistent views"
         )
     return tail_base
 
@@ -89,6 +88,9 @@ def _build_clothing_part(
     tier: str = "sfw",
     skimpiness_level: int = 4,
 ) -> str:
+    if primary_outfit_color and clothing:
+        clothing = f"{primary_outfit_color} {clothing}"
+
     if tier == "nsfw":
         if skimpiness_level == 1:
             clothing_part = (
@@ -102,8 +104,6 @@ def _build_clothing_part(
                 if clothing
                 else "completely naked"
             )
-    elif tier == "sfw" and primary_outfit_color and clothing:
-        clothing_part = f"{primary_outfit_color} {clothing}"
     else:
         clothing_part = clothing
 
@@ -150,12 +150,10 @@ def _build_charsheet_prompt(
 
     anatomy = ""
     body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier)
-    if body_type_details and tier == "nsfw":
-        anatomy = _build_nsfw_anatomy_line(body_type_details)
+    if body_type_details and tier in ("nsfw", "barely"):
+        anatomy = _build_nsfw_anatomy_line(body_type_details, tier)
 
     style = _charsheet_style(gender, tier, skimpiness_level)
-
-    pose_base = personality_pose or "dynamic signature pose"
 
     clothing_part = _build_clothing_part(
         clothing, iconic_features, primary_outfit_color, tier, skimpiness_level,
@@ -163,8 +161,8 @@ def _build_charsheet_prompt(
 
     character_desc = _build_character_desc(body_parts, clothing_part, age, origin)
 
-    front_view = "front slightly angled view standing tall"
-    center_pose = f"center personality pose: {pose_base}"
+    pose_hint = f", {personality_pose}" if personality_pose else ""
+    front_view = f"front-facing slightly angled view standing tall{pose_hint}"
     back_view = "rear view standing tall"
 
     tail = _charsheet_tail(gender, tier, skimpiness_level)
@@ -173,7 +171,7 @@ def _build_charsheet_prompt(
         f"[STYLE] {style}",
         f"[CHARACTER] {character_desc}",
         f"[ANATOMY] {anatomy}" if anatomy else "",
-        f"[VIEWS] {front_view}, {center_pose}, {back_view}",
+        f"[VIEWS] {front_view}, {back_view}",
         f"[EXPRESSION] {expression}" if expression else "",
         f"[QUALITY] {tail}",
         f"[ANATOMY EMPHASIS] {anatomy}" if anatomy else "",
@@ -187,7 +185,6 @@ def _build_charsheet_prompt(
         "clothing": clothing_part,
         "character_desc": character_desc,
         "front_view": front_view,
-        "center_pose": center_pose,
         "back_view": back_view,
         "expression": expression,
         "full_prompt": full,
@@ -544,11 +541,12 @@ def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
 
 PORTRAIT_STYLE = (
     "high quality illustration, single character portrait, upper body shot, "
-    "clean background, professional character art, detailed face and expression"
+    "dark background, professional character art, detailed face and expression"
 )
 
 HEADSHOT_STYLE = (
-    "high quality illustration, tight close-up headshot, face fills the frame, "
+    "high quality illustration, extreme close-up headshot, zoomed in on face, "
+    "face fills the entire frame, cropped tight from forehead to chin, "
     "dramatic dark moody background with subtle gradient, cinematic lighting from the side, "
     "fighting game character select screen, intense stare toward viewer, "
     "sharp focus on face, shallow depth of field, professional character art"
@@ -622,7 +620,7 @@ def build_headshot_prompt(
         f"[CHARACTER] {character_desc}{iconic_part}, close-up headshot filling the frame",
         f"[EXPRESSION] {expression}, intense fighting spirit" if expression else "",
         f"[BACKGROUND] dark moody background, deep shadows, subtle dark gradient, cinematic",
-        f"[QUALITY] {get_art_style_tail(gender)}, headshot, face close-up, character select screen",
+        f"[QUALITY] {get_art_style_tail(gender)}, headshot, extreme close-up zoomed in on face, character select screen",
     ]
     full = "\n".join(s for s in sections if s)
 
