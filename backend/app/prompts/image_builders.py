@@ -1,5 +1,5 @@
 from app.engine.image_style import get_art_style, get_art_style_tail
-from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line
+from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line, MAKEUP_DESCRIPTIONS
 from app.services.grok_image import TIER_PROMPT_KEYS
 
 
@@ -73,9 +73,10 @@ def _enrich_body_parts(
     body_parts: str,
     body_type_details: dict | None = None,
     subtype_info: dict | None = None,
+    tier: str = "",
 ) -> str:
     if body_type_details:
-        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details)}"
+        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details, tier)}"
     if subtype_info:
         body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
     return body_parts
@@ -148,7 +149,7 @@ def _build_charsheet_prompt(
         return {}
 
     anatomy = ""
-    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier)
     if body_type_details and tier == "nsfw":
         anatomy = _build_nsfw_anatomy_line(body_type_details)
 
@@ -387,18 +388,42 @@ def build_body_reference_prompt(
     vulva_type = (
         body_type_details.get("vulva_type", "") if body_type_details else ""
     )
+    waist = (
+        body_type_details.get("waist", "medium") if body_type_details else "medium"
+    )
+    abs_tone = (
+        body_type_details.get("abs_tone", "slight definition")
+        if body_type_details
+        else "slight definition"
+    )
+    body_fat_pct = (
+        body_type_details.get("body_fat_pct", "") if body_type_details else ""
+    )
+    face_shape = (
+        body_type_details.get("face_shape", "") if body_type_details else ""
+    )
+    eye_shape = (
+        body_type_details.get("eye_shape", "") if body_type_details else ""
+    )
+    makeup_level = (
+        body_type_details.get("makeup_level", "") if body_type_details else ""
+    )
+    makeup_desc = MAKEUP_DESCRIPTIONS.get(makeup_level, makeup_level) if makeup_level else ""
+
     rear_angled_panel = (
         f"isolated nude rear view at an angle, "
-        f"bent forward back very arched sensuously, "
-        f"{butt_size} butt with natural curvature, low rear angle looking up, "
-        f"explicit detail, hands raised above head"
+        f"bent forward back arched casually, "
+        f"{butt_size} butt with natural curvature, "
+        f"hands raised above head, profile"
     )
+    vulva_detail = f", {vulva_type} fully visible and detailed" if vulva_type else ""
+    body_fat_detail = f", {body_fat_pct} body fat" if body_fat_pct else ""
     chest_panel = (
-        f"isolated nude female torso drawing from collarbone to hips, "
+        f"isolated nude female torso drawing from collarbone to thighs, "
         f"{breast_size} breasts with {nipple_size} nipples, "
         f"natural breast shape and weight, defined collarbone, "
-        f"slight ab definition on toned flat stomach, navel visible, "
-        f"medium waist, front view"
+        f"{abs_tone} abs/core on toned flat stomach{body_fat_detail}, navel visible, "
+        f"{waist} waist{vulva_detail}, front view"
     )
     butt_panel = (
         f"isolated nude female butt study, rear view directly behind, "
@@ -420,9 +445,17 @@ def build_body_reference_prompt(
     )
 
     iconic_part = f", {iconic_features}" if iconic_features else ""
+    face_details = []
+    if face_shape:
+        face_details.append(f"{face_shape} face")
+    if eye_shape:
+        face_details.append(f"{eye_shape} eyes")
+    if makeup_desc:
+        face_details.append(f"{makeup_desc}")
+    face_extras = f", {', '.join(face_details)}" if face_details else ""
     face_panel = (
         f"isolated face and neck portrait drawing, "
-        f"{expression}, three-quarter angle{iconic_part}"
+        f"{expression}{face_extras}, three-quarter angle{iconic_part}"
     )
 
     if body_type_details:
@@ -435,7 +468,7 @@ def build_body_reference_prompt(
         f"[SUBJECT] {subject}{subject_iconic}, all body parts belong to the same single character",
         f"[TOP-LEFT: FACE] {face_panel}",
         f"[TOP-CENTER: REAR ANGLED VIEW] {rear_angled_panel}",
-        f"[TOP-RIGHT: CHEST AND TORSO] {chest_panel}",
+        f"[TOP-RIGHT: CHEST AND CROTCH STANDING] {chest_panel}",
         f"[BOTTOM-LEFT: BUTT] {butt_panel}",
         f"[BOTTOM-RIGHT: INTIMATE] {intimate_panel}",
         f"[ANATOMY] {anatomy}" if anatomy else "",
@@ -539,7 +572,7 @@ def build_portrait_prompt(
 
     style = get_art_style(gender)
 
-    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier="sfw")
 
     clothing_part = _build_clothing_part(
         clothing_sfw, iconic_features, primary_outfit_color, tier="sfw",
@@ -579,7 +612,7 @@ def build_headshot_prompt(
 
     style = get_art_style(gender)
 
-    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier="sfw")
 
     character_desc = _build_character_desc(body_parts, age=age, origin=origin)
     iconic_part = f", {iconic_features}" if iconic_features else ""

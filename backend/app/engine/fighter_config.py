@@ -2065,10 +2065,11 @@ def _build_male_body_directive(traits: dict) -> str:
     )
 
 
-def _build_body_shape_line(traits: dict) -> str:
+def _build_body_shape_line(traits: dict, tier: str = "") -> str:
     if "chest_build" in traits:
         return f"{traits['chest_build']} chest, {traits.get('shoulder_width', 'broad')} shoulders"
-    return f"{traits['breast_size']} breasts, {traits['butt_size']} butt"
+    covered = " (covered)" if tier == "sfw" else ""
+    return f"{traits['breast_size']} breasts{covered}, {traits['butt_size']} butt"
 
 
 def _build_nsfw_anatomy_line(traits: dict) -> str:

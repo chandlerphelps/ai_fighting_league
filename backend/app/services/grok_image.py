@@ -6,6 +6,8 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from PIL import Image
+
 from app.config import Config
 
 MAX_RETRIES = 5
@@ -19,7 +21,35 @@ TIER_PROMPT_KEYS = {
     "sfw": "image_prompt_sfw",
     "barely": "image_prompt",
     "nsfw": "image_prompt_nsfw",
+    "portrait": "image_prompt_portrait",
+    "headshot": "image_prompt_headshot",
 }
+
+
+_PAD_TMP = Path(__file__).resolve().parents[3] / "data" / "_tmp_padded.png"
+
+
+def _pad_to_aspect(image_path: Path, aspect_ratio: str) -> Path:
+    aw, ah = (int(x) for x in aspect_ratio.split(":"))
+    img = Image.open(image_path)
+    w, h = img.size
+    target_ratio = aw / ah
+    current_ratio = w / h
+    if abs(current_ratio - target_ratio) < 0.01:
+        return image_path
+    if current_ratio < target_ratio:
+        new_w = int(h * target_ratio)
+        new_h = h
+    else:
+        new_w = w
+        new_h = int(w / target_ratio)
+    padded = Image.new("RGBA", (new_w, new_h), (0, 0, 0, 0))
+    offset_x = (new_w - w) // 2
+    offset_y = (new_h - h) // 2
+    padded.paste(img, (offset_x, offset_y))
+    _PAD_TMP.parent.mkdir(parents=True, exist_ok=True)
+    padded.save(_PAD_TMP, format="PNG")
+    return _PAD_TMP
 
 
 def _encode_image(path: Path) -> str:
@@ -82,8 +112,15 @@ def edit_image(
     aspect_ratio: str = "16:9",
     resolution: str = "2k",
     n: int = 1,
+    pad_to_aspect: bool = False,
 ) -> list[str]:
-    encoded = [{"url": _encode_image(p), "type": "image_url"} for p in image_paths]
+    if pad_to_aspect:
+        encoded = [
+            {"url": _encode_image(_pad_to_aspect(p, aspect_ratio)), "type": "image_url"}
+            for p in image_paths
+        ]
+    else:
+        encoded = [{"url": _encode_image(p), "type": "image_url"} for p in image_paths]
 
     body = {
         "model": "grok-imagine-image",
@@ -190,15 +227,29 @@ def generate_charsheet_images(
     body_ref_filename = f"{base}_body_ref.png"
     body_ref_save_path = output_dir / body_ref_filename
 
-    if regen_body_ref and body_ref_prompt:
-        print(f"    Generating body reference image...")
-        urls = generate_image(
+    def _gen_body_ref():
+        female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
+        if not is_male and female_ref.exists():
+            return edit_image(
+                prompt=body_ref_prompt,
+                image_paths=[female_ref],
+                config=config,
+                aspect_ratio="1:1",
+                resolution="2k",
+                n=1,
+                pad_to_aspect=True,
+            )
+        return generate_image(
             prompt=body_ref_prompt,
             config=config,
             aspect_ratio="1:1",
             resolution="2k",
             n=1,
         )
+
+    if regen_body_ref and body_ref_prompt:
+        print(f"    Generating body reference image...")
+        urls = _gen_body_ref()
         download_image(urls[0], body_ref_save_path)
         print(f"    Saved: {body_ref_filename}")
         saved["body_ref"] = body_ref_save_path
@@ -207,13 +258,7 @@ def generate_charsheet_images(
         body_ref_path = body_ref_save_path
     elif body_ref_prompt and actual_tiers:
         print(f"    Generating body reference image...")
-        urls = generate_image(
-            prompt=body_ref_prompt,
-            config=config,
-            aspect_ratio="1:1",
-            resolution="2k",
-            n=1,
-        )
+        urls = _gen_body_ref()
         download_image(urls[0], body_ref_save_path)
         print(f"    Saved: {body_ref_filename}")
         saved["body_ref"] = body_ref_save_path

@@ -179,6 +179,7 @@ def _generate_stage1_images(fighter_data: dict, config, fighters_dir: Path) -> N
                 aspect_ratio="1:1",
                 resolution="2k",
                 n=1,
+                pad_to_aspect=True,
             )
         else:
             urls = generate_image(
