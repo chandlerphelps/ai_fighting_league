@@ -2231,8 +2231,8 @@ ARCHETYPE_STAT_WEIGHTS = {
 }
 
 GENDER_FLAT_BONUS = {
-    "male":   {"power": 15, "toughness": 10},
-    "female": {"power": 0,  "toughness": 0},
+    "male":   {"power": 8, "toughness": 5},
+    "female": {"power": 0, "toughness": 0},
 }
 
 GENDER_GUILE_RANGE = {
@@ -2244,6 +2244,13 @@ GENDER_SUPERNATURAL_RANGE = {
     "male":   (0, 20),
     "female": (20, 100),
 }
+
+
+def _normal_between(lo: int, hi: int, rng: random.Random) -> int:
+    mu = (lo + hi) / 2.0
+    sigma = (hi - lo) / 4.0
+    val = rng.gauss(mu, sigma)
+    return max(lo, min(hi, round(val)))
 
 
 def generate_archetype_stats(
@@ -2260,11 +2267,12 @@ def generate_archetype_stats(
     if not profile:
         profile = ARCHETYPE_STAT_WEIGHTS["The Prodigy"]
 
-    core_total = rng.randint(config.min_total_stats, config.max_total_stats)
+    core_total = _normal_between(config.min_total_stats, config.max_total_stats, rng)
 
     weights = {}
     for stat in ("power", "speed", "technique", "toughness"):
-        weights[stat] = max(5, profile[stat] + rng.randint(-5, 5))
+        jitter = round(rng.gauss(0, 2))
+        weights[stat] = max(5, profile[stat] + jitter)
 
     weight_total = sum(weights.values())
     stats = {}
@@ -2286,10 +2294,11 @@ def generate_archetype_stats(
     bonus = GENDER_FLAT_BONUS.get(gender.lower(), {})
     for stat, val in bonus.items():
         if val:
-            stats[stat] = min(config.stat_max, stats[stat] + rng.randint(val // 2, val))
+            bonus_val = round(rng.gauss(val, val * 0.2))
+            stats[stat] = min(config.stat_max, stats[stat] + max(0, bonus_val))
 
     guile_lo, guile_hi = GENDER_GUILE_RANGE.get(gender.lower(), (0, 15))
-    stats["guile"] = rng.randint(guile_lo, guile_hi)
+    stats["guile"] = _normal_between(guile_lo, guile_hi, rng)
 
     sup_lo, sup_hi = GENDER_SUPERNATURAL_RANGE.get(gender.lower(), (0, 20))
     if has_supernatural:
@@ -2298,7 +2307,7 @@ def generate_archetype_stats(
     else:
         sup_lo = 0
         sup_hi = 0
-    stats["supernatural"] = rng.randint(sup_lo, min(config.supernatural_cap, sup_hi))
+    stats["supernatural"] = _normal_between(sup_lo, min(config.supernatural_cap, sup_hi), rng)
 
     return stats
 
