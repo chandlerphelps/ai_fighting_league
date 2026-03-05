@@ -2210,6 +2210,94 @@ def classify_hair_color(raw: str) -> str:
     return "Brown"
 
 
+ARCHETYPE_STAT_WEIGHTS = {
+    "The Siren":      {"power": 15, "speed": 25, "technique": 30, "toughness": 15, "guile": (30, 50), "supernatural": (0, 15)},
+    "The Witch":      {"power": 15, "speed": 20, "technique": 25, "toughness": 15, "guile": (20, 40), "supernatural": (25, 50)},
+    "The Viper":      {"power": 20, "speed": 30, "technique": 25, "toughness": 15, "guile": (35, 50), "supernatural": (0, 10)},
+    "The Prodigy":    {"power": 20, "speed": 30, "technique": 30, "toughness": 20, "guile": (5, 25),  "supernatural": (0, 10)},
+    "The Doll":       {"power": 15, "speed": 25, "technique": 25, "toughness": 15, "guile": (35, 50), "supernatural": (0, 20)},
+    "The Huntress":   {"power": 25, "speed": 35, "technique": 20, "toughness": 20, "guile": (10, 30), "supernatural": (0, 10)},
+    "The Empress":    {"power": 20, "speed": 20, "technique": 30, "toughness": 20, "guile": (30, 50), "supernatural": (0, 15)},
+    "The Experiment": {"power": 30, "speed": 20, "technique": 25, "toughness": 30, "guile": (5, 20),  "supernatural": (10, 35)},
+    "The Demon":      {"power": 30, "speed": 20, "technique": 20, "toughness": 20, "guile": (15, 35), "supernatural": (30, 50)},
+    "The Assassin":   {"power": 20, "speed": 35, "technique": 30, "toughness": 15, "guile": (25, 45), "supernatural": (0, 10)},
+    "The Nymph":      {"power": 15, "speed": 30, "technique": 20, "toughness": 15, "guile": (20, 40), "supernatural": (25, 45)},
+    "The Brute":      {"power": 35, "speed": 15, "technique": 15, "toughness": 30, "guile": (0, 15),  "supernatural": (0, 10)},
+    "The Veteran":    {"power": 25, "speed": 20, "technique": 30, "toughness": 25, "guile": (10, 30), "supernatural": (0, 10)},
+    "The Monster":    {"power": 35, "speed": 15, "technique": 15, "toughness": 35, "guile": (0, 10),  "supernatural": (0, 15)},
+    "The Technician": {"power": 20, "speed": 25, "technique": 35, "toughness": 20, "guile": (10, 25), "supernatural": (0, 10)},
+    "The Wildcard":   {"power": 25, "speed": 30, "technique": 20, "toughness": 20, "guile": (15, 35), "supernatural": (0, 20)},
+    "The Mystic":     {"power": 20, "speed": 20, "technique": 25, "toughness": 20, "guile": (10, 25), "supernatural": (30, 50)},
+}
+
+GENDER_CORE_BIAS = {
+    "male":   {"power": 10, "speed": -5, "technique": -5, "toughness": 5},
+    "female": {"power": -5, "speed": 5, "technique": 5, "toughness": -5},
+}
+
+GENDER_GUILE_SHIFT = {
+    "male": -10,
+    "female": 10,
+}
+
+
+def generate_archetype_stats(
+    archetype: str,
+    gender: str,
+    config,
+    has_supernatural: bool = False,
+    rng: random.Random = None,
+) -> dict:
+    if rng is None:
+        rng = random.Random()
+
+    profile = ARCHETYPE_STAT_WEIGHTS.get(archetype)
+    if not profile:
+        profile = ARCHETYPE_STAT_WEIGHTS["The Prodigy"]
+
+    core_total = rng.randint(config.min_total_stats, config.max_total_stats)
+
+    bias = GENDER_CORE_BIAS.get(gender.lower(), {})
+    weights = {}
+    for stat in ("power", "speed", "technique", "toughness"):
+        base_w = profile[stat] + bias.get(stat, 0)
+        weights[stat] = max(5, base_w + rng.randint(-5, 5))
+
+    weight_total = sum(weights.values())
+    stats = {}
+    for stat, w in weights.items():
+        raw = round(core_total * w / weight_total)
+        stats[stat] = max(config.stat_min, min(config.stat_max, raw))
+
+    diff = core_total - sum(stats.values())
+    core_keys = list(stats.keys())
+    while diff != 0:
+        key = rng.choice(core_keys)
+        if diff > 0 and stats[key] < config.stat_max:
+            stats[key] += 1
+            diff -= 1
+        elif diff < 0 and stats[key] > config.stat_min:
+            stats[key] -= 1
+            diff += 1
+
+    guile_lo, guile_hi = profile["guile"]
+    guile_shift = GENDER_GUILE_SHIFT.get(gender.lower(), 0)
+    guile_lo = max(0, guile_lo + guile_shift)
+    guile_hi = min(config.guile_cap, guile_hi + guile_shift)
+    stats["guile"] = rng.randint(guile_lo, guile_hi)
+
+    sup_lo, sup_hi = profile["supernatural"]
+    if has_supernatural:
+        sup_lo = max(sup_lo, 20)
+        sup_hi = max(sup_hi, 40)
+    else:
+        sup_lo = 0
+        sup_hi = 0
+    stats["supernatural"] = rng.randint(sup_lo, min(config.supernatural_cap, sup_hi))
+
+    return stats
+
+
 def _roll_skimpiness(weights: list[int] | None) -> int:
     if not weights or len(weights) != 4:
         weights = [10, 30, 38, 22]

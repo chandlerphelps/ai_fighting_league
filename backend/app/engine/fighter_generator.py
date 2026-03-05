@@ -27,6 +27,7 @@ from app.engine.fighter_config import (
     load_exotic_outfit_options,
     filter_exotic_for_fighter,
     classify_hair_color,
+    generate_archetype_stats,
 )
 from app.prompts.fighter_prompts import (
     GUIDE_CORE_PHILOSOPHY,
@@ -266,8 +267,13 @@ def generate_fighter(
 
     fighter_id = f"f_{uuid.uuid4().hex[:8]}"
 
-    stats = _extract_stats(result.get("stats", {}), has_supernatural, config)
-    _normalize_core_stats(stats, config)
+    stat_dict = generate_archetype_stats(
+        archetype or "The Prodigy",
+        planned_gender,
+        config,
+        has_supernatural=has_supernatural,
+    )
+    stats = Stats(**stat_dict)
 
     body_parts = result.get("image_prompt_body_parts", "")
     expression = result.get("image_prompt_expression", "")

@@ -514,13 +514,6 @@ def build_generate_fighter_prompt(
     guide = FULL_MALE_CHARACTER_GUIDE if gender.lower() == "male" else FULL_CHARACTER_GUIDE
 
     if gender.lower() == "male":
-        stat_hints = (
-            "- Stats should reflect the archetype (Brute has high power/toughness, "
-            "Technician has high technique/speed, Monster has high power/toughness, "
-            "Veteran has balanced stats with high technique, Wildcard has high speed, "
-            "Mystic has high supernatural/technique, etc.)\n"
-            "- Males tend to have lower guile (0-25 typical)"
-        )
         body_trait_hint = (
             "MUST incorporate the rolled body traits (build type, muscle definition, "
             "shoulder width, chest, face shape, eye expression, facial hair) naturally "
@@ -530,13 +523,6 @@ def build_generate_fighter_prompt(
             "e.g. 'silent predator who breaks bones without changing expression'"
         )
     else:
-        stat_hints = (
-            "- Stats should reflect the archetype (Huntress has high speed/guile, "
-            "Empress has high technique/guile, Viper has high speed/technique/guile, "
-            "Demon has high power/supernatural, Assassin has high speed/technique/guile, "
-            "Nymph has high supernatural/speed/guile, etc.)\n"
-            "- Females tend to have higher guile (15-50 typical) — cunning, distraction, dirty tricks, psychological warfare"
-        )
         body_trait_hint = (
             "MUST incorporate the rolled body traits (waist, abs, butt, face shape, "
             "eyes, makeup) naturally into this description"
@@ -555,13 +541,7 @@ Generate a unique fighter for the AI Fighting League. {archetype_text}.{existing
 
 {supernatural_instruction}
 
-STAT CONSTRAINTS:
-- 4 core stats (power, speed, technique, toughness), each rated 0-100
-- 1 supernatural stat, rated 0-100 (0 if no supernatural abilities)
-- 1 guile stat, rated 0-100 (cunning, distraction, dirty tricks, psychological warfare)
-- The 4 core stats MUST total between {min_total_stats} and {max_total_stats}
-- No fighter should be elite at everything — balance strengths with clear weaknesses
-{stat_hints}
+NOTE: Stats (power, speed, technique, toughness, guile, supernatural) are generated separately — do NOT include a "stats" field in your response.
 
 ICONIC FEATURES:
 List 3-6 visual details that make this character instantly recognizable — the things a fan would
@@ -582,13 +562,5 @@ Return ONLY valid JSON with this exact structure:
   "personality": "<max 10 words — their vibe and attitude, {personality_example}>",
   "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. {body_trait_hint}>",
   "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
-  "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>",
-  "stats": {{
-    "power": <0-100>,
-    "speed": <0-100>,
-    "technique": <0-100>,
-    "toughness": <0-100>,
-    "supernatural": <0-100>,
-    "guile": <0-100>
-  }}
+  "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>"
 }}"""
