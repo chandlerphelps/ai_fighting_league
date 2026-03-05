@@ -2231,18 +2231,18 @@ ARCHETYPE_STAT_WEIGHTS = {
 }
 
 GENDER_FLAT_BONUS = {
-    "male":   {"power": 8, "toughness": 5},
+    "male":   {"power": 6, "toughness": 4},
     "female": {"power": 0, "toughness": 0},
 }
 
 GENDER_GUILE_RANGE = {
     "male":   (0, 15),
-    "female": (40, 100),
+    "female": (45, 100),
 }
 
 GENDER_SUPERNATURAL_RANGE = {
     "male":   (0, 20),
-    "female": (20, 100),
+    "female": (30, 100),
 }
 
 
