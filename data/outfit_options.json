@@ -512,6 +512,30 @@
       {
         "name": "micro chest harness with adhesive nipple patches",
         "skimpiness_level": "3-4"
+      },
+      {
+        "name": "form-fitting mesh top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "form-fitting sheer top",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "partially unzipped form-fitting top",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight mesh top",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight sheer top",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "partially unzipped skin-tight top",
+        "skimpiness_level": "3-4"
       }
     ],
     "bottoms": [
@@ -606,6 +630,22 @@
       {
         "name": "pubic hair shaved into a shape",
         "skimpiness_level": "3-4"
+      },
+      {
+        "name": "form-fitting mesh pants",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "form-fitting sheer tights",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight mesh pants",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight sheer tights",
+        "skimpiness_level": "3-4"
       }
     ],
     "one_pieces": [
@@ -668,6 +708,30 @@
       {
         "name": "disappearing sling-shot with nano nipple covers and clit patch",
         "skimpiness_level": "4"
+      },
+      {
+        "name": "form-fitting mesh bodysuit",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "form-fitting sheer bodysuit",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "partially unzipped form-fitting bodysuit",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight mesh bodysuit",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight sheer bodysuit",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "partially unzipped skin-tight suit",
+        "skimpiness_level": "3-4"
       }
     ]
   },
@@ -768,6 +832,22 @@
       {
         "name": "extreme chest display frame with pierced nipples and hanging chains",
         "skimpiness_level": "4"
+      },
+      {
+        "name": "sheer skin-tight top with bare breasts visible",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "mesh form-fitting top with bare breasts visible",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "unzipped skin-tight top exposing bare breasts",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "torn skin-tight shirt with breasts exposed",
+        "skimpiness_level": "3-4"
       }
     ],
     "bottoms": [
@@ -878,6 +958,18 @@
       {
         "name": "extreme thigh harness with labia spreaders and dangling clit jewelry",
         "skimpiness_level": "4"
+      },
+      {
+        "name": "sheer skin-tight pants with pussy visible",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "mesh form-fitting tights with everything visible",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "skin-tight pants pulled down to hips",
+        "skimpiness_level": "3-4"
       }
     ],
     "one_pieces": [
@@ -956,6 +1048,22 @@
       {
         "name": "extreme full body display frame with everything spread and exposed",
         "skimpiness_level": "4"
+      },
+      {
+        "name": "unzipped skin-tight bodysuit with breasts exposed",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "sheer skin-tight suit with everything visible",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "mesh form-fitting bodysuit with everything visible",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "torn skin-tight suit with breasts and pussy exposed",
+        "skimpiness_level": "3-4"
       }
     ]
   }

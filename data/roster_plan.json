@@ -2,7 +2,7 @@
   "plan_id": "rp_aa09785e",
   "created_at": "2026-03-05",
   "mode": "addition",
-  "pool_summary": "CURRENT ROSTER: 8 fighters\nGender: female: 6, male: 2\n\nArchetype Distribution:\n  The Assassin: 0\n  The Brute: 0\n  The Demon: 0\n  The Doll: 0\n  The Empress: 0\n  The Experiment: 0\n  The Huntress: 0\n  The Monster: 0\n  The Mystic: 0\n  The Nymph: 0\n  The Prodigy: 0\n  The Siren: 0\n  The Technician: 0\n  The Veteran: 0\n  The Viper: 0\n  The Wildcard: 0\n  The Witch: 0\n  MISSING: The Assassin, The Brute, The Demon, The Doll, The Empress, The Experiment, The Huntress, The Monster, The Mystic, The Nymph, The Prodigy, The Siren, The Technician, The Veteran, The Viper, The Wildcard, The Witch\n\nGeographic Spread:\n  East Asia: 2\n  Eastern Europe: 2\n  Oceania: 1\n  South America: 1\n  Western Europe: 1\n  Southeast Asia: 1\n  UNDERREPRESENTED: South Asia, Central Asia, Middle East, Scandinavia, North America, Central America, Africa\n\nAge Distribution: 18-22: 4, 23-27: 2, 28-32: 1, 33+: 1\n\n--- SIGNATURE VISUAL IDENTITY REGISTRY (DO NOT DUPLICATE) ---\n\nOutfit Colors Already Taken:\n  crimson red (1x)\n  teal and white (1x)\n  champagne gold (1x)\n  deep crimson (1x)\n  midnight black (1x)\n  emerald green (1x)\n  steel gray (1x)\n  deep violet (1x)\n\nAvailable Palette Colors: Royal Blue, Pure White, Gold, Silver, Deep Purple, Hot Pink, Orange, Teal, Burgundy, Navy Blue, Forest Green, Copper, Lavender, Scarlet, Ice Blue, Charcoal, Rose, Bronze, Jade, Ivory, Electric Yellow\n\nHair Color Buckets:\n  Black: 2\n  Brown: 2\n  Blonde: 2\n  Red/Auburn: 0\n  White/Silver: 1\n  Blue: 0\n  Pink: 0\n  Green: 0\n  Purple: 0\n  Multicolor: 1\n\nHair Style+Bucket Combos Already Taken:\n  long flowing waves [Blonde] (2x)\n  slicked back ponytail [Black] (1x)\n  wet-look long bob [Multicolor] (1x)\n  long flowing waves [Black] (1x)\n  long straight [White/Silver] (1x)\n  short cropped [Brown] (1x)\n  shaved head [Brown] (1x)\n\nFace Adornments Already Taken:\n  oni half-mask (2x)\n  facial scars from ear to jaw (1x)",
+  "pool_summary": "",
   "entries": [
     {
       "concept_hook": "A former opera singer whose lethal vocal harmonics can shatter bone and mind, using her voice as both weapon and weaponized seduction.",
@@ -293,6 +293,246 @@
       "face_adornment": "none",
       "status": "generated",
       "fighter_id": "f_3bcbed43"
+    },
+    {
+      "concept_hook": "A seductress whose supernatural voice can shatter minds or bend wills, using performative violence as her primary weapon",
+      "ring_name": "Siren's Song",
+      "gender": "female",
+      "age": 24,
+      "origin": "Los Angeles, USA",
+      "primary_archetype": "Siren",
+      "subtype": "Temptress",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "narrative_role": "The charismatic face of the league who weaponizes attention itself",
+      "rivalry_seeds": [
+        "Shadow Whisper",
+        "Iron Puma"
+      ],
+      "media_archetype_inspiration": "Dead or Alive's Ayane meets Jennifer Hale's characters",
+      "skimpiness_weights": [
+        5,
+        25,
+        45,
+        25
+      ],
+      "primary_outfit_color": "Deep Purple",
+      "hair_style": "long flowing waves",
+      "hair_color": "platinum blonde with lavender tips",
+      "hair_color_bucket": "Blonde",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_cc849a3e"
+    },
+    {
+      "concept_hook": "A shadow-walking assassin who strikes from darkness, her blade appearing from nowhere before vanishing again",
+      "ring_name": "Shadow Whisper",
+      "gender": "female",
+      "age": 22,
+      "origin": "Tokyo, Japan",
+      "primary_archetype": "Assassin",
+      "subtype": "Phantom",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "narrative_role": "The deadly wildcard who proves looks can be deceiving",
+      "rivalry_seeds": [
+        "Siren's Song",
+        "The Surgeon"
+      ],
+      "media_archetype_inspiration": "Assassin's Creed meets ninja anime",
+      "skimpiness_weights": [
+        15,
+        35,
+        35,
+        15
+      ],
+      "primary_outfit_color": "Midnight Black",
+      "hair_style": "slicked back ponytail",
+      "hair_color": "jet black",
+      "hair_color_bucket": "Black",
+      "face_adornment": "oni half-mask",
+      "status": "generated",
+      "fighter_id": "f_f6368712"
+    },
+    {
+      "concept_hook": "A massive enhanced soldier whose body has been rebuilt with experimental serum, radiating raw physical threat",
+      "ring_name": "Titan's Fist",
+      "gender": "male",
+      "age": 31,
+      "origin": "Moscow, Russia",
+      "primary_archetype": "Monster",
+      "subtype": "Titan",
+      "has_supernatural": true,
+      "power_tier": "champion",
+      "narrative_role": "The immovable force that tests everyone else's limits",
+      "rivalry_seeds": [
+        "Iron Puma",
+        "The Surgeon"
+      ],
+      "media_archetype_inspiration": "Bane meets Russian super-soldier tropes",
+      "skimpiness_weights": [
+        30,
+        40,
+        20,
+        10
+      ],
+      "primary_outfit_color": "Crimson Red",
+      "hair_style": "buzz cut",
+      "hair_color": "steel gray",
+      "hair_color_bucket": "White/Silver",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_00042fcb"
+    },
+    {
+      "concept_hook": "A fortuneteller who sees combat moments before they happen, making her nearly impossible to hit",
+      "ring_name": "Oracle's Eye",
+      "gender": "female",
+      "age": 26,
+      "origin": "Rio de Janeiro, Brazil",
+      "primary_archetype": "Witch",
+      "subtype": "Oracle",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "narrative_role": "The mystical tactician who fights with forbidden knowledge",
+      "rivalry_seeds": [
+        "The Surgeon",
+        "Cobra Strike"
+      ],
+      "media_archetype_inspiration": "Doctor Strange's mystic arts meets Carmen Sandiego",
+      "skimpiness_weights": [
+        10,
+        30,
+        40,
+        20
+      ],
+      "primary_outfit_color": "Gold",
+      "hair_style": "twin braids",
+      "hair_color": "fire red with orange streaks",
+      "hair_color_bucket": "Red/Auburn",
+      "face_adornment": "tribal war paint",
+      "status": "generated",
+      "fighter_id": "f_840366c1"
+    },
+    {
+      "concept_hook": "A scarred bare-knuckle brawler from the underground fight scene who relies on pure savagery and pain tolerance",
+      "ring_name": "Iron Puma",
+      "gender": "male",
+      "age": 28,
+      "origin": "Detroit, USA",
+      "primary_archetype": "Brute",
+      "subtype": "Berserker",
+      "has_supernatural": false,
+      "power_tier": "gatekeeper",
+      "narrative_role": "The human wall who proves willpower beats powers",
+      "rivalry_seeds": [
+        "Titan's Fist",
+        "Siren's Song"
+      ],
+      "media_archetype_inspiration": "Rocky meets Never Back Down",
+      "skimpiness_weights": [
+        25,
+        40,
+        25,
+        10
+      ],
+      "primary_outfit_color": "Royal Blue",
+      "hair_style": "shaved head",
+      "hair_color": "bald",
+      "hair_color_bucket": "Black",
+      "face_adornment": "none",
+      "status": "generated",
+      "fighter_id": "f_a4b60d9d"
+    },
+    {
+      "concept_hook": "A teenage martial prodigy whose supernatural reflexes let her see and react to attacks before they land",
+      "ring_name": "Flashpoint",
+      "gender": "female",
+      "age": 18,
+      "origin": "Osaka, Japan",
+      "primary_archetype": "Prodigy",
+      "subtype": "Virtuoso",
+      "has_supernatural": true,
+      "power_tier": "prospect",
+      "narrative_role": "The rising star whose potential terrifies veterans",
+      "rivalry_seeds": [
+        "Oracle's Eye",
+        "Shadow Whisper"
+      ],
+      "media_archetype_inspiration": "Street Fighter's Sakura meets Kill la Kill",
+      "skimpiness_weights": [
+        20,
+        40,
+        30,
+        10
+      ],
+      "primary_outfit_color": "Emerald Green",
+      "hair_style": "asymmetric bob",
+      "hair_color": "black with electric blue highlights",
+      "hair_color_bucket": "Black",
+      "face_adornment": "none",
+      "status": "generating",
+      "fighter_id": null
+    },
+    {
+      "concept_hook": "A precision-focused technician who studies opponents like chess problems, finding mechanical solutions to organic threats",
+      "ring_name": "The Surgeon",
+      "gender": "male",
+      "age": 34,
+      "origin": "London, UK",
+      "primary_archetype": "Technician",
+      "subtype": "Surgeon",
+      "has_supernatural": false,
+      "power_tier": "contender",
+      "narrative_role": "The calculating mastermind who beats opponents before fighting starts",
+      "rivalry_seeds": [
+        "Shadow Whisper",
+        "Oracle's Eye"
+      ],
+      "media_archetype_inspiration": "Sherlock Holmes meets fight choreographer",
+      "skimpiness_weights": [
+        35,
+        40,
+        20,
+        5
+      ],
+      "primary_outfit_color": "Silver",
+      "hair_style": "slicked back",
+      "hair_color": "salt and pepper",
+      "hair_color_bucket": "White/Silver",
+      "face_adornment": "none",
+      "status": "approved",
+      "fighter_id": null
+    },
+    {
+      "concept_hook": "A chemically enhanced fighter whose body produces lethal toxins, making every touch potentially fatal",
+      "ring_name": "Cobra Strike",
+      "gender": "female",
+      "age": 25,
+      "origin": "Mexico City, Mexico",
+      "primary_archetype": "Viper",
+      "subtype": "Poisoner",
+      "has_supernatural": true,
+      "power_tier": "contender",
+      "narrative_role": "The dangerous beauty who makes every match high-stakes",
+      "rivalry_seeds": [
+        "Iron Puma",
+        "Flashpoint"
+      ],
+      "media_archetype_inspiration": "Metal Gear's Quiet meets poison dart frog aesthetics",
+      "skimpiness_weights": [
+        10,
+        25,
+        40,
+        25
+      ],
+      "primary_outfit_color": "Hot Pink",
+      "hair_style": "long flowing waves",
+      "hair_color": "jet black",
+      "hair_color_bucket": "Black",
+      "face_adornment": "none",
+      "status": "approved",
+      "fighter_id": null
     }
   ]
 }
