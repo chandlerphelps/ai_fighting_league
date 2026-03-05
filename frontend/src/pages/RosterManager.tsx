@@ -12,22 +12,15 @@ import { fighterImagePath, moveImagePath } from '../lib/images'
 import {
   updateFighter,
   deleteFighter,
-  generateFighter,
   regenerateCharacter,
   regenerateOutfits,
   regenerateImages,
   regenerateMoveImage,
   pollUntilDone,
-  fetchOutfitOptions,
-  saveOutfitOptions,
   fetchRosterPlan,
   advanceStage,
   batchAdvance,
-  fetchArchetypes,
-  type GenerateOptions,
   type TaskResponse,
-  type OutfitOptions,
-  type OutfitItem,
 } from '../lib/api'
 
 type ActiveTask = {
@@ -54,7 +47,6 @@ export default function RosterManager() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editData, setEditData] = useState<Partial<Fighter>>({})
-  const [showGenerate, setShowGenerate] = useState(false)
   const [activeTasks, setActiveTasks] = useState<ActiveTask[]>([])
   const [regenMenuId, setRegenMenuId] = useState<string | null>(null)
   const [globalTier, setGlobalTier] = useState<Tier>('portrait')
@@ -67,7 +59,6 @@ export default function RosterManager() {
     onRedo?: (tier: Tier) => void
   } | null>(null)
   const [imageVersion, setImageVersion] = useState(0)
-  const [showOutfitOptions, setShowOutfitOptions] = useState(false)
   const [plan, setPlan] = useState<RosterPlan | null>(null)
   const [stageTab, setStageTab] = useState<StageTab>('all')
 
@@ -141,16 +132,6 @@ export default function RosterManager() {
       handleTask(task, { type: 'batch-advance', taskId: task.task_id, label: `Advancing ${eligible.length} fighters to Stage ${targetStage}...` })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Batch advance failed')
-    }
-  }
-
-  const handleGenerate = async (options: GenerateOptions) => {
-    try {
-      const task = await generateFighter(options)
-      setShowGenerate(false)
-      handleTask(task, { type: 'generate', taskId: task.task_id, label: 'Generating new fighter...' })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Generate failed')
     }
   }
 
@@ -249,38 +230,14 @@ export default function RosterManager() {
 
   return (
     <div>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: spacing.lg,
-        flexWrap: 'wrap',
-        gap: spacing.md,
+      <h1 style={{
+        fontSize: fontSizes.xxl,
+        color: colors.accent,
+        margin: `0 0 ${spacing.lg} 0`,
+        fontFamily: fonts.heading,
       }}>
-        <h1 style={{
-          fontSize: fontSizes.xxl,
-          color: colors.accent,
-          margin: 0,
-          fontFamily: fonts.heading,
-        }}>
-          Roster Gallery
-        </h1>
-        <div style={{ display: 'flex', gap: spacing.sm }}>
-          <button
-            onClick={() => setShowOutfitOptions(!showOutfitOptions)}
-            style={btnStyle(showOutfitOptions ? colors.accentBright : colors.textMuted)}
-          >
-            Outfit Options
-          </button>
-          <button
-            onClick={() => setShowGenerate(!showGenerate)}
-            disabled={globalTaskActive}
-            style={btnStyle(colors.accent)}
-          >
-            + Generate Fighter
-          </button>
-        </div>
-      </div>
+        Roster Gallery
+      </h1>
 
       <div style={{
         display: 'flex',
@@ -373,9 +330,6 @@ export default function RosterManager() {
         </div>
       )}
 
-      {showOutfitOptions && <OutfitOptionsPanel onClose={() => setShowOutfitOptions(false)} />}
-
-      {showGenerate && <GeneratePanel onGenerate={handleGenerate} onCancel={() => setShowGenerate(false)} />}
 
       <StageFilter
         fighters={fighters}
@@ -447,7 +401,7 @@ export default function RosterManager() {
         </div>
       )}
 
-      {!loading && fighters.length === 0 && !showGenerate && (
+      {!loading && fighters.length === 0 && (
         <div style={{
           textAlign: 'center',
           padding: spacing.xxl,
@@ -457,7 +411,7 @@ export default function RosterManager() {
           fontFamily: fonts.body,
         }}>
           <div style={{ fontSize: fontSizes.lg, marginBottom: spacing.sm }}>No fighters in roster</div>
-          <div style={{ fontSize: fontSizes.sm }}>Click "Generate Fighter" to create your first roster member</div>
+          <div style={{ fontSize: fontSizes.sm }}>Use the Plan tab to create fighters</div>
         </div>
       )}
 
@@ -1064,350 +1018,6 @@ function MovesGallery({ fighter, tier, imageVersion, onExpand, onRedoMove, busy 
             </div>
           )
         })}
-      </div>
-    </div>
-  )
-}
-
-type OutfitTier = 'sfw' | 'barely' | 'nsfw'
-type OutfitCategory = 'tops' | 'bottoms' | 'one_pieces'
-
-function OutfitOptionsPanel({ onClose }: { onClose: () => void }) {
-  const [options, setOptions] = useState<OutfitOptions | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [activeTier, setActiveTier] = useState<OutfitTier>('sfw')
-  const [addInputs, setAddInputs] = useState<Record<string, string>>({})
-
-  useEffect(() => {
-    fetchOutfitOptions().then(data => {
-      setOptions(data)
-      setLoading(false)
-    }).catch(() => setLoading(false))
-  }, [])
-
-  const handleSave = async () => {
-    if (!options) return
-    setSaving(true)
-    try {
-      await saveOutfitOptions(options)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const removeItem = (tier: OutfitTier, category: OutfitCategory, index: number) => {
-    if (!options) return
-    const updated = { ...options }
-    updated[tier] = { ...updated[tier] }
-    updated[tier][category] = [...updated[tier][category]]
-    updated[tier][category].splice(index, 1)
-    setOptions(updated)
-  }
-
-  const addItem = (tier: OutfitTier, category: OutfitCategory) => {
-    const nameKey = `${tier}_${category}`
-    const levelKey = `${tier}_${category}_level`
-    const name = (addInputs[nameKey] || '').trim()
-    const level = (addInputs[levelKey] || '2').trim()
-    if (!name || !options) return
-    const newItem: OutfitItem = { name, skimpiness_level: level }
-    const updated = { ...options }
-    updated[tier] = { ...updated[tier] }
-    updated[tier][category] = [...updated[tier][category], newItem]
-    setOptions(updated)
-    setAddInputs(prev => ({ ...prev, [nameKey]: '', [levelKey]: '' }))
-  }
-
-  if (loading) {
-    return (
-      <div style={{
-        backgroundColor: colors.surface,
-        border: `1px solid ${colors.border}`,
-        borderRadius: '6px',
-        padding: spacing.lg,
-        marginBottom: spacing.lg,
-        textAlign: 'center',
-        color: colors.textMuted,
-        fontFamily: fonts.body,
-      }}>
-        Loading outfit options...
-      </div>
-    )
-  }
-
-  if (!options) return null
-
-  const tierData = options[activeTier]
-  const categories: { key: OutfitCategory; label: string }[] = [
-    { key: 'tops', label: 'Tops' },
-    { key: 'bottoms', label: 'Bottoms' },
-    { key: 'one_pieces', label: 'One-Pieces' },
-  ]
-
-  return (
-    <div style={{
-      backgroundColor: colors.surface,
-      border: `1px solid ${colors.border}`,
-      borderRadius: '6px',
-      padding: spacing.lg,
-      marginBottom: spacing.lg,
-    }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: spacing.md,
-      }}>
-        <h2 style={{
-          fontSize: fontSizes.lg,
-          fontFamily: fonts.heading,
-          color: colors.accent,
-          margin: 0,
-        }}>
-          Outfit Options
-        </h2>
-        <div style={{ display: 'flex', gap: spacing.sm }}>
-          <button onClick={handleSave} disabled={saving} style={btnStyle(colors.win)}>
-            {saving ? 'Saving...' : 'Save'}
-          </button>
-          <button onClick={onClose} style={btnStyle(colors.textMuted)}>Close</button>
-        </div>
-      </div>
-
-      <div style={{
-        display: 'flex',
-        gap: spacing.sm,
-        marginBottom: spacing.md,
-      }}>
-        {(['sfw', 'barely', 'nsfw'] as OutfitTier[]).map(tier => (
-          <button
-            key={tier}
-            onClick={() => setActiveTier(tier)}
-            style={{
-              padding: `${spacing.xs} ${spacing.lg}`,
-              backgroundColor: activeTier === tier ? withAlpha(colors.accent, 0.25) : 'transparent',
-              border: `2px solid ${activeTier === tier ? colors.accent : withAlpha(colors.textDim, 0.3)}`,
-              borderRadius: '4px',
-              color: activeTier === tier ? colors.accent : colors.textMuted,
-              fontFamily: fonts.body,
-              fontSize: fontSizes.md,
-              fontWeight: activeTier === tier ? 'bold' : 'normal',
-              cursor: 'pointer',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
-          >
-            {tier}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
-        {categories.map(({ key, label }) => {
-          return (
-            <div key={key}>
-              <div style={{
-                fontSize: fontSizes.xs,
-                fontFamily: fonts.body,
-                color: colors.accent,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: spacing.xs,
-                fontWeight: 'bold',
-              }}>
-                {label} ({tierData[key].length})
-              </div>
-              <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: spacing.xs,
-                marginBottom: spacing.xs,
-              }}>
-                {tierData[key].map((item: OutfitItem, i: number) => (
-                  <span
-                    key={i}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: spacing.xs,
-                      padding: `2px ${spacing.sm}`,
-                      backgroundColor: withAlpha(colors.surfaceLight, 0.8),
-                      border: `1px solid ${colors.border}`,
-                      borderRadius: '3px',
-                      color: colors.text,
-                      fontFamily: fonts.body,
-                      fontSize: fontSizes.xs,
-                    }}
-                  >
-                    {item.name}
-                    <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
-                      L{item.skimpiness_level}
-                    </span>
-                    <button
-                      onClick={() => removeItem(activeTier, key, i)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: colors.loss,
-                        cursor: 'pointer',
-                        padding: 0,
-                        fontFamily: fonts.body,
-                        fontSize: fontSizes.xs,
-                        lineHeight: 1,
-                      }}
-                    >
-                      x
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <div style={{ display: 'flex', gap: spacing.xs, alignItems: 'center' }}>
-                <input
-                  value={addInputs[`${activeTier}_${key}`] || ''}
-                  onChange={e => setAddInputs(prev => ({ ...prev, [`${activeTier}_${key}`]: e.target.value }))}
-                  onKeyDown={e => { if (e.key === 'Enter') addItem(activeTier, key) }}
-                  placeholder={`Add ${label.toLowerCase()}...`}
-                  style={{ ...inputStyle, flex: 1 }}
-                />
-                <input
-                  value={addInputs[`${activeTier}_${key}_level`] || ''}
-                  onChange={e => setAddInputs(prev => ({ ...prev, [`${activeTier}_${key}_level`]: e.target.value }))}
-                  onKeyDown={e => { if (e.key === 'Enter') addItem(activeTier, key) }}
-                  placeholder="Lvl"
-                  style={{ ...inputStyle, width: '50px', flex: 'none', textAlign: 'center' }}
-                />
-                <button
-                  onClick={() => addItem(activeTier, key)}
-                  style={btnStyleSmall(colors.accent)}
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      <div style={{
-        marginTop: spacing.md,
-        fontSize: fontSizes.xs,
-        fontFamily: fonts.body,
-        color: colors.textDim,
-      }}>
-        These are example attire pieces offered to the AI when generating outfits. Items chosen 2+ times across the roster are auto-removed. 50% of remaining items are randomly dropped each generation for variety.
-      </div>
-    </div>
-  )
-}
-
-function GeneratePanel({ onGenerate, onCancel }: { onGenerate: (o: GenerateOptions) => void; onCancel: () => void }) {
-  const [archetype, setArchetype] = useState('')
-  const [gender, setGender] = useState<'female' | 'male'>('female')
-  const [hasSupernatural, setHasSupernatural] = useState(false)
-  const [conceptHook, setConceptHook] = useState('')
-  const [ringName, setRingName] = useState('')
-  const [origin, setOrigin] = useState('')
-  const [archetypeMap, setArchetypeMap] = useState<{ female: string[]; male: string[] }>({
-    female: ['The Siren', 'The Witch', 'The Viper', 'The Prodigy', 'The Doll', 'The Huntress', 'The Empress', 'The Experiment'],
-    male: ['The Brute', 'The Veteran', 'The Monster', 'The Technician', 'The Wildcard', 'The Mystic', 'The Prodigy', 'The Experiment'],
-  })
-
-  useEffect(() => {
-    fetchArchetypes().then(setArchetypeMap).catch(() => {})
-  }, [])
-
-  const archetypes = ['', ...archetypeMap[gender]]
-
-  return (
-    <div style={{
-      backgroundColor: colors.surface,
-      border: `1px solid ${colors.accent}`,
-      borderRadius: '6px',
-      padding: spacing.lg,
-      marginBottom: spacing.lg,
-    }}>
-      <h2 style={{
-        fontSize: fontSizes.lg,
-        fontFamily: fonts.heading,
-        color: colors.accent,
-        margin: `0 0 ${spacing.md} 0`,
-      }}>
-        Generate New Fighter
-      </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing.md }}>
-        <Field label="Gender">
-          <div style={{ display: 'flex', gap: spacing.sm }}>
-            {(['female', 'male'] as const).map(g => (
-              <button
-                key={g}
-                onClick={() => { setGender(g); setArchetype('') }}
-                style={{
-                  padding: `${spacing.xs} ${spacing.md}`,
-                  backgroundColor: gender === g ? withAlpha(colors.accent, 0.25) : 'transparent',
-                  border: `1px solid ${gender === g ? colors.accent : withAlpha(colors.textDim, 0.3)}`,
-                  borderRadius: '4px',
-                  color: gender === g ? colors.accent : colors.textMuted,
-                  fontFamily: fonts.body,
-                  fontSize: fontSizes.sm,
-                  cursor: 'pointer',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {g}
-              </button>
-            ))}
-          </div>
-        </Field>
-        <Field label="Archetype">
-          <select
-            value={archetype}
-            onChange={e => setArchetype(e.target.value)}
-            style={inputStyle}
-          >
-            {archetypes.map(a => (
-              <option key={a} value={a}>{a || '(Random)'}</option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Ring Name (optional)">
-          <input value={ringName} onChange={e => setRingName(e.target.value)} style={inputStyle} placeholder="Leave empty for AI to decide" />
-        </Field>
-        <Field label="Origin (optional)">
-          <input value={origin} onChange={e => setOrigin(e.target.value)} style={inputStyle} placeholder="e.g. Tokyo, Japan" />
-        </Field>
-        <Field label="Supernatural">
-          <label style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, color: colors.text, fontSize: fontSizes.sm, fontFamily: fonts.body, cursor: 'pointer' }}>
-            <input type="checkbox" checked={hasSupernatural} onChange={e => setHasSupernatural(e.target.checked)} />
-            Has supernatural abilities
-          </label>
-        </Field>
-        <div style={{ gridColumn: '1 / -1' }}>
-          <Field label="Concept Hook (optional)">
-            <textarea
-              value={conceptHook}
-              onChange={e => setConceptHook(e.target.value)}
-              style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }}
-              placeholder="e.g. A cybernetic ballerina who fights with grace and hidden blades"
-            />
-          </Field>
-        </div>
-      </div>
-      <div style={{ display: 'flex', gap: spacing.sm, marginTop: spacing.md, justifyContent: 'flex-end' }}>
-        <button onClick={onCancel} style={btnStyle(colors.textMuted)}>Cancel</button>
-        <button
-          onClick={() => onGenerate({
-            archetype: archetype || undefined,
-            has_supernatural: hasSupernatural,
-            concept_hook: conceptHook || undefined,
-            ring_name: ringName || undefined,
-            gender,
-            origin: origin || undefined,
-          })}
-          style={btnStyle(colors.accent)}
-        >
-          Generate
-        </button>
       </div>
     </div>
   )
