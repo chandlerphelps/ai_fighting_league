@@ -1,6 +1,7 @@
 import json
 import threading
 import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_file
@@ -25,9 +26,8 @@ from app.engine.fighter_generator import (
 from app.engine.pool_summarizer import summarize_fighter_pool
 from app.models.fighter import Fighter, Stats
 from app.services import data_manager
-from app.services.grok_image import generate_charsheet_images
+from app.services.grok_image import generate_charsheet_images, generate_image, edit_image, download_image, _slugify as img_slugify
 from app.engine.move_generator import build_move_image_prompt, _slugify as move_slugify
-from app.services.grok_image import edit_image, download_image
 from app.prompts.image_builders import build_portrait_prompt, build_body_reference_prompt, build_headshot_prompt
 
 app = Flask(__name__)
@@ -158,6 +158,84 @@ def _rebuild_prompts(fighter: dict):
     )
 
 
+def _generate_stage1_images(fighter_data: dict, config, fighters_dir: Path) -> None:
+    fid = fighter_data.get("id", "")
+    gender = fighter_data.get("gender", "female")
+    is_male = gender.lower() == "male"
+    slug = img_slugify(fighter_data.get("ring_name", ""))
+    base = f"{fid}_{slug}" if slug else fid
+
+    body_ref_prompt = fighter_data.get("image_prompt_body_ref", {}).get("full_prompt", "")
+    body_ref_path = fighters_dir / f"{base}_body_ref.png"
+
+    if body_ref_prompt and not body_ref_path.exists():
+        print(f"    Generating body reference image for {fid}...")
+        female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
+        if not is_male and female_ref.exists():
+            urls = edit_image(
+                prompt=body_ref_prompt,
+                image_paths=[female_ref],
+                config=config,
+                aspect_ratio="1:1",
+                resolution="2k",
+                n=1,
+            )
+        else:
+            urls = generate_image(
+                prompt=body_ref_prompt,
+                config=config,
+                aspect_ratio="1:1",
+                resolution="2k",
+                n=1,
+            )
+        if urls:
+            download_image(urls[0], body_ref_path)
+
+    def _gen_variant(prompt_full, save_path, label):
+        if not prompt_full:
+            return
+        if body_ref_path.exists():
+            print(f"    Generating {label} from body reference for {fid}...")
+            urls = edit_image(
+                prompt=prompt_full,
+                image_paths=[body_ref_path],
+                config=config,
+                aspect_ratio="1:1",
+                resolution="2k",
+                n=1,
+            )
+        else:
+            print(f"    Generating {label} for {fid}...")
+            urls = generate_image(
+                prompt=prompt_full,
+                config=config,
+                aspect_ratio="1:1",
+                resolution="2k",
+                n=1,
+            )
+        if urls:
+            download_image(urls[0], save_path)
+
+    portrait_full = fighter_data.get("image_prompt_portrait", {}).get("full_prompt", "")
+    headshot_full = fighter_data.get("image_prompt_headshot", {}).get("full_prompt", "")
+    portrait_path = fighters_dir / f"{base}_portrait.png"
+    headshot_path = fighters_dir / f"{base}_headshot.png"
+
+    tasks = []
+    if portrait_full:
+        tasks.append((portrait_full, portrait_path, "portrait"))
+    if headshot_full:
+        tasks.append((headshot_full, headshot_path, "headshot"))
+
+    if len(tasks) > 1:
+        with ThreadPoolExecutor(max_workers=len(tasks)) as pool:
+            futures = [pool.submit(_gen_variant, *t) for t in tasks]
+            for f in as_completed(futures):
+                f.result()
+    elif tasks:
+        _gen_variant(*tasks[0])
+
+
 def _run_in_background(task_id: str, fn, *args, **kwargs):
     def wrapper():
         try:
@@ -174,9 +252,8 @@ def _run_in_background(task_id: str, fn, *args, **kwargs):
 
 
 def _fighter_image_paths(fighter_id: str, ring_name: str = "") -> dict[str, Path]:
-    from app.services.grok_image import _slugify
     fighters_dir = config.data_dir / "fighters"
-    slug = _slugify(ring_name) if ring_name else ""
+    slug = img_slugify(ring_name) if ring_name else ""
     base = f"{fighter_id}_{slug}" if slug else fighter_id
     result = {}
     for tier in ["sfw", "barely", "nsfw", "portrait"]:
@@ -1034,64 +1111,6 @@ def advance_stage(fighter_id: str):
                     iconic_features=iconic_features,
                 )
 
-            from app.services.grok_image import generate_image, download_image as dl_img, _slugify as img_slugify
-            fighters_dir = config.data_dir / "fighters"
-            slug = img_slugify(fighter_data.get("ring_name", ""))
-            base = f"{fighter_id}_{slug}" if slug else fighter_id
-
-            body_ref_prompt = fighter_data.get("image_prompt_body_ref", {}).get("full_prompt", "")
-            body_ref_path = fighters_dir / f"{base}_body_ref.png"
-            is_male = gender.lower() == "male"
-
-            if body_ref_prompt:
-                print(f"    Generating body reference image...")
-                female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
-                if not is_male and female_ref.exists():
-                    urls = edit_image(
-                        prompt=body_ref_prompt,
-                        image_paths=[female_ref],
-                        config=config,
-                        aspect_ratio="1:1",
-                        resolution="2k",
-                        n=1,
-                    )
-                else:
-                    urls = generate_image(
-                        prompt=body_ref_prompt,
-                        config=config,
-                        aspect_ratio="1:1",
-                        resolution="2k",
-                        n=1,
-                    )
-                if urls:
-                    dl_img(urls[0], body_ref_path)
-
-            save_path = fighters_dir / f"{base}_portrait.png"
-            portrait_full = portrait_prompt.get("full_prompt", "")
-
-            if portrait_full and body_ref_path.exists():
-                print(f"    Generating portrait from body reference...")
-                urls = edit_image(
-                    prompt=portrait_full,
-                    image_paths=[body_ref_path],
-                    config=config,
-                    aspect_ratio="1:1",
-                    resolution="2k",
-                    n=1,
-                )
-            elif portrait_full:
-                urls = generate_image(
-                    prompt=portrait_full,
-                    config=config,
-                    aspect_ratio="1:1",
-                    resolution="2k",
-                    n=1,
-                )
-            else:
-                urls = []
-            if urls:
-                dl_img(urls[0], save_path)
-
             headshot_prompt = build_headshot_prompt(
                 body_parts, expression,
                 gender=gender,
@@ -1102,31 +1121,9 @@ def advance_stage(fighter_id: str):
                 age=age,
             )
             fighter_data["image_prompt_headshot"] = headshot_prompt
-            headshot_full = headshot_prompt.get("full_prompt", "")
-            headshot_path = fighters_dir / f"{base}_headshot.png"
 
-            if headshot_full and body_ref_path.exists():
-                print(f"    Generating headshot from body reference...")
-                urls = edit_image(
-                    prompt=headshot_full,
-                    image_paths=[body_ref_path],
-                    config=config,
-                    aspect_ratio="1:1",
-                    resolution="2k",
-                    n=1,
-                )
-            elif headshot_full:
-                urls = generate_image(
-                    prompt=headshot_full,
-                    config=config,
-                    aspect_ratio="1:1",
-                    resolution="2k",
-                    n=1,
-                )
-            else:
-                urls = []
-            if urls:
-                dl_img(urls[0], headshot_path)
+            fighters_dir = config.data_dir / "fighters"
+            _generate_stage1_images(fighter_data, config, fighters_dir)
 
             fighter_data["generation_stage"] = 2
             fighter_data["generation_dirty"] = [
@@ -1191,185 +1188,115 @@ def batch_advance():
 
     task_id = f"batch_{uuid.uuid4().hex[:8]}"
 
-    def do_batch():
-        results = {}
-        for fid in fighter_ids:
-            fighter_data = data_manager.load_fighter(fid, config)
-            if not fighter_data:
-                results[fid] = {"error": "not found"}
-                continue
+    def _advance_one_fighter(fid):
+        fighter_data = data_manager.load_fighter(fid, config)
+        if not fighter_data:
+            return fid, {"error": "not found"}
 
-            current = fighter_data.get("generation_stage", 0)
-            if current >= target_stage:
-                results[fid] = {"status": "already_at_stage", "stage": current}
-                continue
+        current = fighter_data.get("generation_stage", 0)
+        if current >= target_stage:
+            return fid, {"status": "already_at_stage", "stage": current}
 
-            steps = []
-            if current < 2 and target_stage >= 2:
-                steps.append(1)
-            if current < 3 and target_stage >= 3:
-                steps.append(2)
+        steps = []
+        if current < 2 and target_stage >= 2:
+            steps.append(1)
+        if current < 3 and target_stage >= 3:
+            steps.append(2)
 
-            for step_from in steps:
-                body_parts = fighter_data.get("image_prompt_body_parts", "")
-                if not body_parts:
-                    body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
-                if not body_parts:
-                    body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
-                expression = fighter_data.get("image_prompt_expression", "")
-                if not expression:
-                    expression = fighter_data.get("image_prompt", {}).get("expression", "")
-                if not expression:
-                    expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
+        for step_from in steps:
+            body_parts = fighter_data.get("image_prompt_body_parts", "")
+            if not body_parts:
+                body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+            if not body_parts:
+                body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
+            expression = fighter_data.get("image_prompt_expression", "")
+            if not expression:
+                expression = fighter_data.get("image_prompt", {}).get("expression", "")
+            if not expression:
+                expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
 
-                if step_from == 1:
-                    gender = fighter_data.get("gender", "female")
-                    subtype_info = _get_subtype_info(fighter_data)
-                    portrait_prompt = build_portrait_prompt(
-                        body_parts,
-                        fighter_data.get("ring_attire_sfw", ""),
-                        expression,
-                        gender=gender,
-                        body_type_details=fighter_data.get("body_type_details"),
-                        origin=fighter_data.get("origin", ""),
-                        subtype_info=subtype_info,
-                        iconic_features=fighter_data.get("iconic_features", ""),
-                        primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
-                        age=fighter_data.get("age", 0),
-                    )
-                    fighter_data["image_prompt_portrait"] = portrait_prompt
+            if step_from == 1:
+                gender = fighter_data.get("gender", "female")
+                subtype_info = _get_subtype_info(fighter_data)
+                portrait_prompt = build_portrait_prompt(
+                    body_parts,
+                    fighter_data.get("ring_attire_sfw", ""),
+                    expression,
+                    gender=gender,
+                    body_type_details=fighter_data.get("body_type_details"),
+                    origin=fighter_data.get("origin", ""),
+                    subtype_info=subtype_info,
+                    iconic_features=fighter_data.get("iconic_features", ""),
+                    primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
+                    age=fighter_data.get("age", 0),
+                )
+                fighter_data["image_prompt_portrait"] = portrait_prompt
 
-                    if not fighter_data.get("image_prompt_body_ref"):
-                        fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
-                            body_parts, expression,
-                            gender=gender,
-                            body_type_details=fighter_data.get("body_type_details"),
-                            origin=fighter_data.get("origin", ""),
-                            subtype_info=subtype_info,
-                            age=fighter_data.get("age", 0),
-                            iconic_features=fighter_data.get("iconic_features", ""),
-                        )
-
-                    from app.services.grok_image import generate_image, download_image as dl_img, _slugify as img_slugify
-                    fighters_dir = config.data_dir / "fighters"
-                    slug = img_slugify(fighter_data.get("ring_name", ""))
-                    base = f"{fid}_{slug}" if slug else fid
-                    is_male = gender.lower() == "male"
-
-                    body_ref_prompt = fighter_data.get("image_prompt_body_ref", {}).get("full_prompt", "")
-                    body_ref_path = fighters_dir / f"{base}_body_ref.png"
-
-                    if body_ref_prompt:
-                        print(f"    Generating body reference image for {fid}...")
-                        female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
-                        if not is_male and female_ref.exists():
-                            urls = edit_image(
-                                prompt=body_ref_prompt,
-                                image_paths=[female_ref],
-                                config=config,
-                                aspect_ratio="1:1",
-                                resolution="2k",
-                                n=1,
-                            )
-                        else:
-                            urls = generate_image(
-                                prompt=body_ref_prompt,
-                                config=config,
-                                aspect_ratio="1:1",
-                                resolution="2k",
-                                n=1,
-                            )
-                        if urls:
-                            dl_img(urls[0], body_ref_path)
-
-                    save_path = fighters_dir / f"{base}_portrait.png"
-                    portrait_full = portrait_prompt.get("full_prompt", "")
-
-                    if portrait_full and body_ref_path.exists():
-                        print(f"    Generating portrait from body reference for {fid}...")
-                        urls = edit_image(
-                            prompt=portrait_full,
-                            image_paths=[body_ref_path],
-                            config=config,
-                            aspect_ratio="1:1",
-                            resolution="2k",
-                            n=1,
-                        )
-                    elif portrait_full:
-                        urls = generate_image(
-                            prompt=portrait_full,
-                            config=config,
-                            aspect_ratio="1:1",
-                            resolution="2k",
-                            n=1,
-                        )
-                    else:
-                        urls = []
-                    if urls:
-                        dl_img(urls[0], save_path)
-
-                    headshot_prompt = build_headshot_prompt(
+                if not fighter_data.get("image_prompt_body_ref"):
+                    fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
                         body_parts, expression,
                         gender=gender,
                         body_type_details=fighter_data.get("body_type_details"),
                         origin=fighter_data.get("origin", ""),
                         subtype_info=subtype_info,
-                        iconic_features=fighter_data.get("iconic_features", ""),
                         age=fighter_data.get("age", 0),
+                        iconic_features=fighter_data.get("iconic_features", ""),
                     )
-                    fighter_data["image_prompt_headshot"] = headshot_prompt
-                    headshot_full = headshot_prompt.get("full_prompt", "")
-                    headshot_path = fighters_dir / f"{base}_headshot.png"
 
-                    if headshot_full and body_ref_path.exists():
-                        print(f"    Generating headshot from body reference for {fid}...")
-                        urls = edit_image(
-                            prompt=headshot_full,
-                            image_paths=[body_ref_path],
-                            config=config,
-                            aspect_ratio="1:1",
-                            resolution="2k",
-                            n=1,
-                        )
-                    elif headshot_full:
-                        urls = generate_image(
-                            prompt=headshot_full,
-                            config=config,
-                            aspect_ratio="1:1",
-                            resolution="2k",
-                            n=1,
-                        )
-                    else:
-                        urls = []
-                    if urls:
-                        dl_img(urls[0], headshot_path)
-                    fighter_data["generation_stage"] = 2
+                headshot_prompt = build_headshot_prompt(
+                    body_parts, expression,
+                    gender=gender,
+                    body_type_details=fighter_data.get("body_type_details"),
+                    origin=fighter_data.get("origin", ""),
+                    subtype_info=subtype_info,
+                    iconic_features=fighter_data.get("iconic_features", ""),
+                    age=fighter_data.get("age", 0),
+                )
+                fighter_data["image_prompt_headshot"] = headshot_prompt
 
-                elif step_from == 2:
+                fighters_dir = config.data_dir / "fighters"
+                _generate_stage1_images(fighter_data, config, fighters_dir)
+                fighter_data["generation_stage"] = 2
+
+            elif step_from == 2:
+                fighter = Fighter.from_dict(fighter_data)
+                if not fighter.image_prompt_body_ref:
+                    subtype_info = _get_subtype_info(fighter_data)
+                    fighter.image_prompt_body_ref = build_body_reference_prompt(
+                        body_parts, expression,
+                        gender=fighter.gender,
+                        body_type_details=fighter_data.get("body_type_details"),
+                        origin=fighter.origin,
+                        subtype_info=subtype_info,
+                        age=fighter.age,
+                        iconic_features=fighter_data.get("iconic_features", ""),
+                    )
+                if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
+                    _rebuild_prompts(fighter_data)
                     fighter = Fighter.from_dict(fighter_data)
-                    if not fighter.image_prompt_body_ref:
-                        subtype_info = _get_subtype_info(fighter_data)
-                        fighter.image_prompt_body_ref = build_body_reference_prompt(
-                            body_parts, expression,
-                            gender=fighter.gender,
-                            body_type_details=fighter_data.get("body_type_details"),
-                            origin=fighter.origin,
-                            subtype_info=subtype_info,
-                            age=fighter.age,
-                            iconic_features=fighter_data.get("iconic_features", ""),
-                        )
-                    if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
-                        _rebuild_prompts(fighter_data)
-                        fighter = Fighter.from_dict(fighter_data)
-                    fighters_dir = config.data_dir / "fighters"
-                    generate_charsheet_images(fighter, config, fighters_dir)
-                    fighter_data = fighter.to_dict()
-                    fighter_data["generation_stage"] = 3
-                    fighter_data["generation_dirty"] = []
+                fighters_dir = config.data_dir / "fighters"
+                generate_charsheet_images(fighter, config, fighters_dir)
+                fighter_data = fighter.to_dict()
+                fighter_data["generation_stage"] = 3
+                fighter_data["generation_dirty"] = []
 
-                data_manager.save_fighter(fighter_data, config)
+            data_manager.save_fighter(fighter_data, config)
 
-            results[fid] = {"status": "advanced", "stage": fighter_data.get("generation_stage", 0)}
+        return fid, {"status": "advanced", "stage": fighter_data.get("generation_stage", 0)}
+
+    def do_batch():
+        results = {}
+        max_parallel = min(len(fighter_ids), 4)
+        with ThreadPoolExecutor(max_workers=max_parallel) as pool:
+            futures = {pool.submit(_advance_one_fighter, fid): fid for fid in fighter_ids}
+            for future in as_completed(futures):
+                try:
+                    fid, result = future.result()
+                    results[fid] = result
+                except Exception as e:
+                    fid = futures[future]
+                    print(f"    Error advancing {fid}: {e}")
+                    results[fid] = {"error": str(e)}
         return results
 
     _run_in_background(task_id, do_batch)
@@ -1382,7 +1309,6 @@ def get_fighter_portrait(fighter_id: str):
     if not fighter:
         return jsonify({"error": "Fighter not found"}), 404
 
-    from app.services.grok_image import _slugify as img_slugify
     fighters_dir = config.data_dir / "fighters"
     slug = img_slugify(fighter.get("ring_name", ""))
     base = f"{fighter_id}_{slug}" if slug else fighter_id
@@ -1400,7 +1326,6 @@ def get_fighter_headshot(fighter_id: str):
     if not fighter:
         return jsonify({"error": "Fighter not found"}), 404
 
-    from app.services.grok_image import _slugify as img_slugify
     fighters_dir = config.data_dir / "fighters"
     slug = img_slugify(fighter.get("ring_name", ""))
     base = f"{fighter_id}_{slug}" if slug else fighter_id
