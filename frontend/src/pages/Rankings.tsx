@@ -5,6 +5,7 @@ import { useWorldState } from '../hooks/useData'
 import { loadFightersForTier } from '../lib/data'
 import type { Fighter } from '../types/fighter'
 import type { PromotionFight, TitleFight } from '../types/world_state'
+import FighterHoverCard from '../components/FighterHoverCard'
 
 interface NextMatchInfo {
   opponentId: string
@@ -208,26 +209,30 @@ function SeasonFinale({ promotionFights, promotionFightDate, titleFight }: {
             gap: spacing.lg,
           }}>
             <div style={{ textAlign: 'right', flex: 1 }}>
-              <Link to={`/fighter/${titleFight.champion_id}`} style={{
-                color: colors.accentBright,
-                fontSize: fontSizes.xl,
-                fontWeight: 'bold',
-                textDecoration: 'none',
-              }}>
-                {titleFight.champion_name}
-              </Link>
+              <FighterHoverCard fighterId={titleFight.champion_id} fighterName={titleFight.champion_name}>
+                <Link to={`/fighter/${titleFight.champion_id}`} style={{
+                  color: colors.accentBright,
+                  fontSize: fontSizes.xl,
+                  fontWeight: 'bold',
+                  textDecoration: 'none',
+                }}>
+                  {titleFight.champion_name}
+                </Link>
+              </FighterHoverCard>
               <div style={{ fontSize: fontSizes.xs, color: colors.textDim }}>CHAMPION</div>
             </div>
             <span style={{ color: colors.textDim, fontSize: fontSizes.md }}>vs</span>
             <div style={{ textAlign: 'left', flex: 1 }}>
-              <Link to={`/fighter/${titleFight.challenger_id}`} style={{
-                color: colors.text,
-                fontSize: fontSizes.xl,
-                fontWeight: 'bold',
-                textDecoration: 'none',
-              }}>
-                {titleFight.challenger_name}
-              </Link>
+              <FighterHoverCard fighterId={titleFight.challenger_id} fighterName={titleFight.challenger_name}>
+                <Link to={`/fighter/${titleFight.challenger_id}`} style={{
+                  color: colors.text,
+                  fontSize: fontSizes.xl,
+                  fontWeight: 'bold',
+                  textDecoration: 'none',
+                }}>
+                  {titleFight.challenger_name}
+                </Link>
+              </FighterHoverCard>
               <div style={{ fontSize: fontSizes.xs, color: colors.textDim }}>CHALLENGER</div>
             </div>
           </div>
@@ -286,27 +291,31 @@ function PromotionCard({ matchup }: { matchup: PromotionFight }) {
       borderLeft: `3px solid ${colors.rivalry}`,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1 }}>
-        <Link to={`/fighter/${matchup.upper_fighter_id}`} style={{
-          color: colors.text,
-          fontWeight: 'bold',
-          fontSize: fontSizes.sm,
-          textDecoration: 'none',
-        }}>
-          {matchup.upper_fighter_name}
-        </Link>
+        <FighterHoverCard fighterId={matchup.upper_fighter_id} fighterName={matchup.upper_fighter_name}>
+          <Link to={`/fighter/${matchup.upper_fighter_id}`} style={{
+            color: colors.text,
+            fontWeight: 'bold',
+            fontSize: fontSizes.sm,
+            textDecoration: 'none',
+          }}>
+            {matchup.upper_fighter_name}
+          </Link>
+        </FighterHoverCard>
         <span style={{ color: colors.loss, fontSize: fontSizes.xs }}>&#9660;</span>
       </div>
       <span style={{ color: colors.textDim, fontSize: fontSizes.xs, padding: `0 ${spacing.sm}` }}>vs</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1, justifyContent: 'flex-end' }}>
         <span style={{ color: colors.win, fontSize: fontSizes.xs }}>&#9650;</span>
-        <Link to={`/fighter/${matchup.lower_fighter_id}`} style={{
-          color: colors.text,
-          fontWeight: 'bold',
-          fontSize: fontSizes.sm,
-          textDecoration: 'none',
-        }}>
-          {matchup.lower_fighter_name}
-        </Link>
+        <FighterHoverCard fighterId={matchup.lower_fighter_id} fighterName={matchup.lower_fighter_name}>
+          <Link to={`/fighter/${matchup.lower_fighter_id}`} style={{
+            color: colors.text,
+            fontWeight: 'bold',
+            fontSize: fontSizes.sm,
+            textDecoration: 'none',
+          }}>
+            {matchup.lower_fighter_name}
+          </Link>
+        </FighterHoverCard>
       </div>
     </div>
   )
@@ -384,7 +393,7 @@ function TierSection({
           if (!f) return null
           const isBeltHolder = beltHolderId === id
           const inPromotion = promotionFighterIds.has(id)
-          return <FighterRow key={id} fighter={f} rank={idx + 1} isBeltHolder={isBeltHolder} nextMatch={nextMatchMap[id]} inPromotion={inPromotion} />
+          return <FighterRow key={id} fighter={f} rank={idx + 1} isBeltHolder={isBeltHolder} nextMatch={nextMatchMap[id]} inPromotion={inPromotion} fighters={fighters} />
         })}
       </div>
     </div>
@@ -407,7 +416,7 @@ function HeaderCell({ children, align = 'left' }: { children: React.ReactNode; a
   )
 }
 
-function FighterRow({ fighter, rank, isBeltHolder, nextMatch, inPromotion }: { fighter: Fighter; rank: number; isBeltHolder: boolean; nextMatch?: NextMatchInfo; inPromotion?: boolean }) {
+function FighterRow({ fighter, rank, isBeltHolder, nextMatch, inPromotion, fighters }: { fighter: Fighter; rank: number; isBeltHolder: boolean; nextMatch?: NextMatchInfo; inPromotion?: boolean; fighters?: Record<string, Fighter> }) {
   const rec = fighter.record
   const isInjured = fighter.condition?.health_status === 'injured'
   const totalFights = rec.wins + rec.losses + rec.draws
@@ -425,10 +434,12 @@ function FighterRow({ fighter, rank, isBeltHolder, nextMatch, inPromotion }: { f
         <span style={{ color: colors.textDim }}>{rank}</span>
       </Cell>
       <Cell dim={isInjured}>
-        <span style={{ color: isBeltHolder ? colors.accentBright : colors.text, fontWeight: isBeltHolder ? 'bold' : 'normal' }}>
-          {isBeltHolder && <span style={{ color: colors.accent, marginRight: spacing.xs }}>&#9733;</span>}
-          {fighter.ring_name}
-        </span>
+        <FighterHoverCard fighterId={fighter.id} fighterName={fighter.ring_name} fighter={fighter}>
+          <Link to={`/fighter/${fighter.id}`} style={{ color: isBeltHolder ? colors.accentBright : colors.text, fontWeight: isBeltHolder ? 'bold' : 'normal', textDecoration: 'none' }}>
+            {isBeltHolder && <span style={{ color: colors.accent, marginRight: spacing.xs }}>&#9733;</span>}
+            {fighter.ring_name}
+          </Link>
+        </FighterHoverCard>
         {inPromotion && (
           <span style={{
             marginLeft: spacing.xs,
@@ -483,9 +494,11 @@ function FighterRow({ fighter, rank, isBeltHolder, nextMatch, inPromotion }: { f
               </span>
             )}
             <span style={{ color: colors.textDim }}>vs </span>
-            <Link to={`/fighter/${nextMatch.opponentId}`} style={{ color: colors.accent }}>
-              {nextMatch.opponentName}
-            </Link>
+            <FighterHoverCard fighterId={nextMatch.opponentId} fighterName={nextMatch.opponentName} fighter={fighters?.[nextMatch.opponentId]}>
+              <Link to={`/fighter/${nextMatch.opponentId}`} style={{ color: colors.accent }}>
+                {nextMatch.opponentName}
+              </Link>
+            </FighterHoverCard>
           </span>
         ) : (
           <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>—</span>

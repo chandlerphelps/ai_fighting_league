@@ -487,9 +487,9 @@ def _advance_calendar(fighters: dict, ws: dict, rng, day_result: dict):
         )
         season_summary = process_end_of_season(fighters, ws, fighter_counter, rng, used_names)
         day_result["season_end"] = {
-            "retirements": len(season_summary.get("retirements", [])),
-            "new_fighters": len(season_summary.get("new_fighters", [])),
-            "backfill_promotions": len(season_summary.get("backfill_promotions", [])),
+            "retirements": season_summary.get("retirements", []),
+            "new_fighters": season_summary.get("new_fighters", []),
+            "backfill_promotions": season_summary.get("backfill_promotions", []),
         }
 
         for nf_info in season_summary.get("new_fighters", []):
@@ -698,5 +698,7 @@ def _build_summary(day_result: dict) -> str:
         parts.append(f"Recovered: {', '.join(names)}")
     if day_result.get("season_end"):
         se = day_result["season_end"]
-        parts.append(f"Season ended: {se['retirements']} retirements, {se['new_fighters']} new fighters")
+        ret_count = len(se['retirements']) if isinstance(se['retirements'], list) else se['retirements']
+        nf_count = len(se['new_fighters']) if isinstance(se['new_fighters'], list) else se['new_fighters']
+        parts.append(f"Season ended: {ret_count} retirements, {nf_count} new fighters")
     return " | ".join(parts)

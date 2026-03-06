@@ -1,8 +1,12 @@
+import logging
 import random as _random
+from dataclasses import replace as _dc_replace
 from datetime import date as _date
 
-from .retirement import check_retirement, apply_aging, update_promotion_desperation, generate_replacement_fighter
+from .retirement import check_retirement, apply_aging, update_promotion_desperation, generate_replacement_fighter, CORE_STATS
 from .league_tiers import calculate_tier_rankings, TIER_ORDER
+
+_log = logging.getLogger(__name__)
 
 SEASON_START_MONTH = 11
 SEASON_MONTHS = [11, 12, 1, 2, 3, 4, 5, 6]
@@ -102,6 +106,7 @@ def process_end_of_season(
     fighter_counter: int,
     rng: _random.Random = None,
     used_names: set = None,
+    config=None,
 ) -> dict:
     if rng is None:
         rng = _random.Random()
@@ -158,7 +163,7 @@ def process_end_of_season(
         if fighter.get("tier") == "underground":
             update_promotion_desperation(fighter)
 
-    _backfill_tiers(fighters, ws, summary, fighter_counter, rng, season, used_names)
+    _backfill_tiers(fighters, ws, summary, fighter_counter, rng, season, used_names, config=config)
 
     for fid, fighter in fighters.items():
         if fighter.get("status") != "active":
@@ -211,6 +216,7 @@ def _backfill_tiers(
     rng: _random.Random,
     season: int,
     used_names: set = None,
+    config=None,
 ) -> int:
     for upper_tier, lower_tier in [("apex", "contender"), ("contender", "underground")]:
         target = TIER_SIZES[upper_tier]
@@ -244,15 +250,142 @@ def _backfill_tiers(
     active_underground = [f for f in fighters.values() if f.get("tier") == "underground" and f.get("status") == "active"]
     underground_deficit = underground_target - len(active_underground)
 
+    if underground_deficit <= 0:
+        return fighter_counter
+
     new_counter = fighter_counter
-    for _ in range(max(0, underground_deficit)):
-        new_counter += 1
-        new_fighter = generate_replacement_fighter(new_counter, season, rng, used_names)
-        fighters[new_fighter["id"]] = new_fighter
-        summary["new_fighters"].append({
-            "fighter_id": new_fighter["id"],
-            "ring_name": new_fighter["ring_name"],
-            "age": new_fighter["age"],
-        })
+    llm_generated = _backfill_via_llm(fighters, summary, rng, season, underground_deficit, config)
+
+    if llm_generated < underground_deficit:
+        remaining = underground_deficit - llm_generated
+        for _ in range(remaining):
+            new_counter += 1
+            new_fighter = generate_replacement_fighter(new_counter, season, rng, used_names)
+            fighters[new_fighter["id"]] = new_fighter
+            summary["new_fighters"].append({
+                "fighter_id": new_fighter["id"],
+                "ring_name": new_fighter["ring_name"],
+                "age": new_fighter["age"],
+            })
 
     return new_counter
+
+
+def _backfill_via_llm(fighters, summary, rng, season, deficit, config) -> int:
+    try:
+        from app.config import load_config
+        from app.engine.fighter_generator import generate_fighter, plan_roster
+        from app.engine.fighter_config import (
+            load_outfit_options,
+            filter_outfit_options,
+            _roll_skimpiness,
+            load_exotic_outfit_options,
+            filter_exotic_for_fighter,
+        )
+        from app.services import data_manager
+    except Exception:
+        _log.warning("Could not import LLM fighter generation modules, falling back to procedural")
+        return 0
+
+    if config is None:
+        config = load_config()
+
+    existing_fighters = [
+        {"ring_name": f.get("ring_name"), "gender": f.get("gender"),
+         "height": f.get("height", ""), "origin": f.get("origin", ""),
+         "primary_archetype": f.get("primary_archetype", ""),
+         "subtype": f.get("subtype", ""),
+         "build": f.get("build", ""), "personality": f.get("personality", ""),
+         "distinguishing_features": f.get("distinguishing_features", ""),
+         "ring_attire": f.get("ring_attire", "")}
+        for f in fighters.values() if f.get("status") == "active"
+    ]
+
+    try:
+        entries = plan_roster(config, roster_size=deficit, existing_fighters=existing_fighters)
+    except Exception:
+        _log.warning("LLM roster planning failed, falling back to procedural", exc_info=True)
+        return 0
+
+    all_outfit_options = load_outfit_options(config)
+    all_exotics = load_exotic_outfit_options(config)
+
+    tier_config = _dc_replace(config, min_total_stats=150, max_total_stats=220)
+
+    generated = 0
+    for entry in entries[:deficit]:
+        skimpiness_level = _roll_skimpiness(entry.get("skimpiness_weights"))
+        archetype = entry.get("primary_archetype", "")
+        subtype = entry.get("subtype", "")
+        outfit_options_by_tier = {}
+        for tier in ["sfw", "barely", "nsfw"]:
+            tier_options = all_outfit_options.get(tier, {})
+            tier_exotics = None
+            if archetype or subtype:
+                tier_exotics = filter_exotic_for_fighter(
+                    all_exotics, archetype=archetype, subtype=subtype,
+                    tier=tier, skimpiness_level=skimpiness_level,
+                ) or None
+            outfit_options_by_tier[tier] = filter_outfit_options(
+                tier_options, skimpiness_level=skimpiness_level,
+                exotic_one_pieces=tier_exotics,
+            )
+
+        try:
+            fighter = generate_fighter(
+                tier_config,
+                existing_fighters=existing_fighters,
+                roster_plan_entry=entry,
+                outfit_options_by_tier=outfit_options_by_tier,
+                skimpiness_level=skimpiness_level,
+                skip_image_prompts=True,
+            )
+
+            fighter.age = rng.randint(18, 22)
+            fighter.tier = "underground"
+            fighter.status = "active"
+            fighter.peak_tier = "underground"
+            fighter.career_season_count = 0
+            fighter.training_focus = rng.choice(CORE_STATS)
+            fighter.generation_stage = 1
+
+            data_manager.save_fighter(fighter, config)
+
+            fighter_dict = fighter.to_dict()
+            fighter_dict.update({
+                "training_days_accumulated": 0.0,
+                "training_streak": 0,
+                "seasons_in_current_tier": 0,
+                "promotion_desperation": 0.0,
+                "season_wins": 0,
+                "season_losses": 0,
+                "season_tier_wins": {},
+                "consecutive_losses": 0,
+                "consecutive_wins": 0,
+                "tier_records": {},
+                "_entered_season": season,
+                "_entered_age": fighter.age,
+            })
+
+            fighters[fighter.id] = fighter_dict
+            summary["new_fighters"].append({
+                "fighter_id": fighter.id,
+                "ring_name": fighter.ring_name,
+                "age": fighter.age,
+            })
+
+            existing_fighters.append({
+                "ring_name": fighter.ring_name, "gender": fighter.gender,
+                "height": fighter.height, "origin": fighter.origin,
+                "primary_archetype": fighter.primary_archetype,
+                "subtype": fighter.subtype, "build": fighter.build,
+                "personality": fighter.personality,
+                "distinguishing_features": fighter.distinguishing_features,
+                "ring_attire": fighter.ring_attire,
+            })
+            generated += 1
+        except Exception:
+            _log.warning("LLM fighter generation failed for entry %s, skipping", entry.get("ring_name", "?"), exc_info=True)
+            continue
+
+    return generated

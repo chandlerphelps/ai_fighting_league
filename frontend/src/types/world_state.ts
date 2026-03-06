@@ -113,6 +113,30 @@ export interface WorldState {
   event_counter: number
 }
 
+export interface RetirementDetail {
+  fighter_id: string
+  ring_name: string
+  age: number
+  tier: string
+  reason: string
+  career_seasons: number
+  peak_tier: string
+  record: { wins: number; losses: number; draws: number; kos: number; submissions: number }
+}
+
+export interface NewFighterDetail {
+  fighter_id: string
+  ring_name: string
+  age: number
+}
+
+export interface BackfillPromotionDetail {
+  fighter_id: string
+  ring_name: string
+  from_tier: string
+  to_tier: string
+}
+
 export interface DaySimulationResult {
   season: number
   month: number
@@ -122,8 +146,8 @@ export interface DaySimulationResult {
   recoveries: { fighter_id: string; fighter_name: string }[]
   phase: string
   season_end?: {
-    retirements: number
-    new_fighters: number
-    backfill_promotions: number
+    retirements: RetirementDetail[]
+    new_fighters: NewFighterDetail[]
+    backfill_promotions: BackfillPromotionDetail[]
   }
 }

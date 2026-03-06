@@ -4,7 +4,8 @@ import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
 import TierBadge from '../components/TierBadge'
 import { simulateDay } from '../lib/data'
-import type { DaySimulationResult, MatchResult, ScheduledFight, PromotionFight, TitleFight } from '../types/world_state'
+import type { DaySimulationResult, MatchResult, ScheduledFight, PromotionFight, TitleFight, RetirementDetail, NewFighterDetail, BackfillPromotionDetail } from '../types/world_state'
+import FighterHoverCard from '../components/FighterHoverCard'
 
 const TIER_LABELS: Record<string, string> = {
   apex: 'Apex',
@@ -223,7 +224,15 @@ export default function Home() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg, minWidth: 0 }}>
         {heroFight && <HeroFight match={heroFight} />}
 
-        {lastResult && lastResult.matches.length > 0 && (
+        {lastResult?.season_end && (
+          <SeasonRecap
+            seasonEnd={lastResult.season_end}
+            matches={lastResult.matches}
+            season={lastResult.season}
+          />
+        )}
+
+        {lastResult && lastResult.matches.length > 0 && !lastResult.season_end && (
           <div>
             <SectionHeader>Today's Results</SectionHeader>
             <TieredMatchList matches={lastResult.matches} />
@@ -232,19 +241,20 @@ export default function Home() {
                 Recovered: {lastResult.recoveries.map(r => r.fighter_name).join(', ')}
               </div>
             )}
-            {lastResult.season_end && (
-              <div style={{
-                marginTop: spacing.sm,
-                padding: spacing.sm,
-                backgroundColor: withAlpha(colors.accent, 0.1),
-                borderRadius: '4px',
-                color: colors.accent,
-                fontSize: fontSizes.sm,
-              }}>
-                Season ended — {lastResult.season_end.retirements} retirements, {lastResult.season_end.new_fighters} new fighters, {lastResult.season_end.backfill_promotions} promotions
-              </div>
-            )}
           </div>
+        )}
+
+        {currentMonth === 6 && (
+          <UpcomingDay
+            month={currentMonth}
+            day={ws.season_day_in_month}
+            season={ws.season_number}
+            currentDate={ws.current_date}
+            promotionFights={ws.promotion_fights}
+            promotionFightDate={ws.promotion_fight_date}
+            titleFight={ws.title_fight}
+            scheduledFights={ws.scheduled_fights}
+          />
         )}
 
         <div>
@@ -275,16 +285,18 @@ export default function Home() {
           )}
         </div>
 
-        <UpcomingDay
-          month={currentMonth}
-          day={ws.season_day_in_month}
-          season={ws.season_number}
-          currentDate={ws.current_date}
-          promotionFights={ws.promotion_fights}
-          promotionFightDate={ws.promotion_fight_date}
-          titleFight={ws.title_fight}
-          scheduledFights={ws.scheduled_fights}
-        />
+        {currentMonth !== 6 && (
+          <UpcomingDay
+            month={currentMonth}
+            day={ws.season_day_in_month}
+            season={ws.season_number}
+            currentDate={ws.current_date}
+            promotionFights={ws.promotion_fights}
+            promotionFightDate={ws.promotion_fight_date}
+            titleFight={ws.title_fight}
+            scheduledFights={ws.scheduled_fights}
+          />
+        )}
       </div>
 
       <RightSidebar
@@ -422,13 +434,15 @@ function LeftSidebar({ ws, latestChampion, tierCounts, currentMonth, simulating,
         </div>
         {latestChampion ? (
           <div>
-            <Link to={`/fighter/${latestChampion.fighter_id}`} style={{
-              color: colors.accentBright,
-              fontSize: fontSizes.sm,
-              fontWeight: 'bold',
-            }}>
-              {latestChampion.ring_name}
-            </Link>
+            <FighterHoverCard fighterId={latestChampion.fighter_id} fighterName={latestChampion.ring_name}>
+              <Link to={`/fighter/${latestChampion.fighter_id}`} style={{
+                color: colors.accentBright,
+                fontSize: fontSizes.sm,
+                fontWeight: 'bold',
+              }}>
+                {latestChampion.ring_name}
+              </Link>
+            </FighterHoverCard>
             <div style={{ color: colors.textDim, fontSize: fontSizes.xs, marginTop: '2px' }}>
               S{latestChampion.season} — def. {latestChampion.defeated_name}
             </div>
@@ -642,12 +656,14 @@ function RightSidebar({ headlines, seasonLogs }: {
               }}>
                 <span style={{ color: colors.textDim }}>S{log.season}</span>
                 {log.champion_id ? (
-                  <Link to={`/fighter/${log.champion_id}`} style={{
-                    color: colors.accent,
-                    fontWeight: 'bold',
-                  }}>
-                    {log.champion_name || 'No champion'}
-                  </Link>
+                  <FighterHoverCard fighterId={log.champion_id} fighterName={log.champion_name || 'No champion'}>
+                    <Link to={`/fighter/${log.champion_id}`} style={{
+                      color: colors.accent,
+                      fontWeight: 'bold',
+                    }}>
+                      {log.champion_name || 'No champion'}
+                    </Link>
+                  </FighterHoverCard>
                 ) : (
                   <span style={{ color: colors.textMuted }}>{log.champion_name || 'No champion'}</span>
                 )}
@@ -746,13 +762,17 @@ function UpcomingDay({ month, currentDate, promotionFights, promotionFightDate, 
               gap: spacing.sm,
               fontSize: fontSizes.sm,
             }}>
-              <Link to={`/fighter/${tf.champion_id}`} style={{ color: colors.accentBright, fontWeight: 'bold', textDecoration: 'none' }}>
-                {tf.champion_name}
-              </Link>
+              <FighterHoverCard fighterId={tf.champion_id} fighterName={tf.champion_name}>
+                <Link to={`/fighter/${tf.champion_id}`} style={{ color: colors.accentBright, fontWeight: 'bold', textDecoration: 'none' }}>
+                  {tf.champion_name}
+                </Link>
+              </FighterHoverCard>
               <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
-              <Link to={`/fighter/${tf.challenger_id}`} style={{ color: colors.text, fontWeight: 'bold', textDecoration: 'none' }}>
-                {tf.challenger_name}
-              </Link>
+              <FighterHoverCard fighterId={tf.challenger_id} fighterName={tf.challenger_name}>
+                <Link to={`/fighter/${tf.challenger_id}`} style={{ color: colors.text, fontWeight: 'bold', textDecoration: 'none' }}>
+                  {tf.challenger_name}
+                </Link>
+              </FighterHoverCard>
             </div>
           </div>
         )}
@@ -872,6 +892,261 @@ function UpcomingDay({ month, currentDate, promotionFights, promotionFightDate, 
   )
 }
 
+function SeasonRecap({ seasonEnd, matches, season }: {
+  seasonEnd: {
+    retirements: RetirementDetail[]
+    new_fighters: NewFighterDetail[]
+    backfill_promotions: BackfillPromotionDetail[]
+  }
+  matches: MatchResult[]
+  season: number
+}) {
+  const titleMatch = matches.find(m => m.is_title_fight)
+  const promotionMatches = matches.filter(m => !m.is_title_fight)
+
+  return (
+    <div style={{
+      padding: spacing.lg,
+      backgroundColor: colors.surface,
+      borderRadius: '6px',
+      border: `2px solid ${colors.accent}`,
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '3px',
+        background: `linear-gradient(90deg, ${colors.accentDim}, ${colors.accent}, ${colors.accentBright}, ${colors.accent}, ${colors.accentDim})`,
+      }} />
+
+      <div style={{
+        fontSize: fontSizes.lg,
+        fontWeight: 'bold',
+        color: colors.accent,
+        textTransform: 'uppercase',
+        letterSpacing: '0.1em',
+        marginBottom: spacing.md,
+      }}>
+        Season {season} Recap
+      </div>
+
+      {titleMatch && (
+        <div style={{
+          padding: spacing.md,
+          marginBottom: spacing.md,
+          backgroundColor: withAlpha(colors.accent, 0.1),
+          borderRadius: '4px',
+          border: `1px solid ${withAlpha(colors.accent, 0.3)}`,
+        }}>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.accent,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: 'bold',
+            marginBottom: spacing.sm,
+          }}>
+            Title Fight
+          </div>
+          <RecapMatchRow match={titleMatch} />
+        </div>
+      )}
+
+      {promotionMatches.length > 0 && (
+        <div style={{ marginBottom: spacing.md }}>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.rivalry,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: 'bold',
+            marginBottom: spacing.sm,
+          }}>
+            Promotion Fights
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {promotionMatches.map((m, i) => (
+              <RecapMatchRow key={i} match={m} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {seasonEnd.retirements.length > 0 && (
+        <div style={{ marginBottom: spacing.md }}>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.loss,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: 'bold',
+            marginBottom: spacing.sm,
+          }}>
+            Retirements
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {seasonEnd.retirements.map(r => (
+              <div key={r.fighter_id} style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: `${spacing.xs} ${spacing.sm}`,
+                backgroundColor: withAlpha(colors.loss, 0.06),
+                borderRadius: '3px',
+                borderLeft: `3px solid ${colors.loss}`,
+                fontSize: fontSizes.sm,
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                  <FighterHoverCard fighterId={r.fighter_id} fighterName={r.ring_name}>
+                    <Link to={`/fighter/${r.fighter_id}`} style={{ color: colors.text, fontWeight: 'bold', textDecoration: 'none' }}>
+                      {r.ring_name}
+                    </Link>
+                  </FighterHoverCard>
+                  <TierBadge tier={r.tier} size={14} />
+                  <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
+                    Age {r.age}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                  <span style={{ color: colors.textMuted, fontSize: fontSizes.xs }}>
+                    {r.record?.wins ?? 0}-{r.record?.losses ?? 0}-{r.record?.draws ?? 0}
+                  </span>
+                  <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
+                    {r.reason}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {seasonEnd.backfill_promotions.length > 0 && (
+        <div style={{ marginBottom: spacing.md }}>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.accent,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: 'bold',
+            marginBottom: spacing.sm,
+          }}>
+            Tier Promotions
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {seasonEnd.backfill_promotions.map(p => (
+              <div key={p.fighter_id} style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: `${spacing.xs} ${spacing.sm}`,
+                backgroundColor: withAlpha(colors.accent, 0.06),
+                borderRadius: '3px',
+                borderLeft: `3px solid ${colors.accent}`,
+                fontSize: fontSizes.sm,
+              }}>
+                <FighterHoverCard fighterId={p.fighter_id} fighterName={p.ring_name}>
+                  <Link to={`/fighter/${p.fighter_id}`} style={{ color: colors.text, fontWeight: 'bold', textDecoration: 'none' }}>
+                    {p.ring_name}
+                  </Link>
+                </FighterHoverCard>
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+                  <TierBadge tier={p.from_tier} size={14} />
+                  <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>→</span>
+                  <TierBadge tier={p.to_tier} size={14} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {seasonEnd.new_fighters.length > 0 && (
+        <div>
+          <div style={{
+            fontSize: fontSizes.xs,
+            color: colors.win,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            fontWeight: 'bold',
+            marginBottom: spacing.sm,
+          }}>
+            New Fighters
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {seasonEnd.new_fighters.map(nf => (
+              <div key={nf.fighter_id} style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: `${spacing.xs} ${spacing.sm}`,
+                backgroundColor: withAlpha(colors.win, 0.06),
+                borderRadius: '3px',
+                borderLeft: `3px solid ${colors.win}`,
+                fontSize: fontSizes.sm,
+              }}>
+                <FighterHoverCard fighterId={nf.fighter_id} fighterName={nf.ring_name}>
+                  <Link to={`/fighter/${nf.fighter_id}`} style={{ color: colors.text, fontWeight: 'bold', textDecoration: 'none' }}>
+                    {nf.ring_name}
+                  </Link>
+                </FighterHoverCard>
+                <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>
+                  Age {nf.age}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function RecapMatchRow({ match }: { match: MatchResult }) {
+  const isF1Winner = match.winner_id === match.fighter1_id
+  const winnerId = isF1Winner ? match.fighter1_id : match.fighter2_id
+  const winnerName = isF1Winner ? match.fighter1_name : match.fighter2_name
+  const loserId = isF1Winner ? match.fighter2_id : match.fighter1_id
+  const loserName = isF1Winner ? match.fighter2_name : match.fighter1_name
+
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: `${spacing.xs} ${spacing.sm}`,
+      backgroundColor: colors.surfaceLight,
+      borderRadius: '3px',
+      fontSize: fontSizes.sm,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+        <TierBadge tier={match.tier} size={14} />
+        <FighterHoverCard fighterId={winnerId} fighterName={winnerName}>
+          <Link to={`/fighter/${winnerId}`} style={{ color: colors.win, fontWeight: 'bold', textDecoration: 'none' }}>
+            {winnerName}
+          </Link>
+        </FighterHoverCard>
+        <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>def.</span>
+        <FighterHoverCard fighterId={loserId} fighterName={loserName}>
+          <Link to={`/fighter/${loserId}`} style={{ color: colors.loss, textDecoration: 'none' }}>
+            {loserName}
+          </Link>
+        </FighterHoverCard>
+      </div>
+      <span style={{
+        color: methodColor(match.method),
+        fontSize: fontSizes.xs,
+        fontWeight: 'bold',
+      }}>
+        {match.method.toUpperCase()} R{match.round_ended}
+      </span>
+    </div>
+  )
+}
+
 function PromotionMatchupRow({ matchup }: { matchup: PromotionFight }) {
   return (
     <div style={{
@@ -885,17 +1160,21 @@ function PromotionMatchupRow({ matchup }: { matchup: PromotionFight }) {
       fontSize: fontSizes.sm,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1 }}>
-        <Link to={`/fighter/${matchup.upper_fighter_id}`} style={{ color: colors.text, textDecoration: 'none' }}>
-          {matchup.upper_fighter_name}
-        </Link>
+        <FighterHoverCard fighterId={matchup.upper_fighter_id} fighterName={matchup.upper_fighter_name}>
+          <Link to={`/fighter/${matchup.upper_fighter_id}`} style={{ color: colors.text, textDecoration: 'none' }}>
+            {matchup.upper_fighter_name}
+          </Link>
+        </FighterHoverCard>
         <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>&#9660;</span>
       </div>
       <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1, justifyContent: 'flex-end' }}>
         <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>&#9650;</span>
-        <Link to={`/fighter/${matchup.lower_fighter_id}`} style={{ color: colors.text, textDecoration: 'none' }}>
-          {matchup.lower_fighter_name}
-        </Link>
+        <FighterHoverCard fighterId={matchup.lower_fighter_id} fighterName={matchup.lower_fighter_name}>
+          <Link to={`/fighter/${matchup.lower_fighter_id}`} style={{ color: colors.text, textDecoration: 'none' }}>
+            {matchup.lower_fighter_name}
+          </Link>
+        </FighterHoverCard>
       </div>
     </div>
   )
