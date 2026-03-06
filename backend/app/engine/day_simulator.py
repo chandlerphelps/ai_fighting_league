@@ -15,6 +15,7 @@ from app.engine.between_fights.season import (
     get_tier_event_config,
     get_fight_start_time,
     is_fight_day,
+    EVENT_INTERVAL,
     REGULAR_MONTHS,
     PROMOTION_MONTH,
     season_start_date,
@@ -151,10 +152,10 @@ def _process_daily_training(fighters: dict, rng):
 def _schedule_next_day(fighters: dict, ws: dict):
     next_date = _current_date(ws)
     next_month = next_date.month
-    next_day = next_date.day
 
     if next_month not in REGULAR_MONTHS:
         ws["scheduled_fights"] = []
+        ws["next_matchups"] = {}
         return
 
     seed_base = next_date.toordinal()
@@ -202,6 +203,80 @@ def _schedule_next_day(fighters: dict, ws: dict):
                 break
 
     ws["scheduled_fights"] = scheduled
+
+    _compute_next_matchups(fighters, ws)
+
+
+def _compute_next_matchups(fighters: dict, ws: dict):
+    today = _current_date(ws)
+    season = ws["season_number"]
+    base = today.year - season + 1
+    if today.month < 11:
+        base -= 1
+    set_base_year(base)
+    end = season_end_date(season)
+    matchups = {}
+
+    for tier in ["apex", "contender", "underground"]:
+        interval = EVENT_INTERVAL.get(tier, 1)
+        next_fight_date = None
+        for offset in range(1, interval + 1):
+            candidate = today + timedelta(days=offset)
+            if candidate > end:
+                break
+            if is_fight_day(candidate, season, tier):
+                next_fight_date = candidate
+                break
+
+        if next_fight_date is None:
+            continue
+
+        days_until = (next_fight_date - today).days
+
+        available = [
+            f for f in fighters.values()
+            if f.get("tier") == tier
+            and f.get("status") == "active"
+            and _will_be_healthy(f, days_until)
+        ]
+
+        if len(available) < 2:
+            continue
+
+        seed = next_fight_date.toordinal()
+        tier_rng = random.Random(seed)
+        tier_rng.shuffle(available)
+        used = set()
+
+        for i in range(len(available)):
+            for j in range(i + 1, len(available)):
+                if available[i]["id"] in used or available[j]["id"] in used:
+                    continue
+                f1_id = available[i]["id"]
+                f2_id = available[j]["id"]
+                matchups[f1_id] = {
+                    "opponent_id": f2_id,
+                    "opponent_name": available[j].get("ring_name", "?"),
+                    "date": next_fight_date.isoformat(),
+                }
+                matchups[f2_id] = {
+                    "opponent_id": f1_id,
+                    "opponent_name": available[i].get("ring_name", "?"),
+                    "date": next_fight_date.isoformat(),
+                }
+                used.add(f1_id)
+                used.add(f2_id)
+                break
+
+    ws["next_matchups"] = matchups
+
+
+def _will_be_healthy(fighter: dict, days_until: int) -> bool:
+    condition = fighter.get("condition", {})
+    if condition.get("health_status") == "healthy":
+        return True
+    remaining = condition.get("recovery_days_remaining", 0)
+    return remaining <= days_until
 
 
 def _run_tier_event(fighters: dict, ws: dict, tier: str, rng) -> list:

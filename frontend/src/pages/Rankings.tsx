@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
 import { loadFightersForTier } from '../lib/data'
 import type { Fighter } from '../types/fighter'
+
+interface NextMatchInfo {
+  opponentId: string
+  opponentName: string
+  date?: string
+}
 
 const TIER_LOGOS: Record<string, string> = {
   apex: '/logo_apex_mid.png',
@@ -38,6 +45,27 @@ export default function Rankings() {
     })
   }, [ws?.tier_rankings])
 
+  const nextMatchMap = useMemo(() => {
+    const map: Record<string, NextMatchInfo> = {}
+    const matchups = ws?.next_matchups
+    if (matchups) {
+      for (const [fighterId, m] of Object.entries(matchups)) {
+        map[fighterId] = { opponentId: m.opponent_id, opponentName: m.opponent_name, date: m.date }
+      }
+    }
+    if (ws?.scheduled_fights) {
+      for (const sf of ws.scheduled_fights) {
+        if (!map[sf.fighter1_id]) {
+          map[sf.fighter1_id] = { opponentId: sf.fighter2_id, opponentName: sf.fighter2_name }
+        }
+        if (!map[sf.fighter2_id]) {
+          map[sf.fighter2_id] = { opponentId: sf.fighter1_id, opponentName: sf.fighter1_name }
+        }
+      }
+    }
+    return map
+  }, [ws?.next_matchups, ws?.scheduled_fights])
+
   if (loading) return <div style={{ color: colors.textMuted, padding: spacing.lg }}>Loading...</div>
   if (error || !ws) return <div style={{ color: colors.injured, padding: spacing.lg }}>No data available.</div>
 
@@ -57,6 +85,7 @@ export default function Rankings() {
             ids={ids}
             fighters={fighters}
             beltHolderId={tier.key === 'apex' ? ws.belt_holder_id : undefined}
+            nextMatchMap={nextMatchMap}
           />
         )
       })}
@@ -71,6 +100,7 @@ function TierSection({
   ids,
   fighters,
   beltHolderId,
+  nextMatchMap,
 }: {
   tierKey: string
   label: string
@@ -78,6 +108,7 @@ function TierSection({
   ids: string[]
   fighters: Record<string, Fighter>
   beltHolderId?: string
+  nextMatchMap: Record<string, NextMatchInfo>
 }) {
   const logoSrc = TIER_LOGOS[tierKey]
   return (
@@ -104,7 +135,7 @@ function TierSection({
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '40px 1fr 100px 80px 80px 80px 100px 80px 60px 80px',
+        gridTemplateColumns: '40px 1fr 100px 80px 80px 80px 100px 80px 60px 80px 1fr',
         gap: '0',
         fontSize: fontSizes.sm,
       }}>
@@ -124,12 +155,13 @@ function TierSection({
         <HeaderCell align="center">Age</HeaderCell>
         <HeaderCell align="center">Peak</HeaderCell>
         <HeaderCell align="center">Status</HeaderCell>
+        <HeaderCell>Next Match</HeaderCell>
 
         {ids.map((id, idx) => {
           const f = fighters[id]
           if (!f) return null
           const isBeltHolder = beltHolderId === id
-          return <FighterRow key={id} fighter={f} rank={idx + 1} isBeltHolder={isBeltHolder} />
+          return <FighterRow key={id} fighter={f} rank={idx + 1} isBeltHolder={isBeltHolder} nextMatch={nextMatchMap[id]} />
         })}
       </div>
     </div>
@@ -152,7 +184,7 @@ function HeaderCell({ children, align = 'left' }: { children: React.ReactNode; a
   )
 }
 
-function FighterRow({ fighter, rank, isBeltHolder }: { fighter: Fighter; rank: number; isBeltHolder: boolean }) {
+function FighterRow({ fighter, rank, isBeltHolder, nextMatch }: { fighter: Fighter; rank: number; isBeltHolder: boolean; nextMatch?: NextMatchInfo }) {
   const rec = fighter.record
   const isInjured = fighter.condition?.health_status === 'injured'
   const totalFights = rec.wins + rec.losses + rec.draws
@@ -206,6 +238,23 @@ function FighterRow({ fighter, rank, isBeltHolder }: { fighter: Fighter; rank: n
           </span>
         ) : (
           <span style={{ color: colors.healthy, fontSize: fontSizes.xs }}>OK</span>
+        )}
+      </Cell>
+      <Cell dim={isInjured}>
+        {nextMatch ? (
+          <span style={{ fontSize: fontSizes.xs }}>
+            {nextMatch.date && (
+              <span style={{ color: colors.textMuted, marginRight: spacing.xs }}>
+                {new Date(nextMatch.date + 'T00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+              </span>
+            )}
+            <span style={{ color: colors.textDim }}>vs </span>
+            <Link to={`/fighter/${nextMatch.opponentId}`} style={{ color: colors.accent }}>
+              {nextMatch.opponentName}
+            </Link>
+          </span>
+        ) : (
+          <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>—</span>
         )}
       </Cell>
     </>

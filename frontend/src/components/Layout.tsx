@@ -125,8 +125,10 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
         {worldState && (
-          <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
-            S{worldState.season_number} — {worldState.current_date || `M${worldState.season_month} D${worldState.season_day_in_month}`}
+          <div style={{ color: colors.textMuted, fontSize: fontSizes.sm, whiteSpace: 'nowrap' }}>
+            S{worldState.season_number} — {worldState.current_date
+              ? new Date(worldState.current_date + 'T00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+              : `M${worldState.season_month} D${worldState.season_day_in_month}`}
           </div>
         )}
       </nav>

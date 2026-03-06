@@ -1384,10 +1384,15 @@ def get_world_state():
 @app.post("/api/simulate-day")
 def simulate_day():
     from app.engine.day_simulator import simulate_one_day
+    from app.engine.between_fights.season import set_tier_sizes
 
     ws = data_manager.load_world_state(config)
     if not ws:
         return jsonify({"error": "No world state found. Run initialize_league first."}), 404
+
+    tier_sizes = ws.get("tier_sizes")
+    if tier_sizes:
+        set_tier_sizes(**tier_sizes)
 
     all_fighters = data_manager.load_all_fighters(config)
     fighters = {f["id"]: f for f in all_fighters if f.get("status") == "active"}

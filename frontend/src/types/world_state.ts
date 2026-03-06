@@ -61,6 +61,12 @@ export interface ScheduledFight {
   start_time?: string
 }
 
+export interface NextMatchup {
+  opponent_id: string
+  opponent_name: string
+  date: string
+}
+
 export interface WorldState {
   current_date: string
   day_number: number
@@ -83,6 +89,7 @@ export interface WorldState {
   promotion_fights: unknown[]
   title_fight: Record<string, string>
   scheduled_fights: ScheduledFight[]
+  next_matchups: Record<string, NextMatchup>
   rankings: string[]
   upcoming_events: string[]
   completed_events: string[]

@@ -413,11 +413,17 @@ def generate_fighter(
     if not hair_color_bucket:
         hair_color_bucket = classify_hair_color(hair_color)
 
+    raw_age = result.get("age", 25)
+    try:
+        fighter_age = int(raw_age)
+    except (ValueError, TypeError):
+        fighter_age = 25
+
     return Fighter(
         id=fighter_id,
         ring_name=result.get("ring_name", "Unknown"),
         real_name=result.get("real_name", "Unknown"),
-        age=result.get("age", 25),
+        age=fighter_age,
         origin=result.get("origin", "Unknown"),
         gender=gender,
         primary_archetype=archetype or "",
