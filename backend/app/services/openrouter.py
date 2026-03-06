@@ -1,10 +1,13 @@
 import json
+import logging
 import re
 import time
 
 import httpx
 
 from app.config import Config
+
+_log = logging.getLogger(__name__)
 
 
 def call_openrouter(
@@ -43,10 +46,15 @@ def call_openrouter(
             )
             response.raise_for_status()
             data = response.json()
-            return data["choices"][0]["message"]["content"]
-        except (httpx.HTTPError, KeyError, IndexError) as e:
+            content = data["choices"][0]["message"].get("content")
+            if not content:
+                raise RuntimeError("OpenRouter returned null/empty content (model may have exhausted tokens on reasoning)")
+            return content
+        except (httpx.HTTPError, KeyError, IndexError, RuntimeError) as e:
             if attempt < 2:
-                time.sleep(2 ** attempt)
+                wait = 2 ** attempt
+                _log.warning("OpenRouter call failed (attempt %d/3, model=%s): %s — retrying in %ds", attempt + 1, model, e, wait)
+                time.sleep(wait)
                 continue
             raise RuntimeError(f"OpenRouter call failed after 3 attempts: {e}") from e
 
@@ -69,6 +77,7 @@ def call_openrouter_json(
             return json.loads(cleaned)
         except json.JSONDecodeError:
             if attempt < 2:
+                _log.warning("OpenRouter JSON parse failed (attempt %d/3, model=%s) — retrying with stricter prompt", attempt + 1, model or "default")
                 prompt = prompt + "\n\nIMPORTANT: Your previous response was not valid JSON. Please respond with ONLY valid JSON, no markdown fences or extra text."
                 continue
             raise RuntimeError(f"Failed to parse JSON from OpenRouter after 3 attempts. Last response: {text[:500]}")

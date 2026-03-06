@@ -2,6 +2,7 @@ import argparse
 import random
 import shutil
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import replace
 from datetime import date
 
@@ -106,7 +107,7 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
     data_manager.ensure_data_dirs(config)
 
     print(f"Planning roster of {total} fighters...")
-    entries = plan_roster(config, roster_size=total)
+    entries = plan_roster(config, roster_size=total, gender_mix="mixed")
     print(f"  Planned {len(entries)} fighters")
 
     target_counts = {"apex": apex, "contender": contender, "underground": underground}
@@ -125,12 +126,12 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
     fighters_by_tier = {"apex": [], "contender": [], "underground": []}
     rng = random.Random()
 
-    for i, entry in enumerate(entries):
+    BATCH_SIZE = 4
+
+    def _prepare_and_generate(entry, entry_index, existing_snapshot):
         league_tier = entry["_league_tier"]
         stat_lo, stat_hi = TIER_STAT_RANGES[league_tier]
         tier_config = replace(config, min_total_stats=stat_lo, max_total_stats=stat_hi)
-
-        print(f"[{i + 1}/{len(entries)}] Generating {entry.get('ring_name', '?')} ({league_tier})...")
 
         skimpiness_level = _roll_skimpiness(entry.get("skimpiness_weights"))
         entry_archetype = entry.get("primary_archetype", "")
@@ -149,16 +150,40 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
                 exotic_one_pieces=tier_exotics,
             )
 
-        try:
-            fighter = generate_fighter(
-                tier_config,
-                existing_fighters=existing_fighters,
-                roster_plan_entry=entry,
-                outfit_options_by_tier=outfit_options_by_tier,
-                skimpiness_level=skimpiness_level,
-                skip_image_prompts=True,
-            )
+        fighter = generate_fighter(
+            tier_config,
+            existing_fighters=existing_snapshot,
+            roster_plan_entry=entry,
+            outfit_options_by_tier=outfit_options_by_tier,
+            skimpiness_level=skimpiness_level,
+            skip_image_prompts=True,
+        )
+        return entry_index, entry, fighter
 
+    for batch_start in range(0, len(entries), BATCH_SIZE):
+        batch = entries[batch_start:batch_start + BATCH_SIZE]
+        existing_snapshot = list(existing_fighters)
+
+        batch_labels = [f"{e.get('ring_name', '?')} ({e['_league_tier']})" for e in batch]
+        print(f"[Batch {batch_start // BATCH_SIZE + 1}] Generating: {', '.join(batch_labels)}...")
+
+        results = []
+        with ThreadPoolExecutor(max_workers=BATCH_SIZE) as pool:
+            futures = {
+                pool.submit(_prepare_and_generate, entry, batch_start + j, existing_snapshot): batch_start + j
+                for j, entry in enumerate(batch)
+            }
+            for future in as_completed(futures):
+                idx = futures[future]
+                try:
+                    results.append(future.result())
+                except Exception as e:
+                    print(f"  ERROR [{idx + 1}/{len(entries)}]: {e}")
+
+        results.sort(key=lambda r: r[0])
+
+        for entry_index, entry, fighter in results:
+            league_tier = entry["_league_tier"]
             age_lo, age_hi = TIER_AGE_RANGES[league_tier]
             career_lo, career_hi = TIER_CAREER_SEASONS[league_tier]
             fighter.age = rng.randint(age_lo, age_hi)
@@ -185,13 +210,7 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
                 "distinguishing_features": fighter.distinguishing_features,
                 "ring_attire": fighter.ring_attire,
             })
-            print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin} | Stats: {fighter.total_core_stats()}")
-        except Exception as e:
-            print(f"  ERROR generating fighter: {e}")
-            continue
-
-        if i < len(entries) - 1:
-            time.sleep(1)
+            print(f"  [{entry_index + 1}/{len(entries)}] Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin} | Stats: {fighter.total_core_stats()}")
 
     all_fighters_dicts = []
     for tier in ["apex", "contender", "underground"]:

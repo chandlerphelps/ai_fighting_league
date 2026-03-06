@@ -1,6 +1,11 @@
 import random
 
-from app.engine.fighter_config import ARCHETYPE_SUBTYPES, ARCHETYPE_SUBTYPES_MALE, OUTFIT_COLOR_PALETTE, HAIR_COLOR_BUCKETS
+from app.engine.fighter_config import (
+    ARCHETYPE_SUBTYPES,
+    ARCHETYPE_SUBTYPES_MALE,
+    OUTFIT_COLOR_PALETTE,
+    HAIR_COLOR_BUCKETS,
+)
 
 
 GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
@@ -10,25 +15,21 @@ them, stop and rework.
 
 ### 1. Female Characters Are Attractive — Always
 
-Design for a predominantly male audience. Every female fighter must be attractive — no exceptions.
-No zombies, no body horror, no monstrous designs, no grotesque features. Female fighters should
-be charismatic, beautiful, and this should be blatantly obvious in their outfit and gear design.
-Crop tops, high-cut leotards, sling bikinis, thongs, thigh-highs, mesh panels, cameltoe, loose
-shirts with no bra, short skirts, loin cloths, semi-transparency, body paint — lean into it
-without apology. Sex appeal is a feature, not a bug. Confidence, allure, and willingness to
+Design for a predominantly male audience. Every female fighter should be attractive.
+Sex appeal is a feature, not a bug. Confidence, allure, and willingness to
 weaponize beauty are core to female character design in AFL. But be tasteful so we can have a
 good SFW version of each character which is family friendly. Most should be white / asian / latina.
 
 ### 2. Men Are Bigger and Stronger — Women Win Differently
 
-Men should be physically larger and more powerful than women. No female fighters whose
+Men should be physically larger and more powerful than women on average. No female fighters whose
 primary identity is being big and strong compared to the men. Women compete through
 seduction, charm, playing dirty, psychological warfare, debuffing, supernatural ability,
 technical mastery, mysticism, poison, speed, precision — everything except raw physical
 dominance. The size and strength gap is real and is part of what makes it interesting when
 a woman beats a man twice her size through means other than out-muscling him.
 
-### 3. Characters Are Interesting Because of Violence, Not Despite It
+### 3. Characters are interesting because of how they deal with adversity and hurting others
 
 Attitude and personality alone don't make a character interesting. Magic alone doesn't make
 a character interesting. What makes a character interesting is:
@@ -38,9 +39,6 @@ a character interesting. What makes a character interesting is:
 - How they get hurt — and how they react. Do they crumble? Get angry? Get quiet? Come
   back harder?
 
-We want to know how they deal with hurting and being hurt - and not just physical hurt. Avoid purely
-evil or purely good characters as a general rule. Keep 1-2 at most, and even those should
-be 95/5 — the saint with one dark impulse, the monster with one shred of something human.
 
 ### 4. Steal From Everywhere — Archetypes From Popular Media
 
@@ -83,17 +81,10 @@ What makes a character visually memorable is always human:
 
 - Expression: A cold intellectual appraisal. A feral grin. Dead calm. Righteous
   stillness. The face tells the story.
-- Outfit: Ring attire expresses personality louder than any magical effect. A white
-  leotard with gold filigree says "I'm at a gala, not a cage fight." Ripped denim shorts
-  and ratty Converse say "I came here to break things." An olive sports bra and khaki
-  shorts say "I'm here to work." Immaculate white-and-gold says "I'm already better
-  than you."
-- Body language: How they carry themselves. A warrior's posture. A deliberate hip
-  roll. Coiled, restless scanning. Focused shadowboxing.
-- Physicality: Body type tells a story. A massive gut hiding slabs of core muscle.
-  A coiled-spring wiry frame. Weathered, dense muscle. An angular, forged-by-hardship build.
-- Style details: Scars, tattoos, jewelry, hair choices. A keloid scar and gold-tipped
-  locs. Gold-thread braids. A crocodile scar and twice-broken nose. These are the details
+- Outfit: Ring attire expresses personality louder than any magical effect.
+- Body language: How they carry themselves. 
+- Physicality: Body type tells a story. 
+- Style details: Scars, tattoos, jewelry, hair choices. These are the details
   fans remember.
 
 ### Silhouette Rule
@@ -105,30 +96,6 @@ is distinct from a compact, ponytailed shape.
 Test: describe the character's silhouette in one sentence. If it sounds like someone
 else on the roster, differentiate further.
 
-### Sex Appeal — Especially for Female Characters
-
-This is not optional. This is core to the product. AFL is designed for a predominantly
-male audience and female characters should be designed accordingly.
-
-For every female fighter, the outfit and physical design should be overtly sexy. This means:
-
-- Revealing outfits are encouraged: High-cut leotards, plunging necklines, sling
-  bikinis, crop tops showing underboob, micro shorts, mesh panels, thigh-highs, painted-on
-  bodysuits, micro bikinis, cameltoe, loose shirts with no bra, short skirts,
-  loin cloths, semi-transparency, body paint. The outfit should turn heads, but be tasteful.
-- Physique matters: Athletic, toned, curves emphasized. Different body types are fine
-  (petite, hourglass, athletic, compact) but all should be attractive. No female fighter
-  should be designed to be visually unremarkable.
-- Confidence amplifies everything: Amused condescension. A predatory smile. Cold
-  clinical beauty. The attitude in the eyes and the body language multiply the visual
-  impact of the outfit.
-- The outfit IS the character: An aristocrat in a standard sports bra and shorts
-  loses her identity. A genius in anything less than immaculate couture loses hers.
-  The outfit choice reveals personality as much as any dialogue.
-
-For male fighters, sex appeal comes through physicality — sculpted builds, shirtless by
-default, chiseled jaws, imposing frames. A magazine-cover body. Greek-god proportions.
-Terrifying mass.
 
 What NOT to do: Use "faint [color] energy emanates from their body" or "an aura of
 desire radiates outward" as a substitute for actual visual design. Don't sanitize female
@@ -146,21 +113,8 @@ Every fighter needs at least 1 unique physical detail that fans latch onto:
 - Hair (a hot pink buzzcut, gold-thread braids, an asymmetric cut with a white streak)
 - Body quirks (a missing pinky tip, a chipped tooth, scarred and calcified fists)
 
-### What NOT to Do
-
-These are bad patterns to avoid:
-
-| Bad Pattern | Better Replacement |
-|---|---|
-| "Faint emerald energy wisps around her hands" | Celtic knotwork sleeve tattoos that seem to shift in low light |
-| "An aura of supernatural allure radiates from her" | "Too-perfect proportions, cold clinical beauty — disturbing, not enchanting" |
-| "Mystical golden light surrounds his fists" | Faint shimmer around fists "that could be sweat catching the light, or something else" |
-| "Her eyes glow with psychic power" | "Cool, appraising dark brown eyes with cutting intellectual intensity" |
-| Generic "energy crackling" as identity | Specific human details (scars, expression, outfit, posture) |
-
 The rule: supernatural effects are one optional ingredient, never the main course.
-When present, they should be subtle, ambiguous, or grounded in something physical (tattoos
-that seem to move, veins that darken, eyes that catch light strangely).
+When present, they should be subtle, ambiguous, or grounded in something physical
 """
 
 GUIDE_CREATION_WORKFLOW = """## The Creation Workflow
@@ -234,57 +188,15 @@ these are the ingredients.
 """
 
 GUIDE_COMMON_MISTAKES = """## Common Mistakes
-
-1. Sanitizing female character designs. This is the #1 most likely failure mode. The
-   AI generating characters will instinctively pull toward modest athletic wear, "practical"
-   outfits, and de-sexualized designs for women. Fight this. Female fighters in AFL wear
-   revealing, attention-grabbing outfits by design. If a female character's outfit could
-   pass in a real UFC broadcast, it's too conservative. Think Mortal Kombat, Dead or Alive,
-   Street Fighter — not ESPN.
-
-2. Making a female fighter who isn't attractive. Every female fighter must be beautiful.
-   No zombies, no body horror, no monstrous designs. Women in AFL do not compete with men
-   on physicality. No female character should be designed around being physically imposing
-   relative to the male roster. Rethink around the female archetypes: Siren, Witch, Viper,
-   Prodigy, Doll, Huntress, Empress, Experiment, Demon, Assassin, or Nymph.
-
-3. Making every character clearly good or clearly evil. The roster should be
-   overwhelmingly grey. Characters who hurt people and feel complicated about it. Characters
-   who do bad things for understandable reasons. Characters who do good things for selfish
-   reasons. At most 1-2 characters at the moral extremes, and even those get a 5% crack in
-   the armor.
-
-4. Defaulting to "martial artist with supernatural power." New characters should explore
-   technology, weapons, science, faith, poison, drugs, hypnotics, ninja tradition, mech
-   suits, cybernetics, and other archetypes borrowed from popular media. If the concept is
-   "[martial art] + [magical ability]," pivot to something with a different vocabulary.
-
-5. Generic glow effects as primary visual identity. If the character's most notable
-   visual feature is that they glow, redo the design. Pass the strip test.
-
-6. "Supernatural seduction" substituting for actual personality. Seduction should work
-   through specific human behaviors: how they dress, move, talk, look at you. "Mystical
-   allure" without specific mechanism is lazy.
-
-7. No genuine weaknesses. Every fighter needs weaknesses that specific other roster
-   members can exploit.
-
-8. Duplicate archetype/style in an already crowded slot. Check the roster. If there are
-   already three of an archetype, your version needs a strong reason to exist.
-
-9. Power levels that break matchup dynamics. A new fighter shouldn't be unbeatable by
-   anyone on the current roster. If you can't identify their bad matchups, they're
-   overpowered.
-
-10. Overly complex supernatural systems for a new character. A debut fighter should
-    have 0-2 supernatural stats, not a bespoke magic system.
-
-11. Forgetting the strip test. Remove the supernatural effects. Is the character still
-    visually compelling, personality-rich, and distinct? If not, do more work on the human
-    foundation before adding anything else.
-
-12. Cheap diversity. Don't add geographic/cultural origins just to check boxes. The origin
-    must serve the character concept. Tokenism is boring.
+1. **Sanitizing female designs** — #1 failure mode. If the outfit could pass on ESPN, it's too conservative. Think Mortal Kombat / Dead or Alive, not UFC.
+2. **Repulsive female fighters** No monstrous designs, no strength-based identity.
+3. **Black-and-white morality** — roster should be overwhelmingly grey. At most 1-2 extremes.
+4. **"Martial artist + magic" default** — explore technology, weapons, science, faith, poison, cybernetics. If the concept is [martial art] + [magical ability], pivot.
+5. **Glow effects as identity** — if the most notable visual feature is glowing, redo it. Pass the strip test.
+6. **"Supernatural seduction"** — seduction works through specific human behaviors, not "mystical allure."
+8. **Duplicate archetypes** — if 3 already exist, your version needs a strong reason to exist.
+11. **Failing the strip test** — remove supernatural effects; still compelling? If not, rework the human foundation.
+12. **Cheap diversity** — origin must serve the character concept. Tokenism is boring.
 """
 
 
@@ -296,56 +208,12 @@ FULL_CHARACTER_GUIDE = (
 )
 
 
-GUIDE_MALE_PHILOSOPHY = """## Male Character Design Philosophy
+GUIDE_MALE_PHILOSOPHY = """## Male Character Design
+Outfits serve function and threat: tactical gear, hand wraps, military/mercenary aesthetic,
+gladiatorial leather and chains, traditional gi, street fighting torn jeans. "This guy fights
+for real" not "this guy goes to the gym."
 
-### 1. Male Characters Are DANGEROUS — Always
-
-Every male fighter must look like a threat. Not pretty-boy models. Not gym selfie guys.
-These are men who radiate violence. The kind of face and build that makes a room go quiet
-when they walk in. Scarred, weathered, massive, lean and predatory, or unnaturally large.
-
-The design goal is INTIMIDATION and CONFIDENCE, not sex appeal.
-
-### 2. Physicality Tells the Story
-
-Male fighters are physically imposing — larger, heavier, and more powerful than the women.
-Their bodies are weapons: slabs of muscle, dense scarred frames, impossible wingspans,
-cauliflower ears, broken noses, hands like cinder blocks.
-
-Body types range from:
-- Lean and wiry predators (a knife wrapped in skin)
-- Athletic and cut machines (military precision, every muscle visible)
-- Thick and powerful brawlers (barrel-chested, dense, immovable)
-- Massive and hulking monsters (makes doorways look small)
-
-### 3. The Face Sells the Character
-
-Eyes matter most. Cold dead eyes. Predatory focus. Wild unhinged energy. Calculating patience.
-The expression should tell you exactly what kind of violence this man specializes in.
-
-Facial hair, scars, broken features, tattoos — these are the details that make male characters
-memorable. A twice-broken nose. A scar from ear to jaw. Knuckles like gravel.
-
-### 4. Outfits Serve Function and Intimidation
-
-Male outfits are about combat readiness and threat display:
-- Tactical gear, combat pants, boots, wraps
-- Bare-knuckle with hand wraps and tape
-- Military/mercenary aesthetic
-- Gladiatorial — leather, metal, chains
-- Traditional martial arts gi, hakama
-- Street fighting — torn jeans, bare feet, no shirt
-
-The outfit should make you think "this guy fights for real" not "this guy goes to the gym."
-
-### 5. Common Male Design Mistakes
-
-- Making them too clean or pretty. These are fighters, not models.
-- Generic MMA fighter look. Push into archetypes: the scarred veteran, the unhinged wildcard,
-  the silent assassin, the walking mountain.
-- Forgetting scars, damage, and wear. A male fighter's body tells the story of every fight
-  he's survived.
-- Making them one-dimensional brutes. Even the biggest monster needs a personality beyond "angry."
+Avoid: too clean/pretty, generic MMA look, forgetting scars and wear, one-dimensional brutes.
 """
 
 FULL_MALE_CHARACTER_GUIDE = (
@@ -388,7 +256,9 @@ def _shuffled_subtype_lines(gender: str = "female") -> str:
     return "\n".join(lines)
 
 
-def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "", gender_mix: str = "female") -> str:
+def build_plan_roster_prompt(
+    roster_size: int, existing_roster_text: str = "", gender_mix: str = "female"
+) -> str:
     if gender_mix == "mixed":
         female_archetype_list = _shuffled_archetype_names("female")
         male_archetype_list = _shuffled_archetype_names("male")
@@ -400,23 +270,20 @@ def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "", g
         )
         gender_constraint = (
             "- Gender: include BOTH male and female fighters in this roster\n"
-            "- Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs\n"
-            "- Male fighters should be physically imposing, dangerous, intimidating"
+            "- Every female fighter should be attractive\n"
+            "- Power tiers MUST be distributed evenly across genders — do NOT cluster all males or all females into the same power_tier. Each tier (champion, contender, gatekeeper, prospect) should have a mix of both genders"
         )
-        archetype_json_line = (
-            f'"primary_archetype": "<from female archetypes: {female_archetype_list} OR male archetypes: {male_archetype_list}>"'
-        )
+        archetype_json_line = f'"primary_archetype": "<from female archetypes: {female_archetype_list} OR male archetypes: {male_archetype_list}>"'
         subtype_block = f"FEMALE SUBTYPES:\n{female_subtype_block}\n\nMALE SUBTYPES:\n{male_subtype_block}"
         guide = GUIDE_CORE_PHILOSOPHY + "\n" + GUIDE_MALE_PHILOSOPHY
     elif gender_mix == "male":
         archetype_list = _shuffled_archetype_names("male")
         subtype_block = _shuffled_subtype_lines("male")
         archetype_line = f"- Archetypes: cover at least 5 different primary archetypes from the MALE list: {archetype_list}"
-        gender_constraint = (
-            "- Gender: ALL fighters must be male\n"
-            "- Male fighters should be physically imposing, dangerous, intimidating"
+        gender_constraint = "- Gender: ALL fighters must be male"
+        archetype_json_line = (
+            f'"primary_archetype": "<from the male archetypes: {archetype_list}>"'
         )
-        archetype_json_line = f'"primary_archetype": "<from the male archetypes: {archetype_list}>"'
         guide = GUIDE_MALE_PHILOSOPHY
     else:
         archetype_list = _shuffled_archetype_names()
@@ -424,9 +291,11 @@ def build_plan_roster_prompt(roster_size: int, existing_roster_text: str = "", g
         archetype_line = f"- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: {archetype_list}"
         gender_constraint = (
             "- Gender: ALL fighters must be female\n"
-            "- Every female fighter MUST be attractive — no zombies, no body horror, no monstrous designs"
+            "- Every female fighter should be attractive"
         )
-        archetype_json_line = f'"primary_archetype": "<from the female archetypes: {archetype_list}>"'
+        archetype_json_line = (
+            f'"primary_archetype": "<from the female archetypes: {archetype_list}>"'
+        )
         guide = GUIDE_CORE_PHILOSOPHY
 
     palette_str = ", ".join(OUTFIT_COLOR_PALETTE)
@@ -457,7 +326,7 @@ instantly recognizable. These elements are tracked across the entire roster to p
 - hair_style: distinctive hairstyle (e.g., "long flowing waves", "buzz cut", "twin braids", "mohawk", "slicked back ponytail")
 - hair_color: detailed hair color description (e.g., "platinum blonde", "jet black", "fire red with orange streaks")
 - hair_color_bucket: the broad category — MUST be one of: {bucket_str}
-- face_adornment: mask, face paint, headwear, or "none" (e.g., "oni half-mask", "tribal war paint", "crown of thorns", "eye patch", "none")
+- face_adornment: mask, face paint, hat, headwear, or "none" (e.g., "oni half-mask", "tribal war paint", "crown of thorns", "eye patch", "wide-brim hat", "none")
 No two fighters should share the same primary_outfit_color. Aim for maximum visual diversity in hair combos and face adornments.
 
 Return ONLY valid JSON — an array of {roster_size} objects with this structure:
@@ -480,7 +349,7 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "hair_style": "<distinctive hairstyle>",
     "hair_color": "<detailed hair color description>",
     "hair_color_bucket": "<broad category from: {bucket_str}>",
-    "face_adornment": "<mask, face paint, headwear, or 'none'>"
+    "face_adornment": "<mask, face paint, hat, headwear, or 'none'>"
   }}
 ]
 
@@ -511,7 +380,9 @@ def build_generate_fighter_prompt(
             f"A {subtype_info['name']} should LOOK different from other subtypes of the same archetype."
         )
 
-    guide = FULL_MALE_CHARACTER_GUIDE if gender.lower() == "male" else FULL_CHARACTER_GUIDE
+    guide = (
+        FULL_MALE_CHARACTER_GUIDE if gender.lower() == "male" else FULL_CHARACTER_GUIDE
+    )
 
     if gender.lower() == "male":
         body_trait_hint = (
