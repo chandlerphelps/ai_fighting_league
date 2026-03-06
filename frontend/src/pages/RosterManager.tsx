@@ -30,14 +30,13 @@ type ActiveTask = {
   label: string
 }
 
-type Tier = 'portrait' | 'headshot' | 'sfw' | 'barely' | 'nsfw' | 'body_ref'
+type Tier = 'portrait' | 'headshot' | 'sfw' | 'barely' | 'body_ref'
 
 const TIERS: { key: Tier; label: string }[] = [
   { key: 'portrait', label: 'PORTRAIT' },
   { key: 'headshot', label: 'HEADSHOT' },
   { key: 'sfw', label: 'SFW' },
   { key: 'barely', label: 'BARELY' },
-  { key: 'nsfw', label: 'NSFW' },
   { key: 'body_ref', label: 'BODY REF' },
 ]
 
@@ -664,9 +663,6 @@ export default function RosterManager() {
                         <button onClick={() => handleRegenImages(fighter.id, ['barely'])} style={dropdownItem}>
                           Redo Barely Image
                         </button>
-                        <button onClick={() => handleRegenImages(fighter.id, ['nsfw'])} style={dropdownItem}>
-                          Redo NSFW Image
-                        </button>
                       </div>
                     )}
                   </div>
@@ -1065,7 +1061,7 @@ function EditPanel({
     onChange({ ...data, stats: { ...data.stats!, [key]: value } })
   }
 
-  const updatePromptField = (promptKey: 'image_prompt' | 'image_prompt_sfw' | 'image_prompt_nsfw', field: string, value: string) => {
+  const updatePromptField = (promptKey: 'image_prompt' | 'image_prompt_sfw', field: string, value: string) => {
     const current = (data as Record<string, unknown>)[promptKey] as Record<string, string> | undefined
     onChange({ ...data, [promptKey]: { ...current, [field]: value } })
   }
@@ -1193,9 +1189,6 @@ function EditPanel({
         <Field label="Ring Attire (Barely)">
           <textarea value={data.ring_attire || ''} onChange={e => updateField('ring_attire', e.target.value)} style={{ ...inputStyle, minHeight: '48px', resize: 'vertical' }} />
         </Field>
-        <Field label="Ring Attire (NSFW)">
-          <textarea value={data.ring_attire_nsfw || ''} onChange={e => updateField('ring_attire_nsfw', e.target.value)} style={{ ...inputStyle, minHeight: '48px', resize: 'vertical' }} />
-        </Field>
         <Field label="Skimpiness Level (1-4)">
           <input type="number" min={1} max={4} value={data.skimpiness_level || 2} onChange={e => updateField('skimpiness_level', parseInt(e.target.value) || 2)} style={inputStyle} />
         </Field>
@@ -1224,9 +1217,6 @@ function EditPanel({
         </Field>
         <Field label="Clothing Prompt (Barely)">
           <textarea value={data.image_prompt?.clothing || ''} onChange={e => updatePromptField('image_prompt', 'clothing', e.target.value)} style={{ ...inputStyle, minHeight: '48px', resize: 'vertical' }} />
-        </Field>
-        <Field label="Clothing Prompt (NSFW)">
-          <textarea value={data.image_prompt_nsfw?.clothing || ''} onChange={e => updatePromptField('image_prompt_nsfw', 'clothing', e.target.value)} style={{ ...inputStyle, minHeight: '48px', resize: 'vertical' }} />
         </Field>
       </div>
 
@@ -1291,12 +1281,6 @@ function ExpandedDetails({ fighter }: { fighter: Fighter }) {
           <SectionLabel>Barely Attire</SectionLabel>
           <div style={{ fontSize: fontSizes.xs, fontFamily: fonts.body, color: colors.textMuted }}>
             {fighter.ring_attire || '---'}
-          </div>
-        </div>
-        <div>
-          <SectionLabel>NSFW Attire</SectionLabel>
-          <div style={{ fontSize: fontSizes.xs, fontFamily: fonts.body, color: colors.textMuted }}>
-            {fighter.ring_attire_nsfw || '---'}
           </div>
         </div>
       </div>
@@ -1401,7 +1385,7 @@ function Lightbox({ fighterId, ringName, initialTier, label, imageVersion, onRed
   onClose: () => void
 }) {
   const [activeTier, setActiveTier] = useState<Tier>(initialTier)
-  const tierKeys: Tier[] = ['portrait', 'sfw', 'barely', 'nsfw', 'body_ref']
+  const tierKeys: Tier[] = ['portrait', 'sfw', 'barely', 'body_ref']
 
   const cycleTier = useCallback((dir: 1 | -1) => {
     setActiveTier(prev => {

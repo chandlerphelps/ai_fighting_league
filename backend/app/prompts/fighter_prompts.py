@@ -396,7 +396,10 @@ def build_generate_fighter_prompt(
     else:
         body_trait_hint = (
             "MUST incorporate the rolled body traits (waist, abs, butt, face shape, "
-            "eyes, makeup) naturally into this description"
+            "eyes, nose, lips, brows, cheekbones, jawline, makeup) naturally into this "
+            "description. The FACE is critical — describe specific facial geometry using "
+            "the rolled traits so this character's face is unique and distinguishable "
+            "from every other fighter"
         )
         personality_example = (
             "e.g. 'cold, calculating predator who enjoys breaking opponents slowly'"

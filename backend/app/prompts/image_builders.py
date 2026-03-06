@@ -406,6 +406,21 @@ def build_body_reference_prompt(
         body_type_details.get("makeup_level", "") if body_type_details else ""
     )
     makeup_desc = MAKEUP_DESCRIPTIONS.get(makeup_level, makeup_level) if makeup_level else ""
+    nose_shape = (
+        body_type_details.get("nose_shape", "") if body_type_details else ""
+    )
+    lip_shape = (
+        body_type_details.get("lip_shape", "") if body_type_details else ""
+    )
+    brow_shape = (
+        body_type_details.get("brow_shape", "") if body_type_details else ""
+    )
+    cheekbone = (
+        body_type_details.get("cheekbone", "") if body_type_details else ""
+    )
+    jawline = (
+        body_type_details.get("jawline", "") if body_type_details else ""
+    )
 
     rear_angled_panel = (
         f"isolated nude rear view at an angle, "
@@ -444,9 +459,19 @@ def build_body_reference_prompt(
     iconic_part = f", {iconic_features}" if iconic_features else ""
     face_details = []
     if face_shape:
-        face_details.append(f"{face_shape} face")
+        face_details.append(f"{face_shape} face shape")
+    if jawline:
+        face_details.append(f"{jawline} jaw")
+    if cheekbone:
+        face_details.append(f"{cheekbone} cheekbones")
     if eye_shape:
         face_details.append(f"{eye_shape} eyes")
+    if brow_shape:
+        face_details.append(f"{brow_shape} brows")
+    if nose_shape:
+        face_details.append(f"{nose_shape} nose")
+    if lip_shape:
+        face_details.append(f"{lip_shape} lips")
     if makeup_desc:
         face_details.append(f"{makeup_desc}")
     face_extras = f", {', '.join(face_details)}" if face_details else ""

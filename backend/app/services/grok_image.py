@@ -181,10 +181,7 @@ def generate_charsheet_images(
     )
     is_male = gender.lower() == "male"
     if tiers is None:
-        if is_male:
-            tiers = ["sfw", "barely"]
-        else:
-            tiers = ["sfw", "barely", "nsfw"]
+        tiers = ["sfw", "barely"]
 
     fighter_id = fighter.id if hasattr(fighter, "id") else fighter["id"]
     ring_name = (

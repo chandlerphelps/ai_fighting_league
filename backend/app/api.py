@@ -259,7 +259,7 @@ def _fighter_image_paths(fighter_id: str, ring_name: str = "") -> dict[str, Path
     slug = img_slugify(ring_name) if ring_name else ""
     base = f"{fighter_id}_{slug}" if slug else fighter_id
     result = {}
-    for tier in ["sfw", "barely", "nsfw", "portrait"]:
+    for tier in ["sfw", "barely", "portrait"]:
         path = fighters_dir / f"{base}_{tier}.png"
         if path.exists():
             result[tier] = path
@@ -608,7 +608,7 @@ def regenerate_images(fighter_id: str):
         return jsonify({"error": "Fighter not found"}), 404
 
     body = request.json or {}
-    tiers = body.get("tiers", ["sfw", "barely", "nsfw"])
+    tiers = body.get("tiers", ["sfw", "barely"])
 
     task_id = f"img_{uuid.uuid4().hex[:8]}"
 
@@ -702,7 +702,7 @@ def get_archetypes():
 
 @app.get("/api/fighter-images/<fighter_id>/<tier>")
 def get_fighter_image(fighter_id: str, tier: str):
-    if tier not in ("sfw", "barely", "nsfw"):
+    if tier not in ("sfw", "barely"):
         return jsonify({"error": "Invalid tier"}), 400
 
     fighter = data_manager.load_fighter(fighter_id, config)

@@ -78,7 +78,9 @@ def filter_exotic_for_fighter(
 ) -> list[str]:
     matched = []
     for item in exotics:
-        if archetype in item.get("archetypes", []) or subtype in item.get("subtypes", []):
+        if archetype in item.get("archetypes", []) or subtype in item.get(
+            "subtypes", []
+        ):
             tier_vars = item.get("variations", {}).get(tier, [])
             candidates = [
                 _parse_outfit_item(v)[0]
@@ -273,14 +275,78 @@ MALE_BODY_PROFILES = {
 }
 
 MALE_ARCHETYPE_BODY_PROFILE_WEIGHTS = {
-    "The Brute": {"Skinny": 0, "Wiry": 5, "Athletic": 10, "Muscular": 20, "Stocky": 15, "Heavy": 25, "Massive": 25},
-    "The Veteran": {"Skinny": 5, "Wiry": 15, "Athletic": 25, "Muscular": 15, "Stocky": 25, "Heavy": 10, "Massive": 5},
-    "The Monster": {"Skinny": 0, "Wiry": 0, "Athletic": 5, "Muscular": 15, "Stocky": 5, "Heavy": 25, "Massive": 50},
-    "The Technician": {"Skinny": 10, "Wiry": 30, "Athletic": 30, "Muscular": 15, "Stocky": 10, "Heavy": 5, "Massive": 0},
-    "The Wildcard": {"Skinny": 15, "Wiry": 15, "Athletic": 20, "Muscular": 10, "Stocky": 15, "Heavy": 15, "Massive": 10},
-    "The Mystic": {"Skinny": 20, "Wiry": 30, "Athletic": 25, "Muscular": 10, "Stocky": 10, "Heavy": 5, "Massive": 0},
-    "The Prodigy": {"Skinny": 15, "Wiry": 25, "Athletic": 35, "Muscular": 15, "Stocky": 5, "Heavy": 5, "Massive": 0},
-    "The Experiment": {"Skinny": 5, "Wiry": 10, "Athletic": 15, "Muscular": 20, "Stocky": 10, "Heavy": 20, "Massive": 20},
+    "The Brute": {
+        "Skinny": 0,
+        "Wiry": 5,
+        "Athletic": 10,
+        "Muscular": 20,
+        "Stocky": 15,
+        "Heavy": 25,
+        "Massive": 25,
+    },
+    "The Veteran": {
+        "Skinny": 5,
+        "Wiry": 15,
+        "Athletic": 25,
+        "Muscular": 15,
+        "Stocky": 25,
+        "Heavy": 10,
+        "Massive": 5,
+    },
+    "The Monster": {
+        "Skinny": 0,
+        "Wiry": 0,
+        "Athletic": 5,
+        "Muscular": 15,
+        "Stocky": 5,
+        "Heavy": 25,
+        "Massive": 50,
+    },
+    "The Technician": {
+        "Skinny": 10,
+        "Wiry": 30,
+        "Athletic": 30,
+        "Muscular": 15,
+        "Stocky": 10,
+        "Heavy": 5,
+        "Massive": 0,
+    },
+    "The Wildcard": {
+        "Skinny": 15,
+        "Wiry": 15,
+        "Athletic": 20,
+        "Muscular": 10,
+        "Stocky": 15,
+        "Heavy": 15,
+        "Massive": 10,
+    },
+    "The Mystic": {
+        "Skinny": 20,
+        "Wiry": 30,
+        "Athletic": 25,
+        "Muscular": 10,
+        "Stocky": 10,
+        "Heavy": 5,
+        "Massive": 0,
+    },
+    "The Prodigy": {
+        "Skinny": 15,
+        "Wiry": 25,
+        "Athletic": 35,
+        "Muscular": 15,
+        "Stocky": 5,
+        "Heavy": 5,
+        "Massive": 0,
+    },
+    "The Experiment": {
+        "Skinny": 5,
+        "Wiry": 10,
+        "Athletic": 15,
+        "Muscular": 20,
+        "Stocky": 10,
+        "Heavy": 20,
+        "Massive": 20,
+    },
 }
 
 MALE_ARCHETYPE_HEIGHT_RANGES = {
@@ -729,8 +795,49 @@ BODY_TRAIT_OPTIONS = {
         "doe",
         "cat-like",
     ],
+    "nose_shape": [
+        "small button",
+        "straight narrow",
+        "slightly upturned",
+        "aquiline",
+        "wide flat bridge",
+        "delicate pointed",
+    ],
+    "lip_shape": [
+        "thin precise",
+        "full pouty",
+        "wide generous",
+        "cupid's bow",
+        "naturally asymmetric",
+    ],
+    "brow_shape": [
+        "straight low",
+        "high arched",
+        "thick natural",
+        "thin sculpted",
+        "heavy intense",
+    ],
+    "cheekbone": [
+        "high prominent",
+        "soft subtle",
+        "wide flat",
+        "hollow sculpted",
+    ],
+    "jawline": [
+        "narrow pointed chin",
+        "soft rounded",
+        "defined angular",
+        "wide strong",
+        "delicate tapered",
+    ],
     "makeup_level": ["bare-faced", "light", "moderate", "heavy"],
-    "breast_size": ["tiny flat-chested", "small perky", "medium", "large heavy", "massive oversized"],
+    "breast_size": [
+        "tiny flat-chested",
+        "small perky",
+        "medium",
+        "large heavy",
+        "massive oversized",
+    ],
     "nipple_size": ["small pert", "medium", "perky pointed", "large puffy"],
     "vulva_type": [
         "tucked pussy, small labia",
@@ -1893,8 +2000,14 @@ def _weighted_choice(
     allowed: list[str] | None = None,
     gender: str = "female",
 ) -> str:
-    trait_options = MALE_BODY_TRAIT_OPTIONS if gender.lower() == "male" else BODY_TRAIT_OPTIONS
-    body_weights = MALE_ARCHETYPE_BODY_WEIGHTS if gender.lower() == "male" else ARCHETYPE_BODY_WEIGHTS
+    trait_options = (
+        MALE_BODY_TRAIT_OPTIONS if gender.lower() == "male" else BODY_TRAIT_OPTIONS
+    )
+    body_weights = (
+        MALE_ARCHETYPE_BODY_WEIGHTS
+        if gender.lower() == "male"
+        else ARCHETYPE_BODY_WEIGHTS
+    )
     options = allowed if allowed else trait_options[category]
     weights_dict = {}
     if archetype and archetype in body_weights:
@@ -1997,9 +2110,7 @@ def _roll_body_profile(
         if gender.lower() == "male"
         else ARCHETYPE_BODY_PROFILE_WEIGHTS
     )
-    profiles_source = (
-        MALE_BODY_PROFILES if gender.lower() == "male" else BODY_PROFILES
-    )
+    profiles_source = MALE_BODY_PROFILES if gender.lower() == "male" else BODY_PROFILES
     profile_weights = dict(profile_weights_source.get(archetype, {}))
     if profile_weights:
         if subtype_bias:
@@ -2041,7 +2152,10 @@ def _roll_body_traits(
                 "build_type", arch, allowed.get("build_type"), gender="male"
             ),
             "muscle_definition": _weighted_choice(
-                "muscle_definition", arch, allowed.get("muscle_definition"), gender="male"
+                "muscle_definition",
+                arch,
+                allowed.get("muscle_definition"),
+                gender="male",
             ),
             "body_fat_pct": _weighted_choice(
                 "body_fat_pct", arch, allowed.get("body_fat_pct"), gender="male"
@@ -2087,6 +2201,11 @@ def _roll_body_traits(
         ),
         "face_shape": _weighted_choice("face_shape", arch),
         "eye_shape": _weighted_choice("eye_shape", arch),
+        "nose_shape": _weighted_choice("nose_shape", arch),
+        "lip_shape": _weighted_choice("lip_shape", arch),
+        "brow_shape": _weighted_choice("brow_shape", arch),
+        "cheekbone": _weighted_choice("cheekbone", arch),
+        "jawline": _weighted_choice("jawline", arch),
         "makeup_level": _weighted_choice("makeup_level", arch),
         "nipple_size": _weighted_choice("nipple_size", arch),
         "vulva_type": _weighted_choice("vulva_type", arch),
@@ -2118,7 +2237,13 @@ def _build_body_directive(traits: dict) -> str:
         f"- Abs/core: {traits['abs_tone']}\n"
         f"- Body fat: {traits['body_fat_pct']}\n"
         f"- Butt: {traits['butt_size']}\n"
-        f"- Face: {traits['face_shape']}, {traits['eye_shape']} eyes\n"
+        f"- Face shape: {traits['face_shape']}\n"
+        f"- Eyes: {traits['eye_shape']}\n"
+        f"- Nose: {traits.get('nose_shape', 'straight narrow')}\n"
+        f"- Lips: {traits.get('lip_shape', 'full pouty')}\n"
+        f"- Brows: {traits.get('brow_shape', 'high arched')}\n"
+        f"- Cheekbones: {traits.get('cheekbone', 'soft subtle')}\n"
+        f"- Jawline: {traits.get('jawline', 'soft rounded')}\n"
         f"- Makeup: {traits['makeup_level']} — {makeup_desc}\n"
         "\nThe height and weight are EXACT — use these values directly.\n"
         "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
@@ -2202,7 +2327,7 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Conservative — only face, hands, and forearms visible. Full coverage everywhere else.",
         "barely_label": "Flirty",
         "barely_skin_pct": "45-55",
-        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible. Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
+        "barely_hard_rules": "No nipples, no areola, no genitalia directly visible.",
         "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
         "nsfw_adjective": "Scandalous",
         "nsfw_hard_rules": "Topless — bare breasts fully visible. Bottoms stay on but must be ultra-sexy: thongs, micro-bikini bottoms, strappy lingerie, or sheer panties. Show off legs and hips.",
@@ -2210,7 +2335,7 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "topless",
     },
     2: {
-        "sfw_label": "Sporty & Attractive",
+        "sfw_label": "Covered & Attractive",
         "sfw_skin_pct": "30-45",
         "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
         "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
@@ -2224,14 +2349,14 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
     3: {
-        "sfw_label": "Bold",
+        "sfw_label": "Covered but Suggestive",
         "sfw_skin_pct": "50-65",
         "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
         "sfw_guidance": "Bold — shows skin confidently but still looks like a real outfit.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
-        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible (but seen through transparent fabric is okay). Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
-        "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only. Areola peeking out from tiny pasties is encouraged.",
+        "barely_hard_rules": "No full nipples, but areola peeking out is OK. No genitalia directly visible (but seen through transparent fabric is okay). If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
+        "barely_guidance": "Scandalous — most skin exposed, coverage is minimal. Micro clothing only. Areola peeking out is encouraged.",
         "nsfw_adjective": "Tease",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, pussy visible. Teasing posture — a finger resting playfully near her clit or cupping a breast or running her hands along her body - teasing sensually.",
         "nsfw_description": "Teasing, playful energy. Anatomy on display with flirty self-touching.",
@@ -2244,8 +2369,8 @@ SKIMPINESS_LEVELS = {
         "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "99",
-        "barely_hard_rules": "No full nipples, but areola peeking out from micro pasties is OK. No genitalia directly visible (but seen through transparent fabric is okay). Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
-        "barely_guidance": "Extreme — micro pasties with areola peeking out and a tiny nail-sized strip over the clit. Areola exposure is expected at this level.",
+        "barely_hard_rules": "No full nipples. No genitalia directly visible (but seen through transparent fabric is okay). If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
+        "barely_guidance": "Extreme — as close to nsfw as possible. Micro pasties with areola peeking out and a tiny nail-sized strip over the clit. Areola exposure is expected at this level.",
         "nsfw_adjective": "Pornographic",
         "nsfw_hard_rules": "Fully nude — topless and bottomless, legs apart or spread, pussy fully displayed. Explicit posing.",
         "nsfw_description": "Maximum explicit posing. Pierced nipples allowed or tiny subtle clit piercings allowed (tasteful small rings only). Spreading, legs open, erotic emphasis on genitalia. Nothing left to imagination.",
@@ -2253,30 +2378,156 @@ SKIMPINESS_LEVELS = {
     },
 }
 
-
 OUTFIT_COLOR_PALETTE = [
-    "Crimson Red", "Royal Blue", "Midnight Black", "Pure White", "Emerald Green",
-    "Gold", "Silver", "Deep Purple", "Hot Pink", "Orange", "Teal", "Burgundy",
-    "Navy Blue", "Forest Green", "Copper", "Lavender", "Scarlet", "Ice Blue",
-    "Charcoal", "Rose", "Bronze", "Jade", "Ivory", "Electric Yellow",
+    "Crimson Red",
+    "Royal Blue",
+    "Midnight Black",
+    "Pure White",
+    "Emerald Green",
+    "Gold",
+    "Silver",
+    "Deep Purple",
+    "Hot Pink",
+    "Orange",
+    "Teal",
+    "Burgundy",
+    "Navy Blue",
+    "Forest Green",
+    "Copper",
+    "Lavender",
+    "Scarlet",
+    "Ice Blue",
+    "Charcoal",
+    "Rose",
+    "Bronze",
+    "Jade",
+    "Ivory",
+    "Electric Yellow",
 ]
 
 HAIR_COLOR_BUCKETS = [
-    "Black", "Brown", "Blonde", "Red/Auburn", "White/Silver",
-    "Blue", "Pink", "Green", "Purple", "Multicolor",
+    "Black",
+    "Brown",
+    "Blonde",
+    "Red/Auburn",
+    "White/Silver",
+    "Blue",
+    "Pink",
+    "Green",
+    "Purple",
+    "Multicolor",
 ]
 
 _HAIR_BUCKET_KEYWORDS = {
     "Black": ["black", "jet black", "raven", "ebony", "onyx", "dark black"],
-    "Brown": ["brown", "brunette", "chestnut", "chocolate", "mocha", "mahogany", "walnut", "coffee", "hazel", "caramel", "tawny"],
-    "Blonde": ["blonde", "blond", "golden", "platinum", "honey", "sandy", "ash blonde", "strawberry blonde", "flaxen", "wheat", "champagne", "butter"],
-    "Red/Auburn": ["red", "auburn", "ginger", "copper", "crimson", "scarlet", "rust", "fire", "flame", "cherry", "ruby", "vermillion", "cinnamon"],
-    "White/Silver": ["white", "silver", "grey", "gray", "platinum white", "snow", "frost", "ice", "steel", "pearl", "ivory"],
-    "Blue": ["blue", "navy", "cerulean", "cobalt", "azure", "sapphire", "teal", "cyan", "indigo"],
-    "Pink": ["pink", "magenta", "fuchsia", "rose", "bubblegum", "coral", "salmon", "hot pink"],
-    "Green": ["green", "emerald", "lime", "olive", "mint", "jade", "forest", "sage", "teal green"],
-    "Purple": ["purple", "violet", "lavender", "lilac", "plum", "amethyst", "mauve", "orchid"],
-    "Multicolor": ["multicolor", "rainbow", "ombre", "gradient", "streaks", "highlights", "tips", "two-tone", "split"],
+    "Brown": [
+        "brown",
+        "brunette",
+        "chestnut",
+        "chocolate",
+        "mocha",
+        "mahogany",
+        "walnut",
+        "coffee",
+        "hazel",
+        "caramel",
+        "tawny",
+    ],
+    "Blonde": [
+        "blonde",
+        "blond",
+        "golden",
+        "platinum",
+        "honey",
+        "sandy",
+        "ash blonde",
+        "strawberry blonde",
+        "flaxen",
+        "wheat",
+        "champagne",
+        "butter",
+    ],
+    "Red/Auburn": [
+        "red",
+        "auburn",
+        "ginger",
+        "copper",
+        "crimson",
+        "scarlet",
+        "rust",
+        "fire",
+        "flame",
+        "cherry",
+        "ruby",
+        "vermillion",
+        "cinnamon",
+    ],
+    "White/Silver": [
+        "white",
+        "silver",
+        "grey",
+        "gray",
+        "platinum white",
+        "snow",
+        "frost",
+        "ice",
+        "steel",
+        "pearl",
+        "ivory",
+    ],
+    "Blue": [
+        "blue",
+        "navy",
+        "cerulean",
+        "cobalt",
+        "azure",
+        "sapphire",
+        "teal",
+        "cyan",
+        "indigo",
+    ],
+    "Pink": [
+        "pink",
+        "magenta",
+        "fuchsia",
+        "rose",
+        "bubblegum",
+        "coral",
+        "salmon",
+        "hot pink",
+    ],
+    "Green": [
+        "green",
+        "emerald",
+        "lime",
+        "olive",
+        "mint",
+        "jade",
+        "forest",
+        "sage",
+        "teal green",
+    ],
+    "Purple": [
+        "purple",
+        "violet",
+        "lavender",
+        "lilac",
+        "plum",
+        "amethyst",
+        "mauve",
+        "orchid",
+    ],
+    "Multicolor": [
+        "multicolor",
+        "rainbow",
+        "ombre",
+        "gradient",
+        "streaks",
+        "highlights",
+        "tips",
+        "two-tone",
+        "split",
+    ],
 }
 
 
@@ -2287,44 +2538,46 @@ def classify_hair_color(raw: str) -> str:
     for bucket, keywords in _HAIR_BUCKET_KEYWORDS.items():
         for kw in keywords:
             if kw in lower:
-                if bucket == "White/Silver" and ("platinum blonde" in lower or "strawberry" in lower):
+                if bucket == "White/Silver" and (
+                    "platinum blonde" in lower or "strawberry" in lower
+                ):
                     continue
                 return bucket
     return "Brown"
 
 
 ARCHETYPE_STAT_WEIGHTS = {
-    "The Siren":      {"power": 15, "speed": 25, "technique": 30, "toughness": 15},
-    "The Witch":      {"power": 15, "speed": 20, "technique": 25, "toughness": 15},
-    "The Viper":      {"power": 20, "speed": 30, "technique": 25, "toughness": 15},
-    "The Prodigy":    {"power": 20, "speed": 30, "technique": 30, "toughness": 20},
-    "The Doll":       {"power": 15, "speed": 25, "technique": 25, "toughness": 15},
-    "The Huntress":   {"power": 25, "speed": 35, "technique": 20, "toughness": 20},
-    "The Empress":    {"power": 20, "speed": 20, "technique": 30, "toughness": 20},
+    "The Siren": {"power": 15, "speed": 25, "technique": 30, "toughness": 15},
+    "The Witch": {"power": 15, "speed": 20, "technique": 25, "toughness": 15},
+    "The Viper": {"power": 20, "speed": 30, "technique": 25, "toughness": 15},
+    "The Prodigy": {"power": 20, "speed": 30, "technique": 30, "toughness": 20},
+    "The Doll": {"power": 15, "speed": 25, "technique": 25, "toughness": 15},
+    "The Huntress": {"power": 25, "speed": 35, "technique": 20, "toughness": 20},
+    "The Empress": {"power": 20, "speed": 20, "technique": 30, "toughness": 20},
     "The Experiment": {"power": 30, "speed": 20, "technique": 25, "toughness": 30},
-    "The Demon":      {"power": 30, "speed": 20, "technique": 20, "toughness": 20},
-    "The Assassin":   {"power": 20, "speed": 35, "technique": 30, "toughness": 15},
-    "The Nymph":      {"power": 15, "speed": 30, "technique": 20, "toughness": 15},
-    "The Brute":      {"power": 35, "speed": 15, "technique": 15, "toughness": 30},
-    "The Veteran":    {"power": 25, "speed": 20, "technique": 30, "toughness": 25},
-    "The Monster":    {"power": 35, "speed": 15, "technique": 15, "toughness": 35},
+    "The Demon": {"power": 30, "speed": 20, "technique": 20, "toughness": 20},
+    "The Assassin": {"power": 20, "speed": 35, "technique": 30, "toughness": 15},
+    "The Nymph": {"power": 15, "speed": 30, "technique": 20, "toughness": 15},
+    "The Brute": {"power": 35, "speed": 15, "technique": 15, "toughness": 30},
+    "The Veteran": {"power": 25, "speed": 20, "technique": 30, "toughness": 25},
+    "The Monster": {"power": 35, "speed": 15, "technique": 15, "toughness": 35},
     "The Technician": {"power": 20, "speed": 25, "technique": 35, "toughness": 20},
-    "The Wildcard":   {"power": 25, "speed": 30, "technique": 20, "toughness": 20},
-    "The Mystic":     {"power": 20, "speed": 20, "technique": 25, "toughness": 20},
+    "The Wildcard": {"power": 25, "speed": 30, "technique": 20, "toughness": 20},
+    "The Mystic": {"power": 20, "speed": 20, "technique": 25, "toughness": 20},
 }
 
 GENDER_FLAT_BONUS = {
-    "male":   {"power": 6, "toughness": 4},
+    "male": {"power": 6, "toughness": 4},
     "female": {"power": 0, "toughness": 0},
 }
 
 GENDER_GUILE_RANGE = {
-    "male":   (0, 15),
+    "male": (0, 15),
     "female": (45, 100),
 }
 
 GENDER_SUPERNATURAL_RANGE = {
-    "male":   (0, 20),
+    "male": (0, 20),
     "female": (30, 100),
 }
 
@@ -2390,7 +2643,9 @@ def generate_archetype_stats(
     else:
         sup_lo = 0
         sup_hi = 0
-    stats["supernatural"] = _normal_between(sup_lo, min(config.supernatural_cap, sup_hi), rng)
+    stats["supernatural"] = _normal_between(
+        sup_lo, min(config.supernatural_cap, sup_hi), rng
+    )
 
     return stats
 

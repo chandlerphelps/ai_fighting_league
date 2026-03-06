@@ -5,6 +5,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import replace
 from datetime import date
+from pathlib import Path
 
 from app.config import load_config
 from app.engine.fighter_generator import (
@@ -15,11 +16,16 @@ from app.engine.fighter_generator import (
     load_exotic_outfit_options,
     filter_exotic_for_fighter,
     _roll_skimpiness,
+    _find_subtype,
+    _build_charsheet_prompt,
 )
 from app.engine.fighter_config import generate_archetype_stats
 from app.engine.between_fights.league_tiers import calculate_tier_rankings
 from app.engine.between_fights.retirement import CORE_STATS
+from app.models.fighter import Fighter
+from app.prompts.image_builders import build_portrait_prompt, build_body_reference_prompt, build_headshot_prompt
 from app.services import data_manager
+from app.services.grok_image import generate_charsheet_images, generate_image, edit_image, download_image, _slugify as img_slugify
 
 
 TIER_STAT_RANGES = {
@@ -72,6 +78,12 @@ def _rebalance_tiers(entries, target_counts):
                 promoted = tier_buckets[source].pop(0)
                 promoted["_league_tier"] = tier
                 tier_buckets[tier].append(promoted)
+            elif tier == "apex" and tier_buckets["underground"]:
+                promoted = tier_buckets["underground"].pop(0)
+                promoted["_league_tier"] = tier
+                tier_buckets[tier].append(promoted)
+            else:
+                break
 
     result = []
     for tier in ["apex", "contender", "underground"]:
@@ -79,7 +91,7 @@ def _rebalance_tiers(entries, target_counts):
     return result
 
 
-def initialize_league_llm(apex=8, contender=8, underground=20):
+def initialize_league_llm(apex=8, contender=8, underground=20, full_generate=False, gender_mix="mixed"):
     config = load_config()
     data_dir = config.data_dir
     total = apex + contender + underground
@@ -107,7 +119,7 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
     data_manager.ensure_data_dirs(config)
 
     print(f"Planning roster of {total} fighters...")
-    entries = plan_roster(config, roster_size=total, gender_mix="mixed")
+    entries = plan_roster(config, roster_size=total, gender_mix=gender_mix)
     print(f"  Planned {len(entries)} fighters")
 
     target_counts = {"apex": apex, "contender": contender, "underground": underground}
@@ -156,7 +168,7 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
             roster_plan_entry=entry,
             outfit_options_by_tier=outfit_options_by_tier,
             skimpiness_level=skimpiness_level,
-            skip_image_prompts=True,
+            skip_image_prompts=not full_generate,
         )
         return entry_index, entry, fighter
 
@@ -273,15 +285,261 @@ def initialize_league_llm(apex=8, contender=8, underground=20):
             print(f"  Belt holder: {champ.ring_name}")
     print(f"  World state saved to {data_dir / 'world_state.json'}")
 
+    if full_generate:
+        print(f"\nAdvancing all fighters through stages 2 and 3...")
+        fighters_dir = data_dir / "fighters"
+        _advance_all_fighters(fighter_ids, config, fighters_dir)
+        print(f"  All fighters fully generated (stage 3).")
+
+
+def _get_subtype_info(fighter_data: dict) -> dict | None:
+    archetype = fighter_data.get("primary_archetype", "")
+    subtype_name = fighter_data.get("subtype", "")
+    if archetype and subtype_name:
+        return _find_subtype(archetype, subtype_name, gender=fighter_data.get("gender", "female"))
+    return None
+
+
+def _rebuild_prompts(fighter_data: dict):
+    body_parts = fighter_data.get("image_prompt_body_parts", "")
+    if not body_parts:
+        body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+    if not body_parts:
+        body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
+    expression = fighter_data.get("image_prompt_expression", "")
+    if not expression:
+        expression = fighter_data.get("image_prompt", {}).get("expression", "")
+    if not expression:
+        expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
+    personality_pose = fighter_data.get("image_prompt_personality_pose", "")
+    gender = fighter_data.get("gender", "female")
+    skimpiness = fighter_data.get("skimpiness_level", 2)
+    subtype_info = _get_subtype_info(fighter_data)
+    iconic_features = fighter_data.get("iconic_features", "")
+
+    clothing_sfw = fighter_data.get("ring_attire_sfw", "") or fighter_data.get("image_prompt_sfw", {}).get("clothing", "")
+    clothing_barely = fighter_data.get("ring_attire", "") or fighter_data.get("image_prompt", {}).get("clothing", "")
+    clothing_nsfw = fighter_data.get("ring_attire_nsfw", "") or fighter_data.get("image_prompt_nsfw", {}).get("clothing", "")
+
+    age = fighter_data.get("age", 0)
+    origin = fighter_data.get("origin", "")
+    body_type_details = fighter_data.get("body_type_details")
+    primary_outfit_color = fighter_data.get("primary_outfit_color", "")
+    fighter_data["image_prompt_sfw"] = _build_charsheet_prompt(
+        body_parts, clothing_sfw, expression,
+        personality_pose=personality_pose, tier="sfw",
+        gender=gender, skimpiness_level=skimpiness,
+        body_type_details=body_type_details, origin=origin,
+        subtype_info=subtype_info, iconic_features=iconic_features,
+        age=age, primary_outfit_color=primary_outfit_color,
+    )
+    fighter_data["image_prompt"] = _build_charsheet_prompt(
+        body_parts, clothing_barely, expression,
+        personality_pose=personality_pose, tier="barely",
+        gender=gender, skimpiness_level=skimpiness,
+        body_type_details=body_type_details, origin=origin,
+        subtype_info=subtype_info, iconic_features=iconic_features,
+        age=age, primary_outfit_color=primary_outfit_color,
+    )
+    if gender.lower() == "male":
+        fighter_data["image_prompt_nsfw"] = fighter_data["image_prompt"]
+    else:
+        fighter_data["image_prompt_nsfw"] = _build_charsheet_prompt(
+            body_parts, clothing_nsfw, expression,
+            personality_pose=personality_pose, tier="nsfw",
+            gender=gender, skimpiness_level=skimpiness,
+            body_type_details=body_type_details, origin=origin,
+            subtype_info=subtype_info, iconic_features=iconic_features,
+            age=age, primary_outfit_color=primary_outfit_color,
+        )
+    if not fighter_data.get("image_prompt_body_ref", {}).get("full_prompt"):
+        fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
+            body_parts, expression,
+            gender=gender, body_type_details=body_type_details,
+            origin=origin, subtype_info=subtype_info,
+            age=age, iconic_features=iconic_features,
+        )
+    fighter_data["image_prompt_headshot"] = build_headshot_prompt(
+        body_parts, expression,
+        gender=gender, body_type_details=body_type_details,
+        origin=origin, subtype_info=subtype_info,
+        iconic_features=iconic_features, age=age,
+    )
+
+
+def _generate_stage1_images(fighter_data: dict, config, fighters_dir: Path) -> None:
+    fid = fighter_data.get("id", "")
+    gender = fighter_data.get("gender", "female")
+    is_male = gender.lower() == "male"
+    slug = img_slugify(fighter_data.get("ring_name", ""))
+    base = f"{fid}_{slug}" if slug else fid
+
+    body_ref_prompt = fighter_data.get("image_prompt_body_ref", {}).get("full_prompt", "")
+    body_ref_path = fighters_dir / f"{base}_body_ref.png"
+
+    if body_ref_prompt and not body_ref_path.exists():
+        print(f"    Generating body reference image for {fid}...")
+        female_ref = config.data_dir / "reference_images" / "female" / "pussy_asshole_behind2.png"
+        if not is_male and female_ref.exists():
+            urls = edit_image(
+                prompt=body_ref_prompt, image_paths=[female_ref],
+                config=config, aspect_ratio="1:1", resolution="2k", n=1, pad_to_aspect=True,
+            )
+        else:
+            urls = generate_image(
+                prompt=body_ref_prompt, config=config,
+                aspect_ratio="1:1", resolution="2k", n=1,
+            )
+        if urls:
+            download_image(urls[0], body_ref_path)
+
+    def _gen_variant(prompt_full, save_path, label):
+        if not prompt_full:
+            return
+        if body_ref_path.exists():
+            print(f"    Generating {label} from body reference for {fid}...")
+            urls = edit_image(
+                prompt=prompt_full, image_paths=[body_ref_path],
+                config=config, aspect_ratio="1:1", resolution="2k", n=1,
+            )
+        else:
+            print(f"    Generating {label} for {fid}...")
+            urls = generate_image(
+                prompt=prompt_full, config=config,
+                aspect_ratio="1:1", resolution="2k", n=1,
+            )
+        if urls:
+            download_image(urls[0], save_path)
+
+    portrait_full = fighter_data.get("image_prompt_portrait", {}).get("full_prompt", "")
+    headshot_full = fighter_data.get("image_prompt_headshot", {}).get("full_prompt", "")
+    portrait_path = fighters_dir / f"{base}_portrait.png"
+    headshot_path = fighters_dir / f"{base}_headshot.png"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futs = []
+        if portrait_full:
+            futs.append(pool.submit(_gen_variant, portrait_full, portrait_path, "portrait"))
+        if headshot_full:
+            futs.append(pool.submit(_gen_variant, headshot_full, headshot_path, "headshot"))
+        for fut in as_completed(futs):
+            fut.result()
+
+
+def _advance_fighter_to_stage3(fid: str, config, fighters_dir: Path) -> str:
+    fighter_data = data_manager.load_fighter(fid, config)
+    if not fighter_data:
+        return f"{fid}: not found"
+
+    current = fighter_data.get("generation_stage", 0)
+    ring_name = fighter_data.get("ring_name", fid)
+
+    if current < 1:
+        return f"{ring_name}: skipped (stage 0)"
+    if current >= 3:
+        return f"{ring_name}: already at stage 3"
+
+    if current == 1:
+        print(f"  [{ring_name}] Stage 1 -> 2: generating reference images...")
+        body_parts = fighter_data.get("image_prompt_body_parts", "")
+        if not body_parts:
+            body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+        if not body_parts:
+            body_parts = fighter_data.get("image_prompt_sfw", {}).get("body_parts", "")
+        expression = fighter_data.get("image_prompt_expression", "")
+        if not expression:
+            expression = fighter_data.get("image_prompt", {}).get("expression", "")
+        if not expression:
+            expression = fighter_data.get("image_prompt_sfw", {}).get("expression", "")
+
+        gender = fighter_data.get("gender", "female")
+        subtype_info = _get_subtype_info(fighter_data)
+        iconic_features = fighter_data.get("iconic_features", "")
+        age = fighter_data.get("age", 0)
+
+        fighter_data["image_prompt_portrait"] = build_portrait_prompt(
+            body_parts, fighter_data.get("ring_attire_sfw", ""), expression,
+            gender=gender, body_type_details=fighter_data.get("body_type_details"),
+            origin=fighter_data.get("origin", ""), subtype_info=subtype_info,
+            iconic_features=iconic_features,
+            primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
+            age=age,
+        )
+        if not fighter_data.get("image_prompt_body_ref"):
+            fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
+                body_parts, expression, gender=gender,
+                body_type_details=fighter_data.get("body_type_details"),
+                origin=fighter_data.get("origin", ""), subtype_info=subtype_info,
+                age=age, iconic_features=iconic_features,
+            )
+        fighter_data["image_prompt_headshot"] = build_headshot_prompt(
+            body_parts, expression, gender=gender,
+            body_type_details=fighter_data.get("body_type_details"),
+            origin=fighter_data.get("origin", ""), subtype_info=subtype_info,
+            iconic_features=iconic_features, age=age,
+        )
+
+        _generate_stage1_images(fighter_data, config, fighters_dir)
+        fighter_data["generation_stage"] = 2
+        fighter_data["generation_dirty"] = [
+            d for d in fighter_data.get("generation_dirty", []) if d != "images"
+        ]
+        data_manager.save_fighter(fighter_data, config)
+
+    print(f"  [{ring_name}] Stage 2 -> 3: generating charsheet images...")
+    fighter = Fighter.from_dict(fighter_data)
+    if not fighter.image_prompt_body_ref:
+        body_parts = fighter_data.get("image_prompt_body_parts", "")
+        if not body_parts:
+            body_parts = fighter_data.get("image_prompt", {}).get("body_parts", "")
+        expression = fighter_data.get("image_prompt_expression", "")
+        if not expression:
+            expression = fighter_data.get("image_prompt", {}).get("expression", "")
+        subtype_info = _get_subtype_info(fighter_data)
+        fighter.image_prompt_body_ref = build_body_reference_prompt(
+            body_parts, expression, gender=fighter.gender,
+            body_type_details=fighter_data.get("body_type_details"),
+            origin=fighter.origin, subtype_info=subtype_info,
+            age=fighter.age, iconic_features=fighter_data.get("iconic_features", ""),
+        )
+    if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
+        _rebuild_prompts(fighter_data)
+        fighter = Fighter.from_dict(fighter_data)
+
+    generate_charsheet_images(fighter, config, fighters_dir)
+    fighter_data = fighter.to_dict()
+    fighter_data["generation_stage"] = 3
+    fighter_data["generation_dirty"] = []
+    data_manager.save_fighter(fighter_data, config)
+
+    return f"{ring_name}: fully generated (stage 3)"
+
+
+def _advance_all_fighters(fighter_ids: list, config, fighters_dir: Path):
+    PARALLEL = 2
+    for batch_start in range(0, len(fighter_ids), PARALLEL):
+        batch = fighter_ids[batch_start:batch_start + PARALLEL]
+        with ThreadPoolExecutor(max_workers=PARALLEL) as pool:
+            futures = {pool.submit(_advance_fighter_to_stage3, fid, config, fighters_dir): fid for fid in batch}
+            for future in as_completed(futures):
+                fid = futures[future]
+                try:
+                    result = future.result()
+                    print(f"    {result}")
+                except Exception as e:
+                    print(f"    ERROR advancing {fid}: {e}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Initialize AI Fighting League with LLM-generated fighters")
     parser.add_argument("--apex", type=int, default=8, help="Number of Apex tier fighters (default: 8)")
     parser.add_argument("--contender", type=int, default=8, help="Number of Contender tier fighters (default: 8)")
     parser.add_argument("--underground", type=int, default=20, help="Number of Underground tier fighters (default: 20)")
+    parser.add_argument("--full-generate", action="store_true", help="Fully generate all fighters through stage 3 (images)")
+    parser.add_argument("--gender", choices=["mixed", "female", "male"], default="mixed", help="Gender mix for roster (default: mixed)")
     args = parser.parse_args()
 
-    initialize_league_llm(apex=args.apex, contender=args.contender, underground=args.underground)
+    initialize_league_llm(apex=args.apex, contender=args.contender, underground=args.underground, full_generate=args.full_generate, gender_mix=args.gender)
 
 
 if __name__ == "__main__":

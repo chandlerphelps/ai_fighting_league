@@ -6,38 +6,19 @@
   "season_day_in_month": 6,
   "tier_rankings": {
     "apex": [
-      "f_6a705dda",
-      "f_9c11327b",
-      "f_38935cb3",
-      "f_c7901f53",
-      "f_9b46d823",
-      "f_2c2af452"
+      "f_8f482930",
+      "f_c980573f",
+      "f_3571ed97",
+      "f_7e9be01e",
+      "f_971bb18a"
     ],
-    "contender": [
-      "f_91dfcbb7",
-      "f_a116c328",
-      "f_bc709014",
-      "f_cb41d73d",
-      "f_4989293d",
-      "f_7ddc0da9",
-      "f_4f187501",
-      "f_2a350d4c"
-    ],
-    "underground": [
-      "f_83c30c61",
-      "f_4060c2f7",
-      "f_5b624be4",
-      "f_3c2b0d5f",
-      "f_39a9a3d4",
-      "f_106395b1",
-      "f_d8921232",
-      "f_c1700f33"
-    ]
+    "contender": [],
+    "underground": []
   },
-  "belt_holder_id": "f_6a705dda",
+  "belt_holder_id": "f_8f482930",
   "belt_history": [
     {
-      "fighter_id": "f_6a705dda",
+      "fighter_id": "f_8f482930",
       "won_date": "season_0",
       "lost_date": null,
       "defenses": 0
@@ -52,36 +33,19 @@
   "promotion_fights": [],
   "title_fight": {},
   "rankings": [
-    "f_6a705dda",
-    "f_9c11327b",
-    "f_38935cb3",
-    "f_c7901f53",
-    "f_9b46d823",
-    "f_2c2af452",
-    "f_91dfcbb7",
-    "f_a116c328",
-    "f_bc709014",
-    "f_cb41d73d",
-    "f_4989293d",
-    "f_7ddc0da9",
-    "f_4f187501",
-    "f_2a350d4c",
-    "f_83c30c61",
-    "f_4060c2f7",
-    "f_5b624be4",
-    "f_3c2b0d5f",
-    "f_39a9a3d4",
-    "f_106395b1",
-    "f_d8921232",
-    "f_c1700f33"
+    "f_8f482930",
+    "f_c980573f",
+    "f_3571ed97",
+    "f_7e9be01e",
+    "f_971bb18a"
   ],
   "upcoming_events": [],
   "completed_events": [],
   "last_daily_summary": "League initialized with LLM-generated fighters.",
   "event_counter": 0,
   "tier_sizes": {
-    "apex": 6,
-    "contender": 8,
-    "underground": 8
+    "apex": 5,
+    "contender": 0,
+    "underground": 0
   }
 }

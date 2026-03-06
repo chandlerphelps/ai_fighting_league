@@ -143,6 +143,9 @@ npm run build   # Production build
 - `frontend/notes/design_philosophy.md` - Design principles and guidelines
 - `frontend/notes/task_list.md` - Current work and TODOs
 
-### Project-Level
+### Project-Level Overview Docs (`/notes/`)
+
+Deep-dive docs on major subsystems. The `/orient` skill should read these to understand how the project works. The `/update-docs` skill should update them when their source files change.
 
 - `notes/mvp_prd.md` - Full MVP product requirements document
+- `notes/character_generation.md` - Character generation pipeline (roster planning, body traits, outfits, image prompts). **Update when any of these change**: `engine/fighter_config.py`, `engine/fighter_generator.py`, `prompts/fighter_prompts.py`, `prompts/outfit_prompts.py`, `prompts/image_builders.py`, `engine/image_style.py`, `services/grok_image.py`
