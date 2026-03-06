@@ -13,9 +13,9 @@ GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
 Everything below flows from these four principles. If a new character violates any of
 them, stop and rework.
 
-### 1. Female Characters Are Attractive — Always
+### 1. Female Characters Are Attractive but Distinctive
 
-Design for a predominantly male audience. Every female fighter should be attractive.
+Design for a predominantly male audience. Every female fighter should be attractive in a distinctive way.
 Sex appeal is a feature, not a bug. Confidence, allure, and willingness to
 weaponize beauty are core to female character design in AFL. But be tasteful so we can have a
 good SFW version of each character which is family friendly. Most should be white / asian / latina.
@@ -270,7 +270,7 @@ def build_plan_roster_prompt(
         )
         gender_constraint = (
             "- Gender: include BOTH male and female fighters in this roster\n"
-            "- Every female fighter should be attractive\n"
+            "- Every female fighter should be attractive but distinctive\n"
             "- Power tiers MUST be distributed evenly across genders — do NOT cluster all males or all females into the same power_tier. Each tier (champion, contender, gatekeeper, prospect) should have a mix of both genders"
         )
         archetype_json_line = f'"primary_archetype": "<from female archetypes: {female_archetype_list} OR male archetypes: {male_archetype_list}>"'
@@ -291,7 +291,7 @@ def build_plan_roster_prompt(
         archetype_line = f"- Archetypes: cover at least 5 different primary archetypes from the FEMALE list: {archetype_list}"
         gender_constraint = (
             "- Gender: ALL fighters must be female\n"
-            "- Every female fighter should be attractive"
+            "- Every female fighter should be attractive but distinctive"
         )
         archetype_json_line = (
             f'"primary_archetype": "<from the female archetypes: {archetype_list}>"'
