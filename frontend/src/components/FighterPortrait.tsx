@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { colors, fontSizes, withAlpha } from '../design-system'
 import { fighterImagePath } from '../lib/images'
 
+const IMAGE_TIERS = ['sfw', 'headshot', 'portrait']
+
 interface FighterPortraitProps {
   fighterId: string
   name: string
@@ -9,9 +11,13 @@ interface FighterPortraitProps {
 }
 
 export default function FighterPortrait({ fighterId, name, size = 48 }: FighterPortraitProps) {
-  const [failed, setFailed] = useState(false)
+  const [tierIndex, setTierIndex] = useState(0)
 
-  if (failed) {
+  const handleError = () => {
+    setTierIndex(prev => prev + 1)
+  }
+
+  if (tierIndex >= IMAGE_TIERS.length) {
     return (
       <div style={{
         width: size,
@@ -38,9 +44,9 @@ export default function FighterPortrait({ fighterId, name, size = 48 }: FighterP
 
   return (
     <img
-      src={fighterImagePath(fighterId, name, 'sfw')}
+      src={fighterImagePath(fighterId, name, IMAGE_TIERS[tierIndex])}
       alt={name}
-      onError={() => setFailed(true)}
+      onError={handleError}
       style={{
         width: size,
         height: size,

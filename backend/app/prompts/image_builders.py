@@ -170,11 +170,11 @@ def _build_charsheet_prompt(
     sections = [
         f"[STYLE] {style}",
         f"[CHARACTER] {character_desc}",
-        f"[ANATOMY] {anatomy}" if anatomy else "",
+        f"[BODY TYPE] {anatomy}" if anatomy else "",
         f"[VIEWS] {front_view}, {back_view}",
         f"[EXPRESSION] {expression}" if expression else "",
         f"[QUALITY] {tail}",
-        f"[ANATOMY EMPHASIS] {anatomy}" if anatomy else "",
+        f"[BODY TYPE REFERENCE] {anatomy}" if anatomy else "",
     ]
     full = "\n".join(s for s in sections if s)
 
@@ -493,7 +493,7 @@ def build_body_reference_prompt(
         f"[TOP-RIGHT: CHEST AND CROTCH STANDING] {chest_panel}",
         f"[BOTTOM-LEFT: BUTT] {butt_panel}",
         f"[BOTTOM-RIGHT: INTIMATE] {intimate_panel}",
-        f"[ANATOMY] {anatomy}" if anatomy else "",
+        f"[BODY TYPE] {anatomy}" if anatomy else "",
         f"[QUALITY] {BODY_REF_QUALITY}",
     ]
     full = "\n".join(s for s in sections if s)

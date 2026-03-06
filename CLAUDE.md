@@ -149,3 +149,4 @@ Deep-dive docs on major subsystems. The `/orient` skill should read these to und
 
 - `notes/mvp_prd.md` - Full MVP product requirements document
 - `notes/character_generation.md` - Character generation pipeline (roster planning, body traits, outfits, image prompts). **Update when any of these change**: `engine/fighter_config.py`, `engine/fighter_generator.py`, `prompts/fighter_prompts.py`, `prompts/outfit_prompts.py`, `prompts/image_builders.py`, `engine/image_style.py`, `services/grok_image.py`
+- `notes/league_mechanics.md` - League and combat simulation overview (seasons, tiers, matchmaking, combat, training, injuries, promotions, retirement). **Update when any of these change**: `engine/day_simulator.py`, `engine/combat/`, `engine/between_fights/`, `engine/post_fight.py`, `engine/rankings.py`, `engine/fight_simulator.py`

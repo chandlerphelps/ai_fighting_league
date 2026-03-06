@@ -538,13 +538,15 @@ function HeroFight({ match }: { match: MatchResult }) {
         gap: spacing.lg,
       }}>
         <div style={{ textAlign: 'right', flex: 1 }}>
-          <div style={{
-            fontSize: fontSizes.xxl,
-            fontWeight: 'bold',
-            color: isF1Winner ? colors.win : colors.loss,
-          }}>
-            {match.fighter1_name}
-          </div>
+          <FighterHoverCard fighterId={match.fighter1_id} fighterName={match.fighter1_name}>
+            <span style={{
+              fontSize: fontSizes.xxl,
+              fontWeight: 'bold',
+              color: isF1Winner ? colors.win : colors.loss,
+            }}>
+              {match.fighter1_name}
+            </span>
+          </FighterHoverCard>
           <div style={{ fontSize: fontSizes.xs, color: colors.textDim }}>
             {isF1Winner ? 'WINNER' : ''}
           </div>
@@ -557,13 +559,15 @@ function HeroFight({ match }: { match: MatchResult }) {
           vs
         </div>
         <div style={{ textAlign: 'left', flex: 1 }}>
-          <div style={{
-            fontSize: fontSizes.xxl,
-            fontWeight: 'bold',
-            color: !isF1Winner ? colors.win : colors.loss,
-          }}>
-            {match.fighter2_name}
-          </div>
+          <FighterHoverCard fighterId={match.fighter2_id} fighterName={match.fighter2_name}>
+            <span style={{
+              fontSize: fontSizes.xxl,
+              fontWeight: 'bold',
+              color: !isF1Winner ? colors.win : colors.loss,
+            }}>
+              {match.fighter2_name}
+            </span>
+          </FighterHoverCard>
           <div style={{ fontSize: fontSizes.xs, color: colors.textDim }}>
             {!isF1Winner ? 'WINNER' : ''}
           </div>
@@ -879,9 +883,13 @@ function UpcomingDay({ month, currentDate, promotionFights, promotionFightDate, 
                   <span style={{ color: colors.textDim, fontSize: fontSizes.xs, minWidth: '52px' }}>
                     {formatTime(f.start_time || '')}
                   </span>
-                  <span style={{ color: colors.text, textAlign: 'right' }}>{f.fighter1_name}</span>
+                  <FighterHoverCard fighterId={f.fighter1_id} fighterName={f.fighter1_name}>
+                    <span style={{ color: colors.text, textAlign: 'right' }}>{f.fighter1_name}</span>
+                  </FighterHoverCard>
                   <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
-                  <span style={{ color: colors.text }}>{f.fighter2_name}</span>
+                  <FighterHoverCard fighterId={f.fighter2_id} fighterName={f.fighter2_name}>
+                    <span style={{ color: colors.text }}>{f.fighter2_name}</span>
+                  </FighterHoverCard>
                 </div>
               ))}
             </div>
@@ -1268,20 +1276,24 @@ function MatchRow({ match }: { match: MatchResult }) {
         }}>
           {timeStr}
         </span>
-        <span style={{
-          color: isF1Winner ? colors.win : colors.loss,
-          fontWeight: isF1Winner ? 'bold' : 'normal',
-          textAlign: 'right',
-        }}>
-          {match.fighter1_name}
-        </span>
+        <FighterHoverCard fighterId={match.fighter1_id} fighterName={match.fighter1_name}>
+          <span style={{
+            color: isF1Winner ? colors.win : colors.loss,
+            fontWeight: isF1Winner ? 'bold' : 'normal',
+            textAlign: 'right',
+          }}>
+            {match.fighter1_name}
+          </span>
+        </FighterHoverCard>
         <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
-        <span style={{
-          color: !isF1Winner ? colors.win : colors.loss,
-          fontWeight: !isF1Winner ? 'bold' : 'normal',
-        }}>
-          {match.fighter2_name}
-        </span>
+        <FighterHoverCard fighterId={match.fighter2_id} fighterName={match.fighter2_name}>
+          <span style={{
+            color: !isF1Winner ? colors.win : colors.loss,
+            fontWeight: !isF1Winner ? 'bold' : 'normal',
+          }}>
+            {match.fighter2_name}
+          </span>
+        </FighterHoverCard>
         <span style={{
           color: methodColor(match.method),
           fontSize: fontSizes.xs,

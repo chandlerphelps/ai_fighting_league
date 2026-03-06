@@ -27,9 +27,11 @@ Generation stages tracked on `Fighter.generation_stage`:
 **Entry**: `plan_roster()` in `fighter_generator.py`
 **LLM call**: minimax/minimax-m2.5, temp 0.9, system prompt = `SYSTEM_PROMPT_ROSTER_PLANNER`
 
+Accepts `gender_mix` parameter (`"female"`, `"male"`, or `"mixed"`) which controls which archetype lists, character guides, and gender constraints are injected. Mixed mode presents both male and female archetypes and enforces power-tier balance across genders.
+
 The planner gets:
 - `GUIDE_CORE_PHILOSOPHY` (or male/mixed variant) + `GUIDE_COMMON_MISTAKES`
-- Existing roster summary (pool summary or fighter list) for deduplication
+- Existing roster summary via `pool_summarizer.py` for deduplication — includes archetype distribution (with MISSING highlighted), geographic spread, age brackets, and a **visual identity registry** of taken outfit colors, hair bucket counts, style+bucket combos, and face adornments
 - Shuffled archetype + subtype lists (randomized order to reduce LLM position bias)
 - Constraints: archetype diversity, geography, supernatural mix, skimpiness weights, visual identity uniqueness
 
@@ -68,36 +70,28 @@ archetype + subtype -> body profile (weighted) -> trait options (constrained) ->
 #### Female body profiles (4): Petite, Slim, Athletic, Curvy
 Each profile constrains which options are available for: body_fat_pct, abs_tone, waist, breast_size, butt_size.
 
-`ARCHETYPE_BODY_PROFILE_WEIGHTS` maps archetype -> profile probabilities:
-- Siren: 55% Curvy, 20% Slim/Athletic, 5% Petite
-- Assassin: 40% Athletic, 30% Slim, 20% Petite, 10% Curvy
-- Doll: 35% Petite, 28% Curvy, 25% Slim, 12% Athletic
-
-Subtype `body_profile_bias` adjusts these weights (e.g., Succubus adds +30 Curvy, -20 Petite).
+`ARCHETYPE_BODY_PROFILE_WEIGHTS` maps archetype -> profile probabilities (e.g. Siren skews Curvy, Assassin skews Athletic). Subtype `body_profile_bias` further adjusts these weights. See `fighter_config.py` for exact values.
 
 #### Female traits rolled (17 total):
 - **Body**: waist, abs_tone, body_fat_pct, butt_size, breast_size, nipple_size, vulva_type
 - **Face**: face_shape, eye_shape, nose_shape, lip_shape, brow_shape, cheekbone, jawline, makeup_level
-- **Derived**: height (from `ARCHETYPE_HEIGHT_RANGES`, e.g. Siren 5'2"-5'9"), weight (formula using height + body fat + breast/butt modifiers)
+- **Derived**: height (from `ARCHETYPE_HEIGHT_RANGES`), weight (formula using height + body fat + breast/butt modifiers)
 
-`ARCHETYPE_BODY_WEIGHTS` provides per-archetype weighted distributions for many traits. Example: Siren breast_size weights `{tiny: 2, small: 7, medium: 23, large: 50, massive: 18}`.
-
-`_weighted_choice()` picks a trait value using archetype weights if available, uniform otherwise.
+`ARCHETYPE_BODY_WEIGHTS` provides per-archetype weighted distributions for many traits. `_weighted_choice()` picks a trait value using archetype weights if available, uniform otherwise. See `fighter_config.py` for all weight tables.
 
 #### Male body profiles (7): Skinny, Wiry, Athletic, Muscular, Stocky, Heavy, Massive
 
 Each constrains: body_fat_pct, muscle_definition, shoulder_width, chest_build, build_type, waist.
 
-`MALE_ARCHETYPE_BODY_PROFILE_WEIGHTS`: e.g. Monster = 50% Massive, 25% Heavy, 15% Muscular.
+`MALE_ARCHETYPE_BODY_PROFILE_WEIGHTS` maps archetype -> profile probabilities. See `fighter_config.py`.
 
 #### Male traits rolled (10 total):
 - **Body**: build_type, muscle_definition, body_fat_pct, shoulder_width, chest_build, waist
 - **Face**: face_shape, eye_expression, facial_hair
-- **Derived**: height (from `MALE_ARCHETYPE_HEIGHT_RANGES`, e.g. Monster 6'2"-6'8"), weight (different formula: higher base, build bonus)
+- **Derived**: height (from `MALE_ARCHETYPE_HEIGHT_RANGES`), weight (different formula: higher base, build bonus)
 
 #### Weight derivation
-- **Female**: `base = (height_in - 60) * 3.0 + 105`, modified by body_fat multiplier, waist multiplier, breast weight (+0-10 lbs), butt weight (+0-9 lbs), +/- 3 random
-- **Male**: `base = (height_in - 60) * 5.0 + 140`, modified by body_fat multiplier, waist multiplier, build bonus (+/- 15-35 lbs), +/- 5 random
+Height-based formula modified by body fat, waist, and gender-specific factors (breast/butt for female, build bonus for male). See `_roll_body_traits()` in `fighter_config.py`.
 
 ### LLM output (character JSON)
 
@@ -105,18 +99,20 @@ The LLM returns: `ring_name`, `real_name`, `age`, `origin`, `gender`, `build`, `
 
 Key constraint in the prompt: skin tone descriptions must avoid metaphorical terms (golden, olive, bronze, etc.) because the image model takes them literally.
 
+### Hidden Training Multipliers
+
+Every fighter gets randomized `learning_rate` and `work_ethic` multipliers that affect between-fight stat progression. These create hidden variance — two fighters with identical stats develop at different rates over a season.
+
 ### Stats Generation (`generate_archetype_stats()`)
 
 Stats are NOT from the LLM — they're generated independently.
 
 **Core stats** (power, speed, technique, toughness):
 - Target total drawn from normal distribution between `config.min_total_stats` and `config.max_total_stats`
-- Distributed according to `ARCHETYPE_STAT_WEIGHTS` with per-stat jitter (gaussian noise sigma=2)
-- Males get flat bonus: power +6, toughness +4 (gaussian around those values)
+- Distributed according to `ARCHETYPE_STAT_WEIGHTS` with per-stat jitter. Each archetype has a distinct stat profile (e.g. Siren: speed/technique heavy, Brute: power/toughness heavy).
+- Males get flat bonus to power and toughness via `GENDER_FLAT_BONUS`
 
-**Secondary stats**:
-- `guile`: female 45-100 (normal), male 0-15
-- `supernatural`: female 30-100 if has_supernatural (else 0), male 0-20 if has_supernatural (else 0)
+**Secondary stats** (`guile`, `supernatural`): gender-differentiated ranges via `GENDER_GUILE_RANGE` and `GENDER_SUPERNATURAL_RANGE`. Females get much higher guile and supernatural ceilings. See `fighter_config.py` for exact ranges.
 
 ---
 
@@ -131,29 +127,24 @@ Stats are NOT from the LLM — they're generated independently.
 | Tier | Female | Male |
 |------|--------|------|
 | `sfw` | Family-friendly, skin % varies by skimpiness | Battle Ready to Intimidating |
-| `barely` | Suggestive to extreme, effective_skimpiness = level + 4 | Stripped Down to Primal |
-| `nsfw` | Topless (level 1) or fully nude (levels 2-4) | Same as barely (no nsfw tier for males) |
+| `barely` | Suggestive to extreme, effective_skimpiness = level + 4 (shown as "X of 8" to LLM) | Stripped Down to Primal |
+| `nsfw` | Topless (level 1) or fully nude (levels 2-4) | Males restricted to sfw+barely only; `nsfw_prompt = barely_prompt`. If nsfw tier requested, silently downgrades to barely in `outfit_prompts.py`. |
 
 ### Skimpiness System
 
-`_roll_skimpiness()`: weighted random 1-4. Plan entries can specify `skimpiness_weights[4]` (must sum to 100). Default: `[10, 30, 38, 22]`.
+`_roll_skimpiness()`: weighted random 1-4. Plan entries can specify `skimpiness_weights[4]` (must sum to 100). Default: `[30, 35, 22, 13]` (biased toward lower levels).
 
-**Female `SKIMPINESS_LEVELS`** (4 levels, each defines sfw/barely/nsfw rules):
-- Level 1: SFW 15-25% skin, Barely "Flirty" 45-55%, NSFW "Scandalous" (topless only)
-- Level 2: SFW 30-45% "Sporty", Barely "Risque" 60-70%, NSFW "Confident" (full nude)
-- Level 3: SFW 50-65% "Bold", Barely "Scandalous" 75-85%, NSFW "Tease" (full nude, self-touching)
-- Level 4: SFW 60-75% "Daring", Barely "Extreme" 99%, NSFW "Pornographic" (explicit posing)
+**Female `SKIMPINESS_LEVELS`** — 4 levels, each defines sfw/barely/nsfw rules with labels, skin % targets, hard rules, and guidance. Level 1 NSFW is topless only; levels 2-4 are fully nude. All barely tiers enforce: nipples and groin MUST be covered. See `SKIMPINESS_LEVELS` in `fighter_config.py` for exact rules per level.
 
-**Male `MALE_SKIMPINESS_LEVELS`** (4 levels, sfw/barely only):
-- Level 1: SFW "Battle Ready" 15-30%, Barely "Stripped Down" 40-55%
-- Level 4: SFW "Intimidating" 40-55%, Barely "Primal" 65-80%
+**Male `MALE_SKIMPINESS_LEVELS`** — 4 levels, sfw/barely only. See `fighter_config.py`.
 
 ### Outfit context injected into prompts
 
 Each tier prompt receives:
 - Character summary (ring_name, archetype, subtype with description, personality, iconic_features, body_parts, expression)
-- `_build_body_shape_line()`: e.g. "petite 5'2\", small perky breasts (covered), tiny tight butt"
-- NSFW tiers also get `_build_nsfw_anatomy_line()`: breast/nipple/butt/vulva details
+- `_build_body_shape_line()`: body summary string. SFW tier adds "(covered)" annotation; barely/nsfw omit it.
+- `_build_nsfw_anatomy_line()`: NSFW tiers get full anatomy details (breasts/nipples/butt/vulva). Barely tier gets a reduced version (breasts + butt only).
+- `makeup_level` is expanded via `MAKEUP_DESCRIPTIONS` into natural-language descriptions before injection into body directives and face panels.
 - `OUTFIT_STYLE_RULES`: conciseness, 4-5 items minimum, combat footwear preference
 - Tier-specific rules: hard rules, skin target %, vibe guidance
 - Optional `outfit_options` (from `outfit_options.json`): sampled tops, bottoms, one-pieces, exotic one-pieces
@@ -196,11 +187,11 @@ Output: dict with `style`, `layout`, `body_parts`, `clothing`, `character_desc`,
 ```
 [STYLE] art_style + charsheet_layout + (NSFW prefix if nsfw tier)
 [CHARACTER] body_parts + body_shape_line + subtype_aesthetic + clothing + iconic_features + age + origin
-[ANATOMY] nsfw_anatomy_line (barely/nsfw tiers only)
+[BODY TYPE] nsfw_anatomy_line (barely/nsfw tiers only)
 [VIEWS] front-facing view with personality_pose, rear view
 [EXPRESSION] expression
 [QUALITY] art_style_tail + (NSFW tail if nsfw tier)
-[ANATOMY EMPHASIS] repeated anatomy line (for emphasis)
+[BODY TYPE REFERENCE] repeated anatomy line (for emphasis)
 ```
 
 **Key helper functions**:
@@ -223,6 +214,8 @@ Output: dict with `style`, `layout`, `body_parts`, `clothing`, `character_desc`,
 - `build_portrait_prompt()`: SFW upper-body shot with `PORTRAIT_STYLE`
 - `build_headshot_prompt()`: extreme close-up face shot with `HEADSHOT_STYLE` (character select screen energy)
 - `build_move_image_prompt()`: action pose with move name + snapshot, dynamic combat style
+
+`TIER_PROMPT_KEYS` in `grok_image.py` maps tier names to fighter prompt fields: `sfw` → `image_prompt_sfw`, `barely` → `image_prompt`, `nsfw` → `image_prompt_nsfw`, `portrait` → `image_prompt_portrait`, `headshot` → `image_prompt_headshot`. All of these can be passed as tiers to `generate_charsheet_images()`.
 
 ---
 
@@ -265,6 +258,7 @@ The body_ref -> charsheet pipeline is key: female charsheets use `edit_image()` 
 | Art style constants | `engine/image_style.py` |
 | Grok image gen/edit + charsheet pipeline | `services/grok_image.py` |
 | Fighter data model | `models/fighter.py` |
+| Roster dedup + pool summary | `engine/pool_summarizer.py` |
 | Outfit option data | `data/outfit_options.json`, `data/exotic_outfit_options.json` |
 
 ## Data Stored on Fighter
@@ -282,3 +276,4 @@ After generation, the Fighter object carries everything needed to regenerate ima
 - `iconic_features`: persistent visual details across all tiers
 - `primary_outfit_color`: outfit color from palette
 - `outfit_suggestions`: per-tier outfit option samples (for regeneration)
+- `learning_rate`, `work_ethic`: hidden training progression multipliers

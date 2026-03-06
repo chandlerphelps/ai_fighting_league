@@ -75,7 +75,7 @@ export default function FighterHoverCard({ fighterId, fighterName, fighter: prel
           top: '100%',
           left: 0,
           zIndex: 1000,
-          width: 240,
+          width: 270,
           padding: spacing.sm,
           backgroundColor: colors.surface,
           border: `1px solid ${colors.border}`,
@@ -87,7 +87,7 @@ export default function FighterHoverCard({ fighterId, fighterName, fighter: prel
           {fighterData ? (
             <>
               <div style={{ display: 'flex', gap: spacing.sm, marginBottom: spacing.sm }}>
-                <FighterPortrait fighterId={fighterId} name={fighterData.ring_name} size={56} />
+                <FighterPortrait fighterId={fighterId} name={fighterData.ring_name} size={80} />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 0 }}>
                   <div style={{
                     color: colors.text,

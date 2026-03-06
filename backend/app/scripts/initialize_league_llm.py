@@ -516,7 +516,7 @@ def _advance_fighter_to_stage3(fid: str, config, fighters_dir: Path) -> str:
 
 
 def _advance_all_fighters(fighter_ids: list, config, fighters_dir: Path):
-    PARALLEL = 2
+    PARALLEL = 4
     for batch_start in range(0, len(fighter_ids), PARALLEL):
         batch = fighter_ids[batch_start:batch_start + PARALLEL]
         with ThreadPoolExecutor(max_workers=PARALLEL) as pool:

@@ -42,7 +42,7 @@ def call_openrouter(
                     "X-Title": "AI Fighting League",
                 },
                 json=payload,
-                timeout=120.0,
+                timeout=30.0,
             )
             response.raise_for_status()
             data = response.json()
