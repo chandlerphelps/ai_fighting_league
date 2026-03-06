@@ -204,6 +204,7 @@ def generate_replacement_fighter(
         "promotion_desperation": 0.0,
         "season_wins": 0,
         "season_losses": 0,
+        "season_tier_wins": {},
         "consecutive_losses": 0,
         "consecutive_wins": 0,
         "learning_rate": round(rng.uniform(0.7, 1.4), 2),

@@ -135,13 +135,14 @@ function TierSection({
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '40px 1fr 100px 80px 80px 80px 100px 80px 60px 80px 1fr',
+        gridTemplateColumns: '40px 1fr 100px 100px 80px 80px 80px 100px 80px 60px 80px 1fr',
         gap: '0',
         fontSize: fontSizes.sm,
       }}>
         <HeaderCell>#</HeaderCell>
         <HeaderCell>Fighter</HeaderCell>
-        <HeaderCell align="center">Record</HeaderCell>
+        <HeaderCell align="center">Season</HeaderCell>
+        <HeaderCell align="center">Career</HeaderCell>
         <HeaderCell align="center">
           <span style={{ color: colors.accent }}>A</span>
         </HeaderCell>
@@ -207,6 +208,7 @@ function FighterRow({ fighter, rank, isBeltHolder, nextMatch }: { fighter: Fight
           {fighter.ring_name}
         </span>
       </Cell>
+      <SeasonRecordCell fighter={fighter} dim={isInjured} />
       <Cell dim={isInjured} align="center">
         <span style={{ color: colors.win }}>{rec.wins}</span>
         <span style={{ color: colors.textDim }}>-</span>
@@ -258,6 +260,30 @@ function FighterRow({ fighter, rank, isBeltHolder, nextMatch }: { fighter: Fight
         )}
       </Cell>
     </>
+  )
+}
+
+function SeasonRecordCell({ fighter, dim }: { fighter: Fighter; dim?: boolean }) {
+  const sw = fighter.season_wins ?? 0
+  const sl = fighter.season_losses ?? 0
+  const total = sw + sl
+  const pct = total > 0 ? Math.round((sw / total) * 100) : 0
+  if (total === 0) {
+    return (
+      <Cell dim={dim} align="center">
+        <span style={{ color: colors.textDim }}>—</span>
+      </Cell>
+    )
+  }
+  return (
+    <Cell dim={dim} align="center">
+      <span style={{ color: colors.win }}>{sw}</span>
+      <span style={{ color: colors.textDim }}>-</span>
+      <span style={{ color: colors.loss }}>{sl}</span>
+      <span style={{ color: colors.textDim, fontSize: fontSizes.xs, marginLeft: spacing.xs }}>
+        ({pct}%)
+      </span>
+    </Cell>
   )
 }
 

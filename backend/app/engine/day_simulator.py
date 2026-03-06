@@ -351,14 +351,21 @@ def _run_single_fight(fighters: dict, ws: dict, f1_id: str, f2_id: str, rng, sta
         w_record["submissions"] = w_record.get("submissions", 0) + 1
     winner["record"] = w_record
     winner["season_wins"] = winner.get("season_wins", 0) + 1
+    fight_tier = f1.get("tier", "underground")
+    w_tr = winner.setdefault("tier_records", {}).setdefault(fight_tier, {"wins": 0, "losses": 0, "draws": 0})
+    w_tr["wins"] += 1
     winner["consecutive_losses"] = 0
+    winner["consecutive_wins"] = winner.get("consecutive_wins", 0) + 1
     winner["training_streak"] = 0
 
     l_record = loser.get("record", {})
     l_record["losses"] = l_record.get("losses", 0) + 1
     loser["record"] = l_record
     loser["season_losses"] = loser.get("season_losses", 0) + 1
+    l_tr = loser.setdefault("tier_records", {}).setdefault(fight_tier, {"wins": 0, "losses": 0, "draws": 0})
+    l_tr["losses"] += 1
     loser["consecutive_losses"] = loser.get("consecutive_losses", 0) + 1
+    loser["consecutive_wins"] = 0
     loser["training_streak"] = 0
 
     if loser["consecutive_losses"] >= 5:

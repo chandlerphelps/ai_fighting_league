@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext, createContext, type ReactNode } from 'react'
 import type { Fighter } from '../types/fighter'
 import type { WorldState } from '../types/world_state'
 import {
@@ -45,7 +45,16 @@ function useDataLoader<T>(loader: () => Promise<T | null>, deps: unknown[] = [])
   return { ...state, refresh }
 }
 
+const WorldStateContext = createContext<DataState<WorldState> | null>(null)
+
+export function WorldStateProvider({ children }: { children: ReactNode }) {
+  const state = useDataLoader(loadWorldState)
+  return <WorldStateContext.Provider value={state}>{children}</WorldStateContext.Provider>
+}
+
 export function useWorldState(): DataState<WorldState> {
+  const ctx = useContext(WorldStateContext)
+  if (ctx) return ctx
   return useDataLoader(loadWorldState)
 }
 

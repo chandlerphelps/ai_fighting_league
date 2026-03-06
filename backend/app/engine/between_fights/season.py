@@ -165,6 +165,7 @@ def process_end_of_season(
             continue
         fighter["season_wins"] = 0
         fighter["season_losses"] = 0
+        fighter["season_tier_wins"] = {}
         fighter["seasons_in_current_tier"] = fighter.get("seasons_in_current_tier", 0) + 1
         fighter["career_season_count"] = fighter.get("career_season_count", 0) + 1
         fighter["consecutive_losses"] = 0
@@ -222,7 +223,7 @@ def _backfill_tiers(
                 if f.get("tier") == lower_tier and f.get("status") == "active"
             ]
             lower_candidates.sort(
-                key=lambda f: (f.get("season_wins", 0), sum(f.get("stats", {}).get(s, 0) for s in ["power", "speed", "technique", "toughness"])),
+                key=lambda f: (f.get("season_tier_wins", {}).get(lower_tier, 0), sum(f.get("stats", {}).get(s, 0) for s in ["power", "speed", "technique", "toughness"])),
                 reverse=True,
             )
 

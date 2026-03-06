@@ -1,14 +1,14 @@
 {
-  "current_date": "2027-12-26",
+  "current_date": "2028-01-01",
   "day_number": 0,
   "season_number": 3,
-  "season_month": 12,
-  "season_day_in_month": 26,
+  "season_month": 1,
+  "season_day_in_month": 1,
   "tier_rankings": {
     "apex": [
       "f_08917d99",
-      "f_fa9c6423",
       "f_35af2453",
+      "f_fa9c6423",
       "f_5e76a49f"
     ],
     "contender": [
@@ -60,126 +60,6 @@
   "active_injuries": {},
   "rivalry_graph": [],
   "recent_matches": [
-    {
-      "fighter1_id": "f_6dc9feac",
-      "fighter1_name": "Virtu",
-      "fighter2_id": "f_08917d99",
-      "fighter2_name": "Sweet Venom",
-      "winner_id": "f_6dc9feac",
-      "method": "tko",
-      "round_ended": 4,
-      "tier": "apex",
-      "date": "2027-03-01",
-      "start_time": "21:30"
-    },
-    {
-      "fighter1_id": "f_2d56f32e",
-      "fighter1_name": "Dingo",
-      "fighter2_id": "f_ac439bd5",
-      "fighter2_name": "Neon Kiss",
-      "winner_id": "f_ac439bd5",
-      "method": "ko",
-      "round_ended": 5,
-      "tier": "contender",
-      "date": "2027-03-01",
-      "start_time": "18:00"
-    },
-    {
-      "fighter1_id": "f_35af2453",
-      "fighter1_name": "Void Weaver",
-      "fighter2_id": "f_a78c9133",
-      "fighter2_name": "Jaguar",
-      "winner_id": "f_35af2453",
-      "method": "ko",
-      "round_ended": 5,
-      "tier": "contender",
-      "date": "2027-03-01",
-      "start_time": "18:30"
-    },
-    {
-      "fighter1_id": "f_5e76a49f",
-      "fighter1_name": "Glitch",
-      "fighter2_id": "f_fc710d9c",
-      "fighter2_name": "Rosa Explosiva",
-      "winner_id": "f_5e76a49f",
-      "method": "tko",
-      "round_ended": 4,
-      "tier": "underground",
-      "date": "2027-03-01",
-      "start_time": "14:00"
-    },
-    {
-      "fighter1_id": "f_5e76a49f",
-      "fighter1_name": "Glitch",
-      "fighter2_id": "f_1e007842",
-      "fighter2_name": "Green Whisper",
-      "winner_id": "f_5e76a49f",
-      "method": "submission",
-      "round_ended": 5,
-      "tier": "underground",
-      "date": "2027-03-02",
-      "start_time": "14:00"
-    },
-    {
-      "fighter1_id": "f_5e76a49f",
-      "fighter1_name": "Glitch",
-      "fighter2_id": "f_1e007842",
-      "fighter2_name": "Green Whisper",
-      "winner_id": "f_5e76a49f",
-      "method": "ko",
-      "round_ended": 5,
-      "tier": "underground",
-      "date": "2027-03-03",
-      "start_time": "14:00"
-    },
-    {
-      "fighter1_id": "f_5e76a49f",
-      "fighter1_name": "Glitch",
-      "fighter2_id": "f_e329ffba",
-      "fighter2_name": "Mirage",
-      "winner_id": "f_5e76a49f",
-      "method": "tko",
-      "round_ended": 3,
-      "tier": "underground",
-      "date": "2027-03-04",
-      "start_time": "14:00"
-    },
-    {
-      "fighter1_id": "f_35af2453",
-      "fighter1_name": "Void Weaver",
-      "fighter2_id": "f_ac439bd5",
-      "fighter2_name": "Neon Kiss",
-      "winner_id": "f_35af2453",
-      "method": "tko",
-      "round_ended": 5,
-      "tier": "contender",
-      "date": "2027-03-07",
-      "start_time": "18:00"
-    },
-    {
-      "fighter1_id": "f_559d1366",
-      "fighter1_name": "Duchess",
-      "fighter2_id": "f_a116b1f2",
-      "fighter2_name": "Blood Moon",
-      "winner_id": "f_559d1366",
-      "method": "tko",
-      "round_ended": 4,
-      "tier": "contender",
-      "date": "2027-03-07",
-      "start_time": "18:30"
-    },
-    {
-      "fighter1_id": "f_dfe0562a",
-      "fighter1_name": "China Doll",
-      "fighter2_id": "f_fc710d9c",
-      "fighter2_name": "Rosa Explosiva",
-      "winner_id": "f_fc710d9c",
-      "method": "tko",
-      "round_ended": 5,
-      "tier": "underground",
-      "date": "2027-03-08",
-      "start_time": "14:00"
-    },
     {
       "fighter1_id": "f_5e76a49f",
       "fighter1_name": "Glitch",
@@ -2460,6 +2340,126 @@
       "tier": "contender",
       "date": "2027-12-25",
       "start_time": "18:30"
+    },
+    {
+      "fighter1_id": "f_2d56f32e",
+      "fighter1_name": "Dingo",
+      "fighter2_id": "f_559d1366",
+      "fighter2_name": "Duchess",
+      "winner_id": "f_559d1366",
+      "method": "tko",
+      "round_ended": 5,
+      "tier": "underground",
+      "date": "2027-12-26",
+      "start_time": "14:00"
+    },
+    {
+      "fighter1_id": "f_2d56f32e",
+      "fighter1_name": "Dingo",
+      "fighter2_id": "f_559d1366",
+      "fighter2_name": "Duchess",
+      "winner_id": "f_559d1366",
+      "method": "tko",
+      "round_ended": 6,
+      "tier": "underground",
+      "date": "2027-12-27",
+      "start_time": "14:00"
+    },
+    {
+      "fighter1_id": "f_559d1366",
+      "fighter1_name": "Duchess",
+      "fighter2_id": "f_2d56f32e",
+      "fighter2_name": "Dingo",
+      "winner_id": "f_559d1366",
+      "method": "tko",
+      "round_ended": 5,
+      "tier": "underground",
+      "date": "2027-12-29",
+      "start_time": "14:00"
+    },
+    {
+      "fighter1_id": "f_2d56f32e",
+      "fighter1_name": "Dingo",
+      "fighter2_id": "f_dfe0562a",
+      "fighter2_name": "China Doll",
+      "winner_id": "f_2d56f32e",
+      "method": "tko",
+      "round_ended": 7,
+      "tier": "underground",
+      "date": "2027-12-30",
+      "start_time": "14:00"
+    },
+    {
+      "fighter1_id": "f_5e76a49f",
+      "fighter1_name": "Glitch",
+      "fighter2_id": "f_08917d99",
+      "fighter2_name": "Sweet Venom",
+      "winner_id": "f_08917d99",
+      "method": "ko",
+      "round_ended": 5,
+      "tier": "apex",
+      "date": "2027-12-31",
+      "start_time": "21:00"
+    },
+    {
+      "fighter1_id": "f_fa9c6423",
+      "fighter1_name": "Cipher",
+      "fighter2_id": "f_35af2453",
+      "fighter2_name": "Void Weaver",
+      "winner_id": "f_35af2453",
+      "method": "ko",
+      "round_ended": 4,
+      "tier": "apex",
+      "date": "2027-12-31",
+      "start_time": "21:30"
+    },
+    {
+      "fighter1_id": "f_a116b1f2",
+      "fighter1_name": "Blood Moon",
+      "fighter2_id": "f_6dc9feac",
+      "fighter2_name": "Virtu",
+      "winner_id": "f_6dc9feac",
+      "method": "submission",
+      "round_ended": 2,
+      "tier": "contender",
+      "date": "2027-12-31",
+      "start_time": "18:00"
+    },
+    {
+      "fighter1_id": "f_1e007842",
+      "fighter1_name": "Green Whisper",
+      "fighter2_id": "f_a78c9133",
+      "fighter2_name": "Jaguar",
+      "winner_id": "f_a78c9133",
+      "method": "tko",
+      "round_ended": 5,
+      "tier": "contender",
+      "date": "2027-12-31",
+      "start_time": "18:30"
+    },
+    {
+      "fighter1_id": "f_efe81ab5",
+      "fighter1_name": "Pointe",
+      "fighter2_id": "f_ac439bd5",
+      "fighter2_name": "Neon Kiss",
+      "winner_id": "f_ac439bd5",
+      "method": "tko",
+      "round_ended": 5,
+      "tier": "contender",
+      "date": "2027-12-31",
+      "start_time": "19:00"
+    },
+    {
+      "fighter1_id": "sim-0001",
+      "fighter1_name": "Venom",
+      "fighter2_id": "f_559d1366",
+      "fighter2_name": "Duchess",
+      "winner_id": "f_559d1366",
+      "method": "tko",
+      "round_ended": 3,
+      "tier": "underground",
+      "date": "2027-12-31",
+      "start_time": "14:00"
     }
   ],
   "season_logs": [
@@ -2496,8 +2496,8 @@
   "title_fight": {},
   "rankings": [
     "f_08917d99",
-    "f_fa9c6423",
     "f_35af2453",
+    "f_fa9c6423",
     "f_5e76a49f",
     "f_a78c9133",
     "f_6dc9feac",
@@ -2514,74 +2514,83 @@
   ],
   "upcoming_events": [],
   "completed_events": [],
-  "last_daily_summary": "Season 3, 2027-12-25 | 2 matches fought | Recovered: Green Whisper",
+  "last_daily_summary": "Season 3, 2027-12-31 | 6 matches fought | Recovered: Rosa Explosiva",
   "event_counter": 0,
   "tier_sizes": {
     "apex": 4,
     "contender": 6,
     "underground": 6
   },
-  "scheduled_fights": [],
+  "scheduled_fights": [
+    {
+      "tier": "underground",
+      "fighter1_id": "f_fc710d9c",
+      "fighter1_name": "Rosa Explosiva",
+      "fighter2_id": "f_559d1366",
+      "fighter2_name": "Duchess",
+      "start_time": "14:00"
+    }
+  ],
   "next_matchups": {
-    "f_35af2453": {
-      "opponent_id": "f_fa9c6423",
-      "opponent_name": "Cipher",
-      "date": "2027-12-31"
-    },
-    "f_fa9c6423": {
+    "f_5e76a49f": {
       "opponent_id": "f_35af2453",
       "opponent_name": "Void Weaver",
-      "date": "2027-12-31"
+      "date": "2028-01-10"
     },
-    "f_5e76a49f": {
-      "opponent_id": "f_08917d99",
-      "opponent_name": "Sweet Venom",
-      "date": "2027-12-31"
-    },
-    "f_08917d99": {
+    "f_35af2453": {
       "opponent_id": "f_5e76a49f",
       "opponent_name": "Glitch",
-      "date": "2027-12-31"
+      "date": "2028-01-10"
     },
-    "f_a116b1f2": {
-      "opponent_id": "f_efe81ab5",
-      "opponent_name": "Pointe",
-      "date": "2027-12-31"
+    "f_fa9c6423": {
+      "opponent_id": "f_08917d99",
+      "opponent_name": "Sweet Venom",
+      "date": "2028-01-10"
+    },
+    "f_08917d99": {
+      "opponent_id": "f_fa9c6423",
+      "opponent_name": "Cipher",
+      "date": "2028-01-10"
+    },
+    "f_6dc9feac": {
+      "opponent_id": "f_1e007842",
+      "opponent_name": "Green Whisper",
+      "date": "2028-01-06"
+    },
+    "f_1e007842": {
+      "opponent_id": "f_6dc9feac",
+      "opponent_name": "Virtu",
+      "date": "2028-01-06"
     },
     "f_efe81ab5": {
       "opponent_id": "f_a116b1f2",
       "opponent_name": "Blood Moon",
-      "date": "2027-12-31"
+      "date": "2028-01-06"
+    },
+    "f_a116b1f2": {
+      "opponent_id": "f_efe81ab5",
+      "opponent_name": "Pointe",
+      "date": "2028-01-06"
     },
     "f_a78c9133": {
-      "opponent_id": "f_6dc9feac",
-      "opponent_name": "Virtu",
-      "date": "2027-12-31"
-    },
-    "f_6dc9feac": {
-      "opponent_id": "f_a78c9133",
-      "opponent_name": "Jaguar",
-      "date": "2027-12-31"
-    },
-    "f_ac439bd5": {
-      "opponent_id": "f_1e007842",
-      "opponent_name": "Green Whisper",
-      "date": "2027-12-31"
-    },
-    "f_1e007842": {
       "opponent_id": "f_ac439bd5",
       "opponent_name": "Neon Kiss",
-      "date": "2027-12-31"
+      "date": "2028-01-06"
     },
-    "f_2d56f32e": {
-      "opponent_id": "f_559d1366",
-      "opponent_name": "Duchess",
-      "date": "2027-12-27"
+    "f_ac439bd5": {
+      "opponent_id": "f_a78c9133",
+      "opponent_name": "Jaguar",
+      "date": "2028-01-06"
     },
     "f_559d1366": {
-      "opponent_id": "f_2d56f32e",
-      "opponent_name": "Dingo",
-      "date": "2027-12-27"
+      "opponent_id": "f_fc710d9c",
+      "opponent_name": "Rosa Explosiva",
+      "date": "2028-01-02"
+    },
+    "f_fc710d9c": {
+      "opponent_id": "f_559d1366",
+      "opponent_name": "Duchess",
+      "date": "2028-01-02"
     }
   }
 }

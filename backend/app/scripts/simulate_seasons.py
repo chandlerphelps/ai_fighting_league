@@ -197,6 +197,7 @@ class LeagueSimulator:
             "promotion_desperation": 0.0,
             "season_wins": 0,
             "season_losses": 0,
+            "season_tier_wins": {},
             "consecutive_losses": 0,
             "consecutive_wins": 0,
             "learning_rate": round(self.rng.uniform(0.7, 1.4), 2),
@@ -408,6 +409,10 @@ class LeagueSimulator:
             w_record["submissions"] = w_record.get("submissions", 0) + 1
         winner["record"] = w_record
         winner["season_wins"] = winner.get("season_wins", 0) + 1
+        fight_tier = self.fighters[f1_id].get("tier", "underground")
+        stw = winner.get("season_tier_wins", {})
+        stw[fight_tier] = stw.get(fight_tier, 0) + 1
+        winner["season_tier_wins"] = stw
         winner["consecutive_losses"] = 0
         winner["consecutive_wins"] = winner.get("consecutive_wins", 0) + 1
         winner["training_streak"] = 0
