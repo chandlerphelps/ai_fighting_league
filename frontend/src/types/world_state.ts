@@ -67,6 +67,21 @@ export interface NextMatchup {
   date: string
 }
 
+export interface PromotionFight {
+  upper_fighter_id: string
+  upper_fighter_name: string
+  lower_fighter_id: string
+  lower_fighter_name: string
+  tier_boundary: 'champ_contender' | 'contender_underground'
+}
+
+export interface TitleFight {
+  champion_id: string
+  champion_name: string
+  challenger_id: string
+  challenger_name: string
+}
+
 export interface WorldState {
   current_date: string
   day_number: number
@@ -86,8 +101,9 @@ export interface WorldState {
   rivalry_graph: RivalryRecord[]
   recent_matches: MatchResult[]
   season_logs: SeasonLog[]
-  promotion_fights: unknown[]
-  title_fight: Record<string, string>
+  promotion_fights: PromotionFight[]
+  promotion_fight_date: string
+  title_fight: TitleFight | Record<string, never>
   scheduled_fights: ScheduledFight[]
   next_matchups: Record<string, NextMatchup>
   rankings: string[]

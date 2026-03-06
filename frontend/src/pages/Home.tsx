@@ -4,7 +4,7 @@ import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState } from '../hooks/useData'
 import TierBadge from '../components/TierBadge'
 import { simulateDay } from '../lib/data'
-import type { DaySimulationResult, MatchResult, ScheduledFight } from '../types/world_state'
+import type { DaySimulationResult, MatchResult, ScheduledFight, PromotionFight, TitleFight } from '../types/world_state'
 
 const TIER_LABELS: Record<string, string> = {
   apex: 'Apex',
@@ -281,6 +281,7 @@ export default function Home() {
           season={ws.season_number}
           currentDate={ws.current_date}
           promotionFights={ws.promotion_fights}
+          promotionFightDate={ws.promotion_fight_date}
           titleFight={ws.title_fight}
           scheduledFights={ws.scheduled_fights}
         />
@@ -295,7 +296,7 @@ export default function Home() {
 }
 
 function LeftSidebar({ ws, latestChampion, tierCounts, currentMonth, simulating, multiSimulating, multiDayCount, setMultiDayCount, onSimulateDay, onSimulateMultiple }: {
-  ws: { season_number: number; current_date: string; season_month: number; season_day_in_month: number; promotion_fights: unknown[]; belt_holder_id: string }
+  ws: { season_number: number; current_date: string; season_month: number; season_day_in_month: number; promotion_fights: PromotionFight[]; belt_holder_id: string }
   latestChampion: { ring_name: string; season: number; defeated_name: string; fighter_id: string } | null
   tierCounts: { apex: number; contender: number; underground: number }
   currentMonth: number
@@ -659,13 +660,14 @@ function RightSidebar({ headlines, seasonLogs }: {
   )
 }
 
-function UpcomingDay({ month, currentDate, promotionFights, titleFight, scheduledFights }: {
+function UpcomingDay({ month, currentDate, promotionFights, promotionFightDate, titleFight, scheduledFights }: {
   month: number
   day: number
   season: number
   currentDate: string
-  promotionFights: unknown[]
-  titleFight: Record<string, string>
+  promotionFights: PromotionFight[]
+  promotionFightDate?: string
+  titleFight: TitleFight | Record<string, never>
   scheduledFights: ScheduledFight[]
 }) {
   const isPromotionMonth = month === 6
@@ -673,8 +675,12 @@ function UpcomingDay({ month, currentDate, promotionFights, titleFight, schedule
 
   if (isPromotionMonth) {
     const hasPromos = promotionFights && promotionFights.length > 0
-    const hasTitle = titleFight && titleFight.champion_id
+    const tf = titleFight as TitleFight
+    const hasTitle = tf && tf.champion_id
     if (!hasPromos && !hasTitle) return null
+
+    const champContender = hasPromos ? promotionFights.filter(p => p.tier_boundary === 'champ_contender') : []
+    const contenderUnderground = hasPromos ? promotionFights.filter(p => p.tier_boundary === 'contender_underground') : []
 
     return (
       <div style={{
@@ -684,31 +690,108 @@ function UpcomingDay({ month, currentDate, promotionFights, titleFight, schedule
         border: `1px solid ${withAlpha(colors.rivalry, 0.25)}`,
       }}>
         <div style={{
-          color: colors.rivalry,
-          fontSize: fontSizes.sm,
-          fontWeight: 'bold',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           marginBottom: spacing.sm,
         }}>
-          Coming Up — Promotion Month
+          <span style={{
+            color: colors.rivalry,
+            fontSize: fontSizes.sm,
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}>
+            Season Finale
+          </span>
+          {promotionFightDate && (
+            <span style={{ color: colors.textMuted, fontSize: fontSizes.xs }}>
+              {formatCurrentDate(promotionFightDate)}
+            </span>
+          )}
         </div>
+
         {hasTitle && (
           <div style={{
-            padding: `${spacing.xs} ${spacing.sm}`,
-            marginBottom: hasPromos ? spacing.xs : 0,
+            padding: spacing.sm,
+            marginBottom: spacing.sm,
             backgroundColor: withAlpha(colors.accent, 0.1),
-            borderRadius: '3px',
-            borderLeft: `3px solid ${colors.accent}`,
-            color: colors.accent,
-            fontSize: fontSizes.sm,
+            borderRadius: '4px',
+            border: `1px solid ${withAlpha(colors.accent, 0.3)}`,
+            position: 'relative',
+            overflow: 'hidden',
           }}>
-            Title Fight — Champion vs #1 Challenger
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '2px',
+              background: `linear-gradient(90deg, ${colors.accentDim}, ${colors.accent}, ${colors.accentBright}, ${colors.accent}, ${colors.accentDim})`,
+            }} />
+            <div style={{
+              fontSize: fontSizes.xs,
+              color: colors.accent,
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+              fontWeight: 'bold',
+              marginBottom: spacing.xs,
+            }}>
+              Title Fight
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: spacing.sm,
+              fontSize: fontSizes.sm,
+            }}>
+              <Link to={`/fighter/${tf.champion_id}`} style={{ color: colors.accentBright, fontWeight: 'bold', textDecoration: 'none' }}>
+                {tf.champion_name}
+              </Link>
+              <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
+              <Link to={`/fighter/${tf.challenger_id}`} style={{ color: colors.text, fontWeight: 'bold', textDecoration: 'none' }}>
+                {tf.challenger_name}
+              </Link>
+            </div>
           </div>
         )}
-        {hasPromos && (
-          <div style={{ color: colors.textMuted, fontSize: fontSizes.sm }}>
-            {promotionFights.length} promotion/relegation matchup{promotionFights.length !== 1 ? 's' : ''} pending
+
+        {champContender.length > 0 && (
+          <div style={{ marginBottom: contenderUnderground.length > 0 ? spacing.sm : 0 }}>
+            <div style={{
+              fontSize: fontSizes.xs,
+              color: colors.textDim,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: spacing.xs,
+            }}>
+              Apex / Contender
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              {champContender.map((p, i) => (
+                <PromotionMatchupRow key={i} matchup={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {contenderUnderground.length > 0 && (
+          <div>
+            <div style={{
+              fontSize: fontSizes.xs,
+              color: colors.textDim,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: spacing.xs,
+            }}>
+              Contender / Underground
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              {contenderUnderground.map((p, i) => (
+                <PromotionMatchupRow key={i} matchup={p} />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -784,6 +867,35 @@ function UpcomingDay({ month, currentDate, promotionFights, titleFight, schedule
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  )
+}
+
+function PromotionMatchupRow({ matchup }: { matchup: PromotionFight }) {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: `${spacing.xs} ${spacing.sm}`,
+      backgroundColor: withAlpha(colors.rivalry, 0.06),
+      borderRadius: '3px',
+      borderLeft: `3px solid ${colors.rivalry}`,
+      fontSize: fontSizes.sm,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1 }}>
+        <Link to={`/fighter/${matchup.upper_fighter_id}`} style={{ color: colors.text, textDecoration: 'none' }}>
+          {matchup.upper_fighter_name}
+        </Link>
+        <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>&#9660;</span>
+      </div>
+      <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>vs</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, flex: 1, justifyContent: 'flex-end' }}>
+        <span style={{ color: colors.textDim, fontSize: fontSizes.xs }}>&#9650;</span>
+        <Link to={`/fighter/${matchup.lower_fighter_id}`} style={{ color: colors.text, textDecoration: 'none' }}>
+          {matchup.lower_fighter_name}
+        </Link>
       </div>
     </div>
   )

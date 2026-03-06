@@ -557,15 +557,35 @@ def _prepare_promotions(fighters: dict, ws: dict):
         contender_underground_slots=6,
         protected_fighter_ids=protected,
     )
+    for m in matchups:
+        upper = fighters.get(m["upper_fighter_id"])
+        lower = fighters.get(m["lower_fighter_id"])
+        m["upper_fighter_name"] = upper.get("ring_name", "?") if upper else "?"
+        m["lower_fighter_name"] = lower.get("ring_name", "?") if lower else "?"
     ws["promotion_fights"] = matchups
+    ws["promotion_fight_date"] = season_end_date(ws["season_number"]).isoformat()
 
     champ_rankings = ws["tier_rankings"].get("apex", [])
     if belt_holder and belt_holder in [f["id"] for f in fighters.values() if f.get("status") == "active" and f.get("tier") == "apex"]:
         challengers = [fid for fid in champ_rankings if fid != belt_holder]
         if challengers:
-            ws["title_fight"] = {"champion_id": belt_holder, "challenger_id": challengers[0]}
+            champ = fighters.get(belt_holder)
+            challenger = fighters.get(challengers[0])
+            ws["title_fight"] = {
+                "champion_id": belt_holder,
+                "champion_name": champ.get("ring_name", "?") if champ else "?",
+                "challenger_id": challengers[0],
+                "challenger_name": challenger.get("ring_name", "?") if challenger else "?",
+            }
     elif champ_rankings and len(champ_rankings) >= 2:
-        ws["title_fight"] = {"champion_id": champ_rankings[0], "challenger_id": champ_rankings[1]}
+        f1 = fighters.get(champ_rankings[0])
+        f2 = fighters.get(champ_rankings[1])
+        ws["title_fight"] = {
+            "champion_id": champ_rankings[0],
+            "champion_name": f1.get("ring_name", "?") if f1 else "?",
+            "challenger_id": champ_rankings[1],
+            "challenger_name": f2.get("ring_name", "?") if f2 else "?",
+        }
 
 
 def _run_promotions(fighters: dict, ws: dict, rng, day_result: dict):
@@ -592,6 +612,7 @@ def _run_promotions(fighters: dict, ws: dict, rng, day_result: dict):
 
     apply_promotion_results(fighters, results)
     ws["promotion_fights"] = []
+    ws["promotion_fight_date"] = ""
 
 
 def _run_title_fight(fighters: dict, ws: dict, rng, day_result: dict):
