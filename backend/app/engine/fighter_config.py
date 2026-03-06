@@ -2321,24 +2321,24 @@ def _build_nsfw_anatomy_line(traits: dict, tier: str = "nsfw") -> str:
 
 SKIMPINESS_LEVELS = {
     1: {
-        "sfw_label": "Covered & Composed",
-        "sfw_skin_pct": "15-25",
-        "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
-        "sfw_guidance": "Conservative — only face, hands, and forearms visible. Full coverage everywhere else.",
+        "sfw_label": "Fitted",
+        "sfw_skin_pct": "5-20",
+        "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage — fabric covers everything but can show body shape.",
+        "sfw_guidance": "Fitted athletic wear — fabric follows the body's shape but isn't clinging. Think tailored combat gear, fitted compression shirts, athletic pants. Coverage is near-total but the silhouette is clean and defined.",
         "barely_label": "Flirty",
         "barely_skin_pct": "45-55",
         "barely_hard_rules": "No nipples, no areola, no genitalia directly visible.",
-        "barely_guidance": "Suggestive — form-fitting silhouette, cleavage, legs showing. Covered but clearly sexy.",
+        "barely_guidance": "First taste of skin — strategic reveals begin. Midriff, cleavage, legs showing. The transition from covered to showing.",
         "nsfw_adjective": "Scandalous",
         "nsfw_hard_rules": "Topless — bare breasts fully visible. Bottoms stay on but must be ultra-sexy: thongs, micro-bikini bottoms, strappy lingerie, or sheer panties. Show off legs and hips.",
         "nsfw_description": "Topless and unapologetic. Sultry, confident posing. Bottoms are barely-there and designed to tease — maximum skin, minimum fabric below the waist.",
         "nsfw_nudity_level": "topless",
     },
     2: {
-        "sfw_label": "Covered & Attractive",
-        "sfw_skin_pct": "30-45",
-        "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
-        "sfw_guidance": "Moderate — bare arms, some leg, a peek of midriff. Sporty and attractive.",
+        "sfw_label": "Form-fitting",
+        "sfw_skin_pct": "5-30",
+        "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage — fabric hugs every curve but all skin is covered.",
+        "sfw_guidance": "Form-fitting — fabric hugs every curve, the body shape is unmistakable. Think yoga pants, compression tops, body-hugging combat suits. Nearly all skin covered but the body is clearly on display through the fabric.",
         "barely_label": "Risqué",
         "barely_skin_pct": "60-70",
         "barely_hard_rules": "No nipples, no areola, no genitalia directly visible (but seen through transparent fabric is okay). Cameltoe, sideboob, underbutt are OK. If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
@@ -2349,10 +2349,10 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
     3: {
-        "sfw_label": "Covered but Suggestive",
-        "sfw_skin_pct": "50-65",
-        "sfw_hard_rules": "No nipples, no genitalia, no underboob, no sideboob, no cameltoe. Family-friendly.",
-        "sfw_guidance": "Bold — shows skin confidently but still looks like a real outfit.",
+        "sfw_label": "Skin-tight",
+        "sfw_skin_pct": "5-60",
+        "sfw_hard_rules": "No bare nipples, no genitalia. Nipple outline and cameltoe through tight fabric IS allowed. Full coverage with vacuum-sealed tightness — fabric is a second skin.",
+        "sfw_guidance": "Skin-tight — fabric is vacuum-sealed to the body, every muscle, contour and curve visible. Nipple outline through fabric is expected. Think bodysuits, catsuits, skin-tight leggings and tops. Coverage is high but nothing is left to imagination about the body underneath.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "75-85",
         "barely_hard_rules": "No full nipples, but areola peeking out is OK. No genitalia directly visible (but seen through transparent fabric is okay). If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
@@ -2363,10 +2363,10 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
     4: {
-        "sfw_label": "Daring",
-        "sfw_skin_pct": "60-75",
-        "sfw_hard_rules": "No nipples, no genitalia. Sideboob hints are OK at this level.",
-        "sfw_guidance": "Daring — the outfit is minimal but intentional. Looks great and happens to show skin.",
+        "sfw_label": "Skin-tight with Cutouts",
+        "sfw_skin_pct": "15-65",
+        "sfw_hard_rules": "No bare nipples, no genitalia. Nipple outline through fabric IS allowed. Sideboob hints OK. Strategic cutouts showing skin (midriff, sides, back, thighs) are expected.",
+        "sfw_guidance": "Skin-tight base with strategic cutouts — vacuum-sealed fabric with deliberate skin windows. Midriff cutouts, side panels, open backs, thigh windows. The outfit is skin-tight where it covers but intentionally reveals select areas of skin.",
         "barely_label": "Extreme",
         "barely_skin_pct": "99",
         "barely_hard_rules": "No full nipples. No genitalia directly visible (but seen through transparent fabric is okay). If using sheer or transparent fabric, nipples and anatomy MUST be visible through it — transparency means you can see through it.",
@@ -2652,10 +2652,10 @@ def generate_archetype_stats(
 
 def _roll_skimpiness(weights: list[int] | None) -> int:
     if not weights or len(weights) != 4:
-        weights = [10, 30, 38, 22]
+        weights = [30, 35, 22, 13]
     total = sum(weights)
     if total <= 0:
-        weights = [10, 30, 38, 22]
+        weights = [30, 35, 22, 13]
         total = 100
     normalized = [w / total for w in weights]
     return random.choices([1, 2, 3, 4], weights=normalized, k=1)[0]

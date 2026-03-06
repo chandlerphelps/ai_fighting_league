@@ -373,7 +373,7 @@ def generate_new_fighter():
             "gender": body.get("gender", "female"),
             "age": body.get("age", 0),
             "origin": body.get("origin", ""),
-            "skimpiness_weights": body.get("skimpiness_weights", [15, 35, 35, 15]),
+            "skimpiness_weights": body.get("skimpiness_weights", [30, 35, 22, 13]),
         }
         roster_plan_entry = {k: v for k, v in roster_plan_entry.items() if v}
 
@@ -394,7 +394,7 @@ def generate_new_fighter():
     task_id = f"gen_{uuid.uuid4().hex[:8]}"
 
     def do_generate():
-        weights = body.get("skimpiness_weights", [15, 35, 35, 15])
+        weights = body.get("skimpiness_weights", [30, 35, 22, 13])
         skimpiness = _roll_skimpiness(weights)
         outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness, archetype=archetype or "")
         fighter = generate_fighter(
@@ -438,7 +438,7 @@ def regenerate_character(fighter_id: str):
         "ring_name": body.get("ring_name", existing.get("ring_name", "")),
         "gender": existing.get("gender", "female"),
         "origin": body.get("origin", existing.get("origin", "")),
-        "skimpiness_weights": body.get("skimpiness_weights", [15, 35, 35, 15]),
+        "skimpiness_weights": body.get("skimpiness_weights", [30, 35, 22, 13]),
     }
     roster_plan_entry = {k: v for k, v in roster_plan_entry.items() if v}
 
@@ -460,7 +460,7 @@ def regenerate_character(fighter_id: str):
     task_id = f"regen_{uuid.uuid4().hex[:8]}"
 
     def do_regenerate():
-        weights = body.get("skimpiness_weights", [15, 35, 35, 15])
+        weights = body.get("skimpiness_weights", [30, 35, 22, 13])
         skimpiness = _roll_skimpiness(weights)
         outfit_opts = _build_outfit_options_for_fighter(skimpiness_level=skimpiness, archetype=archetype or "")
         fighter = generate_fighter(
@@ -999,7 +999,7 @@ def generate_from_plan():
             entry["status"] = "generating"
             data_manager.save_roster_plan(plan, config)
 
-            weights = entry.get("skimpiness_weights", [15, 35, 35, 15])
+            weights = entry.get("skimpiness_weights", [30, 35, 22, 13])
             skimpiness = _roll_skimpiness(weights)
             archetype = entry.get("primary_archetype")
             outfit_opts = _build_outfit_options_for_fighter(

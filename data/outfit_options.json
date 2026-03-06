@@ -2,20 +2,20 @@
   "sfw": {
     "tops": [
       {
-        "name": "high-neck tactical combat shirt",
-        "skimpiness_level": "1-2"
+        "name": "fitted compression top",
+        "skimpiness_level": "1"
       },
       {
-        "name": "reinforced plate carrier vest",
-        "skimpiness_level": "1-2"
+        "name": "fitted high-neck top",
+        "skimpiness_level": "1"
+      },
+      {
+        "name": "fitted long-sleeve shirt",
+        "skimpiness_level": "1"
       },
       {
         "name": "compression long-sleeve top",
         "skimpiness_level": "1"
-      },
-      {
-        "name": "stealth mesh compression top",
-        "skimpiness_level": "1-2"
       },
       {
         "name": "chemical-resistant fitted shirt",
@@ -26,16 +26,16 @@
         "skimpiness_level": "1"
       },
       {
-        "name": "utility bandolier rig",
-        "skimpiness_level": "1-3"
+        "name": "high-neck tactical combat shirt",
+        "skimpiness_level": "1"
       },
       {
-        "name": "light exoskeleton frame top",
-        "skimpiness_level": "1-3"
+        "name": "reinforced plate carrier vest",
+        "skimpiness_level": "1"
       },
       {
         "name": "fitted combat vest",
-        "skimpiness_level": "1-3"
+        "skimpiness_level": "1-2"
       },
       {
         "name": "secure wrap top",
@@ -46,28 +46,48 @@
         "skimpiness_level": "1-2"
       },
       {
-        "name": "rune-etched compression vest",
-        "skimpiness_level": "1-3"
+        "name": "stealth mesh compression top",
+        "skimpiness_level": "1-2"
       },
       {
         "name": "plasma weave compression tunic",
         "skimpiness_level": "1-2"
       },
       {
+        "name": "form-fitting top",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting long-sleeve top",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting turtleneck",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting vest",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting tank top",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting sports bra",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "body-hugging combat shirt",
+        "skimpiness_level": "2"
+      },
+      {
         "name": "nano-adaptive combat top",
-        "skimpiness_level": "1-3"
+        "skimpiness_level": "1-2"
       },
       {
-        "name": "sports bra",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "tank top",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "reinforced sports bra",
-        "skimpiness_level": "2-3"
+        "name": "rune-etched compression vest",
+        "skimpiness_level": "1-2"
       },
       {
         "name": "stim-injector harness vest",
@@ -78,99 +98,71 @@
         "skimpiness_level": "2-3"
       },
       {
-        "name": "halter top",
-        "skimpiness_level": "2-4"
-      },
-      {
         "name": "structured corset armor",
-        "skimpiness_level": "2-4"
-      },
-      {
-        "name": "off-shoulder fitted top",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "tactical crop top",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "bandeau top",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "underarm-cut tank top",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "open-back crop top",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "midriff-baring crop top",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "bustier with exposed midriff",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "ultra-cropped sports bra with sideboob cutouts",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "deep-plunge halter with maximum cleavage",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "micro crop vest with underboob line",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "extreme low-cut wrap top",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "fitted compression top",
-        "skimpiness_level": "1-2"
-      },
-      {
-        "name": "fitted long-sleeve shirt",
-        "skimpiness_level": "1-2"
-      },
-      {
-        "name": "fitted high-neck top",
-        "skimpiness_level": "1"
-      },
-      {
-        "name": "form-fitting top",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "form-fitting long-sleeve top",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "form-fitting turtleneck",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "form-fitting vest",
         "skimpiness_level": "2-3"
       },
       {
         "name": "skin-tight top",
-        "skimpiness_level": "3-4"
+        "skimpiness_level": "3"
       },
       {
         "name": "skin-tight long-sleeve shirt",
-        "skimpiness_level": "3-4"
+        "skimpiness_level": "3"
       },
       {
         "name": "skin-tight high-neck top",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "skin-tight sports bra",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "vacuum-sealed compression top",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "second-skin combat shirt",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "light exoskeleton frame top",
         "skimpiness_level": "3-4"
+      },
+      {
+        "name": "utility bandolier rig",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight top with midriff cutout",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight top with side panels removed",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight top with open back",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "vacuum-sealed crop top with side cutouts",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight halter with back window",
+        "skimpiness_level": "4"
       }
     ],
     "bottoms": [
+      {
+        "name": "fitted pants",
+        "skimpiness_level": "1"
+      },
+      {
+        "name": "fitted tights",
+        "skimpiness_level": "1"
+      },
       {
         "name": "high-waisted tactical pants",
         "skimpiness_level": "1"
@@ -180,122 +172,114 @@
         "skimpiness_level": "1"
       },
       {
-        "name": "gene-weave tactical pants",
-        "skimpiness_level": "1-2"
+        "name": "cargo pants",
+        "skimpiness_level": "1"
       },
       {
-        "name": "cargo pants",
-        "skimpiness_level": "1-2"
+        "name": "gene-weave tactical pants",
+        "skimpiness_level": "1"
       },
       {
         "name": "reinforced joggers",
         "skimpiness_level": "1-2"
       },
       {
-        "name": "utility thigh rig pants",
-        "skimpiness_level": "1-3"
-      },
-      {
         "name": "split hakama pants",
         "skimpiness_level": "1-2"
       },
       {
-        "name": "leggings",
-        "skimpiness_level": "1-3"
-      },
-      {
-        "name": "capri combat pants",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "combat shorts",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "fitted knee-length skirt",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "mini-skirt with bike shorts",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "tactical thigh panel skirt",
-        "skimpiness_level": "2-4"
-      },
-      {
-        "name": "short battle skirt",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "combat kilt",
-        "skimpiness_level": "2-4"
-      },
-      {
-        "name": "mid-thigh shorts",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "chainmail mesh skirt",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "exoskeleton leg plating",
-        "skimpiness_level": "2-4"
-      },
-      {
-        "name": "blade hip utility rig",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "extreme high-cut micro shorts",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "ultra high-leg tactical skirt",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "micro battle kilt with waist-high side slits",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "barely-there hot pants",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "fitted pants",
-        "skimpiness_level": "1-2"
-      },
-      {
-        "name": "fitted tights",
-        "skimpiness_level": "1-2"
-      },
-      {
         "name": "form-fitting pants",
-        "skimpiness_level": "2-3"
+        "skimpiness_level": "2"
       },
       {
         "name": "form-fitting tights",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting leggings",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "body-hugging combat pants",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting capri pants",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "utility thigh rig pants",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "exoskeleton leg plating",
         "skimpiness_level": "2-3"
       },
       {
         "name": "skin-tight pants",
-        "skimpiness_level": "3-4"
+        "skimpiness_level": "3"
       },
       {
         "name": "skin-tight tights",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "skin-tight leggings",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "vacuum-sealed combat pants",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "second-skin combat tights",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "chainmail mesh over skin-tight pants",
         "skimpiness_level": "3-4"
+      },
+      {
+        "name": "skin-tight pants with side cutouts",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight shorts with thigh windows",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "vacuum-sealed leggings with hip cutouts",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight pants with open side panels",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "blade hip utility rig over skin-tight shorts",
+        "skimpiness_level": "4"
       }
     ],
     "one_pieces": [
+      {
+        "name": "fitted bodysuit",
+        "skimpiness_level": "1"
+      },
+      {
+        "name": "fitted jumpsuit",
+        "skimpiness_level": "1"
+      },
+      {
+        "name": "fitted full-body suit",
+        "skimpiness_level": "1"
+      },
       {
         "name": "full coverage bodysuit",
         "skimpiness_level": "1"
       },
       {
         "name": "tactical jumpsuit",
-        "skimpiness_level": "1-2"
+        "skimpiness_level": "1"
       },
       {
         "name": "monastic discipline bodysuit",
@@ -318,15 +302,23 @@
         "skimpiness_level": "1-2"
       },
       {
+        "name": "form-fitting bodysuit",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting jumpsuit",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "body-hugging combat suit",
+        "skimpiness_level": "2"
+      },
+      {
+        "name": "form-fitting flight suit",
+        "skimpiness_level": "2"
+      },
+      {
         "name": "quantum weave combat suit",
-        "skimpiness_level": "1-3"
-      },
-      {
-        "name": "armored leotard with shorts",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "fight dress with built-in leggings",
         "skimpiness_level": "2-3"
       },
       {
@@ -334,69 +326,101 @@
         "skimpiness_level": "2-3"
       },
       {
-        "name": "high-cut leotard",
-        "skimpiness_level": "2-4"
-      },
-      {
-        "name": "combat romper",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "fitted mini-dress",
-        "skimpiness_level": "2-4"
-      },
-      {
-        "name": "high-leg bodysuit with open back",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "micro one-piece with high-leg cuts and side windows",
-        "skimpiness_level": "3-4"
-      },
-      {
-        "name": "ultra-skimpy tactical leotard with hip and midriff exposure",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "extreme high-cut bodysuit with deep plunge and sideboob",
-        "skimpiness_level": "4"
-      },
-      {
-        "name": "fitted bodysuit",
-        "skimpiness_level": "1-2"
-      },
-      {
-        "name": "fitted jumpsuit",
-        "skimpiness_level": "1-2"
-      },
-      {
-        "name": "fitted full-body suit",
-        "skimpiness_level": "1"
-      },
-      {
-        "name": "form-fitting bodysuit",
-        "skimpiness_level": "2-3"
-      },
-      {
-        "name": "form-fitting jumpsuit",
-        "skimpiness_level": "2-3"
-      },
-      {
         "name": "skin-tight bodysuit",
-        "skimpiness_level": "3-4"
+        "skimpiness_level": "3"
       },
       {
         "name": "skin-tight jumpsuit",
-        "skimpiness_level": "3-4"
+        "skimpiness_level": "3"
       },
       {
         "name": "skin-tight full-body suit",
-        "skimpiness_level": "3-4"
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "skin-tight catsuit",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "vacuum-sealed combat suit",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "second-skin bodysuit",
+        "skimpiness_level": "3"
+      },
+      {
+        "name": "skin-tight bodysuit with midriff cutout",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight suit with side windows",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight catsuit with open back",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "vacuum-sealed suit with thigh cutouts",
+        "skimpiness_level": "4"
+      },
+      {
+        "name": "skin-tight bodysuit with midriff and back windows",
+        "skimpiness_level": "4"
       }
     ]
   },
   "barely": {
     "tops": [
+      {
+        "name": "tactical crop top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "bandeau top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "underarm-cut tank top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "open-back crop top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "midriff-baring crop top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "bustier with exposed midriff",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "ultra-cropped sports bra with sideboob cutouts",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "deep-plunge halter with maximum cleavage",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "micro crop vest with underboob line",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "extreme low-cut wrap top",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "off-shoulder fitted top",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "tank top",
+        "skimpiness_level": "1-2"
+      },
       {
         "name": "sports bra",
         "skimpiness_level": "1-2"
@@ -540,6 +564,54 @@
     ],
     "bottoms": [
       {
+        "name": "combat shorts",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "mid-thigh shorts",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "mini-skirt with bike shorts",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "short battle skirt",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "barely-there hot pants",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "extreme high-cut micro shorts",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "ultra high-leg tactical skirt",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "micro battle kilt with waist-high side slits",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "tactical thigh panel skirt",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted knee-length skirt",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "combat kilt",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "capri combat pants",
+        "skimpiness_level": "1-2"
+      },
+      {
         "name": "micro shorts",
         "skimpiness_level": "1-2"
       },
@@ -649,6 +721,42 @@
       }
     ],
     "one_pieces": [
+      {
+        "name": "high-cut leotard",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "combat romper",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fitted mini-dress",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "high-leg bodysuit with open back",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "micro one-piece with high-leg cuts and side windows",
+        "skimpiness_level": "2-3"
+      },
+      {
+        "name": "ultra-skimpy tactical leotard with hip and midriff exposure",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "extreme high-cut bodysuit with deep plunge and sideboob",
+        "skimpiness_level": "3-4"
+      },
+      {
+        "name": "armored leotard with shorts",
+        "skimpiness_level": "1-2"
+      },
+      {
+        "name": "fight dress with built-in leggings",
+        "skimpiness_level": "1-2"
+      },
       {
         "name": "cut-out bodysuit",
         "skimpiness_level": "1-2"

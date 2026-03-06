@@ -318,7 +318,7 @@ ROSTER BALANCE CONSTRAINTS:
 {archetype_line}
 - No two fighters should share the same primary fighting style concept
 - Design rivalry seeds: each fighter should have 1-2 natural rivals within this roster
-- Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean slightly toward the skimpier side — most fighters should center around levels 2-3. A Siren might weight heavily toward 3-4, a Prodigy toward 2-3, an Empress toward 2-3. The 4 weights must sum to 100.
+- Skimpiness: assign each fighter probability weights for skimpiness levels 1-4 based on personality. The weights represent how likely each level is for this character. Default bias should lean toward the lower end — most fighters should center around levels 1-2 (fitted/form-fitting). A Siren might weight toward 2-3, a Prodigy toward 1-2, an Empress toward 1-2. Only the most provocative characters should have significant weight at level 4. The 4 weights must sum to 100.
 
 SIGNATURE VISUAL IDENTITY — each fighter needs a unique visual signature that makes them
 instantly recognizable. These elements are tracked across the entire roster to prevent duplicates:
