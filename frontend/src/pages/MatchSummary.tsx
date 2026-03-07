@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState, useFighter } from '../hooks/useData'
 import FighterPortrait from '../components/FighterPortrait'
+import { getStatColor } from '../components/StatBar'
 import type { MatchResult } from '../types/world_state'
 import type { Fighter } from '../types/fighter'
 
@@ -53,12 +54,6 @@ function formatDate(dateStr: string): string {
     return `${MONTHS[parts[1] ?? 0]} ${parts[2]}, ${parts[0]}`
   }
   return dateStr
-}
-
-function getStatColor(value: number): string {
-  if (value <= 35) return colors.statLow
-  if (value <= 65) return colors.statMid
-  return colors.statHigh
 }
 
 function formatRecord(f: Fighter): string {
@@ -655,6 +650,10 @@ function ComparisonBar({ label, value1, value2 }: {
 }) {
   const c1 = getStatColor(value1)
   const c2 = getStatColor(value2)
+  const over1 = value1 > 100
+  const over2 = value2 > 100
+  const overflow1 = over1 ? value1 - 100 : 0
+  const overflow2 = over2 ? value2 - 100 : 0
 
   return (
     <div>
@@ -664,7 +663,12 @@ function ComparisonBar({ label, value1, value2 }: {
         alignItems: 'center',
         marginBottom: '3px',
       }}>
-        <span style={{ fontSize: fontSizes.xs, color: c1, fontWeight: 'bold' }}>{value1}</span>
+        <span style={{
+          fontSize: fontSizes.xs,
+          color: c1,
+          fontWeight: 'bold',
+          ...(over1 ? { textShadow: `0 0 4px ${withAlpha(colors.statOverclock, 0.7)}` } : {}),
+        }}>{value1}</span>
         <span style={{
           fontSize: fontSizes.xs,
           color: colors.textDim,
@@ -672,36 +676,79 @@ function ComparisonBar({ label, value1, value2 }: {
         }}>
           {label}
         </span>
-        <span style={{ fontSize: fontSizes.xs, color: c2, fontWeight: 'bold' }}>{value2}</span>
+        <span style={{
+          fontSize: fontSizes.xs,
+          color: c2,
+          fontWeight: 'bold',
+          ...(over2 ? { textShadow: `0 0 4px ${withAlpha(colors.statOverclock, 0.7)}` } : {}),
+        }}>{value2}</span>
       </div>
       <div style={{ display: 'flex', gap: '2px', height: '8px' }}>
         <div style={{
           flex: 1,
-          backgroundColor: withAlpha(colors.border, 0.5),
-          borderRadius: '2px',
-          overflow: 'hidden',
-          display: 'flex',
-          justifyContent: 'flex-end',
+          position: 'relative',
         }}>
           <div style={{
-            width: `${value1}%`,
+            width: '100%',
             height: '100%',
-            backgroundColor: withAlpha(c1, 0.6),
+            backgroundColor: withAlpha(colors.border, 0.5),
             borderRadius: '2px',
-          }} />
+            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}>
+            <div style={{
+              width: over1 ? '100%' : `${value1}%`,
+              height: '100%',
+              backgroundColor: withAlpha(over1 ? colors.statHigh : c1, 0.6),
+              borderRadius: '2px',
+            }} />
+          </div>
+          {over1 && (
+            <div style={{
+              position: 'absolute',
+              top: -1,
+              bottom: -1,
+              left: `-${overflow1 * 0.6}%`,
+              width: `${overflow1 * 0.6}%`,
+              minWidth: '3px',
+              background: `linear-gradient(270deg, ${colors.statOverclock}, ${withAlpha(colors.statOverclock, 0.4)})`,
+              borderRadius: '2px 0 0 2px',
+              boxShadow: `0 0 6px ${withAlpha(colors.statOverclock, 0.5)}`,
+            }} />
+          )}
         </div>
         <div style={{
           flex: 1,
-          backgroundColor: withAlpha(colors.border, 0.5),
-          borderRadius: '2px',
-          overflow: 'hidden',
+          position: 'relative',
         }}>
           <div style={{
-            width: `${value2}%`,
+            width: '100%',
             height: '100%',
-            backgroundColor: withAlpha(c2, 0.6),
+            backgroundColor: withAlpha(colors.border, 0.5),
             borderRadius: '2px',
-          }} />
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              width: over2 ? '100%' : `${value2}%`,
+              height: '100%',
+              backgroundColor: withAlpha(over2 ? colors.statHigh : c2, 0.6),
+              borderRadius: '2px',
+            }} />
+          </div>
+          {over2 && (
+            <div style={{
+              position: 'absolute',
+              top: -1,
+              bottom: -1,
+              right: `-${overflow2 * 0.6}%`,
+              width: `${overflow2 * 0.6}%`,
+              minWidth: '3px',
+              background: `linear-gradient(90deg, ${colors.statOverclock}, ${withAlpha(colors.statOverclock, 0.4)})`,
+              borderRadius: '0 2px 2px 0',
+              boxShadow: `0 0 6px ${withAlpha(colors.statOverclock, 0.5)}`,
+            }} />
+          )}
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, type ReactNode } from 'react'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { loadFighter } from '../lib/data'
 import FighterPortrait from './FighterPortrait'
+import { getStatColor } from './StatBar'
 import type { Fighter } from '../types/fighter'
 
 const fighterCache = new Map<string, Fighter>()
@@ -21,12 +22,6 @@ const STAT_KEYS: { key: keyof Fighter['stats']; label: string }[] = [
   { key: 'supernatural', label: 'SPN' },
   { key: 'guile', label: 'GLE' },
 ]
-
-function getStatColor(value: number): string {
-  if (value <= 35) return colors.statLow
-  if (value <= 65) return colors.statMid
-  return colors.statHigh
-}
 
 export default function FighterHoverCard({ fighterId, fighterName, fighter: preloaded, children }: FighterHoverCardProps) {
   const [visible, setVisible] = useState(false)
@@ -118,12 +113,14 @@ export default function FighterHoverCard({ fighterId, fighterName, fighter: prel
                 {STAT_KEYS.map(({ key, label }) => {
                   const val = fighterData.stats[key]
                   const barColor = getStatColor(val)
+                  const isOver = val > 100
+                  const overflow = isOver ? val - 100 : 0
                   return (
                     <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span style={{
                         width: 28,
                         fontSize: fontSizes.xs,
-                        color: colors.textDim,
+                        color: isOver ? colors.statOverclock : colors.textDim,
                         flexShrink: 0,
                       }}>
                         {label}
@@ -131,16 +128,35 @@ export default function FighterHoverCard({ fighterId, fighterName, fighter: prel
                       <div style={{
                         flex: 1,
                         height: 8,
-                        backgroundColor: withAlpha(colors.border, 0.5),
-                        borderRadius: '2px',
-                        overflow: 'hidden',
+                        position: 'relative',
                       }}>
                         <div style={{
-                          width: `${val}%`,
+                          width: '100%',
                           height: '100%',
-                          backgroundColor: barColor,
+                          backgroundColor: withAlpha(colors.border, 0.5),
                           borderRadius: '2px',
-                        }} />
+                          overflow: 'hidden',
+                        }}>
+                          <div style={{
+                            width: isOver ? '100%' : `${val}%`,
+                            height: '100%',
+                            backgroundColor: isOver ? colors.statHigh : barColor,
+                            borderRadius: '2px',
+                          }} />
+                        </div>
+                        {isOver && (
+                          <div style={{
+                            position: 'absolute',
+                            top: -1,
+                            bottom: -1,
+                            right: `-${overflow * 0.6}%`,
+                            width: `${overflow * 0.6}%`,
+                            minWidth: '3px',
+                            background: `linear-gradient(90deg, ${colors.statOverclock}, ${withAlpha(colors.statOverclock, 0.4)})`,
+                            borderRadius: '0 2px 2px 0',
+                            boxShadow: `0 0 6px ${withAlpha(colors.statOverclock, 0.5)}`,
+                          }} />
+                        )}
                       </div>
                       <span style={{
                         width: 24,
@@ -148,6 +164,7 @@ export default function FighterHoverCard({ fighterId, fighterName, fighter: prel
                         fontSize: fontSizes.xs,
                         color: barColor,
                         fontWeight: 'bold',
+                        ...(isOver ? { textShadow: `0 0 4px ${withAlpha(colors.statOverclock, 0.7)}` } : {}),
                       }}>
                         {val}
                       </span>

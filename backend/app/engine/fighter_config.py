@@ -2269,6 +2269,51 @@ def get_adornment_coverage(category: str) -> dict:
     return ADORNMENT_COVERAGE.get(category, ADORNMENT_COVERAGE["none"])
 
 
+OUTFIT_COVERABLE_TRAITS_FEMALE = ["breast_size", "nipple_size", "vulva_type", "butt_size", "waist", "abs_tone"]
+OUTFIT_COVERABLE_TRAITS_MALE = ["chest_build", "muscle_definition", "shoulder_width", "waist"]
+VALID_COVERAGE_STATES = {"exposed", "transparent", "form-fitted", "half-obscured", "covered"}
+
+
+def validate_outfit_coverage(raw: dict, gender: str) -> dict:
+    valid_keys = OUTFIT_COVERABLE_TRAITS_MALE if gender.lower() == "male" else OUTFIT_COVERABLE_TRAITS_FEMALE
+    return {
+        k: v for k, v in raw.items()
+        if k in valid_keys and v in VALID_COVERAGE_STATES and v != "exposed"
+    }
+
+
+TRAIT_LABELS = {
+    "breast_size": lambda v: f"{v} breasts",
+    "nipple_size": lambda v: f"{v} nipples",
+    "vulva_type": lambda v: v,
+    "butt_size": lambda v: f"{v} butt",
+    "waist": lambda v: f"{v} waist",
+    "abs_tone": lambda v: f"{v} abs",
+    "chest_build": lambda v: f"{v} chest",
+    "muscle_definition": lambda v: f"{v} build",
+    "shoulder_width": lambda v: f"{v} shoulders",
+}
+
+
+def build_clothing_coverage_annotations(outfit_coverage: dict, traits: dict) -> str:
+    annotations = []
+    for trait_key, state in outfit_coverage.items():
+        val = traits.get(trait_key)
+        if not val:
+            continue
+        label_fn = TRAIT_LABELS.get(trait_key)
+        if not label_fn:
+            continue
+        readable = label_fn(val)
+        if state == "transparent":
+            annotations.append(f"{readable} visible through outfit")
+        elif state == "form-fitted":
+            annotations.append(f"outfit hugging {readable}")
+        elif state == "half-obscured":
+            annotations.append(f"partially revealing {readable}")
+    return ", ".join(annotations)
+
+
 def _build_body_directive(traits: dict, face_adornment: str = "", adornment_coverage: str = "") -> str:
     if "chest_build" in traits:
         return _build_male_body_directive(traits, face_adornment, adornment_coverage)
@@ -2362,10 +2407,32 @@ def _height_adjective(inches: int) -> str:
     return "tall"
 
 
-def _build_body_shape_line(traits: dict, tier: str = "") -> str:
+def _apply_coverage(trait_name: str, trait_text: str, outfit_coverage: dict | None) -> str | None:
+    if not outfit_coverage:
+        return trait_text
+    state = outfit_coverage.get(trait_name, "exposed")
+    if state == "covered":
+        return None
+    if state == "form-fitted":
+        return f"{trait_text} shape visible under outfit"
+    if state == "transparent":
+        return f"{trait_text} visible through outfit"
+    if state == "half-obscured":
+        return f"partially visible {trait_text}"
+    return trait_text
+
+
+def _build_body_shape_line(traits: dict, tier: str = "", outfit_coverage: dict | None = None) -> str:
     if "chest_build" in traits:
-        return f"{traits['chest_build']} chest, {traits.get('shoulder_width', 'broad')} shoulders"
-    if tier == "sfw":
+        parts = []
+        chest = _apply_coverage("chest_build", f"{traits['chest_build']} chest", outfit_coverage)
+        if chest:
+            parts.append(chest)
+        shoulders = _apply_coverage("shoulder_width", f"{traits.get('shoulder_width', 'broad')} shoulders", outfit_coverage)
+        if shoulders:
+            parts.append(shoulders)
+        return ", ".join(parts) if parts else ""
+    if tier == "sfw" and not outfit_coverage:
         covered = " (covered)"
     else:
         covered = ""
@@ -2377,27 +2444,52 @@ def _build_body_shape_line(traits: dict, tier: str = "") -> str:
         height_part = f"{adj} {feet}'{remaining}\", "
     else:
         height_part = ""
-    return f"{height_part}{traits['breast_size']} breasts{covered}, {traits['butt_size']} butt"
+    parts = []
+    breast_text = _apply_coverage("breast_size", f"{traits['breast_size']} breasts{covered}", outfit_coverage)
+    if breast_text:
+        parts.append(breast_text)
+    butt_text = _apply_coverage("butt_size", f"{traits['butt_size']} butt", outfit_coverage)
+    if butt_text:
+        parts.append(butt_text)
+    return f"{height_part}{', '.join(parts)}" if parts else height_part.rstrip(", ")
 
 
-def _build_nsfw_anatomy_line(traits: dict, tier: str = "nsfw") -> str:
+def _build_nsfw_anatomy_line(traits: dict, tier: str = "nsfw", outfit_coverage: dict | None = None) -> str:
     if "chest_build" in traits:
-        return (
-            f"{traits['chest_build']} chest, "
-            f"{traits.get('muscle_definition', 'toned and defined')} build, "
-            f"{traits.get('shoulder_width', 'broad')} shoulders"
-        )
+        parts = []
+        chest = _apply_coverage("chest_build", f"{traits['chest_build']} chest", outfit_coverage)
+        if chest:
+            parts.append(chest)
+        muscle = _apply_coverage("muscle_definition", f"{traits.get('muscle_definition', 'toned and defined')} build", outfit_coverage)
+        if muscle:
+            parts.append(muscle)
+        shoulders = _apply_coverage("shoulder_width", f"{traits.get('shoulder_width', 'broad')} shoulders", outfit_coverage)
+        if shoulders:
+            parts.append(shoulders)
+        return ", ".join(parts) if parts else ""
     if tier == "barely":
-        return (
-            f"{traits['breast_size']} breasts, "
-            f"{traits['butt_size']} butt"
-        )
-    return (
-        f"{traits['breast_size']} breasts, "
-        f"{traits['nipple_size']} nipples, "
-        f"{traits['butt_size']} butt, "
-        f"{traits['vulva_type']}"
-    )
+        parts = []
+        breast = _apply_coverage("breast_size", f"{traits['breast_size']} breasts", outfit_coverage)
+        if breast:
+            parts.append(breast)
+        butt = _apply_coverage("butt_size", f"{traits['butt_size']} butt", outfit_coverage)
+        if butt:
+            parts.append(butt)
+        return ", ".join(parts) if parts else ""
+    parts = []
+    breast = _apply_coverage("breast_size", f"{traits['breast_size']} breasts", outfit_coverage)
+    if breast:
+        parts.append(breast)
+    nipple = _apply_coverage("nipple_size", f"{traits['nipple_size']} nipples", outfit_coverage)
+    if nipple:
+        parts.append(nipple)
+    butt = _apply_coverage("butt_size", f"{traits['butt_size']} butt", outfit_coverage)
+    if butt:
+        parts.append(butt)
+    vulva = _apply_coverage("vulva_type", traits['vulva_type'], outfit_coverage)
+    if vulva:
+        parts.append(vulva)
+    return ", ".join(parts) if parts else ""
 
 
 SKIMPINESS_LEVELS = {
@@ -2648,7 +2740,7 @@ ARCHETYPE_STAT_WEIGHTS = {
 }
 
 GENDER_FLAT_BONUS = {
-    "male": {"power": 6, "toughness": 4},
+    "male": {"power": 15, "toughness": 10},
     "female": {"power": 0, "toughness": 0},
 }
 

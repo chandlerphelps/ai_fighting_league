@@ -1,5 +1,5 @@
 from app.engine.image_style import get_art_style, get_art_style_tail
-from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line, MAKEUP_DESCRIPTIONS, get_adornment_coverage
+from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line, MAKEUP_DESCRIPTIONS, get_adornment_coverage, build_clothing_coverage_annotations
 from app.services.grok_image import TIER_PROMPT_KEYS
 
 
@@ -73,9 +73,12 @@ def _enrich_body_parts(
     body_type_details: dict | None = None,
     subtype_info: dict | None = None,
     tier: str = "",
+    outfit_coverage: dict | None = None,
 ) -> str:
     if body_type_details:
-        body_parts = f"{body_parts}, {_build_body_shape_line(body_type_details, tier)}"
+        shape_line = _build_body_shape_line(body_type_details, tier, outfit_coverage=outfit_coverage)
+        if shape_line:
+            body_parts = f"{body_parts}, {shape_line}"
     if subtype_info:
         body_parts = f"{body_parts}, {subtype_info['name'].lower()} aesthetic, {subtype_info['description'].lower()}"
     return body_parts
@@ -87,6 +90,8 @@ def _build_clothing_part(
     primary_outfit_color: str = "",
     tier: str = "sfw",
     skimpiness_level: int = 4,
+    outfit_coverage: dict | None = None,
+    body_type_details: dict | None = None,
 ) -> str:
     if primary_outfit_color and clothing:
         clothing = f"{primary_outfit_color} {clothing}"
@@ -106,6 +111,13 @@ def _build_clothing_part(
             )
     else:
         clothing_part = clothing
+
+    if outfit_coverage and body_type_details:
+        annotations = build_clothing_coverage_annotations(outfit_coverage, body_type_details)
+        if annotations and clothing_part:
+            clothing_part = f"{clothing_part}, {annotations}"
+        elif annotations:
+            clothing_part = annotations
 
     if iconic_features and clothing_part:
         clothing_part = f"{clothing_part}, {iconic_features}"
@@ -145,19 +157,21 @@ def _build_charsheet_prompt(
     age: int = 0,
     primary_outfit_color: str = "",
     face_adornment: str = "",
+    outfit_coverage: dict | None = None,
 ) -> dict:
     if not body_parts:
         return {}
 
     anatomy = ""
-    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier)
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier, outfit_coverage=outfit_coverage)
     if body_type_details and tier in ("nsfw", "barely"):
-        anatomy = _build_nsfw_anatomy_line(body_type_details, tier)
+        anatomy = _build_nsfw_anatomy_line(body_type_details, tier, outfit_coverage=outfit_coverage)
 
     style = _charsheet_style(gender, tier, skimpiness_level)
 
     clothing_part = _build_clothing_part(
         clothing, iconic_features, primary_outfit_color, tier, skimpiness_level,
+        outfit_coverage=outfit_coverage, body_type_details=body_type_details,
     )
 
     character_desc = _build_character_desc(body_parts, clothing_part, age, origin)
@@ -609,16 +623,18 @@ def build_portrait_prompt(
     primary_outfit_color: str = "",
     age: int = 0,
     face_adornment: str = "",
+    outfit_coverage: dict | None = None,
 ) -> dict:
     if not body_parts:
         return {}
 
     style = get_art_style(gender)
 
-    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier="sfw")
+    body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info, tier="sfw", outfit_coverage=outfit_coverage)
 
     clothing_part = _build_clothing_part(
         clothing_sfw, iconic_features, primary_outfit_color, tier="sfw",
+        outfit_coverage=outfit_coverage, body_type_details=body_type_details,
     )
 
     character_desc = _build_character_desc(body_parts, clothing_part, age, origin)

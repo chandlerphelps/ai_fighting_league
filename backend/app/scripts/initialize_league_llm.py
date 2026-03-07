@@ -327,6 +327,7 @@ def _rebuild_prompts(fighter_data: dict):
     primary_outfit_color = fighter_data.get("primary_outfit_color", "")
     face_adornment = fighter_data.get("face_adornment", "")
     adornment_coverage = fighter_data.get("adornment_coverage", "")
+    oc = fighter_data.get("outfit_coverage", {})
     fighter_data["image_prompt_sfw"] = _build_charsheet_prompt(
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
@@ -335,6 +336,7 @@ def _rebuild_prompts(fighter_data: dict):
         subtype_info=subtype_info, iconic_features=iconic_features,
         age=age, primary_outfit_color=primary_outfit_color,
         face_adornment=face_adornment,
+        outfit_coverage=oc.get("sfw"),
     )
     fighter_data["image_prompt"] = _build_charsheet_prompt(
         body_parts, clothing_barely, expression,
@@ -344,6 +346,7 @@ def _rebuild_prompts(fighter_data: dict):
         subtype_info=subtype_info, iconic_features=iconic_features,
         age=age, primary_outfit_color=primary_outfit_color,
         face_adornment=face_adornment,
+        outfit_coverage=oc.get("barely"),
     )
     if gender.lower() == "male":
         fighter_data["image_prompt_nsfw"] = fighter_data["image_prompt"]
@@ -356,6 +359,7 @@ def _rebuild_prompts(fighter_data: dict):
             subtype_info=subtype_info, iconic_features=iconic_features,
             age=age, primary_outfit_color=primary_outfit_color,
             face_adornment=face_adornment,
+            outfit_coverage=oc.get("nsfw"),
         )
     if not fighter_data.get("image_prompt_body_ref", {}).get("full_prompt"):
         fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(
@@ -467,6 +471,7 @@ def _advance_fighter_to_stage3(fid: str, config, fighters_dir: Path) -> str:
 
         face_adornment = fighter_data.get("face_adornment", "")
         adornment_coverage = fighter_data.get("adornment_coverage", "")
+        oc_s3 = fighter_data.get("outfit_coverage", {})
         fighter_data["image_prompt_portrait"] = build_portrait_prompt(
             body_parts, fighter_data.get("ring_attire_sfw", ""), expression,
             gender=gender, body_type_details=fighter_data.get("body_type_details"),
@@ -475,6 +480,7 @@ def _advance_fighter_to_stage3(fid: str, config, fighters_dir: Path) -> str:
             primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
             age=age,
             face_adornment=face_adornment,
+            outfit_coverage=oc_s3.get("sfw"),
         )
         if not fighter_data.get("image_prompt_body_ref"):
             fighter_data["image_prompt_body_ref"] = build_body_reference_prompt(

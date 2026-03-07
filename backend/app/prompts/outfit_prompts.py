@@ -4,6 +4,8 @@ from app.engine.fighter_config import (
     ARCHETYPE_DESCRIPTIONS,
     ARCHETYPE_SUBTYPES,
     ARCHETYPE_SUBTYPES_MALE,
+    OUTFIT_COVERABLE_TRAITS_FEMALE,
+    OUTFIT_COVERABLE_TRAITS_MALE,
     _build_body_shape_line,
     _build_nsfw_anatomy_line,
 )
@@ -22,6 +24,21 @@ SYSTEM_PROMPT_OUTFIT_DESIGNER = (
     "Design outfits that match the character's personality and the tier's rules. "
     "Always respond with valid JSON only."
 )
+
+
+def _coverage_instruction(gender: str) -> str:
+    traits = OUTFIT_COVERABLE_TRAITS_MALE if gender.lower() == "male" else OUTFIT_COVERABLE_TRAITS_FEMALE
+    return f"""
+BODY COVERAGE: For the outfit you just designed, classify how each of these body traits
+is affected. Only include traits that are NOT "exposed" (exposed is the default).
+Traits to classify: {", ".join(traits)}
+
+States:
+- "exposed": bare skin, fully visible
+- "transparent": sheer/mesh fabric, trait visible through material
+- "form-fitted": tight opaque fabric, shape/outline clearly visible
+- "half-obscured": partially covered (sideboob, underbutt, cutouts, etc.)
+- "covered": fully hidden, not discernible through clothing"""
 
 
 def build_tier_prompt(
@@ -150,12 +167,14 @@ RULES:
 The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 POSE: Also generate a short personality pose for this tier — a confident, powerful pose that fits a family-friendly context. 5-10 words max describing the body position and attitude.
+{_coverage_instruction(gender)}
 
 Return ONLY valid JSON:
 {{
   "ring_attire_sfw": "<concise SFW outfit description — list each item plainly, no flowery language>",
   "image_prompt_clothing_sfw": "<SFW clothing for image gen — just the clothing pieces, no adjective fluff>",
-  "image_prompt_pose_sfw": "<concise personality pose for this tier — 5-10 words>"
+  "image_prompt_pose_sfw": "<concise personality pose for this tier — 5-10 words>",
+  "outfit_body_coverage": {{}}
 }}"""
 
     elif tier == "barely":
@@ -175,12 +194,14 @@ RULES:
 The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
 POSE: Also generate a short personality pose for this tier — {"intimidating, powerful, showing off raw physicality. 5-10 words max." if is_male else "dangerous with alluring sex appeal. 5-10 words max."}
+{_coverage_instruction(gender)}
 
 Return ONLY valid JSON:
 {{
   "ring_attire": "<concise outfit description — list each item plainly, no flowery language>",
   "image_prompt_clothing": "<clothing for image gen — just the clothing pieces, no adjective fluff>",
-  "image_prompt_pose": "<concise personality pose for this tier — 5-10 words>"
+  "image_prompt_pose": "<concise personality pose for this tier — 5-10 words>",
+  "outfit_body_coverage": {{}}
 }}"""
 
     else:
@@ -234,9 +255,12 @@ RULES:
 {image_prompt_rules}
 
 POSE: Also generate a short personality pose for this NSFW tier that matches the tone: {level['nsfw_adjective']}. 5-15 words max describing body position and attitude.
+{_coverage_instruction(gender)}
 
 Return ONLY valid JSON:
 {{
   "ring_attire_nsfw": "<concise NSFW description — {attire_hint}>",
   "image_prompt_clothing_nsfw": "<NSFW clothing for image gen — {clothing_hint}>",
-  "image_prompt_pose_nsfw": "<concise NSFW pose matching the {level['nsfw_adjective']} tone — 5-15 words>"}}"""
+  "image_prompt_pose_nsfw": "<concise NSFW pose matching the {level['nsfw_adjective']} tone — 5-15 words>",
+  "outfit_body_coverage": {{}}
+}}"""

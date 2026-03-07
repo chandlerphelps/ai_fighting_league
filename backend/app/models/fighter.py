@@ -127,6 +127,7 @@ class Fighter:
     storyline_log: list[str] = field(default_factory=list)
     moves: list[Move] = field(default_factory=list)
     outfit_suggestions: dict = field(default_factory=dict)
+    outfit_coverage: dict = field(default_factory=dict)
     body_type_details: dict = field(default_factory=dict)
     rivalries: list[str] = field(default_factory=list)
     last_fight_date: Optional[str] = None
@@ -200,6 +201,7 @@ class Fighter:
             storyline_log=d.get("storyline_log", []),
             moves=[Move.from_dict(m) for m in d.get("moves", [])],
             outfit_suggestions=d.get("outfit_suggestions", {}),
+            outfit_coverage=d.get("outfit_coverage", {}),
             body_type_details=d.get("body_type_details", {}),
             rivalries=d.get("rivalries", []),
             last_fight_date=d.get("last_fight_date"),

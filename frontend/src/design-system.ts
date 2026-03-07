@@ -26,6 +26,7 @@ export const colors = {
   statLow: '#ef5350',
   statMid: '#d4a843',
   statHigh: '#4caf50',
+  statOverclock: '#e040fb',
 
   ko: '#ff6b35',
   submission: '#7c4dff',

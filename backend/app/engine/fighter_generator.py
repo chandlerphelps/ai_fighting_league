@@ -28,6 +28,7 @@ from app.engine.fighter_config import (
     filter_exotic_for_fighter,
     classify_hair_color,
     generate_archetype_stats,
+    validate_outfit_coverage,
 )
 from app.prompts.fighter_prompts import (
     GUIDE_CORE_PHILOSOPHY,
@@ -101,6 +102,8 @@ def _generate_outfits(
     if tiers is None:
         tiers = ["sfw", "barely", "nsfw"]
 
+    gender = character_summary.get("gender", "female")
+
     def _fetch_tier(tier):
         tier_opts = (outfit_options_by_tier or {}).get(tier)
         prompt = _build_tier_prompt(
@@ -114,15 +117,20 @@ def _generate_outfits(
 
     outfit_data = {}
     outfit_suggestions = {}
+    outfit_coverage = {}
     with ThreadPoolExecutor(max_workers=len(tiers)) as pool:
         results = pool.map(_fetch_tier, tiers)
     for tier, result in results:
         tier_opts = (outfit_options_by_tier or {}).get(tier)
         if tier_opts:
             outfit_suggestions[tier] = tier_opts
+        raw_coverage = result.pop("outfit_body_coverage", {})
+        if raw_coverage:
+            outfit_coverage[tier] = validate_outfit_coverage(raw_coverage, gender)
         outfit_data.update(result)
 
     outfit_data["_outfit_suggestions"] = outfit_suggestions
+    outfit_data["_outfit_coverage"] = outfit_coverage
     return outfit_data
 
 
@@ -316,6 +324,7 @@ def generate_fighter(
         )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})
+    outfit_coverage = outfit_data.pop("_outfit_coverage", {})
 
     clothing_sfw = outfit_data.get("image_prompt_clothing_sfw", "")
     clothing = outfit_data.get("image_prompt_clothing", "")
@@ -360,6 +369,7 @@ def generate_fighter(
             age=result.get("age", 25),
             primary_outfit_color=primary_outfit_color,
             face_adornment=face_adornment,
+            outfit_coverage=outfit_coverage.get("barely"),
         )
 
         sfw_prompt = _build_charsheet_prompt(
@@ -377,6 +387,7 @@ def generate_fighter(
             age=result.get("age", 25),
             primary_outfit_color=primary_outfit_color,
             face_adornment=face_adornment,
+            outfit_coverage=outfit_coverage.get("sfw"),
         )
 
         body_ref_prompt = build_body_reference_prompt(
@@ -410,6 +421,7 @@ def generate_fighter(
                 age=result.get("age", 25),
                 primary_outfit_color=primary_outfit_color,
                 face_adornment=face_adornment,
+                outfit_coverage=outfit_coverage.get("nsfw"),
             )
 
     hair_color = result.get("hair_color", "")
@@ -464,6 +476,7 @@ def generate_fighter(
         condition=Condition(),
         storyline_log=[],
         outfit_suggestions=outfit_suggestions if not is_male else {},
+        outfit_coverage=outfit_coverage,
         body_type_details=body_traits,
         rivalries=[],
         last_fight_date=None,

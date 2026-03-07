@@ -20,6 +20,7 @@ from app.engine.fighter_generator import (
     filter_outfit_options,
     load_exotic_outfit_options,
     filter_exotic_for_fighter,
+    validate_outfit_coverage,
     ARCHETYPES_FEMALE,
     ARCHETYPES_MALE,
 )
@@ -63,6 +64,7 @@ FIELD_DEPENDENCIES = {
     "ring_attire_sfw":      ["image_prompts", "images"],
     "ring_attire_nsfw":     ["image_prompts", "images"],
     "skimpiness_level":     ["outfits", "image_prompts", "images"],
+    "outfit_coverage":      ["image_prompts", "images"],
     "image_prompt_personality_pose": ["image_prompts", "images"],
     "image_prompt_body_ref": ["images"],
     "image_prompt_sfw":      ["images"],
@@ -106,6 +108,7 @@ def _rebuild_prompts(fighter: dict):
     primary_outfit_color = fighter.get("primary_outfit_color", "")
     face_adornment = fighter.get("face_adornment", "")
     adornment_coverage = fighter.get("adornment_coverage", "")
+    oc = fighter.get("outfit_coverage", {})
     fighter["image_prompt_sfw"] = _build_charsheet_prompt(
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
@@ -117,6 +120,7 @@ def _rebuild_prompts(fighter: dict):
         age=age,
         primary_outfit_color=primary_outfit_color,
         face_adornment=face_adornment,
+        outfit_coverage=oc.get("sfw"),
     )
     fighter["image_prompt"] = _build_charsheet_prompt(
         body_parts, clothing_barely, expression,
@@ -129,6 +133,7 @@ def _rebuild_prompts(fighter: dict):
         age=age,
         primary_outfit_color=primary_outfit_color,
         face_adornment=face_adornment,
+        outfit_coverage=oc.get("barely"),
     )
     if gender.lower() == "male":
         fighter["image_prompt_nsfw"] = fighter["image_prompt"]
@@ -144,6 +149,7 @@ def _rebuild_prompts(fighter: dict):
             age=age,
             primary_outfit_color=primary_outfit_color,
             face_adornment=face_adornment,
+            outfit_coverage=oc.get("nsfw"),
         )
     if not fighter.get("image_prompt_body_ref", {}).get("full_prompt"):
         fighter["image_prompt_body_ref"] = build_body_reference_prompt(
@@ -535,10 +541,16 @@ def regenerate_outfits(fighter_id: str):
         outfit_data = _generate_outfits(config, character_summary, skimpiness_level, tiers=tiers, outfit_options_by_tier=outfit_opts, tech_level=tech_level)
 
         new_suggestions = outfit_data.pop("_outfit_suggestions", {})
+        new_coverage = outfit_data.pop("_outfit_coverage", {})
         if new_suggestions:
             current_suggestions = existing.get("outfit_suggestions", {})
             current_suggestions.update(new_suggestions)
             existing["outfit_suggestions"] = current_suggestions
+        if new_coverage:
+            current_coverage = existing.get("outfit_coverage", {})
+            current_coverage.update(new_coverage)
+            existing["outfit_coverage"] = current_coverage
+        oc = existing.get("outfit_coverage", {})
 
         body_parts = existing.get("image_prompt", {}).get("body_parts", "")
         expression = existing.get("image_prompt", {}).get("expression", "")
@@ -573,6 +585,7 @@ def regenerate_outfits(fighter_id: str):
                 age=age,
                 primary_outfit_color=primary_outfit_color,
                 face_adornment=face_adornment,
+                outfit_coverage=oc.get("sfw"),
             )
         if not tiers or "barely" in tiers:
             existing["ring_attire"] = outfit_data.get("ring_attire", existing.get("ring_attire", ""))
@@ -587,6 +600,7 @@ def regenerate_outfits(fighter_id: str):
                 age=age,
                 primary_outfit_color=primary_outfit_color,
                 face_adornment=face_adornment,
+                outfit_coverage=oc.get("barely"),
             )
         if not tiers or "nsfw" in tiers:
             existing["ring_attire_nsfw"] = outfit_data.get("ring_attire_nsfw", existing.get("ring_attire_nsfw", ""))
@@ -604,6 +618,7 @@ def regenerate_outfits(fighter_id: str):
                     age=age,
                     primary_outfit_color=primary_outfit_color,
                     face_adornment=face_adornment,
+                    outfit_coverage=oc.get("nsfw"),
                 )
 
         existing["skimpiness_level"] = skimpiness_level
@@ -1132,6 +1147,7 @@ def advance_stage(fighter_id: str):
             age = fighter_data.get("age", 0)
             face_adornment = fighter_data.get("face_adornment", "")
             adornment_coverage = fighter_data.get("adornment_coverage", "")
+            oc_stage = fighter_data.get("outfit_coverage", {})
 
             portrait_prompt = build_portrait_prompt(
                 body_parts, clothing_sfw, expression,
@@ -1143,6 +1159,7 @@ def advance_stage(fighter_id: str):
                 primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
                 age=age,
                 face_adornment=face_adornment,
+                outfit_coverage=oc_stage.get("sfw"),
             )
 
             fighter_data["image_prompt_portrait"] = portrait_prompt
@@ -1257,6 +1274,7 @@ def _advance_to_stage(fid, target_stage):
             subtype_info = _get_subtype_info(fighter_data)
             face_adornment = fighter_data.get("face_adornment", "")
             adornment_coverage = fighter_data.get("adornment_coverage", "")
+            oc_adv = fighter_data.get("outfit_coverage", {})
             portrait_prompt = build_portrait_prompt(
                 body_parts,
                 fighter_data.get("ring_attire_sfw", ""),
@@ -1269,6 +1287,7 @@ def _advance_to_stage(fid, target_stage):
                 primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
                 age=fighter_data.get("age", 0),
                 face_adornment=face_adornment,
+                outfit_coverage=oc_adv.get("sfw"),
             )
             fighter_data["image_prompt_portrait"] = portrait_prompt
 

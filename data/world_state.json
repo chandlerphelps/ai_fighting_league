@@ -6,18 +6,18 @@
   "season_day_in_month": 6,
   "tier_rankings": {
     "apex": [
-      "f_ff16c53c",
-      "f_d2684511",
-      "f_95353fbc",
-      "f_f7e07c6f"
+      "f_a8941228",
+      "f_8df3bf57",
+      "f_ad5b3be4",
+      "f_5445e411"
     ],
     "contender": [],
     "underground": []
   },
-  "belt_holder_id": "f_ff16c53c",
+  "belt_holder_id": "f_a8941228",
   "belt_history": [
     {
-      "fighter_id": "f_ff16c53c",
+      "fighter_id": "f_a8941228",
       "won_date": "season_0",
       "lost_date": null,
       "defenses": 0
@@ -32,10 +32,10 @@
   "promotion_fights": [],
   "title_fight": {},
   "rankings": [
-    "f_ff16c53c",
-    "f_d2684511",
-    "f_95353fbc",
-    "f_f7e07c6f"
+    "f_a8941228",
+    "f_8df3bf57",
+    "f_ad5b3be4",
+    "f_5445e411"
   ],
   "upcoming_events": [],
   "completed_events": [],

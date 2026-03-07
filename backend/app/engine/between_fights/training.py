@@ -63,16 +63,18 @@ def process_daily_training(fighter: dict, rng: _random.Random = None) -> dict:
     if focus not in TRAINABLE_STATS:
         focus = "technique"
 
+    stats = fighter.get("stats", {})
+    current_val = stats.get(focus, 50)
+    if current_val >= STAT_CAP:
+        rate *= 0.5
+
     fighter["training_streak"] = fighter.get("training_streak", 0) + 1
     fighter["training_days_accumulated"] = fighter.get("training_days_accumulated", 0.0) + rate
 
-    stats = fighter.get("stats", {})
     if fighter["training_days_accumulated"] >= 1.0:
         fighter["training_days_accumulated"] -= 1.0
-        current_val = stats.get(focus, 50)
-        if current_val < STAT_CAP:
-            stats[focus] = min(current_val + 1, STAT_CAP)
-            fighter["stats"] = stats
+        stats[focus] = current_val + 1
+        fighter["stats"] = stats
 
     if fighter["training_streak"] > OVERTRAINING_THRESHOLD:
         if rng.random() < OVERTRAINING_INJURY_CHANCE:
@@ -99,6 +101,8 @@ def apply_fight_camp_boost(fighter: dict) -> dict:
 
     boosted_stats = dict(fighter.get("stats", {}))
     current_val = boosted_stats.get(focus, 50)
-    boosted_stats[focus] = min(current_val + boost, STAT_CAP)
+    if current_val >= STAT_CAP:
+        boost = max(1, boost // 2)
+    boosted_stats[focus] = current_val + boost
 
     return boosted_stats
