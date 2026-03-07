@@ -24,6 +24,7 @@ A two-part system: a Python engine that generates fighters, simulates fights wit
 ### Image Generation (Grok API)
 
 - **Grok image gen does NOT support negative prompts** — never use "no X", "not Y", "without Z" in image prompts. Only describe what you WANT to see, not what you don't.
+- **Grok imagine (edit) uses the input image's aspect ratio** — when editing a single image, the output matches the input's aspect ratio regardless of the `aspect_ratio` parameter. To get a different output ratio, pad the input image to the desired aspect ratio first (see `_pad_to_aspect` in `grok_image.py`).
 
 ### Development Guidelines
 

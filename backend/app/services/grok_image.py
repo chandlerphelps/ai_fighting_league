@@ -261,26 +261,31 @@ def generate_charsheet_images(
         saved["body_ref"] = body_ref_save_path
         body_ref_path = body_ref_save_path
 
+    CHARSHEET_TIERS = {"sfw", "barely", "nsfw"}
+
     if tier_prompts:
         def _gen_and_save(tier, prompt):
             filename = f"{base}_{tier}.png"
             save_path = output_dir / filename
             print(f"    Generating {tier} charsheet...")
+            is_charsheet = tier in CHARSHEET_TIERS
+            aspect = "2:3" if is_charsheet else "1:1"
             use_body_ref = body_ref_path and not is_male
             if use_body_ref:
                 urls = edit_image(
                     prompt=prompt,
                     image_paths=[body_ref_path],
                     config=config,
-                    aspect_ratio="1:1",
+                    aspect_ratio=aspect,
                     resolution="2k",
                     n=1,
+                    pad_to_aspect=is_charsheet,
                 )
             else:
                 urls = generate_image(
                     prompt=prompt,
                     config=config,
-                    aspect_ratio="1:1",
+                    aspect_ratio=aspect,
                     resolution="2k",
                     n=1,
                 )
