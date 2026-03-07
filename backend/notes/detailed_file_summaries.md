@@ -44,6 +44,7 @@ Comprehensive documentation of backend code.
 41. [app/scripts/initialize_league.py](#appscriptsinitialize_league)
 42. [app/engine/day_simulator.py](#appengineday_simulator)
 43. [app/engine/pool_summarizer.py](#appenginepool_summarizer)
+44. [app/scripts/initialize_league_llm.py](#appscriptsinitialize_league_llm)
 
 ---
 
@@ -59,17 +60,18 @@ Artefacts
 
 ## app/api.py
 File: app/api.py
-File Length: 1411 lines
-Purpose: Flask REST API for roster management, world state access, day simulation, and 3-stage roster initialization pipeline. CRUD fighters, generate/regenerate characters/outfits/images, manage outfit options, roster plan CRUD with AI planning, multi-stage generation (JSON->portrait->charsheets), serve fighter images, poll async tasks.
+File Length: 1472 lines
+Purpose: Flask REST API for roster management, world state access, day simulation, and 3-stage roster initialization pipeline. CRUD fighters, generate/regenerate characters/outfits/images, manage outfit options, roster plan CRUD with AI planning, multi-stage generation (JSON->portrait+headshot->charsheets), serve fighter images, poll async tasks.
 
 Artefacts
 - PROMPT_RELEVANT_FIELDS - set of fields that trigger prompt rebuild on update
 - FIELD_DEPENDENCIES - maps fighter fields to downstream invalidation targets (outfits, image_prompts, images)
 - _get_subtype_info(fighter) - lookup subtype info from archetype/subtype fields
-- _rebuild_prompts(fighter) - reconstructs all 3 tier image_prompt dicts + body_ref from current fighter data; gender-aware (male nsfw = barely)
+- _rebuild_prompts(fighter) - reconstructs all 3 tier image_prompt dicts + body_ref + headshot from current fighter data; gender-aware (male nsfw = barely)
 - _run_in_background(task_id, fn) - runs function in daemon thread, stores result in tasks dict
-- _fighter_image_paths(fighter_id, ring_name) - returns dict of tier->Path for existing images (sfw, barely, nsfw, portrait)
+- _fighter_image_paths(fighter_id, ring_name) - returns dict of tier->Path for existing images (sfw, barely, nsfw, portrait, headshot)
 - _build_outfit_options_for_fighter(skimpiness_level, archetype, subtype) - loads and filters outfit options per tier with exotic support
+- _generate_stage1_images(fighter, config, fighters_dir) - generates body_ref, portrait, and headshot images in parallel
 
 Endpoints
 - GET /api/fighters - list all fighters with available image tiers
@@ -81,12 +83,13 @@ Endpoints
 - POST /api/fighters/<id>/regenerate-outfits - async: regenerate outfits for specified tiers
 - POST /api/fighters/<id>/regenerate-images - async: regenerate charsheet images for specified tiers
 - POST /api/fighters/<id>/regenerate-move-image - async: regenerate single move image using charsheet as reference
-- POST /api/fighters/<id>/advance-stage - async: advance fighter through generation stages (1->2: portrait, 2->3: full charsheets)
+- POST /api/fighters/<id>/advance-stage - async: advance fighter through generation stages (1->2: portrait+headshot, 2->3: full charsheets)
 - POST /api/fighters/batch-advance - async: advance multiple fighters to a target stage (2 or 3)
 - GET /api/tasks/<id> - poll async task status
 - GET /api/archetypes - list female and male archetypes
 - GET /api/fighter-images/<id>/<tier> - serve fighter charsheet image
 - GET /api/fighter-images/<id>/portrait - serve fighter portrait image
+- GET /api/fighter-images/<id>/headshot - serve fighter headshot image
 - GET /api/outfit-options - get outfit options JSON
 - PUT /api/outfit-options - save outfit options JSON
 - GET /api/roster-plan - get current roster plan (auto-migrates legacy list format)
@@ -247,7 +250,7 @@ Artefacts
 
 ## app/engine/between_fights/training.py
 File: app/engine/between_fights/training.py
-File Length: 104 lines
+File Length: 108 lines
 Purpose: Daily training system with tier-based progression rates, age/morale/work_ethic/learning_rate modifiers, overtraining injury risk, and fight camp stat boosts.
 
 Artefacts
@@ -329,14 +332,14 @@ Artefacts
 
 ## app/engine/fighter_generator.py
 File: app/engine/fighter_generator.py
-File Length: 472 lines
-Purpose: Orchestration for AI fighter creation. Rolls subtypes, body profiles, generates outfits in parallel with tech level, builds body reference and charsheet image prompts. Supports gender-aware generation (male fighters get sfw/barely tiers only, nsfw=barely).
+File Length: 586 lines
+Purpose: Orchestration for AI fighter creation. Rolls subtypes, body profiles, fit styles, transparency, generates outfits in parallel with tech level, builds body reference, portrait, headshot, and charsheet image prompts. Supports gender-aware generation (male fighters get sfw/barely tiers only, nsfw=barely). Stats generated via generate_archetype_stats().
 
 Artefacts
 - plan_roster(config, roster_size, existing_fighters, pool_summary, gender_mix) - builds existing roster text from pool_summary or fighter list, calls build_plan_roster_prompt() with gender_mix, calls OpenRouter (minimax model)
-- _generate_outfits(config, character_summary, skimpiness_level, tiers, outfit_options_by_tier, tech_level) - parallel tier outfit generation using build_tier_prompt() with tech_level; collects outfit_suggestions per tier
-- generate_fighter_json_only(config, archetype, ...) - generates fighter with skip_image_prompts=True, sets generation_stage=1, copies signature visual identity fields from roster_plan_entry (primary_outfit_color, hair_style, hair_color, face_adornment)
-- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ..., skip_image_prompts) - full pipeline: rolls subtype, body traits, character JSON, tech_level, outfits, image prompts; generates learning_rate (0.7-1.4) and work_ethic (0.6-1.3); gender-aware (male: sfw/barely tiers only, nsfw=barely), returns Fighter
+- _generate_outfits(config, character_summary, skimpiness_level, tiers, outfit_options_by_tier, tech_level, fit_style, transparency) - parallel tier outfit generation using build_tier_prompt() with tech_level, fit_style, transparency; collects outfit_suggestions per tier
+- generate_fighter_json_only(config, archetype, ...) - generates fighter with skip_image_prompts=True, sets generation_stage=1, copies signature visual identity fields and adornment_coverage from roster_plan_entry
+- generate_fighter(config, archetype, has_supernatural, existing_fighters, roster_plan_entry, ..., skip_image_prompts) - full pipeline: rolls subtype, body traits, fit_style (female only via _roll_fit_style), transparency (female only via _roll_transparency), character JSON, tech_level, outfits, image prompts (including headshot); stats via generate_archetype_stats(); generates learning_rate (0.7-1.4) and work_ethic (0.6-1.3); gender-aware (male: sfw/barely tiers only, nsfw=barely, empty fit_style/transparency), returns Fighter
 - _extract_stats(data, has_supernatural, config) - clamps stat values to config bounds
 - _normalize_core_stats(stats, config) - scales core stats to target range if out of bounds
 
@@ -344,8 +347,8 @@ Artefacts
 
 ## app/engine/fighter_config.py
 File: app/engine/fighter_config.py
-File Length: 1285 lines
-Purpose: All configuration data for fighter generation: archetypes with subtypes and body profile biases, body profiles constraining trait ranges, outfit options, skimpiness levels, weight derivation tables, tech levels, archetype descriptions, and body trait utility functions.
+File Length: 2957 lines
+Purpose: All configuration data for fighter generation: archetypes with subtypes and body profile biases (both female and male), body profiles constraining trait ranges, outfit options, skimpiness levels, weight derivation tables, tech levels, archetype descriptions, body trait utility functions, fit styles, transparency options, outfit coverage validation, stat generation, hair/color classification, and adornment coverage.
 
 Artefacts
 - load_outfit_options(config) / filter_outfit_options(options_for_tier, skimpiness_level) - outfit option loading and filtering
@@ -353,21 +356,50 @@ Artefacts
 - ARCHETYPES_MALE - 8 archetypes (Brute, Veteran, Monster, Technician, Wildcard, Mystic, Prodigy, Experiment)
 - ARCHETYPE_DESCRIPTIONS - per-archetype one-line description dict
 - TECH_LEVELS - predefined list of technology eras for outfit generation
-- BODY_TRAIT_OPTIONS - category->options dict (waist, abs_tone, body_fat_pct, butt_size, breast_size, nipple_size, vulva_type, face_shape, eye_shape, makeup_level)
-- BODY_PROFILES - 4 profiles (Petite, Slim, Athletic, Curvy) each constraining allowed trait ranges
-- ARCHETYPE_BODY_PROFILE_WEIGHTS - per-archetype probability weights across the 4 body profiles
-- ARCHETYPE_SUBTYPES - per-archetype list of 5 subtypes, each with name, description, body_profile_bias adjustments
-- _roll_subtype(archetype) / _find_subtype(archetype, name) - random or lookup subtype selection
-- ARCHETYPE_BODY_WEIGHTS - per-archetype weighted probability tables for individual body traits
-- ARCHETYPE_HEIGHT_RANGES / MAKEUP_DESCRIPTIONS - height ranges and makeup descriptions per archetype
-- BODY_FAT_MULTIPLIERS / BREAST_WEIGHT_LBS / BUTT_WEIGHT_LBS / WAIST_MULTIPLIERS - weight derivation tables
-- _weighted_choice(category, archetype, allowed) - roll a body trait with archetype weights, optionally constrained by allowed list
-- _format_height(inches) / _derive_weight(height_inches, traits) - height formatting and weight calculation
-- _roll_body_profile(archetype, subtype_bias) - weighted body profile selection with optional subtype adjustments
-- _roll_body_traits(archetype, subtype) - rolls body profile then all traits within profile constraints, adds subtype name
-- _build_body_directive(traits) / _build_body_shape_line(traits) / _build_nsfw_anatomy_line(traits) - format traits for LLM/image prompts
-- SKIMPINESS_LEVELS - 4-level dict of tier-specific outfit rules
+- BODY_TRAIT_OPTIONS - category->options dict (waist, abs_tone, body_fat_pct, butt_size, breast_size, nipple_size, vulva_type, face_shape, eye_shape, eye_expression [16 options], nose_shape, lip_shape, brow_shape, cheekbone, jawline, makeup_level)
+- MALE_BODY_TRAIT_OPTIONS - male category->options dict (build_type, muscle_definition, body_fat_pct, shoulder_width, chest_build, waist, face_shape, eye_expression [5 options], facial_hair)
+- BODY_PROFILES - 4 female profiles (Petite, Slim, Athletic, Curvy) each constraining allowed trait ranges
+- MALE_BODY_PROFILES - 7 male profiles (Skinny, Wiry, Athletic, Muscular, Stocky, Heavy, Massive) each constraining allowed trait ranges
+- ARCHETYPE_BODY_PROFILE_WEIGHTS / MALE_ARCHETYPE_BODY_PROFILE_WEIGHTS - per-archetype probability weights across body profiles
+- ARCHETYPE_SUBTYPES - per-archetype list of 5 subtypes (female), each with name, description, body_profile_bias
+- ARCHETYPE_SUBTYPES_MALE - per-archetype list of 5 subtypes (male), each with name, description, body_profile_bias
+- _roll_subtype(archetype, gender) / _find_subtype(archetype, name, gender) - random or lookup subtype selection, gender-aware
+- ARCHETYPE_BODY_WEIGHTS - per-archetype weighted probability tables for female body traits including eye_expression
+- MALE_ARCHETYPE_BODY_WEIGHTS - per-archetype weighted probability tables for male body traits including eye_expression
+- ARCHETYPE_HEIGHT_RANGES / MALE_ARCHETYPE_HEIGHT_RANGES - height ranges per archetype per gender
+- MAKEUP_DESCRIPTIONS - makeup descriptions per level
+- BODY_FAT_MULTIPLIERS / BREAST_WEIGHT_LBS / BUTT_WEIGHT_LBS / WAIST_MULTIPLIERS - female weight derivation tables
+- _weighted_choice(category, archetype, allowed, gender) - roll a body trait with archetype weights, gender-aware
+- _format_height(inches) / _derive_weight(height_inches, traits) / _derive_male_weight(height_inches, traits) - height formatting and weight calculation (gender-aware)
+- _roll_body_profile(archetype, subtype_bias, gender) - weighted body profile selection, gender-aware
+- _roll_body_traits(archetype, subtype, gender) - rolls body profile then all traits within profile constraints, includes eye_expression, gender-aware
+- _build_body_directive(traits, face_adornment, adornment_coverage) - format female traits for LLM/image prompts with combined "Eyes: {eye_shape}, {eye_expression} gaze" output, respects adornment coverage
+- _build_male_body_directive(traits, face_adornment, adornment_coverage) - format male traits with combined "Face: {face_shape}, {eye_expression} eyes" output, respects adornment coverage
+- _build_body_shape_line(traits, tier, outfit_coverage) / _build_nsfw_anatomy_line(traits, tier, outfit_coverage) - format traits for image prompts with coverage-aware visibility
+- SKIMPINESS_LEVELS - 4-level dict of tier-specific outfit rules (female)
+- MALE_SKIMPINESS_LEVELS - 4-level dict of tier-specific outfit rules (male)
 - _roll_skimpiness(weights) - weighted random choice of skimpiness level 1-4
+- FIT_STYLES - 5 styles (skin-tight, form-fitted, loose, layered, structured) with weights_by_skimpiness dicts
+- TRANSPARENCY_OPTIONS - weighted options (opaque: 70, some mesh/sheer panels: 30)
+- _roll_fit_style(skimpiness_level) - weighted random fit style selection based on skimpiness
+- _roll_transparency() - weighted random transparency selection
+- ADORNMENT_COVERAGE - per-category dict mapping adornment types (full_face, upper_face, lower_face, eyes_only, head_covering, face_paint, decorative, none) to lists of covered face traits including eye_expression
+- get_adornment_coverage(category) - lookup adornment coverage by category
+- OUTFIT_COVERABLE_TRAITS_FEMALE / OUTFIT_COVERABLE_TRAITS_MALE - lists of traits that outfits can cover
+- VALID_COVERAGE_STATES - set of valid coverage states (exposed, transparent, form-fitted, half-obscured, covered)
+- validate_outfit_coverage(raw, gender) - filters raw coverage dict to valid keys and states
+- build_clothing_coverage_annotations(outfit_coverage, traits, tier) - builds human-readable coverage annotation string
+- _apply_coverage(trait_name, trait_text, outfit_coverage) - modifies trait text based on outfit coverage state
+- OUTFIT_COLOR_PALETTE - list of 30+ outfit color options
+- HAIR_COLOR_BUCKETS - 10 hair color categories
+- _HAIR_BUCKET_KEYWORDS - keyword->bucket mapping for classification
+- classify_hair_color(raw) - classifies raw hair color string into a bucket
+- ARCHETYPE_STAT_WEIGHTS - per-archetype probability weights for core stats (power, speed, technique, toughness)
+- GENDER_FLAT_BONUS - per-gender flat stat bonuses (male: +15 power, +10 toughness)
+- GENDER_GUILE_RANGE / GENDER_SUPERNATURAL_RANGE - per-gender secondary stat ranges
+- generate_archetype_stats(archetype, gender, config, has_supernatural, rng) - generates full stat dict using archetype weights, gender bonuses, and guile/supernatural ranges
+- ABS_TONE_SHORT / TRAIT_LABELS / INTIMATE_TRAITS - trait formatting helpers
+- _height_adjective(inches) - returns adjective for height
 
 ---
 
@@ -401,12 +433,15 @@ Artefacts
 
 ## app/engine/image_style.py
 File: app/engine/image_style.py
-File Length: 44 lines
-Purpose: Art style constants and gender-aware accessors for Arcane-inspired image generation prompts.
+File Length: 79 lines
+Purpose: Art style constants and gender-aware accessors for dark indie comic art (Mike Mignola / Hellboy inspired) image generation prompts. Separate painterly style for body reference pages.
 
 Artefacts
-- ART_STYLE_BASE, ART_STYLE_FEMALE, ART_STYLE_MALE - base and gendered full art style strings
-- ART_STYLE_TAIL_BASE, ART_STYLE_TAIL_FEMALE, ART_STYLE_TAIL_MALE - shorter tail variants
+- ART_STYLE_BASE - dark indie comic art base style (heavy black ink, minimal color, noir comic, Mignola inspired)
+- ART_STYLE_FEMALE / ART_STYLE_MALE - gendered full art style strings
+- ART_STYLE_TAIL_FEMALE / ART_STYLE_TAIL_MALE - shorter tail variants per gender
+- PAINTERLY_STYLE_BASE / PAINTERLY_STYLE_FEMALE / PAINTERLY_STYLE_MALE - painterly anatomy study style for body reference pages
+- PAINTERLY_QUALITY / PAINTERLY_QUALITY_MALE - body reference quality descriptors
 - get_art_style(gender) - returns gender-appropriate full art style
 - get_art_style_tail(gender) - returns gender-appropriate tail art style
 
@@ -430,13 +465,14 @@ Artefacts
 
 ## app/prompts/outfit_prompts.py
 File: app/prompts/outfit_prompts.py
-File Length: 230 lines
-Purpose: Tier-based outfit prompt builder for SFW/barely/NSFW tiers with archetype, subtype, personality, tech level context, and exotic outfit support.
+File Length: 289 lines
+Purpose: Tier-based outfit prompt builder for SFW/barely/NSFW tiers with archetype, subtype, personality, tech level context, fit style, transparency, body coverage classification, and exotic outfit support.
 
 Artefacts
 - OUTFIT_STYLE_RULES - universal style rules applied to all tiers
 - SYSTEM_PROMPT_OUTFIT_DESIGNER - system prompt
-- build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options, tech_level) - returns outfit generation prompt including archetype description (from ARCHETYPE_DESCRIPTIONS), subtype description (from ARCHETYPE_SUBTYPES), personality line, technology era design constraint, and exotic_one_pieces outfit options support for both NSFW and non-NSFW tiers
+- _coverage_instruction(gender) - returns body coverage classification instruction text for outfit response schema
+- build_tier_prompt(tier, skimpiness_level, character_summary, outfit_options, tech_level, fit_style, transparency) - returns outfit generation prompt including archetype/subtype descriptions, personality line, technology era design constraint, exotic_one_pieces support; SFW tier includes FIT line (e.g., "FIT: skin-tight — Every contour visible") and TRANSPARENCY line (e.g., "TRANSPARENCY: opaque"); includes explanation that skin target and fit style are independent concepts
 
 ---
 
@@ -473,31 +509,33 @@ Artefacts
 
 ## app/prompts/image_builders.py
 File: app/prompts/image_builders.py
-File Length: 552 lines
-Purpose: Image prompt assembly for charsheet images (Grok API), body reference sheets, portraits, and move action images. Not LLM prompts. Gender-aware with separate male body ref layout (3-panel vs 5-panel).
+File Length: 687 lines
+Purpose: Image prompt assembly for charsheet images (Grok API), body reference sheets, portraits, headshots, and move action images. Not LLM prompts. Gender-aware with separate male body ref layout (3-panel vs 5-panel). Eye expression integration in face panels. Outfit coverage annotations.
 
 Artefacts
 - CHARSHEET_LAYOUT - character reference sheet turnaround prompt template (3 views)
 - _charsheet_style_base/style/tail(gender, tier, skimpiness_level) - charsheet art style with NSFW nudity prefixes when needed
 - _enrich_body_parts(body_parts, body_type_details, subtype_info) - enriches body_parts with body shape line and subtype aesthetic
-- _build_clothing_part(clothing, iconic_features, primary_outfit_color, tier, skimpiness_level) - builds clothing description with iconic features and primary color for SFW tier
+- _build_clothing_part(clothing, iconic_features, primary_outfit_color, tier, skimpiness_level, outfit_coverage, body_type_details) - builds clothing description with iconic features, primary color, and coverage annotations
 - _build_character_desc(body_parts, clothing_part, age, origin) - builds character description string
-- _build_charsheet_prompt(body_parts, clothing, expression, personality_pose, tier, gender, skimpiness_level, body_type_details, origin, subtype_info, iconic_features, age, primary_outfit_color) - assembles full charsheet image prompt dict with subtype aesthetic, iconic features, age, and primary color integration
+- _build_charsheet_prompt(body_parts, clothing, expression, personality_pose, tier, gender, skimpiness_level, body_type_details, origin, subtype_info, iconic_features, age, primary_outfit_color, face_adornment, outfit_coverage) - assembles full charsheet image prompt dict with eye_expression in face details, adornment coverage, outfit coverage
 - BODY_REF_STYLE_BASE / BODY_REF_STYLE_FEMALE / BODY_REF_STYLE_MALE - painterly anatomy study style strings
 - BODY_REF_PAGE_STYLE / MALE_BODY_REF_PAGE_STYLE - anatomy study page layouts (5-panel female, 3-panel male)
 - BODY_REF_LAYOUT / MALE_BODY_REF_LAYOUT - layout templates (female: face/rear-angled/chest/butt/intimate; male: face/front-body/back-body)
 - BODY_REF_QUALITY / MALE_BODY_REF_QUALITY - quality descriptors
-- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info, age) - assembles gender-aware body reference prompt (5-panel female, 3-panel male in underwear)
+- build_body_reference_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info, age, iconic_features, face_adornment, adornment_coverage) - assembles gender-aware body reference prompt; face panel includes combined "eye_expression eye_shape eyes" (female) or "eye_expression eyes" (male) when uncovered by adornments
 - _nsfw_prefix/tail(gender, skimpiness_level) - NSFW prefix/tail for move images
 - build_move_image_prompt(fighter, move, tier) - assembles move action image prompt string
 - PORTRAIT_STYLE - upper body portrait style constants
-- build_portrait_prompt(body_parts, clothing_sfw, expression, gender, body_type_details, origin, subtype_info, iconic_features, primary_outfit_color, age) - assembles portrait image prompt dict for stage 2 generation
+- build_portrait_prompt(body_parts, clothing_sfw, expression, gender, body_type_details, origin, subtype_info, iconic_features, primary_outfit_color, age, face_adornment, outfit_coverage) - assembles portrait image prompt dict with face adornment and outfit coverage support
+- HEADSHOT_STYLE - extreme close-up headshot style constants
+- build_headshot_prompt(body_parts, expression, gender, body_type_details, origin, subtype_info, iconic_features, age, face_adornment) - assembles headshot image prompt dict with eye_expression in face details
 
 ---
 
 ## app/models/fighter.py
 File: app/models/fighter.py
-File Length: 216 lines
+File Length: 229 lines
 Purpose: Fighter data model with nested Stats, Record, Injury, Condition, and Move dataclasses. Includes league season tracking fields and 3-stage generation pipeline fields.
 
 Artefacts
@@ -506,7 +544,7 @@ Artefacts
 - Injury - type, severity, recovery_days_remaining
 - Condition - health_status, injuries list, recovery_days_remaining, morale, momentum
 - Move - name, description, stat_affinity
-- Fighter - full fighter profile: identity, physical, attire (3 tiers), image_prompt dicts (sfw, barely, nsfw, body_ref, portrait), stats, record, condition, moves, storyline_log, rivalries, signature visual identity (primary_outfit_color, hair_style, hair_color, face_adornment), generation pipeline (generation_stage 0-3, generation_dirty list), league fields (tier, status, training_focus, training_days_accumulated, training_streak, seasons_in_current_tier, career_season_count, peak_tier, promotion_desperation, season_wins, season_losses, consecutive_losses, consecutive_wins, learning_rate, work_ethic, tier_records)
+- Fighter - full fighter profile: identity, physical, attire (3 tiers), image_prompt dicts (sfw, barely, nsfw, body_ref, portrait, headshot), stats, record, condition, moves, storyline_log, rivalries, signature visual identity (primary_outfit_color, hair_style, hair_color, face_adornment), outfit customization (fit_style, transparency), generation pipeline (generation_stage 0-3, generation_dirty list), league fields (tier, status, training_focus, training_days_accumulated, training_streak, seasons_in_current_tier, career_season_count, peak_tier, promotion_desperation, season_wins, season_losses, consecutive_losses, consecutive_wins, learning_rate, work_ethic, tier_records)
 
 ---
 
@@ -684,3 +722,24 @@ Artefacts
 - _classify_region(origin) - classifies a fighter's origin string into a region via keyword matching
 - _age_bracket(age) - returns age bracket string (18-22, 23-27, 28-32, 33+)
 - summarize_fighter_pool(fighters, for_display) - generates comprehensive pool summary text: total count, gender counts, archetype distribution (with missing archetypes highlighted), geographic spread (with underrepresented regions), age distribution, signature visual identity registry (outfit colors, hair style+color combos, face adornments); when for_display=True also lists individual fighters with archetype/subtype/origin and signature details
+
+---
+
+## app/scripts/initialize_league_llm.py
+File: app/scripts/initialize_league_llm.py
+File Length: 568 lines
+Purpose: Initializes the league with LLM-generated fighters via plan_roster, assigns fighters to tiers with appropriate age/stat ranges, optionally advances all fighters through the full 3-stage image generation pipeline.
+
+Artefacts
+- TIER_STAT_RANGES - per-tier (apex/contender/underground) stat total ranges
+- TIER_AGE_RANGES - per-tier age ranges (apex 27-32, contender 23-28, underground 18-24)
+- TIER_CAREER_SEASONS - per-tier career season count ranges
+- POWER_TIER_TO_LEAGUE - maps AI power_tier labels (champion/contender/gatekeeper/prospect) to league tiers
+- _rebalance_tiers(entries, target_counts) - redistributes roster plan entries across tiers to match target counts, promoting/demoting as needed
+- initialize_league_llm(apex, contender, underground, full_generate, gender_mix) - main pipeline: backs up existing fighters, clears matches/events/world_state, plans roster via AI, rebalances tiers, generates fighters in batches of 4 (parallel via ThreadPoolExecutor), assigns tier-appropriate age/career stats, builds world_state with tier_rankings/belt_holder/belt_history, optionally advances to stage 3
+- _get_subtype_info(fighter_data) - lookup subtype info from fighter dict
+- _rebuild_prompts(fighter_data) - reconstructs all image prompts (sfw/barely/nsfw/body_ref/portrait/headshot) from fighter data
+- _generate_stage1_images(fighter_data, config, fighters_dir) - generates body_ref image, then portrait and headshot in parallel via ThreadPoolExecutor
+- _advance_fighter_to_stage3(fid, config, fighters_dir) - advances fighter from stage 1->2 (reference images) then 2->3 (charsheet images), rebuilds prompts as needed
+- _advance_all_fighters(fighter_ids, config, fighters_dir) - advances all fighters in parallel batches of 4
+- main() - CLI entry (--apex, --contender, --underground, --full-generate, --gender)

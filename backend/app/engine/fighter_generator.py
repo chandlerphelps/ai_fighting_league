@@ -93,6 +93,39 @@ def plan_roster(
     return result
 
 
+def _sample_existing_outfits(
+    existing_fighters: list[dict],
+    tier: str,
+    skimpiness_level: int,
+    max_samples: int = 5,
+) -> list[str]:
+    field_map = {
+        "sfw": "ring_attire_sfw",
+        "barely": "ring_attire",
+        "nsfw": "ring_attire_nsfw",
+    }
+    field = field_map.get(tier, "ring_attire")
+
+    same_skimp = []
+    diff_skimp = []
+    for f in existing_fighters:
+        text = (f.get(field) or "").strip()
+        if not text:
+            continue
+        if f.get("skimpiness_level") == skimpiness_level:
+            same_skimp.append(text)
+        else:
+            diff_skimp.append(text)
+
+    random.shuffle(same_skimp)
+    random.shuffle(diff_skimp)
+    result = same_skimp[:max_samples]
+    remaining = max_samples - len(result)
+    if remaining > 0:
+        result.extend(diff_skimp[:remaining])
+    return result
+
+
 def _generate_outfits(
     config: Config,
     character_summary: dict,
@@ -102,6 +135,7 @@ def _generate_outfits(
     tech_level: str = "",
     fit_style: str = "",
     transparency: str = "",
+    existing_fighters: list[dict] | None = None,
 ) -> dict:
     if tiers is None:
         tiers = ["sfw", "barely", "nsfw"]
@@ -110,9 +144,15 @@ def _generate_outfits(
 
     def _fetch_tier(tier):
         tier_opts = (outfit_options_by_tier or {}).get(tier)
+        tier_existing = None
+        if existing_fighters:
+            tier_existing = _sample_existing_outfits(
+                existing_fighters, tier, skimpiness_level,
+            ) or None
         prompt = _build_tier_prompt(
             tier, skimpiness_level, character_summary, outfit_options=tier_opts,
             tech_level=tech_level, fit_style=fit_style, transparency=transparency,
+            existing_outfits=tier_existing,
         )
         result = call_openrouter_json(
             prompt, config, system_prompt=SYSTEM_PROMPT_OUTFIT_DESIGNER, temperature=0.5
@@ -323,6 +363,7 @@ def generate_fighter(
             tiers=effective_tiers,
             outfit_options_by_tier=male_outfit_opts,
             tech_level=tech_level,
+            existing_fighters=existing_fighters,
         )
     else:
         outfit_data = _generate_outfits(
@@ -334,6 +375,7 @@ def generate_fighter(
             tech_level=tech_level,
             fit_style=fit_style,
             transparency=transparency,
+            existing_fighters=existing_fighters,
         )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})

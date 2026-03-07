@@ -95,6 +95,11 @@ Tiers: `sfw`, `barely`, `nsfw`
 curl "http://localhost:5001/api/fighter-images/f_abc123/portrait" --output portrait.png
 ```
 
+### Get fighter headshot
+```bash
+curl "http://localhost:5001/api/fighter-images/f_abc123/headshot" --output headshot.png
+```
+
 ### Get/save outfit options
 ```bash
 curl "http://localhost:5001/api/outfit-options"
@@ -110,7 +115,7 @@ curl -X PUT "http://localhost:5001/api/outfit-options" \
 ```bash
 curl -X POST "http://localhost:5001/api/fighters/f_abc123/advance-stage"
 ```
-Advances: stage 1 -> 2 (portrait), stage 2 -> 3 (full charsheets)
+Advances: stage 1 -> 2 (portrait + headshot), stage 2 -> 3 (full charsheets)
 
 ### Batch advance fighters
 ```bash

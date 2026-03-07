@@ -6,9 +6,10 @@ Comprehensive documentation of frontend code.
 
 1. [src/App.tsx](#srcapptsx)
 2. [src/design-system.ts](#srcdesign-systemts)
-3. [src/pages/Dashboard.tsx](#srcpagesdashboardtsx)
+3. [src/pages/Home.tsx](#srcpagehometsx)
 4. [src/pages/FighterProfile.tsx](#srcpagesfighterprofiletsx)
-5. [src/pages/FightNarrative.tsx](#srcpagesfightnarrativetsx)
+5. [src/pages/MatchSummary.tsx](#srcpagesmatchsummarytsx)
+5b. [src/pages/FightReplay.tsx](#srcpagesfightreplaytsx)
 6. [src/pages/Rankings.tsx](#srcpagesrankingstsx)
 7. [src/pages/Schedule.tsx](#srcpagesscheduletsx)
 8. [src/pages/RosterManager.tsx](#srcpagesrostermanagertsx)
@@ -39,7 +40,7 @@ File Length: 23 lines
 Purpose: Root component with React Router route definitions.
 
 Artefacts
-- App - Routes: / (Dashboard), /fighter/:id (FighterProfile), /rankings (Rankings), /schedule (Schedule), /match/:id (FightNarrative), /roster (RosterManager)
+- App - Routes: / (Home), /rankings (Rankings), /roster (RosterManager), /match/:matchKey (MatchSummary which embeds FightReplay)
 
 ---
 
@@ -57,13 +58,13 @@ Artefacts
 
 ---
 
-## src/pages/Dashboard.tsx
-File: src/pages/Dashboard.tsx
+## src/pages/Home.tsx
+File: src/pages/Home.tsx
 File Length: 216 lines
 Purpose: League overview showing current day, today's fights, roster health, next event, and recent results.
 
 Artefacts
-- Dashboard - loads worldState and fighters; fetches today's completed event, next upcoming event, and 5 most recent matches
+- Home - loads worldState and fighters; fetches today's completed event, next upcoming event, and 5 most recent matches
 - Sections: day/date header, today's fights (FightCard), roster health (active/injured counts with FighterLink + InjuryBadge), next event, recent results with portraits and outcome badges
 
 ---
@@ -80,15 +81,31 @@ Artefacts
 
 ---
 
-## src/pages/FightNarrative.tsx
-File: src/pages/FightNarrative.tsx
-File Length: 203 lines
-Purpose: Full fight narrative page showing matchup analysis, stat comparison, key moments, and post-fight updates.
+## src/pages/MatchSummary.tsx
+File: src/pages/MatchSummary.tsx
+File Length: ~300 lines
+Purpose: Match summary page showing fight overview with stat comparison, outcome, and embedded fight replay. Replaces the old FightNarrative page.
 
 Artefacts
-- FightNarrative - loads match by URL param, displays fighter matchup header
-- StatSnapshot - sub-component showing stats for one fighter with winner highlight
-- Sections: outcome banner (winner/draw/method), key matchup factors, stat comparison (2-column), key moments with attacker highlighting, post-fight updates
+- MatchSummary - loads match by URL param (matchKey), displays fighter matchup with portraits, stat comparison, outcome banner, tier logo, and embeds FightReplay component
+- StatSnapshot - sub-component showing stats for one fighter with winner highlight using getStatColor
+- formatTime/formatDate - helpers for display formatting
+- TIER_LOGOS/TIER_LABELS - maps tier names to logo image paths and display labels
+- Sections: fight card header with tier badge and time, fighter portraits with links, stat comparison (6 stats), outcome banner with method, embedded FightReplay
+
+---
+
+## src/pages/FightReplay.tsx
+File: src/pages/FightReplay.tsx
+File Length: ~993 lines
+Purpose: Interactive animated fight replay with tick-by-tick combat playback.
+
+Artefacts
+- FightReplay - main component. Accepts a MatchResult and both Fighter objects. Generates mock fight moments from match outcome data, then animates them in sequence.
+- generateMockMoments(match) - creates synthetic FightMoment array from match result (round-by-round, with HP tracking, damage, blocks, misses, finishers)
+- DAMAGE_VERBS/BLOCK_VERBS/MISS_VERBS - random verb pools for event descriptions
+- METHOD_COLORS/METHOD_LABELS - maps finish methods to colors and display text
+- Animated playback: auto-advances through moments with configurable speed, shows HP bars, round counter, event log with attacker/defender highlights, position indicators (standing/clinch/ground), finish animation on final moment
 
 ---
 
@@ -141,7 +158,7 @@ File Length: 76 lines
 Purpose: App shell with top navigation bar and content area.
 
 Artefacts
-- Layout - nav bar with AFL logo, links (Dashboard, Rankings, Schedule, Roster), league date; max-width 1200px content area
+- Layout - nav bar with AFL logo, links (Home, Rankings, Roster), league date; max-width 1200px content area
 
 ---
 

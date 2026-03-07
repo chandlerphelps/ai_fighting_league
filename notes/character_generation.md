@@ -72,12 +72,14 @@ Each profile constrains which options are available for: body_fat_pct, abs_tone,
 
 `ARCHETYPE_BODY_PROFILE_WEIGHTS` maps archetype -> profile probabilities (e.g. Siren skews Curvy, Assassin skews Athletic). Subtype `body_profile_bias` further adjusts these weights. See `fighter_config.py` for exact values.
 
-#### Female traits rolled (17 total):
+#### Female traits rolled (18 total):
 - **Body**: waist, abs_tone, body_fat_pct, butt_size, breast_size, nipple_size, vulva_type
-- **Face**: face_shape, eye_shape, nose_shape, lip_shape, brow_shape, cheekbone, jawline, makeup_level
+- **Face**: face_shape, eye_shape, eye_expression, nose_shape, lip_shape, brow_shape, cheekbone, jawline, makeup_level
 - **Derived**: height (from `ARCHETYPE_HEIGHT_RANGES`), weight (formula using height + body fat + breast/butt modifiers)
 
-`ARCHETYPE_BODY_WEIGHTS` provides per-archetype weighted distributions for many traits. `_weighted_choice()` picks a trait value using archetype weights if available, uniform otherwise. See `fighter_config.py` for all weight tables.
+`eye_expression` has 16 options for females (cold, predatory, calculating, contemptuous, unblinking, piercing, narrowed, half-lidded, wide unblinking, vacant, knowing, fierce, smoldering, wild, glaring, heavy-lidded, focused) with per-archetype weighted distributions (e.g. Siren skews half-lidded/smoldering, Assassin skews cold/narrowed).
+
+`ARCHETYPE_BODY_WEIGHTS` provides per-archetype weighted distributions for many traits including `eye_expression`. `_weighted_choice()` picks a trait value using archetype weights if available, uniform otherwise. See `fighter_config.py` for all weight tables.
 
 #### Male body profiles (7): Skinny, Wiry, Athletic, Muscular, Stocky, Heavy, Massive
 
@@ -89,6 +91,8 @@ Each constrains: body_fat_pct, muscle_definition, shoulder_width, chest_build, b
 - **Body**: build_type, muscle_definition, body_fat_pct, shoulder_width, chest_build, waist
 - **Face**: face_shape, eye_expression, facial_hair
 - **Derived**: height (from `MALE_ARCHETYPE_HEIGHT_RANGES`), weight (different formula: higher base, build bonus)
+
+Male `eye_expression` has 5 options (cold dead, predatory, calculating, wild unhinged, focused intense) with per-archetype weighted distributions in `MALE_ARCHETYPE_BODY_WEIGHTS`.
 
 #### Weight derivation
 Height-based formula modified by body fat, waist, and gender-specific factors (breast/butt for female, build bonus for male). See `_roll_body_traits()` in `fighter_config.py`.
@@ -138,17 +142,50 @@ Stats are NOT from the LLM — they're generated independently.
 
 **Male `MALE_SKIMPINESS_LEVELS`** — 4 levels, sfw/barely only. See `fighter_config.py`.
 
+### Fit Style & Transparency (females only)
+
+Rolled per-fighter alongside skimpiness:
+
+**`FIT_STYLES`** — 5 options: skin-tight, form-fitted, loose, layered, structured. Each has `weights_by_skimpiness` so higher skimpiness levels skew toward skin-tight/structured while lower levels skew toward loose/layered. Rolled by `_roll_fit_style()`.
+
+**`TRANSPARENCY_OPTIONS`** — opaque (70%) or "some mesh/sheer panels" (30%). Rolled by `_roll_transparency()`.
+
+Fit and transparency are injected into the SFW tier prompt only. The prompt clarifies that fit style and skin target are independent — a skin-tight outfit at low skimpiness covers lots of skin, while a loose outfit at high skimpiness shows lots of skin.
+
+Males do not get fit_style or transparency (both set to empty string).
+
+### Outfit Body Coverage
+
+Each tier's LLM output now includes `outfit_body_coverage` — a dict classifying how each body trait is affected by the outfit. The `_coverage_instruction()` function in `outfit_prompts.py` tells the LLM to classify traits as:
+- **exposed**: bare skin (default, omitted from dict)
+- **transparent**: sheer/mesh, trait visible through material
+- **form-fitted**: tight opaque fabric, shape visible
+- **half-obscured**: partially covered (sideboob, cutouts, etc.)
+- **covered**: fully hidden
+
+Coverable traits — Female: breast_size, nipple_size, vulva_type, butt_size, waist, abs_tone. Male: chest_build, muscle_definition, shoulder_width, waist.
+
+`validate_outfit_coverage()` filters LLM output to valid keys/states. Coverage data flows into image prompt assembly via `build_clothing_coverage_annotations()`, which converts coverage states into prompt-friendly annotations (e.g. "outfit hugging large heavy breasts", "partially revealing medium round butt").
+
+### Adornment Coverage System
+
+`ADORNMENT_COVERAGE` maps face adornment categories to which facial traits they cover: full_face, upper_face, lower_face, eyes_only, head_covering, face_paint, decorative, none. Each category specifies `covers_face` (female traits hidden), `male_covers` (male traits hidden), and `covers_hair` (boolean).
+
+Used in body reference prompts and body directives to skip covered facial traits from image descriptions — if a mask covers the eyes, eye_shape/eye_expression are omitted from the face panel.
+
 ### Outfit context injected into prompts
 
 Each tier prompt receives:
 - Character summary (ring_name, archetype, subtype with description, personality, iconic_features, body_parts, expression)
-- `_build_body_shape_line()`: body summary string. SFW tier adds "(covered)" annotation; barely/nsfw omit it.
-- `_build_nsfw_anatomy_line()`: NSFW tiers get full anatomy details (breasts/nipples/butt/vulva). Barely tier gets a reduced version (breasts + butt only).
+- `_build_body_shape_line()`: body summary string. SFW tier adds "(covered)" annotation; barely/nsfw omit it. Accepts `outfit_coverage` to generate clothing coverage annotations.
+- `_build_nsfw_anatomy_line()`: NSFW tiers get full anatomy details (breasts/nipples/butt/vulva). Barely tier gets a reduced version (breasts + butt only). Accepts `outfit_coverage`.
 - `makeup_level` is expanded via `MAKEUP_DESCRIPTIONS` into natural-language descriptions before injection into body directives and face panels.
 - `OUTFIT_STYLE_RULES`: conciseness, 4-5 items minimum, combat footwear preference
 - Tier-specific rules: hard rules, skin target %, vibe guidance
 - Optional `outfit_options` (from `outfit_options.json`): sampled tops, bottoms, one-pieces, exotic one-pieces
 - `tech_level`: random from 6 options (Fantasy Medieval through Sci-Fi / Far Future)
+- `fit_style` + `transparency` (SFW tier, females only)
+- `existing_outfits`: sampled outfit descriptions from existing roster fighters for deduplication
 
 ### Outfit options system
 
@@ -164,6 +201,7 @@ Two JSON files in `/data/`:
 - `ring_attire[_sfw|_nsfw]`: text description of the outfit
 - `image_prompt_clothing[_sfw||_nsfw]`: clothing string for image generation
 - `image_prompt_pose[_sfw||_nsfw]`: tier-appropriate pose (5-15 words)
+- `outfit_body_coverage`: dict of trait -> coverage state (see Outfit Body Coverage above)
 
 ---
 
@@ -173,11 +211,20 @@ All prompt assembly happens in `image_builders.py`. These are **deterministic** 
 
 ### Art Style (`image_style.py`)
 
-Base style: "hand-painted textures over detailed 3D forms, extremely detailed skin and fabric textures, painterly brushstroke overlay, rich moody color grading, dramatic volumetric lighting with atmospheric haze..."
+Two distinct style systems:
 
-- Female adds: "strictly female character, feminine curves and anatomy, beautiful face"
-- Male adds: "male character, masculine build and anatomy, imposing physique, chiseled jaw"
-- Tail variants reinforce style at end of prompt
+**Charsheet/Move art** — Dark indie comic style (Mike Mignola / Hellboy inspired):
+- `ART_STYLE_BASE`: "dark indie comic art, heavy black ink with minimal color, stark high-contrast shadows, noir comic style, Mike Mignola inspired bold shapes and deep blacks, limited muted color palette with one accent color, woodcut-like bold linework, atmospheric horror comic aesthetic..."
+- Female adds: "strictly female character, feminine curves and anatomy, beautiful face, deadly fighter"
+- Male adds: "male character, masculine build and anatomy, imposing physique, chiseled jaw, rugged face"
+- Tail variants (`ART_STYLE_TAIL_*`) reinforce style at end of prompt
+
+**Body reference art** — Painterly anatomy study style:
+- `PAINTERLY_STYLE_BASE`: "hand-painted textures over detailed 3D forms, extremely detailed skin textures, painterly brushstroke overlay, soft even studio lighting, highly detailed anatomy, professional perfect shading"
+- `PAINTERLY_QUALITY` / `PAINTERLY_QUALITY_MALE`: figure drawing study quality, parchment background
+- Used exclusively for body_ref prompts (anatomy study pages)
+
+Gender-aware accessors: `get_art_style(gender)`, `get_art_style_tail(gender)`
 
 ### Charsheet Prompt (`_build_charsheet_prompt()`)
 
@@ -195,9 +242,9 @@ Output: dict with `style`, `layout`, `body_parts`, `clothing`, `character_desc`,
 ```
 
 **Key helper functions**:
-- `_enrich_body_parts()`: appends body shape line + subtype aesthetic to base body_parts
-- `_build_clothing_part()`: prepends outfit color, handles nsfw framing ("topless, bare breasts" or "completely naked except...")
-- `_build_character_desc()`: combines body_parts + clothing + age + origin
+- `_enrich_body_parts()`: appends body shape line + subtype aesthetic to base body_parts. Accepts `outfit_coverage` for clothing annotations.
+- `_build_clothing_part()`: prepends outfit color, handles nsfw framing ("topless, bare breasts" or "completely naked except..."). Accepts `outfit_coverage` + `body_type_details` to append `build_clothing_coverage_annotations()`.
+- `_build_character_desc()`: combines body_parts + clothing + age + origin. Appends face adornment if present.
 
 **NSFW framing**:
 - Skimpiness 1: "topless woman, bare breasts visible"
@@ -206,9 +253,9 @@ Output: dict with `style`, `layout`, `body_parts`, `clothing`, `character_desc`,
 
 ### Body Reference Prompt (`build_body_reference_prompt()`)
 
-**Female**: 5-panel anatomy study page (face, rear angled, torso, butt, intimate). Uses `BODY_REF_STYLE_FEMALE`, `BODY_REF_PAGE_STYLE`, `BODY_REF_LAYOUT`. Each panel is a detailed standalone description using rolled body traits (breast_size, nipple_size, butt_size, vulva_type, face details, etc.).
+**Female**: 5-panel anatomy study page (face, rear angled, torso, butt, intimate). Uses `BODY_REF_STYLE_FEMALE`, `BODY_REF_PAGE_STYLE`, `BODY_REF_LAYOUT`. Each panel is a detailed standalone description using rolled body traits (breast_size, nipple_size, butt_size, vulva_type, face details including eye_expression, etc.). Face panel respects `ADORNMENT_COVERAGE` — traits hidden by face adornments are omitted. Eye expression and eye shape are combined when both are uncovered (e.g. "smoldering almond eyes").
 
-**Male**: 3-panel anatomy study (face, front body in underwear, rear body in underwear). Uses `MALE_BODY_REF_*` variants. Less explicit — no intimate panels.
+**Male**: 3-panel anatomy study (face, front body in underwear, rear body in underwear). Uses `MALE_BODY_REF_*` variants. Less explicit — no intimate panels. Face panel includes eye_expression (e.g. "focused intense eyes") respecting adornment coverage.
 
 ### Other prompts
 - `build_portrait_prompt()`: SFW upper-body shot with `PORTRAIT_STYLE`
@@ -265,8 +312,10 @@ The body_ref -> charsheet pipeline is key: female charsheets use `edit_image()` 
 
 After generation, the Fighter object carries everything needed to regenerate images without re-running the LLM:
 
-- `body_type_details`: full dict of rolled traits (breast_size, vulva_type, face_shape, etc.)
+- `body_type_details`: full dict of rolled traits (breast_size, vulva_type, face_shape, eye_expression, etc.)
 - `skimpiness_level`: 1-4
+- `fit_style`: clothing fit (skin-tight, form-fitted, loose, layered, structured) — females only
+- `transparency`: opaque or "some mesh/sheer panels" — females only
 - `tech_level`: random era string
 - `image_prompt_body_parts`, `image_prompt_expression`, `image_prompt_personality_pose`: from LLM
 - `ring_attire`, `ring_attire_sfw`, `ring_attire_nsfw`: outfit text descriptions
@@ -276,4 +325,6 @@ After generation, the Fighter object carries everything needed to regenerate ima
 - `iconic_features`: persistent visual details across all tiers
 - `primary_outfit_color`: outfit color from palette
 - `outfit_suggestions`: per-tier outfit option samples (for regeneration)
+- `outfit_coverage`: per-tier dict of body trait -> coverage state (from LLM)
+- `face_adornment`, `adornment_coverage`: face/head adornment and its coverage category
 - `learning_rate`, `work_ethic`: hidden training progression multipliers

@@ -402,6 +402,9 @@ def generate_new_fighter():
             "build": f.get("build", ""),
             "distinguishing_features": f.get("distinguishing_features", ""),
             "ring_attire": f.get("ring_attire", ""),
+            "ring_attire_sfw": f.get("ring_attire_sfw", ""),
+            "ring_attire_nsfw": f.get("ring_attire_nsfw", ""),
+            "skimpiness_level": f.get("skimpiness_level"),
         }
         for f in existing_on_disk
     ]
@@ -467,6 +470,9 @@ def regenerate_character(fighter_id: str):
             "build": f.get("build", ""),
             "distinguishing_features": f.get("distinguishing_features", ""),
             "ring_attire": f.get("ring_attire", ""),
+            "ring_attire_sfw": f.get("ring_attire_sfw", ""),
+            "ring_attire_nsfw": f.get("ring_attire_nsfw", ""),
+            "skimpiness_level": f.get("skimpiness_level"),
         }
         for f in existing_on_disk
         if f.get("id") != fighter_id
@@ -1021,6 +1027,9 @@ def generate_from_plan():
                 "build": f.get("build", ""),
                 "distinguishing_features": f.get("distinguishing_features", ""),
                 "ring_attire": f.get("ring_attire", ""),
+                "ring_attire_sfw": f.get("ring_attire_sfw", ""),
+                "ring_attire_nsfw": f.get("ring_attire_nsfw", ""),
+                "skimpiness_level": f.get("skimpiness_level"),
             }
             for f in existing_on_disk
         ]
@@ -1067,6 +1076,9 @@ def generate_from_plan():
                 "build": fighter.build,
                 "distinguishing_features": fighter.distinguishing_features,
                 "ring_attire": fighter.ring_attire,
+                "ring_attire_sfw": fighter.ring_attire_sfw,
+                "ring_attire_nsfw": fighter.ring_attire_nsfw,
+                "skimpiness_level": fighter.skimpiness_level,
             })
 
             generated.append(fighter.to_dict())

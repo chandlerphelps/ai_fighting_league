@@ -111,6 +111,9 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
             "personality": f.get("personality", ""),
             "distinguishing_features": f.get("distinguishing_features", ""),
             "ring_attire": f.get("ring_attire", ""),
+            "ring_attire_sfw": f.get("ring_attire_sfw", ""),
+            "ring_attire_nsfw": f.get("ring_attire_nsfw", ""),
+            "skimpiness_level": f.get("skimpiness_level"),
         }
         for f in existing_on_disk
     ]
@@ -160,6 +163,9 @@ def generate_from_plan(generate_images: bool = False, tiers: list[str] | None = 
                 "personality": fighter.personality,
                 "distinguishing_features": fighter.distinguishing_features,
                 "ring_attire": fighter.ring_attire,
+                "ring_attire_sfw": fighter.ring_attire_sfw,
+                "ring_attire_nsfw": fighter.ring_attire_nsfw,
+                "skimpiness_level": fighter.skimpiness_level,
             })
             print(f"  Created: {fighter.ring_name} ({fighter.real_name}) - {fighter.origin}")
             print(f"  Stats total: {fighter.total_core_stats()}")

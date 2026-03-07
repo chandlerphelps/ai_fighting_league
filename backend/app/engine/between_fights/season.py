@@ -297,7 +297,10 @@ def _backfill_via_llm(fighters, summary, rng, season, deficit, config) -> int:
          "subtype": f.get("subtype", ""),
          "build": f.get("build", ""), "personality": f.get("personality", ""),
          "distinguishing_features": f.get("distinguishing_features", ""),
-         "ring_attire": f.get("ring_attire", "")}
+         "ring_attire": f.get("ring_attire", ""),
+         "ring_attire_sfw": f.get("ring_attire_sfw", ""),
+         "ring_attire_nsfw": f.get("ring_attire_nsfw", ""),
+         "skimpiness_level": f.get("skimpiness_level")}
         for f in fighters.values() if f.get("status") == "active"
     ]
 
@@ -382,6 +385,9 @@ def _backfill_via_llm(fighters, summary, rng, season, deficit, config) -> int:
                 "personality": fighter.personality,
                 "distinguishing_features": fighter.distinguishing_features,
                 "ring_attire": fighter.ring_attire,
+                "ring_attire_sfw": fighter.ring_attire_sfw,
+                "ring_attire_nsfw": fighter.ring_attire_nsfw,
+                "skimpiness_level": fighter.skimpiness_level,
             })
             generated += 1
         except Exception:

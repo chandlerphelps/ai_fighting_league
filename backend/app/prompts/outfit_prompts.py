@@ -51,6 +51,7 @@ def build_tier_prompt(
     tech_level: str = "",
     fit_style: str = "",
     transparency: str = "",
+    existing_outfits: list[str] | None = None,
 ) -> str:
     gender = character_summary.get("gender", "female")
     is_male = gender.lower() == "male"
@@ -154,6 +155,14 @@ Expression: {expression}"""
             if lines:
                 outfit_examples_text = "\n" + "\n".join(lines) + "\n"
 
+    existing_outfits_text = ""
+    if existing_outfits:
+        numbered = "\n".join(f"{i+1}. {o}" for i, o in enumerate(existing_outfits))
+        existing_outfits_text = (
+            f"\nEXISTING ROSTER OUTFITS (these already exist — your design must be FUNDAMENTALLY different, "
+            f"not a variation. Different garment types, different silhouette, different aesthetic):\n{numbered}\n"
+        )
+
     fit_line = ""
     transparency_line = ""
     if tier == "sfw" and fit_style:
@@ -171,7 +180,7 @@ Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {
 
 {OUTFIT_STYLE_RULES}
 You are encouraged (but not required) to include pieces from the following in your outfit design:
-{outfit_examples_text}
+{outfit_examples_text}{existing_outfits_text}
 RULES:
   HARD RULES: {level['sfw_hard_rules']}
   SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
@@ -198,7 +207,7 @@ Generate the "{level['barely_label']}" tier outfit for this character (skimpines
 
 {OUTFIT_STYLE_RULES}
 You are encouraged to include pieces from the following in your outfit design:
-{outfit_examples_text}
+{outfit_examples_text}{existing_outfits_text}
 RULES:
   HARD RULES: {level['barely_hard_rules']}
   SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
@@ -259,7 +268,7 @@ Return ONLY valid JSON:
 Generate the NSFW outfit for this character. Tone: {level['nsfw_adjective']}.
 
 {OUTFIT_STYLE_RULES}
-{outfit_examples_text}
+{outfit_examples_text}{existing_outfits_text}
 {additional}
 
 RULES:

@@ -6,20 +6,18 @@
   "season_day_in_month": 7,
   "tier_rankings": {
     "apex": [
-      "f_9a94e6e3",
-      "f_23bf4a4b",
-      "f_c8cea658",
-      "f_86ecc556",
-      "f_20584b90",
-      "f_a2913aea"
+      "f_769bd3af",
+      "f_1e6f54a3",
+      "f_27cff8d6",
+      "f_00730231"
     ],
     "contender": [],
     "underground": []
   },
-  "belt_holder_id": "f_9a94e6e3",
+  "belt_holder_id": "f_769bd3af",
   "belt_history": [
     {
-      "fighter_id": "f_9a94e6e3",
+      "fighter_id": "f_769bd3af",
       "won_date": "season_0",
       "lost_date": null,
       "defenses": 0
@@ -34,19 +32,17 @@
   "promotion_fights": [],
   "title_fight": {},
   "rankings": [
-    "f_9a94e6e3",
-    "f_23bf4a4b",
-    "f_c8cea658",
-    "f_86ecc556",
-    "f_20584b90",
-    "f_a2913aea"
+    "f_769bd3af",
+    "f_1e6f54a3",
+    "f_27cff8d6",
+    "f_00730231"
   ],
   "upcoming_events": [],
   "completed_events": [],
   "last_daily_summary": "League initialized with LLM-generated fighters.",
   "event_counter": 0,
   "tier_sizes": {
-    "apex": 6,
+    "apex": 4,
     "contender": 0,
     "underground": 0
   }

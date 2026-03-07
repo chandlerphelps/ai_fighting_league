@@ -4,13 +4,14 @@ Quick reference for finding components and code.
 
 ## App
 
-- `src/App.tsx` - Routes: / (Dashboard), /fighter/:id, /rankings, /schedule, /match/:id, /roster (RosterManager)
+- `src/App.tsx` - Routes: / (Home), /rankings, /roster (RosterManager), /match/:matchKey (MatchSummary)
 
 ## Pages (`src/pages/`)
 
-- `Dashboard.tsx` - League date, today's fights, roster health, next event, recent results
+- `Home.tsx` - League date, today's fights, roster health, next event, recent results
 - `FighterProfile.tsx` - Full fighter profile with tiered image viewer (sfw/barely/nsfw/body_ref), stats, record, fight history, storyline, rivalries
-- `FightNarrative.tsx` - Full fight narrative, stat comparison, outcome banner, key moments, post-fight changes
+- `MatchSummary.tsx` - Match overview: fighter matchup with portraits, stat comparison, outcome banner, tier badge, embeds FightReplay
+- `FightReplay.tsx` - Interactive animated fight replay with tick-by-tick combat playback, HP bars, round counter, event log, position indicators, finish animation
 - `Rankings.tsx` - Ranked table with record, streak, recent form indicators, injury badges
 - `Schedule.tsx` - Upcoming and past events with fight cards
 - `RosterManager.tsx` - Admin 3-stage roster pipeline: AI plan -> stage 1 (JSON) -> stage 2 (portrait) -> stage 3 (charsheets). View/edit/delete fighters, generate/regenerate character/outfits/images, outfit options manager, stage filter tabs, batch operations
