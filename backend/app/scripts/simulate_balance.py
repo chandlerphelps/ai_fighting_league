@@ -306,6 +306,20 @@ class BalanceSimulator(LeagueSimulator):
 
         return season_summary
 
+    def _print_tier_rosters(self):
+        for tier in ["apex", "contender", "underground"]:
+            fighters_in_tier = [f for f in self.fighters.values() if f.get("tier") == tier and f.get("status") == "active"]
+            fighters_in_tier.sort(key=lambda f: sum(f["stats"].get(s, 0) for s in CORE_STATS), reverse=True)
+            print(f"\n  {tier.upper()} ({len(fighters_in_tier)} fighters):")
+            for f in fighters_in_tier:
+                core = sum(f["stats"].get(s, 0) for s in CORE_STATS)
+                rec = f.get("record", {})
+                g = f.get("gender", "?")[0].upper()
+                arch = f.get("primary_archetype", "")
+                print(f"    {f['ring_name']:20s} {g}  {arch:16s} age:{f['age']:2d}  stats:{core:3d}  "
+                      f"W:{rec.get('wins',0):2d}-L:{rec.get('losses',0):2d}  "
+                      f"seasons:{f.get('career_season_count',0)}")
+
     def _process_end_of_season_with_pool(self) -> dict:
         season = self.world_state.get("season_number", 1)
         summary = {

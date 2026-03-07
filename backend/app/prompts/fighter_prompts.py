@@ -13,12 +13,14 @@ GUIDE_CORE_PHILOSOPHY = """## Core Philosophy — Read This First
 Everything below flows from these four principles. If a new character violates any of
 them, stop and rework.
 
-### 1. Female Characters Are Attractive but Distinctive
+### 1. Female Characters Are Dangerous AND Attractive
 
-Design for a predominantly male audience. Every female fighter should be attractive in a distinctive way.
-Sex appeal is a feature, not a bug. Confidence, allure, and willingness to
-weaponize beauty are core to female character design in AFL. But be tasteful so we can have a
-good SFW version of each character which is family friendly. Most should be white / asian / latina.
+Design for a predominantly male audience. Every female fighter should be attractive in a distinctive way
+AND look like she could kill you. Sex appeal is a feature, not a bug — but so is lethality.
+Confidence, allure, and willingness to weaponize beauty are core to female character design in AFL.
+She's gorgeous, but the first thing you notice is that she's dangerous.
+But be tasteful so we can have a good SFW version of each character which is family friendly.
+Most should be white / asian / latina.
 
 ### 2. Men Are Bigger and Stronger — Women Win Differently
 
@@ -28,6 +30,7 @@ seduction, charm, playing dirty, psychological warfare, debuffing, supernatural 
 technical mastery, mysticism, poison, speed, precision — everything except raw physical
 dominance. The size and strength gap is real and is part of what makes it interesting when
 a woman beats a man twice her size through means other than out-muscling him.
+But regardless of HOW they fight, every female fighter should LOOK dangerous.
 
 ### 3. Characters are interesting because of how they deal with adversity and hurting others
 
@@ -160,7 +163,7 @@ Same archetype, completely different characters. The subtype is where personalit
 
 ### Physical Design
 
-For female characters: This is where sex appeal is designed in, not bolted on later.
+For female characters: This is where sex appeal AND lethality are designed in, not bolted on later.
 The outfit should be the statement — high-cut leotards, crop tops, sling bikinis, thongs, mesh
 panels, thigh-highs, micro shorts, plunging necklines. The outfit IS character design.
 
@@ -183,8 +186,9 @@ Bad examples:
 - "A woman who is really strong and tough" (strength isn't the hook for women — see Core Philosophy #2)
 
 For female characters specifically: The hook should make clear why she's compelling
-to a male audience. Beauty, danger, allure, mystique, cleverness, cruelty, seduction —
-these are the ingredients.
+to a male audience. Danger and beauty are the two mandatory ingredients. Then layer in
+allure, mystique, cleverness, cruelty, seduction. She should be someone you can't look
+away from — and can't safely turn your back on.
 """
 
 GUIDE_COMMON_MISTAKES = """## Common Mistakes

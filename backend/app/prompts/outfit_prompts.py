@@ -174,7 +174,7 @@ RULES:
 
 The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
 
-POSE: Also generate a short personality pose for this tier — {"intimidating, powerful, showing off raw physicality. 5-10 words max." if is_male else "suggestive, flirty, showing off the outfit and sex appeal. 5-10 words max."}
+POSE: Also generate a short personality pose for this tier — {"intimidating, powerful, showing off raw physicality. 5-10 words max." if is_male else "dangerous with alluring sex appeal. 5-10 words max."}
 
 Return ONLY valid JSON:
 {{

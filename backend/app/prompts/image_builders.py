@@ -223,7 +223,7 @@ BODY_REF_STYLE_BASE = (
     "professional perfect shading"
 )
 
-BODY_REF_STYLE_FEMALE = BODY_REF_STYLE_BASE + ", female character, beautiful features"
+BODY_REF_STYLE_FEMALE = BODY_REF_STYLE_BASE + ", female character, beautiful and dangerous"
 
 BODY_REF_STYLE_MALE = (
     BODY_REF_STYLE_BASE + ", male character, masculine build, rugged handsome features"
@@ -566,7 +566,7 @@ def build_move_image_prompt(fighter: dict, move: dict, tier: str) -> str:
 
 PORTRAIT_STYLE = (
     "high quality illustration, single character portrait, upper body shot, "
-    "dark background, professional character art, detailed face and expression"
+    "dark background, professional character art, detailed face and expression, dangerous fighter"
 )
 
 HEADSHOT_STYLE = (

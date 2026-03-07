@@ -2247,8 +2247,9 @@ def _build_body_directive(traits: dict) -> str:
         f"- Makeup: {traits['makeup_level']} — {makeup_desc}\n"
         "\nThe height and weight are EXACT — use these values directly.\n"
         "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
-        "IMPORTANT: Interpret ALL facial and body traits through an attractive lens. "
-        "Every combination should result in a beautiful, appealing character."
+        "IMPORTANT: Interpret ALL facial and body traits through a DANGEROUS yet ATTRACTIVE lens. "
+        "Every combination should result in a beautiful, lethal-looking character — "
+        "someone stunning but clearly capable of killing you."
     )
 
 
@@ -2326,7 +2327,7 @@ SKIMPINESS_LEVELS = {
         "sfw_label": "Fitted",
         "sfw_skin_pct": "5-20",
         "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage — fabric covers everything but can show body shape.",
-        "sfw_guidance": "Fitted athletic wear — fabric follows the body's shape but isn't clinging. Think tailored combat gear, fitted compression shirts, athletic pants. Coverage is near-total but the silhouette is clean and defined.",
+        "sfw_guidance": "Fitted athletic wear — fabric follows the body's shape but isn't clinging. Think tailored combat gear, fitted compression shirts, athletic pants. Coverage is near-total but the silhouette is clean and defined. She looks ready to fight.",
         "barely_label": "Flirty",
         "barely_skin_pct": "30-65",
         "barely_hard_rules": "Nipples MUST be fully covered. Groin MUST be fully covered. No exceptions.",
@@ -2340,7 +2341,7 @@ SKIMPINESS_LEVELS = {
         "sfw_label": "Form-fitting",
         "sfw_skin_pct": "5-30",
         "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage — fabric hugs every curve but all skin is covered.",
-        "sfw_guidance": "Form-fitting — fabric hugs every curve, the body shape is unmistakable. Think yoga pants, compression tops, body-hugging combat suits. Nearly all skin covered but the body is clearly on display through the fabric.",
+        "sfw_guidance": "Form-fitting — fabric hugs every curve, the body shape is unmistakable. Think yoga pants, compression tops, body-hugging combat suits. Nearly all skin covered but the body is clearly on display through the fabric. Dangerous.",
         "barely_label": "Risqué",
         "barely_skin_pct": "30-75",
         "barely_hard_rules": "Nipples MUST be fully covered. Groin MUST be fully covered. Sideboob and underbutt OK.",
@@ -2354,7 +2355,7 @@ SKIMPINESS_LEVELS = {
         "sfw_label": "Skin-tight",
         "sfw_skin_pct": "5-60",
         "sfw_hard_rules": "No bare nipples, no genitalia. Nipple outline and cameltoe through tight fabric IS allowed. Full coverage with vacuum-sealed tightness — fabric is a second skin.",
-        "sfw_guidance": "Skin-tight — fabric is vacuum-sealed to the body, every muscle, contour and curve visible. Nipple outline through fabric is expected. Think bodysuits, catsuits, skin-tight leggings and tops. Coverage is high but nothing is left to imagination about the body underneath.",
+        "sfw_guidance": "Skin-tight — fabric is vacuum-sealed to the body, every muscle, contour and curve visible. Nipple outline through fabric is expected. Think bodysuits, catsuits, skin-tight leggings and tops. Coverage is high but nothing is left to imagination about the body underneath. Dangerous.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "35-80",
         "barely_hard_rules": "Nipples MUST be covered (pasties or fabric). Groin MUST be covered. Areola edge peeking is OK but nipple itself stays hidden.",
@@ -2368,7 +2369,7 @@ SKIMPINESS_LEVELS = {
         "sfw_label": "Skin-tight with Cutouts",
         "sfw_skin_pct": "15-65",
         "sfw_hard_rules": "No bare nipples, no genitalia. Nipple outline through fabric IS allowed. Sideboob hints OK. Strategic cutouts showing skin (midriff, sides, back, thighs) are expected.",
-        "sfw_guidance": "Skin-tight base with strategic cutouts — vacuum-sealed fabric with deliberate skin windows. Midriff cutouts, side panels, open backs, thigh windows. The outfit is skin-tight where it covers but intentionally reveals select areas of skin.",
+        "sfw_guidance": "Skin-tight base with strategic cutouts — vacuum-sealed fabric with deliberate skin windows. Midriff cutouts, side panels, open backs, thigh windows. The outfit is skin-tight where it covers but intentionally reveals select areas of skin. Lethal and alluring.",
         "barely_label": "Extreme",
         "barely_skin_pct": "60-99",
         "barely_hard_rules": "Nipples MUST be covered (micro pasties minimum). Groin MUST be covered (micro strip or patch minimum). Areola edge visible is OK.",
