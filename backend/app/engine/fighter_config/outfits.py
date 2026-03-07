@@ -234,6 +234,8 @@ SKIN_POINT_MAP = {
     4: "35-55",
     5: "50-70",
     6: "65-85",
+    7: "80-95",
+    8: "95-99",
 }
 
 TIGHTNESS_POINT_MAP = {
@@ -241,12 +243,14 @@ TIGHTNESS_POINT_MAP = {
     1: "layered",
     2: "form-fitted",
     3: "skin-tight",
+    4: "body-paint",
 }
 
 TRANSPARENCY_POINT_MAP = {
     0: "opaque",
     1: "some mesh/sheer panels",
     2: "significant sheer/transparent sections",
+    3: "fully transparent/sheer",
 }
 
 EXPOSURE_BUDGETS = {
@@ -256,8 +260,8 @@ EXPOSURE_BUDGETS = {
     ("sfw", 4): {"budget": 7, "skin_max": 5, "tightness_max": 3, "transparency_max": 2},
     ("barely", 1): {"budget": 6, "skin_max": 4, "tightness_max": 3, "transparency_max": 2},
     ("barely", 2): {"budget": 8, "skin_max": 5, "tightness_max": 3, "transparency_max": 2},
-    ("barely", 3): {"budget": 9, "skin_max": 6, "tightness_max": 3, "transparency_max": 2},
-    ("barely", 4): {"budget": 11, "skin_max": 6, "tightness_max": 3, "transparency_max": 2},
+    ("barely", 3): {"budget": 10, "skin_max": 7, "tightness_max": 4, "transparency_max": 3},
+    ("barely", 4): {"budget": 13, "skin_max": 8, "tightness_max": 4, "transparency_max": 3},
 }
 
 
