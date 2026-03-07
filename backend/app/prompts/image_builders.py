@@ -1,4 +1,4 @@
-from app.engine.image_style import get_art_style, get_art_style_tail
+from app.engine.image_style import get_art_style, get_art_style_tail, PAINTERLY_STYLE_FEMALE, PAINTERLY_STYLE_MALE, PAINTERLY_QUALITY, PAINTERLY_QUALITY_MALE
 from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line, MAKEUP_DESCRIPTIONS, get_adornment_coverage, build_clothing_coverage_annotations
 from app.services.grok_image import TIER_PROMPT_KEYS
 
@@ -233,18 +233,9 @@ def _nsfw_tail(gender: str, skimpiness_level: int) -> str:
     )
 
 
-BODY_REF_STYLE_BASE = (
-    "hand-painted textures over detailed 3D forms, "
-    "extremely detailed skin textures, painterly brushstroke overlay, "
-    "soft even studio lighting, highly detailed anatomy, "
-    "professional perfect shading"
-)
+BODY_REF_STYLE_FEMALE = PAINTERLY_STYLE_FEMALE
 
-BODY_REF_STYLE_FEMALE = BODY_REF_STYLE_BASE + ", female character, beautiful and dangerous"
-
-BODY_REF_STYLE_MALE = (
-    BODY_REF_STYLE_BASE + ", male character, masculine build, rugged handsome features"
-)
+BODY_REF_STYLE_MALE = PAINTERLY_STYLE_MALE
 
 BODY_REF_PAGE_STYLE = (
     "artist anatomy study page, figure drawing body part studies, "
@@ -266,13 +257,7 @@ BODY_REF_LAYOUT = (
     "each drawing floats independently"
 )
 
-BODY_REF_QUALITY = (
-    "hand-painted textures, extremely detailed, anatomical precision, "
-    "figure drawing study quality, "
-    "each body part rendered as its own separate floating illustration, "
-    "soft even lighting, clean parchment background, "
-    "no text no words no labels no watermarks"
-)
+BODY_REF_QUALITY = PAINTERLY_QUALITY
 
 
 MALE_BODY_REF_PAGE_STYLE = (
@@ -294,14 +279,7 @@ MALE_BODY_REF_LAYOUT = (
     "each drawing floats independently"
 )
 
-MALE_BODY_REF_QUALITY = (
-    "hand-painted textures, extremely detailed, anatomical precision, "
-    "figure drawing study quality, "
-    "each drawing rendered as its own separate floating illustration, "
-    "soft even lighting, clean parchment background, "
-    "masculine imposing physique, "
-    "no text no words no labels no watermarks"
-)
+MALE_BODY_REF_QUALITY = PAINTERLY_QUALITY_MALE
 
 
 def build_body_reference_prompt(
