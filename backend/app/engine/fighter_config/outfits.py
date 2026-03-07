@@ -226,6 +226,79 @@ TRANSPARENCY_OPTIONS = {
 }
 
 
+SKIN_POINT_MAP = {
+    0: "0-10",
+    1: "5-20",
+    2: "15-30",
+    3: "25-40",
+    4: "35-55",
+    5: "50-70",
+    6: "65-85",
+}
+
+TIGHTNESS_POINT_MAP = {
+    0: "loose",
+    1: "layered",
+    2: "form-fitted",
+    3: "skin-tight",
+}
+
+TRANSPARENCY_POINT_MAP = {
+    0: "opaque",
+    1: "some mesh/sheer panels",
+    2: "significant sheer/transparent sections",
+}
+
+EXPOSURE_BUDGETS = {
+    ("sfw", 1): {"budget": 3, "skin_max": 1, "tightness_max": 2, "transparency_max": 1},
+    ("sfw", 2): {"budget": 4, "skin_max": 2, "tightness_max": 3, "transparency_max": 1},
+    ("sfw", 3): {"budget": 6, "skin_max": 4, "tightness_max": 3, "transparency_max": 2},
+    ("sfw", 4): {"budget": 7, "skin_max": 5, "tightness_max": 3, "transparency_max": 2},
+    ("barely", 1): {"budget": 6, "skin_max": 4, "tightness_max": 3, "transparency_max": 2},
+    ("barely", 2): {"budget": 8, "skin_max": 5, "tightness_max": 3, "transparency_max": 2},
+    ("barely", 3): {"budget": 9, "skin_max": 6, "tightness_max": 3, "transparency_max": 2},
+    ("barely", 4): {"budget": 11, "skin_max": 6, "tightness_max": 3, "transparency_max": 2},
+}
+
+
+def _roll_exposure_budget(tier: str, skimpiness_level: int) -> dict:
+    config = EXPOSURE_BUDGETS.get((tier, skimpiness_level))
+    if not config:
+        config = EXPOSURE_BUDGETS.get(("sfw", 2))
+
+    budget = config["budget"]
+    skin_max = min(config["skin_max"], max(SKIN_POINT_MAP.keys()))
+    tight_max = min(config["tightness_max"], max(TIGHTNESS_POINT_MAP.keys()))
+    trans_max = min(config["transparency_max"], max(TRANSPARENCY_POINT_MAP.keys()))
+
+    skin = random.randint(0, skin_max)
+    tight = random.randint(0, tight_max)
+    trans = random.randint(0, trans_max)
+
+    total = skin + tight + trans
+    if total > budget:
+        dims = [("skin", skin, skin_max), ("tight", tight, tight_max), ("trans", trans, trans_max)]
+        random.shuffle(dims)
+        overflow = total - budget
+        reduced = {}
+        for name, val, _ in dims:
+            cut = min(val, overflow)
+            reduced[name] = val - cut
+            overflow -= cut
+        skin = reduced["skin"]
+        tight = reduced["tight"]
+        trans = reduced["trans"]
+
+    return {
+        "skin_pct": SKIN_POINT_MAP[skin],
+        "fit_style": TIGHTNESS_POINT_MAP[tight],
+        "transparency": TRANSPARENCY_POINT_MAP[trans],
+        "skin_points": skin,
+        "tightness_points": tight,
+        "transparency_points": trans,
+    }
+
+
 def _roll_fit_style(skimpiness_level: int) -> str:
     styles = list(FIT_STYLES.keys())
     weights = [FIT_STYLES[s]["weights_by_skimpiness"].get(skimpiness_level, 20) for s in styles]

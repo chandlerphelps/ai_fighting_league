@@ -18,6 +18,7 @@ from app.engine.fighter_config import (
     _roll_skimpiness,
     _roll_fit_style,
     _roll_transparency,
+    _roll_exposure_budget,
     _roll_body_traits,
     _roll_subtype,
     _find_subtype,
@@ -136,6 +137,7 @@ def _generate_outfits(
     fit_style: str = "",
     transparency: str = "",
     existing_fighters: list[dict] | None = None,
+    exposure_by_tier: dict | None = None,
 ) -> dict:
     if tiers is None:
         tiers = ["sfw", "barely", "nsfw"]
@@ -149,10 +151,14 @@ def _generate_outfits(
             tier_existing = _sample_existing_outfits(
                 existing_fighters, tier, skimpiness_level,
             ) or None
+        tier_exposure = (exposure_by_tier or {}).get(tier, {})
+        tier_fit = tier_exposure.get("fit_style", fit_style)
+        tier_trans = tier_exposure.get("transparency", transparency)
+        tier_skin_pct = tier_exposure.get("skin_pct", "")
         prompt = _build_tier_prompt(
             tier, skimpiness_level, character_summary, outfit_options=tier_opts,
-            tech_level=tech_level, fit_style=fit_style, transparency=transparency,
-            existing_outfits=tier_existing,
+            tech_level=tech_level, fit_style=tier_fit, transparency=tier_trans,
+            existing_outfits=tier_existing, skin_pct_override=tier_skin_pct,
         )
         result = call_openrouter_json(
             prompt, config, system_prompt=SYSTEM_PROMPT_OUTFIT_DESIGNER, temperature=0.5
@@ -258,9 +264,13 @@ def generate_fighter(
     if is_male:
         fit_style = ""
         transparency = ""
+        exposure_by_tier = {}
     else:
-        fit_style = _roll_fit_style(skimpiness_level)
-        transparency = _roll_transparency()
+        sfw_exposure = _roll_exposure_budget("sfw", skimpiness_level)
+        barely_exposure = _roll_exposure_budget("barely", skimpiness_level)
+        exposure_by_tier = {"sfw": sfw_exposure, "barely": barely_exposure}
+        fit_style = sfw_exposure["fit_style"]
+        transparency = sfw_exposure["transparency"]
 
     subtype_info = None
     if roster_plan_entry and roster_plan_entry.get("subtype"):
@@ -376,6 +386,7 @@ def generate_fighter(
             fit_style=fit_style,
             transparency=transparency,
             existing_fighters=existing_fighters,
+            exposure_by_tier=exposure_by_tier,
         )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})

@@ -52,6 +52,7 @@ def build_tier_prompt(
     fit_style: str = "",
     transparency: str = "",
     existing_outfits: list[str] | None = None,
+    skin_pct_override: str = "",
 ) -> str:
     gender = character_summary.get("gender", "female")
     is_male = gender.lower() == "male"
@@ -165,7 +166,7 @@ Expression: {expression}"""
 
     fit_line = ""
     transparency_line = ""
-    if tier == "sfw" and fit_style:
+    if tier in ("sfw", "barely") and fit_style:
         fit_desc = FIT_STYLES.get(fit_style, {}).get("description", "")
         fit_line = f"\n  FIT: {fit_style} — {fit_desc}" if fit_desc else f"\n  FIT: {fit_style}"
         if transparency and transparency != "opaque":
@@ -174,6 +175,7 @@ Expression: {expression}"""
             transparency_line = "\n  TRANSPARENCY: opaque — all fabric is fully opaque"
 
     if tier == "sfw":
+        sfw_skin = skin_pct_override if skin_pct_override else level['sfw_skin_pct']
         return f"""{char_context}
 
 Generate the "{level['sfw_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
@@ -183,7 +185,7 @@ You are encouraged (but not required) to include pieces from the following in yo
 {outfit_examples_text}{existing_outfits_text}
 RULES:
   HARD RULES: {level['sfw_hard_rules']}
-  SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
+  SKIN TARGET: ~{sfw_skin}% of skin visible.
   VIBE: {level['sfw_label']} — {level['sfw_guidance']}{fit_line}{transparency_line}
   Iconic features + additional clothing pieces to hit the skin target.
 
@@ -201,6 +203,7 @@ Return ONLY valid JSON:
 }}"""
 
     elif tier == "barely":
+        barely_skin = skin_pct_override if skin_pct_override else level['barely_skin_pct']
         return f"""{char_context}
 
 Generate the "{level['barely_label']}" tier outfit for this character (skimpiness {effective_skimpiness}/8).
@@ -210,8 +213,8 @@ You are encouraged to include pieces from the following in your outfit design:
 {outfit_examples_text}{existing_outfits_text}
 RULES:
   HARD RULES: {level['barely_hard_rules']}
-  SKIN TARGET: ~{level['barely_skin_pct']}% of skin visible.
-  VIBE: {level['barely_label']} — {level['barely_guidance']}
+  SKIN TARGET: ~{barely_skin}% of skin visible.
+  VIBE: {level['barely_label']} — {level['barely_guidance']}{fit_line}{transparency_line}
   Iconic features + additional pieces to hit the skin target.
 
 The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
