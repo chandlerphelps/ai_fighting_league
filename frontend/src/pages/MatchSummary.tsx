@@ -1,9 +1,10 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { colors, fontSizes, spacing, withAlpha } from '../design-system'
 import { useWorldState, useFighter } from '../hooks/useData'
 import FighterPortrait from '../components/FighterPortrait'
 import { getStatColor } from '../components/StatBar'
+import FightReplay from './FightReplay'
 import type { MatchResult } from '../types/world_state'
 import type { Fighter } from '../types/fighter'
 
@@ -64,6 +65,7 @@ function formatRecord(f: Fighter): string {
 export default function MatchSummary() {
   const { matchKey } = useParams<{ matchKey: string }>()
   const { data: ws, loading: wsLoading } = useWorldState()
+  const [activeTab, setActiveTab] = useState<'summary' | 'replay'>('summary')
 
   const match = useMemo<MatchResult | null>(() => {
     if (!ws?.recent_matches || !matchKey) return null
@@ -103,25 +105,36 @@ export default function MatchSummary() {
         methodLabel={methodLabel}
       />
 
-      <TabBar />
+      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 320px',
-        gap: spacing.lg,
-        marginTop: spacing.lg,
-      }}>
-        <LeftColumn
-          match={match}
-          isF1Winner={isF1Winner}
-        />
-        <RightColumn
-          match={match}
-          fighter1={fighter1}
-          fighter2={fighter2}
-          isF1Winner={isF1Winner}
-        />
-      </div>
+      {activeTab === 'summary' ? (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 320px',
+          gap: spacing.lg,
+          marginTop: spacing.lg,
+        }}>
+          <LeftColumn
+            match={match}
+            isF1Winner={isF1Winner}
+          />
+          <RightColumn
+            match={match}
+            fighter1={fighter1}
+            fighter2={fighter2}
+            isF1Winner={isF1Winner}
+          />
+        </div>
+      ) : (
+        <div style={{ marginTop: spacing.lg }}>
+          <FightReplay
+            match={match}
+            fullMatch={null}
+            fighter1={fighter1}
+            fighter2={fighter2}
+          />
+        </div>
+      )}
     </div>
   )
 }
@@ -295,7 +308,7 @@ function FighterSide({ fighter, name, id, isWinner, side }: {
   )
 }
 
-function TabBar() {
+function TabBar({ activeTab, onTabChange }: { activeTab: 'summary' | 'replay'; onTabChange: (tab: 'summary' | 'replay') => void }) {
   return (
     <div style={{
       display: 'flex',
@@ -303,25 +316,28 @@ function TabBar() {
       marginTop: spacing.md,
       borderBottom: `2px solid ${colors.border}`,
     }}>
-      <div style={{
-        padding: `${spacing.sm} ${spacing.lg}`,
-        fontSize: fontSizes.sm,
-        fontWeight: 'bold',
-        color: colors.accent,
-        borderBottom: `2px solid ${colors.accent}`,
-        marginBottom: '-2px',
-        cursor: 'default',
-      }}>
-        Summary
-      </div>
-      <div style={{
-        padding: `${spacing.sm} ${spacing.lg}`,
-        fontSize: fontSizes.sm,
-        color: colors.textDim,
-        cursor: 'not-allowed',
-      }}>
-        Replay
-      </div>
+      {(['summary', 'replay'] as const).map(tab => {
+        const isActive = activeTab === tab
+        return (
+          <div
+            key={tab}
+            onClick={() => onTabChange(tab)}
+            style={{
+              padding: `${spacing.sm} ${spacing.lg}`,
+              fontSize: fontSizes.sm,
+              fontWeight: isActive ? 'bold' : 'normal',
+              color: isActive ? colors.accent : colors.textDim,
+              borderBottom: isActive ? `2px solid ${colors.accent}` : '2px solid transparent',
+              marginBottom: '-2px',
+              cursor: 'pointer',
+              textTransform: 'capitalize',
+              transition: 'color 0.2s ease',
+            }}
+          >
+            {tab === 'replay' ? 'Replay' : 'Summary'}
+          </div>
+        )
+      })}
     </div>
   )
 }
