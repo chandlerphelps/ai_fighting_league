@@ -286,9 +286,12 @@ def _roll_exposure_budget(tier: str, skimpiness_level: int) -> dict:
         overflow = total - budget
         reduced = {}
         for name, val, _ in dims:
-            cut = min(val, overflow)
-            reduced[name] = val - cut
-            overflow -= cut
+            if overflow == 0:
+                reduced[name] = val
+            else:
+                cut = min(val, overflow)
+                reduced[name] = val - cut
+                overflow -= cut
         skin = reduced["skin"]
         tight = reduced["tight"]
         trans = reduced["trans"]
