@@ -227,41 +227,43 @@ TRANSPARENCY_OPTIONS = {
 
 
 SKIN_POINT_MAP = {
-    0: "0-10",
-    1: "5-20",
-    2: "15-30",
-    3: "25-40",
-    4: "35-55",
-    5: "50-70",
-    6: "65-85",
-    7: "80-95",
-    8: "95-99",
+    0: "0-20",
+    2: "20-40",
+    4: "40-60",
+    6: "60-80",
+    8: "80-95",
+    10: "95-99",
 }
 
 TIGHTNESS_POINT_MAP = {
     0: "loose",
     1: "layered",
     2: "form-fitted",
-    3: "skin-tight",
-    4: "body-paint",
+    3: "tight under open layers",
+    4: "tight",
+    5: "skin-tight",
+    6: "second-skin",
+    7: "body-paint under open layers",
+    8: "body-paint",
 }
 
 TRANSPARENCY_POINT_MAP = {
     0: "opaque",
-    1: "some mesh/sheer panels",
-    2: "significant sheer/transparent sections",
-    3: "fully transparent/sheer",
+    2: "sparse semi-transparency",
+    3: "some mesh/sheer panels",
+    5: "significant sheer/transparent sections",
+    8: "fully transparent/sheer",
 }
 
 EXPOSURE_BUDGETS = {
-    ("sfw", 1): {"budget": 3, "skin_max": 1, "tightness_max": 2, "transparency_max": 1},
-    ("sfw", 2): {"budget": 4, "skin_max": 2, "tightness_max": 3, "transparency_max": 1},
-    ("sfw", 3): {"budget": 6, "skin_max": 4, "tightness_max": 3, "transparency_max": 2},
-    ("sfw", 4): {"budget": 7, "skin_max": 5, "tightness_max": 3, "transparency_max": 2},
-    ("barely", 1): {"budget": 6, "skin_max": 4, "tightness_max": 3, "transparency_max": 2},
-    ("barely", 2): {"budget": 8, "skin_max": 5, "tightness_max": 3, "transparency_max": 2},
-    ("barely", 3): {"budget": 10, "skin_max": 7, "tightness_max": 4, "transparency_max": 3},
-    ("barely", 4): {"budget": 13, "skin_max": 8, "tightness_max": 4, "transparency_max": 3},
+    ("sfw", 1): {"budget": 2, "skin_max": 0, "tightness_max": 2, "transparency_max": 0},
+    ("sfw", 2): {"budget": 4, "skin_max": 2, "tightness_max": 2, "transparency_max": 0},
+    ("sfw", 3): {"budget": 7, "skin_max": 4, "tightness_max": 3, "transparency_max": 3},
+    ("sfw", 4): {"budget": 9, "skin_max": 6, "tightness_max": 6, "transparency_max": 3},
+    ("barely", 1): {"budget": 9, "skin_max": 6, "tightness_max": 6, "transparency_max": 3},
+    ("barely", 2): {"budget": 11, "skin_max": 6, "tightness_max": 6, "transparency_max": 5},
+    ("barely", 3): {"budget": 14, "skin_max": 8, "tightness_max": 8, "transparency_max": 5},
+    ("barely", 4): {"budget": 18, "skin_max": 10, "tightness_max": 8, "transparency_max": 8},
 }
 
 
@@ -275,26 +277,49 @@ def _roll_exposure_budget(tier: str, skimpiness_level: int) -> dict:
     tight_max = min(config["tightness_max"], max(TIGHTNESS_POINT_MAP.keys()))
     trans_max = min(config["transparency_max"], max(TRANSPARENCY_POINT_MAP.keys()))
 
-    skin = random.randint(0, skin_max)
-    tight = random.randint(0, tight_max)
-    trans = random.randint(0, trans_max)
+    skin_keys = sorted(k for k in SKIN_POINT_MAP if k <= skin_max)
+    tight_keys = sorted(k for k in TIGHTNESS_POINT_MAP if k <= tight_max)
+    trans_keys = sorted(k for k in TRANSPARENCY_POINT_MAP if k <= trans_max)
+
+    skin = random.choice(skin_keys)
+    tight = random.choice(tight_keys)
+    trans = random.choice(trans_keys)
+
+    def _snap_down(val, valid_keys):
+        options = [k for k in valid_keys if k <= val]
+        return max(options) if options else valid_keys[0]
 
     total = skin + tight + trans
-    if total > budget:
-        dims = [("skin", skin, skin_max), ("tight", tight, tight_max), ("trans", trans, trans_max)]
+    if total != budget:
+        dims = [
+            ("skin", skin, skin_keys),
+            ("tight", tight, tight_keys),
+            ("trans", trans, trans_keys),
+        ]
         random.shuffle(dims)
-        overflow = total - budget
-        reduced = {}
-        for name, val, _ in dims:
-            if overflow == 0:
-                reduced[name] = val
-            else:
-                cut = min(val, overflow)
-                reduced[name] = val - cut
-                overflow -= cut
-        skin = reduced["skin"]
-        tight = reduced["tight"]
-        trans = reduced["trans"]
+        if total > budget:
+            overflow = total - budget
+            adjusted = {}
+            for name, val, valid_keys in dims:
+                if overflow <= 0:
+                    adjusted[name] = val
+                else:
+                    snapped = _snap_down(val - overflow, valid_keys)
+                    overflow -= val - snapped
+                    adjusted[name] = snapped
+        else:
+            remaining = budget - total
+            adjusted = {}
+            for name, val, valid_keys in dims:
+                if remaining <= 0:
+                    adjusted[name] = val
+                else:
+                    bumped = _snap_down(val + remaining, valid_keys)
+                    remaining -= bumped - val
+                    adjusted[name] = bumped
+        skin = adjusted["skin"]
+        tight = adjusted["tight"]
+        trans = adjusted["trans"]
 
     return {
         "skin_pct": SKIN_POINT_MAP[skin],
@@ -308,7 +333,9 @@ def _roll_exposure_budget(tier: str, skimpiness_level: int) -> dict:
 
 def _roll_fit_style(skimpiness_level: int) -> str:
     styles = list(FIT_STYLES.keys())
-    weights = [FIT_STYLES[s]["weights_by_skimpiness"].get(skimpiness_level, 20) for s in styles]
+    weights = [
+        FIT_STYLES[s]["weights_by_skimpiness"].get(skimpiness_level, 20) for s in styles
+    ]
     return random.choices(styles, weights=weights, k=1)[0]
 
 
@@ -346,15 +373,38 @@ OUTFIT_COLOR_PALETTE = [
 ]
 
 
-OUTFIT_COVERABLE_TRAITS_FEMALE = ["breast_size", "nipple_size", "vulva_type", "butt_size", "waist", "abs_tone"]
-OUTFIT_COVERABLE_TRAITS_MALE = ["chest_build", "muscle_definition", "shoulder_width", "waist"]
-VALID_COVERAGE_STATES = {"exposed", "transparent", "form-fitted", "half-obscured", "covered"}
+OUTFIT_COVERABLE_TRAITS_FEMALE = [
+    "breast_size",
+    "nipple_size",
+    "vulva_type",
+    "butt_size",
+    "waist",
+    "abs_tone",
+]
+OUTFIT_COVERABLE_TRAITS_MALE = [
+    "chest_build",
+    "muscle_definition",
+    "shoulder_width",
+    "waist",
+]
+VALID_COVERAGE_STATES = {
+    "exposed",
+    "transparent",
+    "form-fitted",
+    "half-obscured",
+    "covered",
+}
 
 
 def validate_outfit_coverage(raw: dict, gender: str) -> dict:
-    valid_keys = OUTFIT_COVERABLE_TRAITS_MALE if gender.lower() == "male" else OUTFIT_COVERABLE_TRAITS_FEMALE
+    valid_keys = (
+        OUTFIT_COVERABLE_TRAITS_MALE
+        if gender.lower() == "male"
+        else OUTFIT_COVERABLE_TRAITS_FEMALE
+    )
     return {
-        k: v for k, v in raw.items()
+        k: v
+        for k, v in raw.items()
         if k in valid_keys and v in VALID_COVERAGE_STATES and v != "exposed"
     }
 
