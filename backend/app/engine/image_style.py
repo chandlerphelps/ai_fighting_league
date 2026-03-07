@@ -32,10 +32,10 @@ PAINTERLY_QUALITY_MALE = (
 
 
 ART_STYLE_BASE = (
-    "dark indie comic art, heavy black ink with minimal color, "
+    "dark indie comic art, heavy black ink outlines, full color, "
     "stark high-contrast shadows, noir comic style, "
     "Mike Mignola inspired bold shapes and deep blacks, "
-    "limited muted color palette with one accent color, "
+    "muted color palette, full color illustration, "
     "woodcut-like bold linework, atmospheric horror comic aesthetic, "
     "Hellboy art style graphic weight, "
     "absolutely no text, no words, no letters, no labels, no captions, no watermarks"
@@ -54,8 +54,8 @@ ART_STYLE_MALE = (
 )
 
 ART_STYLE_TAIL_BASE = (
-    "dark indie comic, heavy black ink, noir shadows, "
-    "Mignola bold shapes, limited palette, atmospheric horror comic, "
+    "dark indie comic, heavy black ink outlines, full color, noir shadows, "
+    "Mignola bold shapes, muted color palette, atmospheric horror comic, "
     "no text, no words, no labels, no watermarks"
 )
 

@@ -1,14 +1,14 @@
 {
-  "current_date": "2026-03-07",
+  "current_date": "2026-03-15",
   "day_number": 0,
   "season_number": 1,
   "season_month": 3,
-  "season_day_in_month": 7,
+  "season_day_in_month": 15,
   "tier_rankings": {
     "apex": [
-      "f_769bd3af",
       "f_1e6f54a3",
       "f_27cff8d6",
+      "f_769bd3af",
       "f_00730231"
     ],
     "contender": [],
@@ -27,23 +27,71 @@
   "retired_fighter_ids": [],
   "active_injuries": {},
   "rivalry_graph": [],
-  "recent_matches": [],
+  "recent_matches": [
+    {
+      "fighter1_id": "f_1e6f54a3",
+      "fighter1_name": "Crimson Kiss",
+      "fighter2_id": "f_00730231",
+      "fighter2_name": "Specter",
+      "winner_id": "f_1e6f54a3",
+      "method": "tko",
+      "round_ended": 4,
+      "tier": "apex",
+      "date": "2026-03-11",
+      "start_time": "21:00"
+    },
+    {
+      "fighter1_id": "f_769bd3af",
+      "fighter1_name": "Belladonna",
+      "fighter2_id": "f_27cff8d6",
+      "fighter2_name": "Virtuoso",
+      "winner_id": "f_27cff8d6",
+      "method": "tko",
+      "round_ended": 5,
+      "tier": "apex",
+      "date": "2026-03-11",
+      "start_time": "21:30"
+    }
+  ],
   "season_logs": [],
   "promotion_fights": [],
   "title_fight": {},
   "rankings": [
-    "f_769bd3af",
     "f_1e6f54a3",
     "f_27cff8d6",
+    "f_769bd3af",
     "f_00730231"
   ],
   "upcoming_events": [],
   "completed_events": [],
-  "last_daily_summary": "League initialized with LLM-generated fighters.",
+  "last_daily_summary": "Season 1, 2026-03-14",
   "event_counter": 0,
   "tier_sizes": {
     "apex": 4,
     "contender": 0,
     "underground": 0
+  },
+  "scheduled_fights": [],
+  "next_matchups": {
+    "f_769bd3af": {
+      "opponent_id": "f_1e6f54a3",
+      "opponent_name": "Crimson Kiss",
+      "date": "2026-03-21"
+    },
+    "f_1e6f54a3": {
+      "opponent_id": "f_769bd3af",
+      "opponent_name": "Belladonna",
+      "date": "2026-03-21"
+    },
+    "f_27cff8d6": {
+      "opponent_id": "f_00730231",
+      "opponent_name": "Specter",
+      "date": "2026-03-21"
+    },
+    "f_00730231": {
+      "opponent_id": "f_27cff8d6",
+      "opponent_name": "Virtuoso",
+      "date": "2026-03-21"
+    }
   }
 }
