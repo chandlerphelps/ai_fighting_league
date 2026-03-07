@@ -113,7 +113,7 @@ def _build_clothing_part(
         clothing_part = clothing
 
     if outfit_coverage and body_type_details:
-        annotations = build_clothing_coverage_annotations(outfit_coverage, body_type_details)
+        annotations = build_clothing_coverage_annotations(outfit_coverage, body_type_details, tier)
         if annotations and clothing_part:
             clothing_part = f"{clothing_part}, {annotations}"
         elif annotations:
@@ -412,6 +412,9 @@ def build_body_reference_prompt(
     eye_shape = (
         body_type_details.get("eye_shape", "") if body_type_details else ""
     )
+    eye_expression = (
+        body_type_details.get("eye_expression", "") if body_type_details else ""
+    )
     makeup_level = (
         body_type_details.get("makeup_level", "") if body_type_details else ""
     )
@@ -474,8 +477,12 @@ def build_body_reference_prompt(
         face_details.append(f"{jawline} jaw")
     if cheekbone and "cheekbone" not in female_covered:
         face_details.append(f"{cheekbone} cheekbones")
-    if eye_shape and "eye_shape" not in female_covered:
+    if eye_shape and "eye_shape" not in female_covered and eye_expression and "eye_expression" not in female_covered:
+        face_details.append(f"{eye_expression} {eye_shape} eyes")
+    elif eye_shape and "eye_shape" not in female_covered:
         face_details.append(f"{eye_shape} eyes")
+    elif eye_expression and "eye_expression" not in female_covered:
+        face_details.append(f"{eye_expression} gaze")
     if brow_shape and "brow_shape" not in female_covered:
         face_details.append(f"{brow_shape} brows")
     if nose_shape and "nose_shape" not in female_covered:

@@ -5,10 +5,12 @@ PAINTERLY_STYLE_BASE = (
     "professional perfect shading"
 )
 
-PAINTERLY_STYLE_FEMALE = PAINTERLY_STYLE_BASE + ", female character, beautiful and dangerous"
+PAINTERLY_STYLE_FEMALE = (
+    PAINTERLY_STYLE_BASE + ", female character, beautiful and deadly"
+)
 
 PAINTERLY_STYLE_MALE = (
-    PAINTERLY_STYLE_BASE + ", male character, masculine build, rugged handsome features"
+    PAINTERLY_STYLE_BASE + ", male character, masculine build, rugged features"
 )
 
 PAINTERLY_QUALITY = (
@@ -42,13 +44,13 @@ ART_STYLE_BASE = (
 ART_STYLE_FEMALE = (
     ART_STYLE_BASE + ", "
     "strictly female character, feminine curves and anatomy, "
-    "beautiful face with attractive features, dangerous fighter"
+    "beautiful face with attractive features, deadly fighter"
 )
 
 ART_STYLE_MALE = (
     ART_STYLE_BASE + ", "
     "male character, masculine build and anatomy, imposing physique, "
-    "chiseled jaw, rugged handsome face"
+    "chiseled jaw, rugged face"
 )
 
 ART_STYLE_TAIL_BASE = (
@@ -57,7 +59,7 @@ ART_STYLE_TAIL_BASE = (
     "no text, no words, no labels, no watermarks"
 )
 
-ART_STYLE_TAIL_FEMALE = ART_STYLE_TAIL_BASE + ", beautiful face, feminine, dangerous"
+ART_STYLE_TAIL_FEMALE = ART_STYLE_TAIL_BASE + ", beautiful face, feminine, deadly"
 
 ART_STYLE_TAIL_MALE = ART_STYLE_TAIL_BASE + ", masculine, imposing"
 

@@ -830,6 +830,25 @@ BODY_TRAIT_OPTIONS = {
         "wide strong",
         "delicate tapered",
     ],
+    "eye_expression": [
+        "cold",
+        "predatory",
+        "calculating",
+        "contemptuous",
+        "unblinking",
+        "piercing",
+        "narrowed",
+        "half-lidded",
+        "wide unblinking",
+        "vacant",
+        "knowing",
+        "fierce",
+        "smoldering",
+        "wild",
+        "glaring",
+        "heavy-lidded",
+        "focused",
+    ],
     "makeup_level": ["bare-faced", "light", "moderate", "heavy"],
     "breast_size": [
         "tiny flat-chested",
@@ -902,9 +921,9 @@ ARCHETYPE_BODY_PROFILE_WEIGHTS = {
 
 MAKEUP_DESCRIPTIONS = {
     "bare-faced": "natural beauty, minimal or zero makeup",
-    "light": "subtle enhancement, lip tint, light mascara",
-    "moderate": "polished look, foundation, defined eyes, lipstick",
-    "heavy": "full glam, smoky eyes, contoured, bold lip",
+    "light": "subtle enhancement, soft color accents",
+    "moderate": "polished look, foundation, defined features, lipstick",
+    "heavy": "full glam, dramatic makeup, contoured, bold lip",
 }
 
 ARCHETYPE_HEIGHT_RANGES = {
@@ -955,6 +974,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 6,
         },
         "waist": {"narrow": 40, "medium": 45, "wide": 15},
+        "eye_expression": {
+            "half-lidded": 25, "smoldering": 25, "knowing": 20, "contemptuous": 15,
+            "cold": 5, "piercing": 5, "heavy-lidded": 5,
+        },
     },
     "The Witch": {
         "breast_size": {
@@ -989,6 +1012,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 4,
         },
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
+        "eye_expression": {
+            "piercing": 25, "knowing": 20, "vacant": 20, "unblinking": 20,
+            "cold": 10, "half-lidded": 5,
+        },
     },
     "The Viper": {
         "breast_size": {
@@ -1023,6 +1050,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 2,
         },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
+        "eye_expression": {
+            "narrowed": 25, "calculating": 25, "cold": 20, "knowing": 15,
+            "piercing": 10, "contemptuous": 5,
+        },
     },
     "The Prodigy": {
         "breast_size": {
@@ -1057,6 +1088,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 2,
         },
         "waist": {"narrow": 45, "medium": 45, "wide": 10},
+        "eye_expression": {
+            "focused": 30, "fierce": 25, "calculating": 20, "piercing": 15,
+            "narrowed": 10,
+        },
     },
     "The Doll": {
         "breast_size": {
@@ -1091,6 +1126,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 4,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
+        "eye_expression": {
+            "wide unblinking": 30, "vacant": 25, "unblinking": 20,
+            "knowing": 15, "cold": 10,
+        },
     },
     "The Huntress": {
         "breast_size": {
@@ -1125,6 +1164,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 4,
         },
         "waist": {"narrow": 35, "medium": 50, "wide": 15},
+        "eye_expression": {
+            "predatory": 25, "narrowed": 25, "fierce": 20, "focused": 15,
+            "piercing": 10, "glaring": 5,
+        },
     },
     "The Empress": {
         "breast_size": {
@@ -1159,6 +1202,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 6,
         },
         "waist": {"narrow": 25, "medium": 45, "wide": 30},
+        "eye_expression": {
+            "contemptuous": 30, "cold": 25, "half-lidded": 20, "piercing": 15,
+            "knowing": 10,
+        },
     },
     "The Experiment": {
         "breast_size": {
@@ -1193,6 +1240,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 8,
         },
         "waist": {"narrow": 30, "medium": 45, "wide": 25},
+        "eye_expression": {
+            "vacant": 25, "unblinking": 25, "cold": 20, "piercing": 15,
+            "wide unblinking": 10, "calculating": 5,
+        },
     },
     "The Demon": {
         "breast_size": {
@@ -1227,6 +1278,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 12,
         },
         "waist": {"narrow": 35, "medium": 45, "wide": 20},
+        "eye_expression": {
+            "smoldering": 25, "predatory": 25, "wild": 20, "half-lidded": 15,
+            "piercing": 10, "heavy-lidded": 5,
+        },
     },
     "The Assassin": {
         "breast_size": {
@@ -1261,6 +1316,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 2,
         },
         "waist": {"narrow": 50, "medium": 40, "wide": 10},
+        "eye_expression": {
+            "cold": 25, "narrowed": 25, "calculating": 20, "focused": 15,
+            "piercing": 10, "glaring": 5,
+        },
     },
     "The Nymph": {
         "breast_size": {
@@ -1295,6 +1354,10 @@ ARCHETYPE_BODY_WEIGHTS = {
             "very large prominent": 5,
         },
         "waist": {"narrow": 45, "medium": 40, "wide": 15},
+        "eye_expression": {
+            "knowing": 25, "wild": 20, "half-lidded": 20, "piercing": 15,
+            "smoldering": 10, "unblinking": 10,
+        },
     },
 }
 
@@ -2201,6 +2264,7 @@ def _roll_body_traits(
         ),
         "face_shape": _weighted_choice("face_shape", arch),
         "eye_shape": _weighted_choice("eye_shape", arch),
+        "eye_expression": _weighted_choice("eye_expression", arch),
         "nose_shape": _weighted_choice("nose_shape", arch),
         "lip_shape": _weighted_choice("lip_shape", arch),
         "brow_shape": _weighted_choice("brow_shape", arch),
@@ -2223,12 +2287,12 @@ def _roll_body_traits(
 
 ADORNMENT_COVERAGE = {
     "full_face": {
-        "covers_face": ["face_shape", "eye_shape", "nose_shape", "lip_shape", "brow_shape", "cheekbone", "jawline", "makeup_level"],
+        "covers_face": ["face_shape", "eye_shape", "eye_expression", "nose_shape", "lip_shape", "brow_shape", "cheekbone", "jawline", "makeup_level"],
         "male_covers": ["face_shape", "eye_expression", "facial_hair"],
         "covers_hair": False,
     },
     "upper_face": {
-        "covers_face": ["eye_shape", "brow_shape"],
+        "covers_face": ["eye_shape", "eye_expression", "brow_shape"],
         "male_covers": ["eye_expression"],
         "covers_hair": False,
     },
@@ -2238,7 +2302,7 @@ ADORNMENT_COVERAGE = {
         "covers_hair": False,
     },
     "eyes_only": {
-        "covers_face": ["eye_shape"],
+        "covers_face": ["eye_shape", "eye_expression"],
         "male_covers": ["eye_expression"],
         "covers_hair": False,
     },
@@ -2282,22 +2346,35 @@ def validate_outfit_coverage(raw: dict, gender: str) -> dict:
     }
 
 
+ABS_TONE_SHORT = {
+    "soft with no definition": "soft",
+    "slight definition": "toned",
+    "toned and defined": "defined",
+    "ripped and shredded": "shredded",
+}
+
 TRAIT_LABELS = {
     "breast_size": lambda v: f"{v} breasts",
     "nipple_size": lambda v: f"{v} nipples",
     "vulva_type": lambda v: v,
     "butt_size": lambda v: f"{v} butt",
     "waist": lambda v: f"{v} waist",
-    "abs_tone": lambda v: f"{v} abs",
+    "abs_tone": lambda v: f"{ABS_TONE_SHORT.get(v, v)} midsection",
     "chest_build": lambda v: f"{v} chest",
     "muscle_definition": lambda v: f"{v} build",
     "shoulder_width": lambda v: f"{v} shoulders",
 }
 
 
-def build_clothing_coverage_annotations(outfit_coverage: dict, traits: dict) -> str:
+INTIMATE_TRAITS = {"nipple_size", "vulva_type"}
+
+
+def build_clothing_coverage_annotations(outfit_coverage: dict, traits: dict, tier: str = "sfw") -> str:
+    skip = INTIMATE_TRAITS if tier != "nsfw" else set()
     annotations = []
     for trait_key, state in outfit_coverage.items():
+        if trait_key in skip:
+            continue
         val = traits.get(trait_key)
         if not val:
             continue
@@ -2335,8 +2412,12 @@ def _build_body_directive(traits: dict, face_adornment: str = "", adornment_cove
     ]
     if "face_shape" not in covered:
         lines.append(f"- Face shape: {traits['face_shape']}")
-    if "eye_shape" not in covered:
-        lines.append(f"- Eyes: {traits['eye_shape']}")
+    if "eye_shape" not in covered and "eye_expression" not in covered:
+        lines.append(f"- Eyes: {traits['eye_shape']}, {traits.get('eye_expression', 'piercing')} gaze")
+    elif "eye_shape" not in covered:
+        lines.append(f"- Eye shape: {traits['eye_shape']}")
+    elif "eye_expression" not in covered:
+        lines.append(f"- Eye expression: {traits.get('eye_expression', 'piercing')} gaze")
     if "nose_shape" not in covered:
         lines.append(f"- Nose: {traits.get('nose_shape', 'straight narrow')}")
     if "lip_shape" not in covered:
