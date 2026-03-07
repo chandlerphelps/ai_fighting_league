@@ -17,8 +17,9 @@ them, stop and rework.
 
 Design for a predominantly male audience. Every female fighter should be attractive in a distinctive way
 AND look like she could kill you. Sex appeal is a feature, not a bug — but so is lethality.
-Confidence, allure, and willingness to weaponize beauty are core to female character design in AFL.
-She's gorgeous, but the first thing you notice is that she's dangerous.
+Weaponizing beauty are core to female character design in AFL.
+There should be something not entirely natural about her — something uncanny, unsettling,
+or otherworldly that you can't quite put your finger on.
 But be tasteful so we can have a good SFW version of each character which is family friendly.
 Most should be white / asian / latina.
 
@@ -188,12 +189,11 @@ Bad examples:
 For female characters specifically: The hook should make clear why she's compelling
 to a male audience. Danger and beauty are the two mandatory ingredients. Then layer in
 allure, mystique, cleverness, cruelty, seduction. She should be someone you can't look
-away from — and can't safely turn your back on.
+away from — and can't safely turn your back on. Something about her isn't entirely natural.
 """
 
 GUIDE_COMMON_MISTAKES = """## Common Mistakes
 1. **Sanitizing female designs** — #1 failure mode. If the outfit could pass on ESPN, it's too conservative. Think Mortal Kombat / Dead or Alive, not UFC.
-2. **Repulsive female fighters** No monstrous designs, no strength-based identity.
 3. **Black-and-white morality** — roster should be overwhelmingly grey. At most 1-2 extremes.
 4. **"Martial artist + magic" default** — explore technology, weapons, science, faith, poison, cybernetics. If the concept is [martial art] + [magical ability], pivot.
 5. **Glow effects as identity** — if the most notable visual feature is glowing, redo it. Pass the strip test.
@@ -330,7 +330,7 @@ instantly recognizable. These elements are tracked across the entire roster to p
 - hair_style: distinctive hairstyle (e.g., "long flowing waves", "buzz cut", "twin braids", "mohawk", "slicked back ponytail")
 - hair_color: detailed hair color description (e.g., "platinum blonde", "jet black", "fire red with orange streaks")
 - hair_color_bucket: the broad category — MUST be one of: {bucket_str}
-- face_adornment: mask, face paint, hat, headwear, or "none" (e.g., "oni half-mask", "tribal war paint", "crown of thorns", "eye patch", "wide-brim hat", "none")
+- face_adornment: mask, face paint, hat, headwear, or "none" (e.g., "oni half-mask", "tribal war paint", "crown of thorns", "eye patch", "wide-brim hat", "none"). NOT simple jewelry — no earrings, nose rings, lip rings, necklaces, or piercings. Those go in iconic_features, not here.
 No two fighters should share the same primary_outfit_color. Aim for maximum visual diversity in hair combos and face adornments.
 
 Return ONLY valid JSON — an array of {roster_size} objects with this structure:
@@ -353,7 +353,8 @@ Return ONLY valid JSON — an array of {roster_size} objects with this structure
     "hair_style": "<distinctive hairstyle>",
     "hair_color": "<detailed hair color description>",
     "hair_color_bucket": "<broad category from: {bucket_str}>",
-    "face_adornment": "<mask, face paint, hat, headwear, or 'none'>"
+    "face_adornment": "<mask, face paint, hat, headwear, or 'none' — NOT jewelry/piercings>",
+    "adornment_coverage": "<full_face|upper_face|lower_face|eyes_only|head_covering|face_paint|decorative|none — what the adornment covers: full_face=gas mask/lucha mask, upper_face=masquerade mask/visor/goggles, lower_face=half-mask/respirator/bandana, eyes_only=sunglasses/blindfold, head_covering=hat/hood/helmet, face_paint=war paint, decorative=crown/tiara/eye patch/headband, none=no adornment>"
   }}
 ]
 
@@ -439,6 +440,6 @@ Return ONLY valid JSON with this exact structure:
   "iconic_features": "<comma-separated list of 3-6 visual details that make this character instantly recognizable across all tiers>",
   "personality": "<max 10 words — their vibe and attitude, {personality_example}>",
   "image_prompt_body_parts": "<physical build, skin tone, hair, face, distinguishing features — shared across all tiers. IMPORTANT: for skin tone descriptions NEVER use metaphorical terms like 'golden', 'olive', 'bronze', 'caramel', 'porcelain', 'ebony' — the image model takes these literally. {body_trait_hint}>",
-  "image_prompt_expression": "<facial expression and attitude — shared across all tiers>",
+  "image_prompt_expression": "<3-5 words max, simple facial expression only — e.g. 'cold smirk', 'fierce scowl', 'unblinking predatory stare'. Do NOT include eye shape, brow shape, lip shape, or any physical trait — those belong in body_parts>",
   "image_prompt_personality_pose": "<a signature pose or action that shows off this character's personality — e.g. 'cracking knuckles with a cocky smirk', 'coiled fighting stance with one hand beckoning', 'hip cocked with arms crossed, looking down at viewer' — keep it short and visual>"
 }}"""

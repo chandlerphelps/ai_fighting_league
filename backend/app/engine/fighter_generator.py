@@ -153,6 +153,7 @@ def generate_fighter_json_only(
         fighter.hair_style = roster_plan_entry.get("hair_style", "")
         fighter.hair_color = roster_plan_entry.get("hair_color", "")
         fighter.face_adornment = roster_plan_entry.get("face_adornment", "")
+        fighter.adornment_coverage = roster_plan_entry.get("adornment_coverage", "")
         fighter.hair_color_bucket = roster_plan_entry.get("hair_color_bucket", "") or classify_hair_color(fighter.hair_color)
     if not fighter.hair_color_bucket:
         fighter.hair_color_bucket = classify_hair_color(fighter.hair_color)
@@ -216,7 +217,9 @@ def generate_fighter(
         )
 
     body_traits = _roll_body_traits(archetype, subtype=subtype_info, gender=planned_gender)
-    body_directive = _build_body_directive(body_traits)
+    face_adornment = roster_plan_entry.get("face_adornment", "") if roster_plan_entry else ""
+    adornment_coverage = roster_plan_entry.get("adornment_coverage", "") if roster_plan_entry else ""
+    body_directive = _build_body_directive(body_traits, face_adornment, adornment_coverage)
 
     supernatural_instruction = ""
     if has_supernatural:
@@ -356,6 +359,7 @@ def generate_fighter(
             iconic_features=iconic_features,
             age=result.get("age", 25),
             primary_outfit_color=primary_outfit_color,
+            face_adornment=face_adornment,
         )
 
         sfw_prompt = _build_charsheet_prompt(
@@ -372,6 +376,7 @@ def generate_fighter(
             iconic_features=iconic_features,
             age=result.get("age", 25),
             primary_outfit_color=primary_outfit_color,
+            face_adornment=face_adornment,
         )
 
         body_ref_prompt = build_body_reference_prompt(
@@ -383,6 +388,8 @@ def generate_fighter(
             subtype_info=subtype_info,
             age=result.get("age", 25),
             iconic_features=iconic_features,
+            face_adornment=face_adornment,
+            adornment_coverage=adornment_coverage,
         )
 
         if is_male:
@@ -402,6 +409,7 @@ def generate_fighter(
                 iconic_features=iconic_features,
                 age=result.get("age", 25),
                 primary_outfit_color=primary_outfit_color,
+                face_adornment=face_adornment,
             )
 
     hair_color = result.get("hair_color", "")
@@ -445,6 +453,8 @@ def generate_fighter(
         primary_outfit_color=primary_outfit_color,
         hair_color=hair_color,
         hair_color_bucket=hair_color_bucket,
+        face_adornment=face_adornment,
+        adornment_coverage=adornment_coverage,
         image_prompt_body_ref=body_ref_prompt,
         image_prompt=barely_prompt,
         image_prompt_sfw=sfw_prompt,

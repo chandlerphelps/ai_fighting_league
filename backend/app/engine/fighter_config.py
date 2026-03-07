@@ -2221,57 +2221,135 @@ def _roll_body_traits(
     return traits
 
 
-def _build_body_directive(traits: dict) -> str:
+ADORNMENT_COVERAGE = {
+    "full_face": {
+        "covers_face": ["face_shape", "eye_shape", "nose_shape", "lip_shape", "brow_shape", "cheekbone", "jawline", "makeup_level"],
+        "male_covers": ["face_shape", "eye_expression", "facial_hair"],
+        "covers_hair": False,
+    },
+    "upper_face": {
+        "covers_face": ["eye_shape", "brow_shape"],
+        "male_covers": ["eye_expression"],
+        "covers_hair": False,
+    },
+    "lower_face": {
+        "covers_face": ["nose_shape", "lip_shape"],
+        "male_covers": ["facial_hair"],
+        "covers_hair": False,
+    },
+    "eyes_only": {
+        "covers_face": ["eye_shape"],
+        "male_covers": ["eye_expression"],
+        "covers_hair": False,
+    },
+    "head_covering": {
+        "covers_face": [],
+        "male_covers": [],
+        "covers_hair": True,
+    },
+    "face_paint": {
+        "covers_face": [],
+        "male_covers": [],
+        "covers_hair": False,
+    },
+    "decorative": {
+        "covers_face": [],
+        "male_covers": [],
+        "covers_hair": False,
+    },
+    "none": {
+        "covers_face": [],
+        "male_covers": [],
+        "covers_hair": False,
+    },
+}
+
+
+def get_adornment_coverage(category: str) -> dict:
+    return ADORNMENT_COVERAGE.get(category, ADORNMENT_COVERAGE["none"])
+
+
+def _build_body_directive(traits: dict, face_adornment: str = "", adornment_coverage: str = "") -> str:
     if "chest_build" in traits:
-        return _build_male_body_directive(traits)
+        return _build_male_body_directive(traits, face_adornment, adornment_coverage)
+    coverage = get_adornment_coverage(adornment_coverage)
+    covered = set(coverage["covers_face"])
     makeup_desc = MAKEUP_DESCRIPTIONS.get(
         traits["makeup_level"], traits["makeup_level"]
     )
-    return (
-        "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):\n"
-        f"- Build: {traits.get('body_profile', 'Average')}\n"
-        f"- Height: {traits['height']}\n"
-        f"- Weight: {traits['weight']}\n"
-        f"- Breast size: {traits['breast_size']}\n"
-        f"- Waist: {traits['waist']}\n"
-        f"- Abs/core: {traits['abs_tone']}\n"
-        f"- Body fat: {traits['body_fat_pct']}\n"
-        f"- Butt: {traits['butt_size']}\n"
-        f"- Face shape: {traits['face_shape']}\n"
-        f"- Eyes: {traits['eye_shape']}\n"
-        f"- Nose: {traits.get('nose_shape', 'straight narrow')}\n"
-        f"- Lips: {traits.get('lip_shape', 'full pouty')}\n"
-        f"- Brows: {traits.get('brow_shape', 'high arched')}\n"
-        f"- Cheekbones: {traits.get('cheekbone', 'soft subtle')}\n"
-        f"- Jawline: {traits.get('jawline', 'soft rounded')}\n"
-        f"- Makeup: {traits['makeup_level']} — {makeup_desc}\n"
-        "\nThe height and weight are EXACT — use these values directly.\n"
-        "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
+    lines = [
+        "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):",
+        f"- Build: {traits.get('body_profile', 'Average')}",
+        f"- Height: {traits['height']}",
+        f"- Weight: {traits['weight']}",
+        f"- Breast size: {traits['breast_size']}",
+        f"- Waist: {traits['waist']}",
+        f"- Abs/core: {traits['abs_tone']}",
+        f"- Body fat: {traits['body_fat_pct']}",
+        f"- Butt: {traits['butt_size']}",
+    ]
+    if "face_shape" not in covered:
+        lines.append(f"- Face shape: {traits['face_shape']}")
+    if "eye_shape" not in covered:
+        lines.append(f"- Eyes: {traits['eye_shape']}")
+    if "nose_shape" not in covered:
+        lines.append(f"- Nose: {traits.get('nose_shape', 'straight narrow')}")
+    if "lip_shape" not in covered:
+        lines.append(f"- Lips: {traits.get('lip_shape', 'full pouty')}")
+    if "brow_shape" not in covered:
+        lines.append(f"- Brows: {traits.get('brow_shape', 'high arched')}")
+    if "cheekbone" not in covered:
+        lines.append(f"- Cheekbones: {traits.get('cheekbone', 'soft subtle')}")
+    if "jawline" not in covered:
+        lines.append(f"- Jawline: {traits.get('jawline', 'soft rounded')}")
+    if "makeup_level" not in covered:
+        lines.append(f"- Makeup: {traits['makeup_level']} — {makeup_desc}")
+    if face_adornment and face_adornment.lower() != "none":
+        lines.append(f"- Face/head adornment: {face_adornment} (MUST be visible in all images)")
+    lines.append("")
+    lines.append("The height and weight are EXACT — use these values directly.")
+    lines.append("Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.")
+    lines.append(
         "IMPORTANT: Interpret ALL facial and body traits through a DANGEROUS yet ATTRACTIVE lens. "
         "Every combination should result in a beautiful, lethal-looking character — "
         "someone stunning but clearly capable of killing you."
     )
+    return "\n".join(lines)
 
 
-def _build_male_body_directive(traits: dict) -> str:
-    return (
-        "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):\n"
-        f"- Build: {traits.get('body_profile', 'Athletic')} — {traits.get('build_type', 'athletic and cut')}\n"
-        f"- Height: {traits['height']}\n"
-        f"- Weight: {traits['weight']}\n"
-        f"- Muscle definition: {traits.get('muscle_definition', 'toned and defined')}\n"
-        f"- Shoulders: {traits.get('shoulder_width', 'broad')}\n"
-        f"- Chest: {traits.get('chest_build', 'defined pecs')}\n"
-        f"- Waist: {traits.get('waist', 'medium')}\n"
-        f"- Body fat: {traits.get('body_fat_pct', 'average 18-25%')}\n"
-        f"- Face: {traits.get('face_shape', 'square jaw')}, {traits.get('eye_expression', 'focused intense')} eyes\n"
-        f"- Facial hair: {traits.get('facial_hair', 'stubble')}\n"
-        "\nThe height and weight are EXACT — use these values directly.\n"
-        "Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.\n"
+def _build_male_body_directive(traits: dict, face_adornment: str = "", adornment_coverage: str = "") -> str:
+    coverage = get_adornment_coverage(adornment_coverage)
+    covered = set(coverage["male_covers"])
+    lines = [
+        "BODY TYPE DIRECTIVE (you MUST incorporate these exact physical traits):",
+        f"- Build: {traits.get('body_profile', 'Athletic')} — {traits.get('build_type', 'athletic and cut')}",
+        f"- Height: {traits['height']}",
+        f"- Weight: {traits['weight']}",
+        f"- Muscle definition: {traits.get('muscle_definition', 'toned and defined')}",
+        f"- Shoulders: {traits.get('shoulder_width', 'broad')}",
+        f"- Chest: {traits.get('chest_build', 'defined pecs')}",
+        f"- Waist: {traits.get('waist', 'medium')}",
+        f"- Body fat: {traits.get('body_fat_pct', 'average 18-25%')}",
+    ]
+    if "face_shape" not in covered and "eye_expression" not in covered:
+        lines.append(f"- Face: {traits.get('face_shape', 'square jaw')}, {traits.get('eye_expression', 'focused intense')} eyes")
+    elif "face_shape" not in covered:
+        lines.append(f"- Face shape: {traits.get('face_shape', 'square jaw')}")
+    elif "eye_expression" not in covered:
+        lines.append(f"- Eye expression: {traits.get('eye_expression', 'focused intense')}")
+    if "facial_hair" not in covered:
+        lines.append(f"- Facial hair: {traits.get('facial_hair', 'stubble')}")
+    if face_adornment and face_adornment.lower() != "none":
+        lines.append(f"- Face/head adornment: {face_adornment} (MUST be visible in all images)")
+    lines.append("")
+    lines.append("The height and weight are EXACT — use these values directly.")
+    lines.append("Work the other traits naturally into image_prompt_body_parts and image_prompt_expression.")
+    lines.append(
         "IMPORTANT: Interpret ALL traits through a DANGEROUS, IMPOSING lens. "
         "Every combination should result in a threatening, confident character who looks like "
         "someone you would cross the street to avoid."
     )
+    return "\n".join(lines)
 
 
 def _height_adjective(inches: int) -> str:

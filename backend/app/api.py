@@ -49,6 +49,7 @@ FIELD_DEPENDENCIES = {
     "hair_style":           ["image_prompts", "images"],
     "hair_color":           ["image_prompts", "images"],
     "face_adornment":       ["image_prompts", "images"],
+    "adornment_coverage":   ["image_prompts", "images"],
     "primary_archetype":    ["outfits", "image_prompts", "images"],
     "subtype":              ["outfits", "image_prompts", "images"],
     "build":                ["outfits", "image_prompts", "images"],
@@ -103,6 +104,8 @@ def _rebuild_prompts(fighter: dict):
     origin = fighter.get("origin", "")
     body_type_details = fighter.get("body_type_details")
     primary_outfit_color = fighter.get("primary_outfit_color", "")
+    face_adornment = fighter.get("face_adornment", "")
+    adornment_coverage = fighter.get("adornment_coverage", "")
     fighter["image_prompt_sfw"] = _build_charsheet_prompt(
         body_parts, clothing_sfw, expression,
         personality_pose=personality_pose, tier="sfw",
@@ -113,6 +116,7 @@ def _rebuild_prompts(fighter: dict):
         iconic_features=iconic_features,
         age=age,
         primary_outfit_color=primary_outfit_color,
+        face_adornment=face_adornment,
     )
     fighter["image_prompt"] = _build_charsheet_prompt(
         body_parts, clothing_barely, expression,
@@ -124,6 +128,7 @@ def _rebuild_prompts(fighter: dict):
         iconic_features=iconic_features,
         age=age,
         primary_outfit_color=primary_outfit_color,
+        face_adornment=face_adornment,
     )
     if gender.lower() == "male":
         fighter["image_prompt_nsfw"] = fighter["image_prompt"]
@@ -138,6 +143,7 @@ def _rebuild_prompts(fighter: dict):
             iconic_features=iconic_features,
             age=age,
             primary_outfit_color=primary_outfit_color,
+            face_adornment=face_adornment,
         )
     if not fighter.get("image_prompt_body_ref", {}).get("full_prompt"):
         fighter["image_prompt_body_ref"] = build_body_reference_prompt(
@@ -148,6 +154,8 @@ def _rebuild_prompts(fighter: dict):
             subtype_info=subtype_info,
             age=age,
             iconic_features=iconic_features,
+            face_adornment=face_adornment,
+            adornment_coverage=adornment_coverage,
         )
     fighter["image_prompt_headshot"] = build_headshot_prompt(
         body_parts, expression,
@@ -157,6 +165,7 @@ def _rebuild_prompts(fighter: dict):
         subtype_info=subtype_info,
         iconic_features=iconic_features,
         age=age,
+        face_adornment=face_adornment,
     )
 
 
@@ -550,6 +559,7 @@ def regenerate_outfits(fighter_id: str):
         origin = existing.get("origin", "")
         body_type_details = existing.get("body_type_details")
         primary_outfit_color = existing.get("primary_outfit_color", "")
+        face_adornment = existing.get("face_adornment", "")
         if not tiers or "sfw" in tiers:
             existing["ring_attire_sfw"] = outfit_data.get("ring_attire_sfw", existing.get("ring_attire_sfw", ""))
             existing["image_prompt_sfw"] = _build_charsheet_prompt(
@@ -562,6 +572,7 @@ def regenerate_outfits(fighter_id: str):
                 iconic_features=iconic_features,
                 age=age,
                 primary_outfit_color=primary_outfit_color,
+                face_adornment=face_adornment,
             )
         if not tiers or "barely" in tiers:
             existing["ring_attire"] = outfit_data.get("ring_attire", existing.get("ring_attire", ""))
@@ -575,6 +586,7 @@ def regenerate_outfits(fighter_id: str):
                 iconic_features=iconic_features,
                 age=age,
                 primary_outfit_color=primary_outfit_color,
+                face_adornment=face_adornment,
             )
         if not tiers or "nsfw" in tiers:
             existing["ring_attire_nsfw"] = outfit_data.get("ring_attire_nsfw", existing.get("ring_attire_nsfw", ""))
@@ -591,6 +603,7 @@ def regenerate_outfits(fighter_id: str):
                     iconic_features=iconic_features,
                     age=age,
                     primary_outfit_color=primary_outfit_color,
+                    face_adornment=face_adornment,
                 )
 
         existing["skimpiness_level"] = skimpiness_level
@@ -771,7 +784,7 @@ def get_roster_plan():
             "mode": "initial",
             "pool_summary": "",
             "entries": [
-                {**entry, "status": entry.get("status", "pending"), "fighter_id": entry.get("fighter_id"), "primary_outfit_color": entry.get("primary_outfit_color", ""), "hair_style": entry.get("hair_style", ""), "hair_color": entry.get("hair_color", ""), "hair_color_bucket": entry.get("hair_color_bucket", ""), "face_adornment": entry.get("face_adornment", "")}
+                {**entry, "status": entry.get("status", "pending"), "fighter_id": entry.get("fighter_id"), "primary_outfit_color": entry.get("primary_outfit_color", ""), "hair_style": entry.get("hair_style", ""), "hair_color": entry.get("hair_color", ""), "hair_color_bucket": entry.get("hair_color_bucket", ""), "face_adornment": entry.get("face_adornment", ""), "adornment_coverage": entry.get("adornment_coverage", "")}
                 for entry in plan
             ],
         }
@@ -821,6 +834,7 @@ def create_roster_plan():
             entry.setdefault("hair_color", "")
             entry.setdefault("hair_color_bucket", "")
             entry.setdefault("face_adornment", "")
+            entry.setdefault("adornment_coverage", "")
 
         plan = {
             "plan_id": f"rp_{uuid.uuid4().hex[:8]}",
@@ -903,6 +917,7 @@ def regenerate_plan_entry(index: int):
             new_entry.setdefault("hair_color", "")
             new_entry.setdefault("hair_color_bucket", "")
             new_entry.setdefault("face_adornment", "")
+            new_entry.setdefault("adornment_coverage", "")
             entries[index] = new_entry
             plan["pool_summary"] = pool_summary
             data_manager.save_roster_plan(plan, config)
@@ -952,6 +967,7 @@ def add_plan_entries():
             entry.setdefault("hair_color", "")
             entry.setdefault("hair_color_bucket", "")
             entry.setdefault("face_adornment", "")
+            entry.setdefault("adornment_coverage", "")
         plan["entries"].extend(new_entries)
         plan["pool_summary"] = pool_summary
         data_manager.save_roster_plan(plan, config)
@@ -1114,6 +1130,8 @@ def advance_stage(fighter_id: str):
             subtype_info = _get_subtype_info(fighter_data)
             iconic_features = fighter_data.get("iconic_features", "")
             age = fighter_data.get("age", 0)
+            face_adornment = fighter_data.get("face_adornment", "")
+            adornment_coverage = fighter_data.get("adornment_coverage", "")
 
             portrait_prompt = build_portrait_prompt(
                 body_parts, clothing_sfw, expression,
@@ -1124,6 +1142,7 @@ def advance_stage(fighter_id: str):
                 iconic_features=iconic_features,
                 primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
                 age=age,
+                face_adornment=face_adornment,
             )
 
             fighter_data["image_prompt_portrait"] = portrait_prompt
@@ -1137,6 +1156,8 @@ def advance_stage(fighter_id: str):
                     subtype_info=subtype_info,
                     age=age,
                     iconic_features=iconic_features,
+                    face_adornment=face_adornment,
+                    adornment_coverage=adornment_coverage,
                 )
 
             headshot_prompt = build_headshot_prompt(
@@ -1147,6 +1168,7 @@ def advance_stage(fighter_id: str):
                 subtype_info=subtype_info,
                 iconic_features=iconic_features,
                 age=age,
+                face_adornment=face_adornment,
             )
             fighter_data["image_prompt_headshot"] = headshot_prompt
 
@@ -1233,6 +1255,8 @@ def _advance_to_stage(fid, target_stage):
         if step_from == 1:
             gender = fighter_data.get("gender", "female")
             subtype_info = _get_subtype_info(fighter_data)
+            face_adornment = fighter_data.get("face_adornment", "")
+            adornment_coverage = fighter_data.get("adornment_coverage", "")
             portrait_prompt = build_portrait_prompt(
                 body_parts,
                 fighter_data.get("ring_attire_sfw", ""),
@@ -1244,6 +1268,7 @@ def _advance_to_stage(fid, target_stage):
                 iconic_features=fighter_data.get("iconic_features", ""),
                 primary_outfit_color=fighter_data.get("primary_outfit_color", ""),
                 age=fighter_data.get("age", 0),
+                face_adornment=face_adornment,
             )
             fighter_data["image_prompt_portrait"] = portrait_prompt
 
@@ -1256,6 +1281,8 @@ def _advance_to_stage(fid, target_stage):
                     subtype_info=subtype_info,
                     age=fighter_data.get("age", 0),
                     iconic_features=fighter_data.get("iconic_features", ""),
+                    face_adornment=face_adornment,
+                    adornment_coverage=adornment_coverage,
                 )
 
             headshot_prompt = build_headshot_prompt(
@@ -1266,6 +1293,7 @@ def _advance_to_stage(fid, target_stage):
                 subtype_info=subtype_info,
                 iconic_features=fighter_data.get("iconic_features", ""),
                 age=fighter_data.get("age", 0),
+                face_adornment=face_adornment,
             )
             fighter_data["image_prompt_headshot"] = headshot_prompt
 
@@ -1285,6 +1313,8 @@ def _advance_to_stage(fid, target_stage):
                     subtype_info=subtype_info,
                     age=fighter.age,
                     iconic_features=fighter_data.get("iconic_features", ""),
+                    face_adornment=fighter_data.get("face_adornment", ""),
+                    adornment_coverage=fighter_data.get("adornment_coverage", ""),
                 )
             if not fighter.image_prompt_sfw or not fighter.image_prompt_sfw.get("full_prompt"):
                 _rebuild_prompts(fighter_data)

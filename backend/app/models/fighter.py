@@ -112,6 +112,7 @@ class Fighter:
     hair_color: str = ""
     hair_color_bucket: str = ""
     face_adornment: str = ""
+    adornment_coverage: str = ""
     generation_stage: int = 0
     generation_dirty: list[str] = field(default_factory=list)
     image_prompt_portrait: dict = field(default_factory=dict)
@@ -184,6 +185,7 @@ class Fighter:
             hair_color=d.get("hair_color", ""),
             hair_color_bucket=d.get("hair_color_bucket", ""),
             face_adornment=d.get("face_adornment", ""),
+            adornment_coverage=d.get("adornment_coverage", ""),
             generation_stage=d.get("generation_stage", 0),
             generation_dirty=d.get("generation_dirty", []),
             image_prompt_portrait=d.get("image_prompt_portrait", {}),

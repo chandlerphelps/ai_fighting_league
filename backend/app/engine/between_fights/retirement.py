@@ -134,7 +134,7 @@ def update_promotion_desperation(fighter: dict) -> dict:
 
 
 GENDER_STAT_BIAS = {
-    "male": {"power": 15, "speed": 0, "technique": 0, "toughness": 5},
+    "male": {"power": 25, "speed": 0, "technique": -5, "toughness": 15},
     "female": {"power": -5, "speed": 5, "technique": 5, "toughness": 0},
 }
 

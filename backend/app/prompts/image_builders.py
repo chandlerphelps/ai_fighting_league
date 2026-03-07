@@ -1,5 +1,5 @@
 from app.engine.image_style import get_art_style, get_art_style_tail
-from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line, MAKEUP_DESCRIPTIONS
+from app.engine.fighter_config import _build_body_shape_line, _build_nsfw_anatomy_line, MAKEUP_DESCRIPTIONS, get_adornment_coverage
 from app.services.grok_image import TIER_PROMPT_KEYS
 
 
@@ -144,6 +144,7 @@ def _build_charsheet_prompt(
     iconic_features: str = "",
     age: int = 0,
     primary_outfit_color: str = "",
+    face_adornment: str = "",
 ) -> dict:
     if not body_parts:
         return {}
@@ -160,6 +161,8 @@ def _build_charsheet_prompt(
     )
 
     character_desc = _build_character_desc(body_parts, clothing_part, age, origin)
+    if face_adornment and face_adornment.lower() != "none":
+        character_desc = f"{character_desc}, wearing {face_adornment}"
 
     pose_hint = f", {personality_pose}" if personality_pose else ""
     front_view = f"front-facing slightly angled view standing tall{pose_hint}"
@@ -296,11 +299,15 @@ def build_body_reference_prompt(
     subtype_info: dict | None = None,
     age: int = 0,
     iconic_features: str = "",
+    face_adornment: str = "",
+    adornment_coverage: str = "",
 ) -> dict:
     if not body_parts:
         return {}
 
     is_male = gender.lower() == "male"
+    coverage = get_adornment_coverage(adornment_coverage)
+    has_adornment = face_adornment and face_adornment.lower() != "none"
     anatomy = ""
     body_parts = _enrich_body_parts(body_parts, body_type_details, subtype_info)
     if body_type_details and not is_male:
@@ -311,6 +318,7 @@ def build_body_reference_prompt(
     base_style = BODY_REF_STYLE_MALE if is_male else BODY_REF_STYLE_FEMALE
 
     if is_male:
+        male_covered = set(coverage["male_covers"])
         chest_build = (
             body_type_details.get("chest_build", "defined pecs")
             if body_type_details
@@ -328,9 +336,18 @@ def build_body_reference_prompt(
         )
 
         iconic_part = f", {iconic_features}" if iconic_features else ""
+        face_detail_parts = []
+        if "face_shape" not in male_covered and body_type_details:
+            face_detail_parts.append(f"{body_type_details.get('face_shape', 'square jaw')} face")
+        if "eye_expression" not in male_covered and body_type_details:
+            face_detail_parts.append(f"{body_type_details.get('eye_expression', 'focused intense')} eyes")
+        if "facial_hair" not in male_covered and body_type_details:
+            face_detail_parts.append(body_type_details.get("facial_hair", "stubble"))
+        face_extras_male = f", {', '.join(face_detail_parts)}" if face_detail_parts else ""
+        adornment_part = f", wearing {face_adornment}" if has_adornment else ""
         face_panel = (
             f"isolated face and neck portrait drawing, "
-            f"{expression}, three-quarter angle, masculine features{iconic_part}"
+            f"{expression}{face_extras_male}, three-quarter angle, masculine features{adornment_part}{iconic_part}"
         )
         front_panel = (
             f"isolated full-body front view in fitted boxer briefs, "
@@ -363,6 +380,7 @@ def build_body_reference_prompt(
             "full_prompt": full,
         }
 
+    female_covered = set(coverage["covers_face"])
     layout = BODY_REF_LAYOUT.format(
         torso_detail="breasts",
         intimate_label="spread-leg",
@@ -458,26 +476,27 @@ def build_body_reference_prompt(
 
     iconic_part = f", {iconic_features}" if iconic_features else ""
     face_details = []
-    if face_shape:
+    if face_shape and "face_shape" not in female_covered:
         face_details.append(f"{face_shape} face shape")
-    if jawline:
+    if jawline and "jawline" not in female_covered:
         face_details.append(f"{jawline} jaw")
-    if cheekbone:
+    if cheekbone and "cheekbone" not in female_covered:
         face_details.append(f"{cheekbone} cheekbones")
-    if eye_shape:
+    if eye_shape and "eye_shape" not in female_covered:
         face_details.append(f"{eye_shape} eyes")
-    if brow_shape:
+    if brow_shape and "brow_shape" not in female_covered:
         face_details.append(f"{brow_shape} brows")
-    if nose_shape:
+    if nose_shape and "nose_shape" not in female_covered:
         face_details.append(f"{nose_shape} nose")
-    if lip_shape:
+    if lip_shape and "lip_shape" not in female_covered:
         face_details.append(f"{lip_shape} lips")
-    if makeup_desc:
+    if makeup_desc and "makeup_level" not in female_covered:
         face_details.append(f"{makeup_desc}")
     face_extras = f", {', '.join(face_details)}" if face_details else ""
+    adornment_part = f", wearing {face_adornment}" if has_adornment else ""
     face_panel = (
         f"isolated face and neck portrait drawing, "
-        f"{expression}{face_extras}, three-quarter angle{iconic_part}"
+        f"{expression}{face_extras}, three-quarter angle{adornment_part}{iconic_part}"
     )
 
     if body_type_details:
@@ -589,6 +608,7 @@ def build_portrait_prompt(
     iconic_features: str = "",
     primary_outfit_color: str = "",
     age: int = 0,
+    face_adornment: str = "",
 ) -> dict:
     if not body_parts:
         return {}
@@ -602,6 +622,8 @@ def build_portrait_prompt(
     )
 
     character_desc = _build_character_desc(body_parts, clothing_part, age, origin)
+    if face_adornment and face_adornment.lower() != "none":
+        character_desc = f"{character_desc}, wearing {face_adornment}"
 
     sections = [
         f"[STYLE] {style}, {PORTRAIT_STYLE}",
@@ -629,6 +651,7 @@ def build_headshot_prompt(
     subtype_info: dict | None = None,
     iconic_features: str = "",
     age: int = 0,
+    face_adornment: str = "",
 ) -> dict:
     if not body_parts:
         return {}
@@ -639,11 +662,17 @@ def build_headshot_prompt(
 
     character_desc = _build_character_desc(body_parts, age=age, origin=origin)
     iconic_part = f", {iconic_features}" if iconic_features else ""
+    has_adornment = face_adornment and face_adornment.lower() != "none"
+    adornment_part = f", wearing {face_adornment}" if has_adornment else ""
+
+    expression_line = expression
+    if has_adornment and expression_line:
+        expression_line = f"{expression_line}, wearing {face_adornment}"
 
     sections = [
         f"[STYLE] {style}, {HEADSHOT_STYLE}",
-        f"[CHARACTER] {character_desc}{iconic_part}, close-up headshot filling the frame",
-        f"[EXPRESSION] {expression}, intense fighting spirit" if expression else "",
+        f"[CHARACTER] {character_desc}{iconic_part}{adornment_part}, close-up headshot filling the frame",
+        f"[EXPRESSION] {expression_line}, intense fighting spirit" if expression_line else "",
         f"[BACKGROUND] dark moody background, deep shadows, subtle dark gradient, cinematic",
         f"[QUALITY] {get_art_style_tail(gender)}, headshot, extreme close-up zoomed in on face, character select screen",
     ]

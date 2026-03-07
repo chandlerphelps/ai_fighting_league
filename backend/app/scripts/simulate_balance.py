@@ -24,6 +24,7 @@ class BalanceTracker:
     def __init__(self):
         self.fight_records: list[dict] = []
         self.season_snapshots: list[dict] = []
+        self.stat_changes: list[dict] = []
 
     def record_fight(self, winner: dict, loser: dict, method: str, tier: str, season: int):
         self.fight_records.append({
@@ -35,6 +36,55 @@ class BalanceTracker:
             "tier": tier,
             "season": season,
         })
+
+    def snapshot_stats_before(self, fighters: dict, season: int):
+        self._pre_season_stats = {}
+        for fid, f in fighters.items():
+            if f.get("status") != "active":
+                continue
+            stats = f.get("stats", {})
+            self._pre_season_stats[fid] = {
+                "gender": f.get("gender", ""),
+                "archetype": f.get("primary_archetype", ""),
+                "tier": f.get("tier", "underground"),
+                "age": f.get("age", 25),
+                "power": stats.get("power", 0),
+                "speed": stats.get("speed", 0),
+                "technique": stats.get("technique", 0),
+                "toughness": stats.get("toughness", 0),
+                "supernatural": stats.get("supernatural", 0),
+                "guile": stats.get("guile", 0),
+            }
+
+    def snapshot_stats_after(self, fighters: dict, season: int):
+        pre = getattr(self, "_pre_season_stats", {})
+        for fid, before in pre.items():
+            f = fighters.get(fid, {})
+            if f.get("status") != "active":
+                continue
+            stats = f.get("stats", {})
+            self.stat_changes.append({
+                "fighter_id": fid,
+                "season": season,
+                "gender": before["gender"],
+                "archetype": before["archetype"],
+                "tier_start": before["tier"],
+                "tier_end": f.get("tier", "underground"),
+                "age": before["age"],
+                "power_before": before["power"],
+                "power_after": stats.get("power", 0),
+                "speed_before": before["speed"],
+                "speed_after": stats.get("speed", 0),
+                "technique_before": before["technique"],
+                "technique_after": stats.get("technique", 0),
+                "toughness_before": before["toughness"],
+                "toughness_after": stats.get("toughness", 0),
+                "supernatural_before": before["supernatural"],
+                "supernatural_after": stats.get("supernatural", 0),
+                "guile_before": before["guile"],
+                "guile_after": stats.get("guile", 0),
+            })
+        self._pre_season_stats = {}
 
     def snapshot_tier_composition(self, fighters: dict, season: int):
         snapshot = {"season": season}
@@ -246,6 +296,8 @@ class BalanceSimulator(LeagueSimulator):
         self.mid_season_retirements = []
         self.season_ending_injuries = []
 
+        self.balance_tracker.snapshot_stats_before(self.fighters, season_num)
+
         if self.verbose:
             print(f"\n{'='*60}")
             print(f"  SEASON {season_num}")
@@ -299,6 +351,7 @@ class BalanceSimulator(LeagueSimulator):
         self._recalculate_all_rankings()
         self.season_logs.append(season_summary)
 
+        self.balance_tracker.snapshot_stats_after(self.fighters, season_num)
         self.balance_tracker.snapshot_tier_composition(self.fighters, season_num)
 
         if self.verbose:
@@ -509,6 +562,7 @@ class BalanceSimulator(LeagueSimulator):
         self._print_matchup_matrix(records)
         self._print_tier_composition_trends(snapshots)
         self._print_win_method_analysis(records)
+        self._print_stat_growth_analysis(self.balance_tracker.stat_changes)
         self._print_low_sample_flags(records)
 
     def _print_gender_balance(self, records):
@@ -708,9 +762,140 @@ class BalanceSimulator(LeagueSimulator):
         for arch, ko_pct, sub_pct, total in arch_ko:
             print(f"      {arch:{max_name}s}: KO/TKO {ko_pct:5.1f}%  Sub {sub_pct:5.1f}%  (n={total})")
 
+    def _print_stat_growth_analysis(self, stat_changes):
+        print(f"\n  {'─'*60}")
+        print(f"  6. STAT GROWTH ANALYSIS")
+        print(f"  {'─'*60}")
+
+        if not stat_changes:
+            print("    No stat change data recorded.")
+            return
+
+        all_stats = ["power", "speed", "technique", "toughness", "supernatural", "guile"]
+
+        def _compute_deltas(entries):
+            totals = {s: 0.0 for s in all_stats}
+            count = len(entries)
+            if count == 0:
+                return totals, 0
+            for e in entries:
+                for s in all_stats:
+                    totals[s] += e[f"{s}_after"] - e[f"{s}_before"]
+            return {s: totals[s] / count for s in all_stats}, count
+
+        def _compute_averages(entries):
+            totals = {s: 0.0 for s in all_stats}
+            count = len(entries)
+            if count == 0:
+                return totals, 0
+            for e in entries:
+                for s in all_stats:
+                    totals[s] += e[f"{s}_after"]
+            return {s: totals[s] / count for s in all_stats}, count
+
+        def _core_delta(deltas):
+            return sum(deltas[s] for s in ["power", "speed", "technique", "toughness"])
+
+        print("\n    Per-Season Stat Growth by Gender (avg change per fighter per season):")
+        print(f"    {'':12s}  {'power':>7s}  {'speed':>7s}  {'tech':>7s}  {'tough':>7s}  {'supn':>7s}  {'guile':>7s}  {'core':>7s}  {'n':>6s}")
+
+        gender_entries = defaultdict(list)
+        for e in stat_changes:
+            gender_entries[e["gender"]].append(e)
+
+        for g in sorted(gender_entries.keys()):
+            deltas, n = _compute_deltas(gender_entries[g])
+            core = _core_delta(deltas)
+            print(f"    {g:12s}  {deltas['power']:+7.2f}  {deltas['speed']:+7.2f}  {deltas['technique']:+7.2f}  "
+                  f"{deltas['toughness']:+7.2f}  {deltas['supernatural']:+7.2f}  {deltas['guile']:+7.2f}  "
+                  f"{core:+7.2f}  {n:6d}")
+
+        print("\n    Average Stats by Gender (end-of-season values):")
+        print(f"    {'':12s}  {'power':>7s}  {'speed':>7s}  {'tech':>7s}  {'tough':>7s}  {'supn':>7s}  {'guile':>7s}  {'core':>7s}  {'n':>6s}")
+
+        for g in sorted(gender_entries.keys()):
+            avgs, n = _compute_averages(gender_entries[g])
+            core = sum(avgs[s] for s in ["power", "speed", "technique", "toughness"])
+            print(f"    {g:12s}  {avgs['power']:7.1f}  {avgs['speed']:7.1f}  {avgs['technique']:7.1f}  "
+                  f"{avgs['toughness']:7.1f}  {avgs['supernatural']:7.1f}  {avgs['guile']:7.1f}  "
+                  f"{core:7.1f}  {n:6d}")
+
+        print("\n    Per-Season Stat Growth by Archetype (avg change per fighter per season):")
+        print(f"    {'':16s}  {'power':>7s}  {'speed':>7s}  {'tech':>7s}  {'tough':>7s}  {'supn':>7s}  {'guile':>7s}  {'core':>7s}  {'n':>6s}")
+
+        arch_entries = defaultdict(list)
+        for e in stat_changes:
+            arch_entries[e["archetype"]].append(e)
+
+        arch_rows = []
+        for arch, entries in arch_entries.items():
+            deltas, n = _compute_deltas(entries)
+            core = _core_delta(deltas)
+            arch_rows.append((arch, deltas, core, n))
+
+        arch_rows.sort(key=lambda x: x[2], reverse=True)
+        max_name = max(len(r[0]) for r in arch_rows) if arch_rows else 16
+
+        for arch, deltas, core, n in arch_rows:
+            print(f"    {arch:{max_name}s}  {deltas['power']:+7.2f}  {deltas['speed']:+7.2f}  {deltas['technique']:+7.2f}  "
+                  f"{deltas['toughness']:+7.2f}  {deltas['supernatural']:+7.2f}  {deltas['guile']:+7.2f}  "
+                  f"{core:+7.2f}  {n:6d}")
+
+        print("\n    Average Stats by Archetype (end-of-season values):")
+        print(f"    {'':16s}  {'power':>7s}  {'speed':>7s}  {'tech':>7s}  {'tough':>7s}  {'supn':>7s}  {'guile':>7s}  {'core':>7s}  {'n':>6s}")
+
+        arch_avg_rows = []
+        for arch, entries in arch_entries.items():
+            avgs, n = _compute_averages(entries)
+            core = sum(avgs[s] for s in ["power", "speed", "technique", "toughness"])
+            arch_avg_rows.append((arch, avgs, core, n))
+
+        arch_avg_rows.sort(key=lambda x: x[2], reverse=True)
+
+        for arch, avgs, core, n in arch_avg_rows:
+            print(f"    {arch:{max_name}s}  {avgs['power']:7.1f}  {avgs['speed']:7.1f}  {avgs['technique']:7.1f}  "
+                  f"{avgs['toughness']:7.1f}  {avgs['supernatural']:7.1f}  {avgs['guile']:7.1f}  "
+                  f"{core:7.1f}  {n:6d}")
+
+        print("\n    Stat Growth by Tier (avg change per fighter per season):")
+        print(f"    {'':16s}  {'power':>7s}  {'speed':>7s}  {'tech':>7s}  {'tough':>7s}  {'supn':>7s}  {'guile':>7s}  {'core':>7s}  {'n':>6s}")
+
+        tier_entries = defaultdict(list)
+        for e in stat_changes:
+            tier_entries[e["tier_start"]].append(e)
+
+        for tier in ["apex", "contender", "underground"]:
+            if tier not in tier_entries:
+                continue
+            deltas, n = _compute_deltas(tier_entries[tier])
+            core = _core_delta(deltas)
+            print(f"    {tier:16s}  {deltas['power']:+7.2f}  {deltas['speed']:+7.2f}  {deltas['technique']:+7.2f}  "
+                  f"{deltas['toughness']:+7.2f}  {deltas['supernatural']:+7.2f}  {deltas['guile']:+7.2f}  "
+                  f"{core:+7.2f}  {n:6d}")
+
+        print("\n    Stat Growth by Age Bracket (avg change per fighter per season):")
+        print(f"    {'':16s}  {'power':>7s}  {'speed':>7s}  {'tech':>7s}  {'tough':>7s}  {'core':>7s}  {'n':>6s}")
+
+        age_brackets = [
+            ("18-21", lambda a: 18 <= a <= 21),
+            ("22-25", lambda a: 22 <= a <= 25),
+            ("26-31", lambda a: 26 <= a <= 31),
+            ("32-35", lambda a: 32 <= a <= 35),
+            ("36+", lambda a: a >= 36),
+        ]
+
+        for label, pred in age_brackets:
+            bracket_entries = [e for e in stat_changes if pred(e["age"])]
+            if not bracket_entries:
+                continue
+            deltas, n = _compute_deltas(bracket_entries)
+            core = _core_delta(deltas)
+            print(f"    {label:16s}  {deltas['power']:+7.2f}  {deltas['speed']:+7.2f}  {deltas['technique']:+7.2f}  "
+                  f"{deltas['toughness']:+7.2f}  {core:+7.2f}  {n:6d}")
+
     def _print_low_sample_flags(self, records):
         print(f"\n  {'─'*60}")
-        print(f"  6. LOW SAMPLE SIZE FLAGS")
+        print(f"  7. LOW SAMPLE SIZE FLAGS")
         print(f"  {'─'*60}")
 
         arch_total = defaultdict(int)

@@ -1,0 +1,95 @@
+{
+  "plan_id": "rp_2ba8473f",
+  "created_at": "2026-03-06",
+  "mode": "initial",
+  "pool_summary": "",
+  "entries": [
+    {
+      "concept_hook": "A cybernetically enhanced ninja assassin who traded her flesh for titanium precision, feeling nothing as she slides blades between ribs.",
+      "ring_name": "Iron Lotus",
+      "gender": "female",
+      "age": 24,
+      "origin": "Kyoto, Japan",
+      "primary_archetype": "Assassin",
+      "subtype": "Blade",
+      "has_supernatural": false,
+      "power_tier": "contender",
+      "rivalry_seeds": [
+        "Canto Morto",
+        "Blood Meridian"
+      ],
+      "media_archetype_inspiration": "Samurai Champloo's style meets Ghost in the Shell's augmentations \u2014 a killing machine with traditional blade aesthetics",
+      "skimpiness_weights": [
+        40,
+        45,
+        15,
+        0
+      ],
+      "primary_outfit_color": "Midnight Black",
+      "hair_style": "slicked back ponytail",
+      "hair_color": "jet black with electric blue highlights at the tips",
+      "hair_color_bucket": "Black",
+      "face_adornment": "thin metallic visor spanning across eyes",
+      "status": "generated",
+      "fighter_id": "f_9816c6aa"
+    },
+    {
+      "concept_hook": "A former DEA informant rebuilt with experimental combat stimulants and synthetic adrenaline glands, hunting the poisoners who destroyed her family.",
+      "ring_name": "Kreep",
+      "gender": "female",
+      "age": 26,
+      "origin": "San Antonio, Texas, USA",
+      "primary_archetype": "Viper",
+      "subtype": "Poisoner",
+      "has_supernatural": false,
+      "power_tier": "gatekeeper",
+      "rivalry_seeds": [
+        "Canto Morto",
+        "Iron Lotus"
+      ],
+      "media_archetype_inspiration": "Gone Girl's psychological manipulation meets breaking bad's chemistry expertise \u2014 beautiful and lethal with poisons",
+      "skimpiness_weights": [
+        30,
+        40,
+        25,
+        5
+      ],
+      "primary_outfit_color": "Emerald Green",
+      "hair_style": "messy undercut with one side shaved",
+      "hair_color": "auburn with dark brown roots",
+      "hair_color_bucket": "Red/Auburn",
+      "face_adornment": "tribal scarification patterns along cheekbones",
+      "status": "generated",
+      "fighter_id": "f_067037b3"
+    },
+    {
+      "concept_hook": "A RomanianExecutioner who channels ancestral spirits to raise the pain threshold of her enemies while her own wounds close with blackened flesh.",
+      "ring_name": "Blood Meridian",
+      "gender": "female",
+      "age": 31,
+      "origin": "Bucharest, Romania",
+      "primary_archetype": "Witch",
+      "subtype": "Necromancer",
+      "has_supernatural": true,
+      "power_tier": "champion",
+      "rivalry_seeds": [
+        "Iron Lotus",
+        "Kreep"
+      ],
+      "media_archetype_inspiration": "The Witch (2015) meets Hammer Horror \u2014 folk horror aesthetic with actual supernatural Command over death and pain",
+      "skimpiness_weights": [
+        35,
+        40,
+        20,
+        5
+      ],
+      "primary_outfit_color": "Deep Purple",
+      "hair_style": "long braided rope strands",
+      "hair_color": "ink black with silver wisps near temples",
+      "hair_color_bucket": "Black",
+      "face_adornment": "oxidized copper circlet with small bones woven through",
+      "status": "generated",
+      "fighter_id": "f_663b3fdf"
+    }
+  ]
+}
