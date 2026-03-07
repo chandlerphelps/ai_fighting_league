@@ -16,6 +16,8 @@ from app.engine.fighter_config import (
     MALE_SKIMPINESS_LEVELS,
     TECH_LEVELS,
     _roll_skimpiness,
+    _roll_fit_style,
+    _roll_transparency,
     _roll_body_traits,
     _roll_subtype,
     _find_subtype,
@@ -98,6 +100,8 @@ def _generate_outfits(
     tiers: list[str] | None = None,
     outfit_options_by_tier: dict | None = None,
     tech_level: str = "",
+    fit_style: str = "",
+    transparency: str = "",
 ) -> dict:
     if tiers is None:
         tiers = ["sfw", "barely", "nsfw"]
@@ -108,7 +112,7 @@ def _generate_outfits(
         tier_opts = (outfit_options_by_tier or {}).get(tier)
         prompt = _build_tier_prompt(
             tier, skimpiness_level, character_summary, outfit_options=tier_opts,
-            tech_level=tech_level,
+            tech_level=tech_level, fit_style=fit_style, transparency=transparency,
         )
         result = call_openrouter_json(
             prompt, config, system_prompt=SYSTEM_PROMPT_OUTFIT_DESIGNER, temperature=0.5
@@ -210,6 +214,13 @@ def generate_fighter(
         blueprint_text = ""
         if skimpiness_level is None:
             skimpiness_level = _roll_skimpiness(None)
+
+    if is_male:
+        fit_style = ""
+        transparency = ""
+    else:
+        fit_style = _roll_fit_style(skimpiness_level)
+        transparency = _roll_transparency()
 
     subtype_info = None
     if roster_plan_entry and roster_plan_entry.get("subtype"):
@@ -321,6 +332,8 @@ def generate_fighter(
             tiers=tiers,
             outfit_options_by_tier=outfit_options_by_tier,
             tech_level=tech_level,
+            fit_style=fit_style,
+            transparency=transparency,
         )
 
     outfit_suggestions = outfit_data.pop("_outfit_suggestions", {})
@@ -461,6 +474,8 @@ def generate_fighter(
         ring_attire_sfw=outfit_data.get("ring_attire_sfw", ""),
         ring_attire_nsfw=ring_attire_nsfw,
         skimpiness_level=skimpiness_level,
+        fit_style=fit_style,
+        transparency=transparency,
         tech_level=tech_level,
         primary_outfit_color=primary_outfit_color,
         hair_color=hair_color,

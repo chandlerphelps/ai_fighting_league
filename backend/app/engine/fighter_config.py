@@ -2575,10 +2575,10 @@ def _build_nsfw_anatomy_line(traits: dict, tier: str = "nsfw", outfit_coverage: 
 
 SKIMPINESS_LEVELS = {
     1: {
-        "sfw_label": "Fitted",
+        "sfw_label": "Covered",
         "sfw_skin_pct": "5-20",
-        "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage — fabric covers everything but can show body shape.",
-        "sfw_guidance": "Fitted athletic wear — fabric follows the body's shape but isn't clinging. Think tailored combat gear, fitted compression shirts, athletic pants. Coverage is near-total but the silhouette is clean and defined. She looks ready to fight.",
+        "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Near-total skin coverage.",
+        "sfw_guidance": "Near-total coverage — arms, legs, torso all covered. Only hands, neck, and face exposed. She looks ready to fight.",
         "barely_label": "Flirty",
         "barely_skin_pct": "30-65",
         "barely_hard_rules": "Nipples MUST be fully covered. Groin MUST be fully covered. No exceptions.",
@@ -2589,10 +2589,10 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "topless",
     },
     2: {
-        "sfw_label": "Form-fitting",
+        "sfw_label": "Modest",
         "sfw_skin_pct": "5-30",
-        "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage — fabric hugs every curve but all skin is covered.",
-        "sfw_guidance": "Form-fitting — fabric hugs every curve, the body shape is unmistakable. Think yoga pants, compression tops, body-hugging combat suits. Nearly all skin covered but the body is clearly on display through the fabric. Dangerous.",
+        "sfw_hard_rules": "No nipples, no nipple outline, no genitalia, no underboob, no sideboob, no cameltoe. Full coverage.",
+        "sfw_guidance": "Mostly covered — some forearm, lower-leg, or neckline exposure allowed. The outfit is practical and combat-ready.",
         "barely_label": "Risqué",
         "barely_skin_pct": "30-75",
         "barely_hard_rules": "Nipples MUST be fully covered. Groin MUST be fully covered. Sideboob and underbutt OK.",
@@ -2603,10 +2603,10 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
     3: {
-        "sfw_label": "Skin-tight",
-        "sfw_skin_pct": "5-60",
-        "sfw_hard_rules": "No bare nipples, no genitalia. Nipple outline and cameltoe through tight fabric IS allowed. Full coverage with vacuum-sealed tightness — fabric is a second skin.",
-        "sfw_guidance": "Skin-tight — fabric is vacuum-sealed to the body, every muscle, contour and curve visible. Nipple outline through fabric is expected. Think bodysuits, catsuits, skin-tight leggings and tops. Coverage is high but nothing is left to imagination about the body underneath. Dangerous.",
+        "sfw_label": "Revealing",
+        "sfw_skin_pct": "20-50",
+        "sfw_hard_rules": "No bare nipples, no nipple outline, no genitalia, no cameltoe, no sideboob. Cleavage and midriff OK.",
+        "sfw_guidance": "Moderate skin showing — exposed midriff, cleavage, bare arms and shoulders, thigh-high slits. Still has substantial garment pieces but deliberately shows skin.",
         "barely_label": "Scandalous",
         "barely_skin_pct": "35-80",
         "barely_hard_rules": "Nipples MUST be covered (pasties or fabric). Groin MUST be covered. Areola edge peeking is OK but nipple itself stays hidden.",
@@ -2617,10 +2617,10 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
     4: {
-        "sfw_label": "Skin-tight with Cutouts",
-        "sfw_skin_pct": "15-65",
-        "sfw_hard_rules": "No bare nipples, no genitalia. Nipple outline through fabric IS allowed. Sideboob hints OK. Strategic cutouts showing skin (midriff, sides, back, thighs) are expected.",
-        "sfw_guidance": "Skin-tight base with strategic cutouts — vacuum-sealed fabric with deliberate skin windows. Midriff cutouts, side panels, open backs, thigh windows. The outfit is skin-tight where it covers but intentionally reveals select areas of skin. Lethal and alluring.",
+        "sfw_label": "Skimpy",
+        "sfw_skin_pct": "40-65",
+        "sfw_hard_rules": "No bare nipples, no genitalia. Sideboob hints OK. Strategic cutouts, bare midriff, bare legs expected.",
+        "sfw_guidance": "Maximum skin for SFW — crop tops, short shorts, cutout panels, bare backs, thigh windows. Coverage is minimal but nipples and groin stay hidden.",
         "barely_label": "Extreme",
         "barely_skin_pct": "60-99",
         "barely_hard_rules": "Nipples MUST be covered (micro pasties minimum). Groin MUST be covered (micro strip or patch minimum). Areola edge visible is OK.",
@@ -2631,6 +2631,48 @@ SKIMPINESS_LEVELS = {
         "nsfw_nudity_level": "full",
     },
 }
+
+
+FIT_STYLES = {
+    "skin-tight": {
+        "description": "Catsuits, compression suits, bodysuits. Every contour visible.",
+        "weights_by_skimpiness": {1: 10, 2: 15, 3: 25, 4: 30},
+    },
+    "form-fitted": {
+        "description": "Athletic wear that follows the body's shape but isn't painted on.",
+        "weights_by_skimpiness": {1: 30, 2: 35, 3: 25, 4: 15},
+    },
+    "loose": {
+        "description": "Baggy pants, oversized jackets, flowing fabrics, draped wraps.",
+        "weights_by_skimpiness": {1: 30, 2: 20, 3: 10, 4: 5},
+    },
+    "layered": {
+        "description": "Fitted base with loose outer layer — jacket, vest, hoodie over sports bra.",
+        "weights_by_skimpiness": {1: 20, 2: 20, 3: 15, 4: 10},
+    },
+    "structured": {
+        "description": "Rigid pieces — armor plates, corsets, tailored jackets.",
+        "weights_by_skimpiness": {1: 10, 2: 10, 3: 25, 4: 40},
+    },
+}
+
+
+TRANSPARENCY_OPTIONS = {
+    "opaque": 70,
+    "some mesh/sheer panels": 30,
+}
+
+
+def _roll_fit_style(skimpiness_level: int) -> str:
+    styles = list(FIT_STYLES.keys())
+    weights = [FIT_STYLES[s]["weights_by_skimpiness"].get(skimpiness_level, 20) for s in styles]
+    return random.choices(styles, weights=weights, k=1)[0]
+
+
+def _roll_transparency() -> str:
+    options = list(TRANSPARENCY_OPTIONS.keys())
+    weights = list(TRANSPARENCY_OPTIONS.values())
+    return random.choices(options, weights=weights, k=1)[0]
 
 OUTFIT_COLOR_PALETTE = [
     "Crimson Red",

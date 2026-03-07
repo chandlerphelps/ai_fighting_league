@@ -106,6 +106,8 @@ class Fighter:
     ring_attire_sfw: str = ""
     ring_attire_nsfw: str = ""
     skimpiness_level: int = 2
+    fit_style: str = ""
+    transparency: str = ""
     tech_level: str = ""
     primary_outfit_color: str = ""
     hair_style: str = ""
@@ -180,6 +182,8 @@ class Fighter:
             ring_attire_sfw=d.get("ring_attire_sfw", ""),
             ring_attire_nsfw=d.get("ring_attire_nsfw", ""),
             skimpiness_level=d.get("skimpiness_level", 2),
+            fit_style=d.get("fit_style", ""),
+            transparency=d.get("transparency", ""),
             tech_level=d.get("tech_level", ""),
             primary_outfit_color=d.get("primary_outfit_color", ""),
             hair_style=d.get("hair_style", ""),

@@ -1,0 +1,53 @@
+{
+  "current_date": "2026-03-07",
+  "day_number": 0,
+  "season_number": 1,
+  "season_month": 3,
+  "season_day_in_month": 7,
+  "tier_rankings": {
+    "apex": [
+      "f_9a94e6e3",
+      "f_23bf4a4b",
+      "f_c8cea658",
+      "f_86ecc556",
+      "f_20584b90",
+      "f_a2913aea"
+    ],
+    "contender": [],
+    "underground": []
+  },
+  "belt_holder_id": "f_9a94e6e3",
+  "belt_history": [
+    {
+      "fighter_id": "f_9a94e6e3",
+      "won_date": "season_0",
+      "lost_date": null,
+      "defenses": 0
+    }
+  ],
+  "season_champions": [],
+  "retired_fighter_ids": [],
+  "active_injuries": {},
+  "rivalry_graph": [],
+  "recent_matches": [],
+  "season_logs": [],
+  "promotion_fights": [],
+  "title_fight": {},
+  "rankings": [
+    "f_9a94e6e3",
+    "f_23bf4a4b",
+    "f_c8cea658",
+    "f_86ecc556",
+    "f_20584b90",
+    "f_a2913aea"
+  ],
+  "upcoming_events": [],
+  "completed_events": [],
+  "last_daily_summary": "League initialized with LLM-generated fighters.",
+  "event_counter": 0,
+  "tier_sizes": {
+    "apex": 6,
+    "contender": 0,
+    "underground": 0
+  }
+}

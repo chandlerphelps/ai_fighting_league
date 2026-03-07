@@ -1,6 +1,8 @@
 from app.engine.fighter_config import (
     SKIMPINESS_LEVELS,
     MALE_SKIMPINESS_LEVELS,
+    FIT_STYLES,
+    TRANSPARENCY_OPTIONS,
     ARCHETYPE_DESCRIPTIONS,
     ARCHETYPE_SUBTYPES,
     ARCHETYPE_SUBTYPES_MALE,
@@ -47,6 +49,8 @@ def build_tier_prompt(
     character_summary: dict,
     outfit_options: dict | None = None,
     tech_level: str = "",
+    fit_style: str = "",
+    transparency: str = "",
 ) -> str:
     gender = character_summary.get("gender", "female")
     is_male = gender.lower() == "male"
@@ -150,6 +154,16 @@ Expression: {expression}"""
             if lines:
                 outfit_examples_text = "\n" + "\n".join(lines) + "\n"
 
+    fit_line = ""
+    transparency_line = ""
+    if tier == "sfw" and fit_style:
+        fit_desc = FIT_STYLES.get(fit_style, {}).get("description", "")
+        fit_line = f"\n  FIT: {fit_style} — {fit_desc}" if fit_desc else f"\n  FIT: {fit_style}"
+        if transparency and transparency != "opaque":
+            transparency_line = f"\n  TRANSPARENCY: {transparency}"
+        else:
+            transparency_line = "\n  TRANSPARENCY: opaque — all fabric is fully opaque"
+
     if tier == "sfw":
         return f"""{char_context}
 
@@ -161,10 +175,10 @@ You are encouraged (but not required) to include pieces from the following in yo
 RULES:
   HARD RULES: {level['sfw_hard_rules']}
   SKIN TARGET: ~{level['sfw_skin_pct']}% of skin visible.
-  VIBE: {level['sfw_label']} — {level['sfw_guidance']}
+  VIBE: {level['sfw_label']} — {level['sfw_guidance']}{fit_line}{transparency_line}
   Iconic features + additional clothing pieces to hit the skin target.
 
-The rules above only constrain HOW MUCH skin shows, not WHAT the outfit looks like.
+Skin target and fit style are INDEPENDENT. A "skin-tight" outfit at low skimpiness covers lots of skin with tight fabric. A "loose" outfit at high skimpiness shows lots of skin with baggy/flowing pieces. Design accordingly.
 
 POSE: Also generate a short personality pose for this tier — a confident, powerful pose that fits a family-friendly context. 5-10 words max describing the body position and attitude.
 {_coverage_instruction(gender)}
